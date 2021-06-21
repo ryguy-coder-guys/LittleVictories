@@ -10,7 +10,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "extends": "expo/tsconfig.base",
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
