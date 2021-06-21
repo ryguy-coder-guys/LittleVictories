@@ -2,30 +2,30 @@ drop database if exists little_victories;
 create database little_victories;
 use little_victories;
 
-grant all on *.* to 'root'@'localhost' with grant option; 
+grant all on *.* to 'root'@'localhost' with grant option;
 
-create table user (
+create table Users (
   id varchar(25) primary key,
   fName varchar(25) not null,
   lName varchar(25)
 );
 
-create table habit (
+create table Habits (
 	id int primary key auto_increment,
   user_id varchar(25) not null,
   description varchar(50) not null,
   frequency enum('daily', 'weekly', 'monthly') not null,
   days_of_week varchar(11),
   calendar_date int,
-  foreign key (user_id) references user(id)
+  foreign key (user_id) references Users(id)
 );
 
-create table list (
+create table Lists (
 	id int primary key auto_increment,
   name varchar(15)
 );
 
-create table task (
+create table Tasks (
 	id int primary key auto_increment,
   user_id varchar(25) not null,
 	description varchar(150) not null,
@@ -37,45 +37,45 @@ create table task (
   created_at datetime not null default now(),
   is_public bool not null default false,
   list_id int not null,
-  foreign key (list_id) references list(id),
-  foreign key (user_id) references user(id)
+  foreign key (list_id) references Lists(id),
+  foreign key (user_id) references Users(id)
 );
 
-create table task_heart (
+create table TaskHearts (
 	id int primary key auto_increment,
 	task_id int not null,
   user_id varchar(25) not null,
-  foreign key (user_id) references user(id),
-  foreign key (task_id) references task(id)
+  foreign key (user_id) references Users(id),
+  foreign key (task_id) references Tasks(id)
 );
 
-create table comment (
+create table Comments (
 	id int primary key auto_increment,
   user_id varchar(25) not null,
 	task_id int not null,
   content varchar(50) not null,
   created_at datetime default now(),
-  foreign key (user_id) references user(id),
-  foreign key (task_id) references task(id)
+  foreign key (user_id) references Users(id),
+  foreign key (task_id) references Tasks(id)
 );
 
-create table comment_heart (
+create table CommentHearts (
 	id int primary key auto_increment,
 	comment_id int not null,
   user_id varchar(25) not null,
-  foreign key (user_id) references user(id),
-  foreign key (comment_id) references comment(id)
+  foreign key (user_id) references Users(id),
+  foreign key (comment_id) references Comments(id)
 );
 
-create table journal_entry (
+create table JournalEntries (
 	id int primary key auto_increment,
 	user_id varchar(25) not null,
   created_at datetime not null default now(),
   content text not null,
-  foreign key (user_id) references user(id)
+  foreign key (user_id) references Users(id)
 );
 
-create table user_stats (
+create table UserStats (
 	id int primary key auto_increment,
 	user_id varchar(25) not null,
   created_at datetime not null default now(),
@@ -84,7 +84,7 @@ create table user_stats (
   exercised bool,
   notes varchar(150),
   mood enum('great', 'good', 'ok', 'bad', 'terrible'),
-  foreign key (user_id) references user(id)
+  foreign key (user_id) references Users(id)
 );
 
 
