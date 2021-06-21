@@ -1,20 +1,16 @@
 import { DataTypes } from 'sequelize';
 import { dbConnection } from '..';
 
-export const User = dbConnection.define(
-  'User',
+export const List = dbConnection.define(
+  'List',
   {
     id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
-    fName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    lName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: true,
     },
