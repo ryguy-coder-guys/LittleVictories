@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "CommonJS",
     "sourceMap": true,
-    "strict": true,
+    "strict": false,
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": [],
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "allowJs": true
   },
   "extends": "expo/tsconfig.base",
-  "exclude": ["node_modules"]
+  "include": ["./**/*"],
+  "exclude": ["node_modules", "**/*.js"]
 }

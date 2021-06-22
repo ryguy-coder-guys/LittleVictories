@@ -13,6 +13,6 @@ dbConnection
   .authenticate()
   .then(() => console.log('little victories database connection successful'))
   .catch((err) => {
-    console.log('little victories database connction unsuccessful');
+    console.log('little victories database connection unsuccessful');
     console.log(err);
   });
