@@ -1,9 +1,31 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Optional, Model } from 'sequelize';
 import { dbConnection } from '..';
 import { List } from './list';
 import { User } from './user';
 
-export const Task = dbConnection.define(
+interface TaskInstance extends Model {
+  id: number;
+  user_id: string;
+  description: string;
+  due_date: Date;
+  minutes_to_complete: number;
+  is_important: boolean;
+  is_complete: boolean;
+  completed_at: Date;
+  is_public: boolean;
+  list_id: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// interface TaskCreationAttributes extends Optional<TaskAttributes, 'id'> {}
+
+// interface TaskInstance
+//   extends Model<TaskAttributes, TaskCreationAttributes>,
+//     TaskAttributes {}
+
+export const Task = dbConnection.define<TaskInstance>(
   'Task',
   {
     id: {
@@ -55,6 +77,14 @@ export const Task = dbConnection.define(
         model: List,
         key: 'id',
       },
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
   },
   {
