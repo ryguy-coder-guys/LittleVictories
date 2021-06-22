@@ -12,16 +12,16 @@
     "start-prod": "ts-node server/src/index.ts"
   },
   "dependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.14.5",
     "@react-native-async-storage/async-storage": "^1.15.5",
     "@react-navigation/material-bottom-tabs": "^5.3.15",
     "@react-navigation/material-top-tabs": "^5.3.15",
     "@react-navigation/stack": "^5.14.5",
-    "@babel/plugin-transform-modules-commonjs": "^7.14.5",
     "@types/express": "^4.17.12",
     "@types/node": "^15.12.4",
     "@types/sequelize": "^4.28.9",
-    "axios": "^0.21.1",
     "@unimodules/core": "^7.1.0",
+    "axios": "^0.21.1",
     "dotenv": "^10.0.0",
     "expo": "~41.0.1",
     "expo-facebook": "~11.0.5",
