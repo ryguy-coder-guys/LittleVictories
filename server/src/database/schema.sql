@@ -2,7 +2,7 @@ drop database if exists little_victories;
 create database little_victories;
 use little_victories;
 
-grant all on *.* to 'root'@'localhost' with grant option; 
+grant all on *.* to 'root'@'localhost' with grant option;
 
 create table Users (
   id varchar(25) primary key,
