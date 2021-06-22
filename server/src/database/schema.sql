@@ -7,7 +7,9 @@ grant all on *.* to 'root'@'localhost' with grant option;
 create table Users (
   id varchar(25) primary key,
   fName varchar(25) not null,
-  lName varchar(25)
+  lName varchar(25),
+  createdAt datetime not null,
+  updatedAt datetime not null
 );
 
 create table Habits (
@@ -22,7 +24,9 @@ create table Habits (
 
 create table Lists (
 	id int primary key auto_increment,
-  name varchar(15)
+  name varchar(15),
+  createdAt datetime not null,
+  updatedAt datetime not null
 );
 
 create table Tasks (
@@ -34,14 +38,15 @@ create table Tasks (
   is_important bool not null,
   is_complete bool not null,
   completed_at date,
-  created_at datetime not null default now(),
   is_public bool not null default false,
   list_id int not null,
+  createdAt datetime not null,
+  updatedAt datetime not null,
   foreign key (list_id) references Lists(id),
   foreign key (user_id) references Users(id)
 );
 
-create table TaskHearts (
+create table TaskHabits (
 	id int primary key auto_increment,
 	task_id int not null,
   user_id varchar(25) not null,

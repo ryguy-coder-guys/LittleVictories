@@ -1,6 +1,5 @@
 import app from './app';
 import { dbConnection } from './database';
-
 dbConnection
   .sync()
   .then(() => {

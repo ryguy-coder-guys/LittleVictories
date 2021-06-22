@@ -3,6 +3,9 @@ import React, { FunctionComponent  } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Journal from './client/Screens/Journal/Journal.tsx';
 import RootNavigator from './client/Screens/Root/Root';
+import * as Google from 'expo-google-app-auth';
+
+
 export default function App() {
   return (
     // <View style={styles.container}>
@@ -19,7 +22,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff',``
     alignItems: 'center',
     justifyContent: 'center',
   },
