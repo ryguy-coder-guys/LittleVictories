@@ -24,7 +24,6 @@ const Journal = () => {
           style={styles.textArea}
           underlineColorAndroid="transparent"
           placeholder="Type something"
-          //placeholderTextColor=""
           numberOfLines={10}
           multiline={true}
         />
