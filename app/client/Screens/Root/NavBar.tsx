@@ -7,6 +7,7 @@ import IconB from 'react-native-vector-icons/FontAwesome5';
 import Journal from '../Journal/Journal';
 import Home from '../Home/Home';
 import Settings from '../Settings/Settings';
+import Tasks from '../Tasks/Task';
 
 const AppBottomNavigator = createMaterialBottomTabNavigator();
 
@@ -28,7 +29,7 @@ const BottomTabs = () => {
       />
       <AppBottomNavigator.Screen
         name="Tasks"
-        children={Home}
+        children={Tasks}
         options={{
           tabBarIcon: () => <IconB name="tasks" size={25} color="#FAFAFA" />
         }}
