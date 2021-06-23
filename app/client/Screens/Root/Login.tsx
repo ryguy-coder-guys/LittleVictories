@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
+import axios from 'axios';
 
 const Login = ({ navigation }) => {
   const { user, setUser } = useUserContext();
@@ -18,19 +19,76 @@ const Login = ({ navigation }) => {
 
   const [username, setUsername] = useState('');
   const [passwordAttempt, setPasswordAttempt] = useState('');
+  const [passwordAttempt2, setPasswordAttempt2] = useState('');
   const [loginSelected, toggleLogin] = useState(true);
+  const [mismatchPasswords, setMismatchPasswords] = useState(false);
+  const [wrongLogin, toggleWrongLogin] = useState(false);
 
   const handleClick = (view) => {
     if (view === 'login') {
       toggleLogin(true);
+      toggleWrongLogin(false);
+      setUsername('');
+      setPasswordAttempt('');
     } else {
       toggleLogin(false);
+      setMismatchPasswords(false);
+      setUsername('');
+      setPasswordAttempt('');
+      setPasswordAttempt2('');
     }
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     console.log('username: ', username);
     console.log('password attempt: ', passwordAttempt);
+    if (!username.length || !passwordAttempt.length) {
+      return;
+    }
+    if (loginSelected) {
+      // attempt a login for the user
+      const { data: user } = await axios.post(
+        'http://localhost:3000/api/auth/login',
+        {
+          username,
+          password: passwordAttempt,
+        }
+      );
+      if (user) {
+        // if successful navigate to home
+        setUser(user);
+        navigation.navigate('index');
+      } else {
+        // if not successful, will need to toggle wrongLogin
+        toggleWrongLogin(true);
+      }
+    } else if (!loginSelected) {
+      if (
+        !username.length ||
+        !passwordAttempt.length ||
+        !passwordAttempt2.length
+      ) {
+        return;
+      }
+      const { data: user } = await axios.post(
+        'http://localhost:3000/api/auth/register',
+        {
+          username,
+          password: passwordAttempt,
+        }
+      );
+      // compare the two passwords
+      if (user) {
+        // if they match, create a new user
+        // then navigate to home
+        setUser(user);
+        navigation.navigate('index');
+      } else {
+        setMismatchPasswords(true);
+        setPasswordAttempt('');
+        setPasswordAttempt2('');
+      }
+    }
   };
 
   // default view or if login btn is clicked
@@ -42,19 +100,17 @@ const Login = ({ navigation }) => {
         >
           <>
             <Image source={logo} />
-            {/* <Button color='#FAFAFA' onPress={() => { navigation.navigate('index'); }} title="Enter" /> */}
             <View style={{ flexDirection: 'row' }}>
               <AwesomeButton
-                backgroundColor={'#1D426D'}
+                backgroundColor={'#5c83b1'}
                 textColor={'#FAFAFA'}
                 height={35}
                 width={100}
                 raiseLevel={0}
                 borderRadius={8}
                 style={styles.button}
-                onPress={(next) => {
+                onPress={() => {
                   handleClick('login');
-                  next();
                 }}
               >
                 Login
@@ -67,14 +123,21 @@ const Login = ({ navigation }) => {
                 raiseLevel={0}
                 borderRadius={8}
                 style={styles.button}
-                onPress={(next) => {
+                onPress={() => {
                   handleClick('register');
-                  next();
                 }}
               >
                 Register
               </AwesomeButton>
             </View>
+            {wrongLogin ? (
+              <View>
+                <Text style={styles.error}>
+                  Username/Password did not match an existing user.
+                </Text>
+                <Text style={styles.error2}>Please try again.</Text>
+              </View>
+            ) : null}
             <Text style={styles.text}>Username:</Text>
             <TextInput
               style={styles.input}
@@ -98,10 +161,8 @@ const Login = ({ navigation }) => {
               raiseLevel={0}
               borderRadius={8}
               style={styles.button}
-              value="register"
-              onPress={(next) => {
+              onPress={() => {
                 handleLogin();
-                next();
               }}
             >
               Submit
@@ -119,7 +180,6 @@ const Login = ({ navigation }) => {
         >
           <>
             <Image source={logo} />
-            {/* <Button color='#FAFAFA' onPress={() => { navigation.navigate('index'); }} title="Enter" /> */}
             <View style={{ flexDirection: 'row' }}>
               <AwesomeButton
                 backgroundColor={'#1D426D'}
@@ -129,41 +189,53 @@ const Login = ({ navigation }) => {
                 raiseLevel={0}
                 borderRadius={8}
                 style={styles.button}
-                onPress={(next) => {
+                onPress={() => {
                   handleClick('login');
-                  next();
                 }}
               >
                 Login
               </AwesomeButton>
               <AwesomeButton
-                backgroundColor={'#1D426D'}
+                backgroundColor={'#5c83b1'}
                 textColor={'#FAFAFA'}
                 height={35}
                 width={100}
                 raiseLevel={0}
                 borderRadius={8}
                 style={styles.button}
-                onPress={(next) => {
+                onPress={() => {
                   handleClick('register');
-                  next();
                 }}
               >
                 Register
               </AwesomeButton>
             </View>
-            <Text style={styles.text}>Username:</Text>
+            <Text style={styles.text}>Choose a Username:</Text>
             <TextInput
               style={styles.input}
               onChangeText={setUsername}
               value={username}
               autoCapitalize="none"
             />
-            <Text style={styles.text}>Password:</Text>
+            {mismatchPasswords ? (
+              <View>
+                <Text style={styles.error}>Passwords did not match.</Text>
+                <Text style={styles.error2}>Please try again.</Text>
+              </View>
+            ) : null}
+            <Text style={styles.text}>Choose a Password:</Text>
             <TextInput
               style={styles.input}
               onChangeText={setPasswordAttempt}
               value={passwordAttempt}
+              secureTextEntry={true}
+              autoCapitalize="none"
+            />
+            <Text style={styles.text}>Confirm Password:</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={setPasswordAttempt2}
+              value={passwordAttempt2}
               secureTextEntry={true}
               autoCapitalize="none"
             />
@@ -175,13 +247,11 @@ const Login = ({ navigation }) => {
               raiseLevel={0}
               borderRadius={8}
               style={styles.button}
-              value="register"
-              onPress={(next) => {
+              onPress={() => {
                 handleLogin();
-                next();
               }}
             >
-              Register
+              Submit
             </AwesomeButton>
           </>
         </View>
@@ -201,6 +271,15 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     marginBottom: 20,
+  },
+  error: {
+    color: 'red',
+    alignSelf: 'center',
+  },
+  error2: {
+    color: 'red',
+    alignSelf: 'center',
+    marginBottom: 15,
   },
   input: {
     height: 40,

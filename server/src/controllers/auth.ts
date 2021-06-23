@@ -20,7 +20,7 @@ export const registerUser: RequestHandler = async (req, res) => {
   const { username, password } = req.body as RegisterUserReqBody;
   const user = await User.findOne({ where: { username } });
   if (user) {
-    return res.send(`user with username of ${username} already exists`);
+    return res.send(false);
   }
   const newUser = await User.create({
     id: getId(),
