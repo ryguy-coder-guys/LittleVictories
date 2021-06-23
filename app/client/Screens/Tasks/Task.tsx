@@ -1,16 +1,11 @@
 import React, {useState} from 'react';
 import { View, TextInput, StyleSheet, Text, ImageBackground, SafeAreaView, Pressable, Button } from 'react-native';
 import { FAB } from 'react-native-paper';
-import Modal from 'react-native-modal';
 
 
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
-  const [isModalVisible, setModalVisible] = useState(false);
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -22,19 +17,11 @@ const Task = () => {
     small
     color='blue'
     icon="plus"
-    onPress={toggleModal}
+    onPress={() => alert('hi')}
     />
-     <Modal isVisible={isModalVisible}>
-          <View style={{flex: 1}}>
-            <Text>Hello!</Text>
-
-            <Button title="Hide modal" onPress={toggleModal} />
-          </View>
-        </Modal>
       </View>
       <View style={styles.textAreaContainer} >
         <View style={styles.textArea}>
-
         </View>
       {/* </View>
       <View style={styles.textAreaContainer}>
@@ -111,36 +98,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 22
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center"
-  }
+
 });
 
 export default Task;
