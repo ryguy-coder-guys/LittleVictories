@@ -11,12 +11,11 @@ const Journal = () => {
       <View style={styles.container}>
         <Text style={styles.header}> User's Journal </Text>
         <AwesomeButton
-          height={30} width={100}  padding={10}
+          height={30}
+          width={100}
           style={styles.button}
           progress
-          onPress={next => {
-          /** Do Something **/
-            next();
+          onPress={() => {
           }}
         >
         Clear Entry
@@ -66,7 +65,8 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     marginLeft: 20,
-    marginTop: 15
+    marginTop: 15,
+    padding: 10
   },
   backgroundImage: {
     flex: 1,

@@ -1,17 +1,69 @@
-import React from 'react';
-import { View, TextInput, StyleSheet, Text, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
+import { View, TextInput, StyleSheet, Text, ImageBackground, SafeAreaView } from 'react-native';
 
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const exampleTaskData = [
+  {
+    id: 1,
+    description: 'do the dishes',
+    due_date: '6/24/21'
+  },
+  {
+    id: 2,
+    description: 'take out the trash',
+    due_date: '6/25/21'
+  }
+]
 
 const Home = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
 
+  const [ sleepHours, setSleepHours ] = useState('');
+  const [ didSkipMeals, setSkipMeals ] = useState('');
+  const [ didExercise, setDidExercise ] = useState('');
+
   return (
     <ImageBackground style= { styles.backgroundImage } source={bgImage}>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>HomePage</Text>
-      </View>
+      <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
+        <View style={styles.view}>
+          <Text style={styles.heading}>Upcoming Tasks</Text>
+          {exampleTaskData.map(task => {
+            return (
+              <View style={styles.task} key={task.id}>
+                <Text style={styles.desc}>{task.description} - {task.due_date}</Text>
+              </View>
+            )
+          })}
+        </View>
+        <View style={styles.view}>
+          <Text style={styles.heading}>Daily Reflection</Text>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={styles.prompt}>How many hours did you sleep last night?</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={sleepHours => setSleepHours(sleepHours)}
+              placeholder='Enter 0 - 24'
+              autoCapitalize='none'
+            />
+            <Text style={styles.prompt}>Did you skip any meals?</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={didSkipMeals => setSkipMeals(didSkipMeals)}
+              placeholder='yes or no'
+              autoCapitalize='none'
+            />
+            <Text style={styles.prompt}>Did you get any exercise?</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={didExercise => setDidExercise(didExercise)}
+              placeholder='yes or no'
+              autoCapitalize='none'
+            />
+          </View>
+        </View>
+        <View style={styles.view}>
+          <Text style={styles.heading}>Weekly Stats</Text>
+        </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 };
@@ -19,10 +71,43 @@ const Home = () => {
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    width: '100%',
     height: '100%',
     justifyContent: 'center',
+    width: '100%'
   },
+  desc: {
+    color: '#1D426D',
+    fontSize: 14
+  },
+  heading: {
+    color: '#1D426D',
+    fontSize: 22,
+    fontWeight: 'bold'
+  },
+  input: {
+    borderRadius: 10,
+    backgroundColor: '#9ec5cf',
+    color: '#1D426D',
+    height: 40,
+    padding: 10,
+    width: '100%',
+    marginTop: 10
+  },
+  task: {
+    paddingTop: 10
+  },
+  prompt: {
+    alignSelf: 'flex-start',
+    color: '#1D426D',
+    marginTop: 10
+  },
+  view: {
+    backgroundColor: '#8ebac6',
+    borderRadius: 10,
+    marginBottom: 20,
+    padding: 20,
+    width: '80%',
+  }
 });
 
 

@@ -29,8 +29,6 @@ const Login = ({ navigation }) => {
   }
 
   const handleLogin = () => {
-    console.log('username: ', username);
-    console.log('password attempt: ', passwordAttempt);
     if (loginSelected) {
       // attempt a login for the user
       if (!wrongLogin) {
