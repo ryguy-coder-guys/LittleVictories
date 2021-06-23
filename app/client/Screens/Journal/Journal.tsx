@@ -1,45 +1,37 @@
 import React from 'react';
 import AwesomeButton from 'react-native-really-awesome-button';
-import { View, TextInput, StyleSheet, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Text, ImageBackground } from 'react-native';
 
 
 const Journal = () => {
+  const bgImage = require('../../../assets/blue-gradient.png');
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header} >Users Journal</Text>
-      <AwesomeButton
-        height={30} width={100}  padding={10}
-        style={styles.button}
-        progress
-        onPress={next => {
-        /** Do Something **/
-          next();
-        }}
-      >
-      Clear Entry
-      </AwesomeButton>
-      <View style={styles.textAreaContainer} >
-        <TextInput
-          style={styles.textArea}
-          underlineColorAndroid="transparent"
-          placeholder="Type something"
-          numberOfLines={10}
-          multiline={true}
-        />
+    <ImageBackground style={styles.backgroundImage} source={bgImage}>
+      <View style={styles.container}>
+        <Text style={styles.header}> User's Journal </Text>
+        <AwesomeButton
+          height={30} width={100}  padding={10}
+          style={styles.button}
+          progress
+          onPress={next => {
+          /** Do Something **/
+            next();
+          }}
+        >
+        Clear Entry
+        </AwesomeButton>
+        <View style={styles.textAreaContainer} >
+          <TextInput
+            style={styles.textArea}
+            underlineColorAndroid="transparent"
+            placeholder="Type something"
+            numberOfLines={10}
+            multiline={true}
+          />
+        </View>
       </View>
-      <AwesomeButton
-        height={30} width={100}  padding={10}
-        style={styles.submitButton}
-        progress
-        onPress={next => {
-        /** Do Something **/
-          next();
-        }}
-      >
-      Submit
-      </AwesomeButton>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -50,10 +42,15 @@ const styles = StyleSheet.create({
     paddingTop: 65,
   },
   textAreaContainer: {
-    borderColor: '#d17373',
+    backgroundColor: '#FAFAFA',
+    borderColor: '#FAFAFA',
     borderWidth: 1,
+    borderRadius: 20,
     padding: 5,
     marginTop: 30,
+    marginRight: 20,
+    marginLeft: 20,
+    opacity: 0.2
   },
   textArea: {
     height: 550,
@@ -61,23 +58,22 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   header: {
-    textAlign: 'center',
-    color: '#9ee7ff',
-    fontSize: 30,
-    fontWeight: 'bold'
+    color: '#1D426D',
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginLeft: 20
   },
   button: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20
+    marginLeft: 20,
+    marginTop: 15
   },
-  submitButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
-    marginTop: 20
-  },
+  }
 });
 
 export default Journal;

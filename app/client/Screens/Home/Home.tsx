@@ -4,12 +4,11 @@ import { View, TextInput, StyleSheet, Text, ImageBackground } from 'react-native
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 
-const HomeTopTab = () => {
-  const image = { uri: 'https://i.pinimg.com/originals/4d/06/e1/4d06e1d42101b073bb0b4491f0aaa100.jpg' };
+const Home = () => {
+  const bgImage = require('../../../assets/blue-gradient.png');
 
   return (
-    <ImageBackground style= { styles.backgroundImage } source={image} imageStyle=
-      {{opacity: 0.7}}>
+    <ImageBackground style= { styles.backgroundImage } source={bgImage}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <Text>HomePage</Text>
       </View>
@@ -27,4 +26,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default HomeTopTab;
+export default Home;
