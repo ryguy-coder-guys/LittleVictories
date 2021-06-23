@@ -1,16 +1,10 @@
 import React, {useState} from 'react';
 import { View, TextInput, StyleSheet, Text, ImageBackground, SafeAreaView, Pressable, Button } from 'react-native';
 import { FAB } from 'react-native-paper';
-import Modal from 'react-native-modal';
 
 
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
-  const [isModalVisible, setModalVisible] = useState(false);
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -22,15 +16,8 @@ const Task = () => {
     small
     color='blue'
     icon="plus"
-    onPress={toggleModal}
+    onPress={() => alert('add task will happen now!')}
     />
-     <Modal isVisible={isModalVisible}>
-          <View style={{flex: 1}}>
-            <Text>Hello!</Text>
-
-            <Button title="Hide modal" onPress={toggleModal} />
-          </View>
-        </Modal>
       </View>
       <View style={styles.textAreaContainer} >
         <View style={styles.textArea}>
@@ -103,7 +90,6 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-
   },
   centeredView: {
     flex: 1,
