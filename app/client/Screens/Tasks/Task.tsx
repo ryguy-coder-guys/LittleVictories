@@ -1,42 +1,57 @@
 import React from 'react';
 import AwesomeButton from 'react-native-really-awesome-button';
-import { View, TextInput, StyleSheet, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Text, ImageBackground, SafeAreaView } from 'react-native';
+import { FAB } from 'react-native-paper';
 
+
+const addNewTask = () => {
+  return(
+    <View style={styles.textAreaContainer} >
+    <View style={styles.textArea}>
+    </View>
+    </View>
+  )
+}
 
 const Task = () => {
-
+  const bgImage = require('../../../assets/blue-gradient.png');
   return (
+    <ImageBackground style={styles.backgroundImage} source={bgImage}>
     <View style={styles.container}>
       <Text style={styles.header} >Tasks</Text>
-
+      <View>
+      <FAB
+    style={styles.fab}
+    small
+    color='blue'
+    icon="plus"
+    onPress={addNewTask}
+    />
+      </View>
       <View style={styles.textAreaContainer} >
-        <TextInput
-          style={styles.textArea}
-          underlineColorAndroid="transparent"
-          placeholder="Type something"
-          numberOfLines={10}
-          multiline={true}
-        />
+        <View style={styles.textArea}>
+
+        </View>
+      {/* </View>
+      <View style={styles.textAreaContainer}>
+      <View style={styles.textArea}>
+
+      </View>
       </View>
       <View style={styles.textAreaContainer}>
-        <TextInput
-          style={styles.textArea}
-          underlineColorAndroid="transparent"
-          placeholder="Type something"
-          numberOfLines={10}
-          multiline={true}
-        />
+        <View style={styles.textArea}>
+
+        </View> */}
       </View>
-      <View style={styles.textAreaContainer}>
-        <TextInput
-          style={styles.textArea}
-          underlineColorAndroid="transparent"
-          placeholder="Type something"
-          numberOfLines={10}
-          multiline={true}
-        />
-      </View>
+      {/* <FAB
+    style={styles.fab}
+    small
+    color='blue'
+    icon="plus"
+    onPress={() => console.log('Pressed')}
+    /> */}
     </View>
+    </ImageBackground>
   );
 };
 
@@ -47,10 +62,15 @@ const styles = StyleSheet.create({
     paddingTop: 65,
   },
   textAreaContainer: {
-    borderColor: '#d17373',
+    backgroundColor: '#FAFAFA',
+    borderColor: '#FAFAFA',
     borderWidth: 1,
+    borderRadius: 20,
     padding: 5,
     marginTop: 30,
+    marginRight: 20,
+    marginLeft: 20,
+    opacity: 0.2
   },
   textArea: {
     height: 200,
@@ -74,6 +94,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20
+  },
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
+
   },
 });
 

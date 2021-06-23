@@ -29,7 +29,7 @@ const BottomTabs = () => {
       />
       <AppBottomNavigator.Screen
         name="Tasks"
-        children={Home}
+        children={Tasks}
         options={{
           tabBarIcon: () => <IconB name="tasks" size={25} color="#FAFAFA" />
         }}
