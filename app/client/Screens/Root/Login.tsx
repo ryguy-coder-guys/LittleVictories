@@ -1,19 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {Text, Button, View, TextInput, StyleSheet, ImageBackground} from 'react-native';
+import {Text, Button, View, TextInput, StyleSheet, ImageBackground, Image} from 'react-native';
 
 
 const Login = ({ navigation }) => {
-  const image = { uri: 'https://i.pinimg.com/originals/4d/06/e1/4d06e1d42101b073bb0b4491f0aaa100.jpg' };
+  const bgImage = require('../../../assets/blue-gradient.png');
+  const logo = require('../../../assets/logo.png');
 
   return (
-    <ImageBackground style= { styles.backgroundImage } source={image} imageStyle={{opacity: 0.7}}>
+    <ImageBackground style= { styles.backgroundImage } source={bgImage}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <>
-          <Text style={{ fontSize: 30 }}>Welcome To</Text>
-          <Text></Text>
-          <Text style={{ fontSize: 30 }}>LittleVictories</Text>
-          <Text></Text>
-          <Button onPress={() => { navigation.navigate('index'); }} title="Enter" />
+          <Image source={logo} />
+          <Button color='#FAFAFA' onPress={() => { navigation.navigate('index'); }} title="Enter" />
         </>
       </View>
     </ImageBackground>
