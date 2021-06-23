@@ -5,7 +5,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import IconA from 'react-native-vector-icons/Ionicons';
 import IconB from 'react-native-vector-icons/FontAwesome5';
 import Journal from '../Journal/Journal';
-import HomeTopTab  from '../Home/Home';
+import Home from '../Home/Home';
 import Settings from '../Settings/Settings';
 import Tasks from '../Tasks/Task';
 
@@ -17,35 +17,35 @@ const BottomTabs = () => {
     <AppBottomNavigator.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarColor: '#4cc52e'
+        tabBarColor: '#94B6BD'
       }}
     >
       <AppBottomNavigator.Screen
         name="Home"
-        children={HomeTopTab}
+        children={Home}
         options={{
-          tabBarIcon: () => <IconA name="home" size={25} color="#fff" />
+          tabBarIcon: () => <IconA name="home" size={25} color="#FAFAFA" />
         }}
       />
       <AppBottomNavigator.Screen
         name="Tasks"
-        children={Tasks}
+        children={Home}
         options={{
-          tabBarIcon: () => <IconB name="tasks" size={25} color="#fff" />
+          tabBarIcon: () => <IconB name="tasks" size={25} color="#FAFAFA" />
         }}
       />
       <AppBottomNavigator.Screen
         name="Journal"
         children={Journal}
         options={{
-          tabBarIcon: () => <IconA name="journal" size={25} color="#fff" />
+          tabBarIcon: () => <IconA name="journal" size={25} color="#FAFAFA" />
         }}
       />
       <AppBottomNavigator.Screen
         name="Settings"
         children={Settings}
         options={{
-          tabBarIcon: () => <IconA name="settings" size={25} color="#fff" />
+          tabBarIcon: () => <IconA name="settings" size={25} color="#FAFAFA" />
         }}
       />
     </AppBottomNavigator.Navigator>

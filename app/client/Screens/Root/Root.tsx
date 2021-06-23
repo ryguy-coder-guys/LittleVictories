@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {IotdContext, MusicContext, FontContext } from './Context';
+// import {IotdContext, MusicContext, FontContext } from './Context';
 import axios from 'axios';
-import BottomTabs from './BottomTabs';
+import BottomTabs from './NavBar';
 import Login from './Login';
 // import LoginModal from './Login';
 
