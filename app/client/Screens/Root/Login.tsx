@@ -1,17 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import {Text, View, TextInput, StyleSheet, ImageBackground, Image} from 'react-native';
+import {
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  ImageBackground,
+  Image,
+} from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
+import { useUserContext } from '../../Contexts/userContext';
+import axios from 'axios';
 
 const Login = ({ navigation }) => {
+  const { user, setUser } = useUserContext();
+
   const bgImage = require('../../../assets/blue-gradient.png');
   const logo = require('../../../assets/logo.png');
 
-  const [ username, setUsername ] = useState('');
-  const [ passwordAttempt, setPasswordAttempt ] = useState('');
-  const [ passwordAttempt2, setPasswordAttempt2 ] = useState('');
-  const [ loginSelected, toggleLogin ] = useState(true);
-  const [ mismatchPasswords, setMismatchPasswords ] = useState(false);
-  const [ wrongLogin, toggleWrongLogin ] = useState(false);
+  const [username, setUsername] = useState('');
+  const [passwordAttempt, setPasswordAttempt] = useState('');
+  const [passwordAttempt2, setPasswordAttempt2] = useState('');
+  const [loginSelected, toggleLogin] = useState(true);
+  const [mismatchPasswords, setMismatchPasswords] = useState(false);
+  const [wrongLogin, toggleWrongLogin] = useState(false);
 
   const handleClick = (view) => {
     if (view === 'login') {
@@ -26,24 +37,51 @@ const Login = ({ navigation }) => {
       setPasswordAttempt('');
       setPasswordAttempt2('');
     }
-  }
+  };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    console.log('username: ', username);
+    console.log('password attempt: ', passwordAttempt);
+    if (!username.length || !passwordAttempt.length) {
+      return;
+    }
     if (loginSelected) {
       // attempt a login for the user
-      if (!wrongLogin) {
+      const { data: user } = await axios.post(
+        'http://localhost:3000/api/auth/login',
+        {
+          username,
+          password: passwordAttempt,
+        }
+      );
+      if (user) {
         // if successful navigate to home
+        setUser(user);
         navigation.navigate('index');
       } else {
         // if not successful, will need to toggle wrongLogin
         toggleWrongLogin(true);
       }
-
     } else if (!loginSelected) {
+      if (
+        !username.length ||
+        !passwordAttempt.length ||
+        !passwordAttempt2.length
+      ) {
+        return;
+      }
+      const { data: user } = await axios.post(
+        'http://localhost:3000/api/auth/register',
+        {
+          username,
+          password: passwordAttempt,
+        }
+      );
       // compare the two passwords
-      if (passwordAttempt === passwordAttempt2) {
+      if (user) {
         // if they match, create a new user
         // then navigate to home
+        setUser(user);
         navigation.navigate('index');
       } else {
         setMismatchPasswords(true);
@@ -51,13 +89,15 @@ const Login = ({ navigation }) => {
         setPasswordAttempt2('');
       }
     }
-  }
+  };
 
   // default view or if login btn is clicked
   if (loginSelected) {
     return (
       <ImageBackground style={styles.backgroundImage} source={bgImage}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
           <>
             <Image source={logo} />
             <View style={{ flexDirection: 'row' }}>
@@ -90,28 +130,28 @@ const Login = ({ navigation }) => {
                 Register
               </AwesomeButton>
             </View>
-            {
-              wrongLogin ?
+            {wrongLogin ? (
               <View>
-                <Text style={styles.error}>Username/Password did not match an existing user.</Text>
+                <Text style={styles.error}>
+                  Username/Password did not match an existing user.
+                </Text>
                 <Text style={styles.error2}>Please try again.</Text>
               </View>
-              : null
-            }
+            ) : null}
             <Text style={styles.text}>Username:</Text>
             <TextInput
-                style={styles.input}
-                onChangeText={setUsername}
-                value={username}
-                autoCapitalize='none'
-              />
+              style={styles.input}
+              onChangeText={setUsername}
+              value={username}
+              autoCapitalize="none"
+            />
             <Text style={styles.text}>Password:</Text>
             <TextInput
               style={styles.input}
               onChangeText={setPasswordAttempt}
               value={passwordAttempt}
               secureTextEntry={true}
-              autoCapitalize='none'
+              autoCapitalize="none"
             />
             <AwesomeButton
               backgroundColor={'#1D426D'}
@@ -131,11 +171,13 @@ const Login = ({ navigation }) => {
         </View>
       </ImageBackground>
     );
-  // default view or if login btn is clicked
+    // default view or if login btn is clicked
   } else {
     return (
       <ImageBackground style={styles.backgroundImage} source={bgImage}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
           <>
             <Image source={logo} />
             <View style={{ flexDirection: 'row' }}>
@@ -170,26 +212,24 @@ const Login = ({ navigation }) => {
             </View>
             <Text style={styles.text}>Choose a Username:</Text>
             <TextInput
-                style={styles.input}
-                onChangeText={setUsername}
-                value={username}
-                autoCapitalize='none'
-              />
-            {
-              mismatchPasswords ?
+              style={styles.input}
+              onChangeText={setUsername}
+              value={username}
+              autoCapitalize="none"
+            />
+            {mismatchPasswords ? (
               <View>
                 <Text style={styles.error}>Passwords did not match.</Text>
                 <Text style={styles.error2}>Please try again.</Text>
               </View>
-              : null
-            }
+            ) : null}
             <Text style={styles.text}>Choose a Password:</Text>
             <TextInput
               style={styles.input}
               onChangeText={setPasswordAttempt}
               value={passwordAttempt}
               secureTextEntry={true}
-              autoCapitalize='none'
+              autoCapitalize="none"
             />
             <Text style={styles.text}>Confirm Password:</Text>
             <TextInput
@@ -197,7 +237,7 @@ const Login = ({ navigation }) => {
               onChangeText={setPasswordAttempt2}
               value={passwordAttempt2}
               secureTextEntry={true}
-              autoCapitalize='none'
+              autoCapitalize="none"
             />
             <AwesomeButton
               backgroundColor={'#1D426D'}
@@ -215,7 +255,7 @@ const Login = ({ navigation }) => {
             </AwesomeButton>
           </>
         </View>
-        </ImageBackground>
+      </ImageBackground>
     );
   }
 };
@@ -230,16 +270,16 @@ const styles = StyleSheet.create({
   button: {
     marginLeft: 5,
     marginRight: 5,
-    marginBottom: 20
+    marginBottom: 20,
   },
   error: {
     color: 'red',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   error2: {
     color: 'red',
     alignSelf: 'center',
-    marginBottom: 15
+    marginBottom: 15,
   },
   input: {
     height: 40,
@@ -248,12 +288,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#FAFAFA',
     opacity: 0.3,
-    marginBottom: 20
+    marginBottom: 20,
   },
   text: {
     color: '#FAFAFA',
-    marginBottom: 5
-  }
+    marginBottom: 5,
+  },
 });
 
 export default Login;

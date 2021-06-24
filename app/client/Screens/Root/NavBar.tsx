@@ -11,40 +11,39 @@ import Tasks from '../Tasks/Task';
 const AppBottomNavigator = createMaterialBottomTabNavigator();
 
 const BottomTabs = () => {
-
   return (
     <AppBottomNavigator.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarColor: '#94B6BD'
+        tabBarColor: '#94B6BD',
       }}
     >
       <AppBottomNavigator.Screen
         name="Home"
         component={Home}
         options={{
-          tabBarIcon: () => <IconA name="home" size={25} color="#FAFAFA" />
+          tabBarIcon: () => <IconA name="home" size={25} color="#FAFAFA" />,
         }}
       />
       <AppBottomNavigator.Screen
         name="Tasks"
         component={Tasks}
         options={{
-          tabBarIcon: () => <IconB name="tasks" size={25} color="#FAFAFA" />
+          tabBarIcon: () => <IconB name="tasks" size={25} color="#FAFAFA" />,
         }}
       />
       <AppBottomNavigator.Screen
         name="Journal"
         component={Journal}
         options={{
-          tabBarIcon: () => <IconA name="journal" size={25} color="#FAFAFA" />
+          tabBarIcon: () => <IconA name="journal" size={25} color="#FAFAFA" />,
         }}
       />
       <AppBottomNavigator.Screen
         name="Settings"
         component={Settings}
         options={{
-          tabBarIcon: () => <IconA name="settings" size={25} color="#FAFAFA" />
+          tabBarIcon: () => <IconA name="settings" size={25} color="#FAFAFA" />,
         }}
       />
     </AppBottomNavigator.Navigator>

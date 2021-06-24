@@ -1,15 +1,26 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, ImageBackground } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  ImageBackground,
+} from 'react-native';
 import { Switch } from 'react-native-switch';
 import AwesomeButton from 'react-native-really-awesome-button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useUserContext } from '../../Contexts/userContext';
 
-const SettingsScreen = ({navigation, route}) => {
+const SettingsScreen = ({ navigation, route }) => {
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const bgImage = require('../../../assets/blue-gradient.png');
+  const { setUser } = useUserContext();
+
+  const logout = (): void => setUser(null);
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -36,7 +47,7 @@ const SettingsScreen = ({navigation, route}) => {
             navigation.navigate('login');
           }}
         >
-        Delete Account
+          Delete Account
         </AwesomeButton>
         <AwesomeButton
           style={styles.button}
@@ -44,25 +55,25 @@ const SettingsScreen = ({navigation, route}) => {
           height={50}
           progress
           onPress={() => {
+            logout();
             navigation.navigate('login');
           }}
         >
-        Log Out
+          Log Out
         </AwesomeButton>
       </View>
     </ImageBackground>
   );
-
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   value: {
-    marginVertical: 12
+    marginVertical: 12,
   },
   button: {
     marginBottom: '10%',
@@ -81,7 +92,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: 'center',
-  }
+  },
 });
 
 export default SettingsScreen;
