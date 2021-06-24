@@ -12,7 +12,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { FAB } from 'react-native-paper';
-import Modal from 'react-native-modal';
+import { white } from 'react-native-paper/lib/typescript/styles/colors';
 import TaskSummary from './TaskSummary';
 
 const Task = () => {
@@ -28,13 +28,12 @@ const Task = () => {
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <ScrollView style={styles.container}>
-        <Text style={styles.header}>Tasks</Text>
-        <View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.header}>Tasks</Text>
           <FAB
             style={styles.fab}
             small
-            color="blue"
-            icon="plus"
+            icon='plus'
             onPress={() => setShowForm(true)}
           />
         </View>
@@ -61,32 +60,11 @@ const Task = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
-    padding: 20,
-    paddingTop: 65,
-  },
-  textAreaContainer: {
-    backgroundColor: '#FAFAFA',
-    borderColor: '#FAFAFA',
-    borderWidth: 1,
-    borderRadius: 20,
-    padding: 5,
-    marginTop: 30,
-    marginRight: 20,
-    marginLeft: 20,
-    opacity: 0.2,
-  },
-  textArea: {
-    height: 200,
-    width: 100,
-    justifyContent: 'flex-start',
-  },
-  header: {
-    textAlign: 'center',
-    color: '#9ee7ff',
-    fontSize: 30,
-    fontWeight: 'bold',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
   },
   button: {
     flexDirection: 'row',
@@ -94,29 +72,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20,
   },
-  submitButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
-  backgroundImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-  },
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
+  },
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 65,
+  },
+  fab: {
+    backgroundColor: '#1D426D',
+    height: 40,
+    marginRight: 20
+  },
+  header: {
+    color: '#1D426D',
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginLeft: 20
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
   modalView: {
     margin: 20,
@@ -133,21 +113,30 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
+  submitButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
   },
-  buttonClose: {
-    backgroundColor: '#2196F3',
+  textArea: {
+    height: 200,
+    width: 100,
+    justifyContent: 'flex-start',
   },
   textStyle: {
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
+  textAreaContainer: {
+    backgroundColor: '#8ebac6',
+    borderRadius: 10,
+    padding: 5,
+    marginTop: 30,
+    marginRight: 20,
+    marginLeft: 20
+  }
 });
 
 export default Task;
