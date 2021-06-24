@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { View, TextInput, StyleSheet, Text, ImageBackground } from 'react-native';
+import { compareAsc, format } from 'date-fns';
 
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
 
   const [ journal, setJournal ] = useState('');
+  const [ date ] = useState(format(new Date(), 'MMMM do y'))
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -28,6 +30,7 @@ const Journal = () => {
           </AwesomeButton>
         </View>
         <View style={styles.textAreaContainer} >
+          <Text style={styles.date}>{date}</Text>
           <TextInput
             style={styles.textArea}
             underlineColorAndroid="transparent"
@@ -48,6 +51,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 65,
+  },
+  date: {
+    color: '#1D426D',
+    fontSize: 14,
+    alignSelf: 'flex-end'
   },
   textAreaContainer: {
     backgroundColor: '#8ebac6',
