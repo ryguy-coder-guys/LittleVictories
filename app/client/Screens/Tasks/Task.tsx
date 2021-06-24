@@ -17,7 +17,6 @@ import { Switch } from 'react-native-switch';
 import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 
-
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const [showForm, setShowForm] = useState(false);
