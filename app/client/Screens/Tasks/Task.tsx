@@ -95,16 +95,15 @@ const Task = () => {
       </View>
             <Text style={styles.taskPrompt}>Is Important?</Text>
             <Switch
-          style={styles.switch}
-          circleActiveColor={'#9ee7ff'}
-          circleInActiveColor={'#f4f3f4'}
-          backgroundActive={'rgb(7, 40, 82)'}
-          backgroundInactive={'rgb(7, 40, 82)'}
-          switchLeftPx={5}
-          switchRightPx={5}
-          onValueChange={toggleSwitch}
-          value={isImportant}
-          />
+              circleActiveColor={'#9ee7ff'}
+              circleInActiveColor={'#f4f3f4'}
+              backgroundActive={'rgb(7, 40, 82)'}
+              backgroundInactive={'rgb(7, 40, 82)'}
+              switchLeftPx={5}
+              switchRightPx={5}
+              onValueChange={toggleSwitch}
+              value={isImportant}
+            />
             <Button title="submit" onPress={() => handleSubmit()}/>
             <Button title="exit" onPress={() => setShowForm(false)}/>
           </View>
