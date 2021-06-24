@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {Text, View, TextInput, StyleSheet, ImageBackground, Image} from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 
@@ -29,8 +29,6 @@ const Login = ({ navigation }) => {
   }
 
   const handleLogin = () => {
-    console.log('username: ', username);
-    console.log('password attempt: ', passwordAttempt);
     if (loginSelected) {
       // attempt a login for the user
       if (!wrongLogin) {
