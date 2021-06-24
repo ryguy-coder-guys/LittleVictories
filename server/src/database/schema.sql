@@ -5,11 +5,15 @@ use little_victories;
 grant all on *.* to 'root'@'localhost' with grant option;
 
 create table Users (
-  id varchar(25) primary key,
-  fName varchar(25) not null,
-  lName varchar(25),
+  id varchar(36) primary key,
   createdAt datetime not null,
-  updatedAt datetime not null
+  updatedAt datetime not null,
+  username varchar(25) not null,
+  hash text not null
+  -- salt text not null,
+  -- activationKey float not null,
+  -- resetPasswordKey float not null,
+  -- verified bool not null
 );
 
 create table Habits (
