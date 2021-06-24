@@ -7,6 +7,7 @@ interface JournalEntryInstance extends Model {
   user_id: string;
   createdAt: Date;
   content: string;
+  date: string;
 }
 
 export const JournalEntry = dbConnection.define<JournalEntryInstance>(
@@ -31,6 +32,10 @@ export const JournalEntry = dbConnection.define<JournalEntryInstance>(
       allowNull: false
     },
     content: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    date: {
       type: DataTypes.STRING,
       allowNull: false
     }

@@ -82,6 +82,7 @@ create table JournalEntries (
   createdAt datetime not null default now(),
   updatedAt datetime,
   content text not null,
+  date varchar(10) not null,
   foreign key (user_id) references Users(id)
 );
 
