@@ -98,4 +98,4 @@ create table UserStats (
 
 
 /* run from project root
-/* mysql -u root < server/database/schema.sql
+/* mysql -u root < server/src/database/schema.sql
