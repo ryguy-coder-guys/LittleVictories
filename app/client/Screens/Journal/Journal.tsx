@@ -1,14 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AwesomeButton from 'react-native-really-awesome-button';
-import { View, TextInput, StyleSheet, Text, ImageBackground } from 'react-native';
+import { View, TextInput, StyleSheet, Text, ImageBackground, Alert } from 'react-native';
 import { format } from 'date-fns';
 import IconA from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import { useUserContext } from '../../Contexts/userContext';
+import { useJournalContext } from '../../Contexts/journalContext';
 
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
 
-  const [ journal, setJournal ] = useState('');
-  const [ date ] = useState(format(new Date(), 'MMMM do y'))
+  const [ text, setText ] = useState('');
+  const [ date ] = useState(format(new Date(), 'MMMM do y'));
+  const { user } = useUserContext();
+  const { journal } = useJournalContext();
+
+  useEffect(() => {
+    setText(journal);
+  }, [])
+
+  const saveJournal = async () => {
+    await axios.post(
+      'http://localhost:3000/api/journalEntries/create',
+      {
+        user_id: user.id,
+        content: text,
+        date: format(new Date(), 'MM-dd-yyyy')
+      }
+    );
+    alert('Journal successfully saved.')
+  };
+
+  const clearJournal = () => {
+    const areYouSure = Alert.alert(
+      "Are you sure?",
+      "Once deleted, you cannot get this journal entry back.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Clear Entry", onPress: async () => {
+          await axios.post(
+            'http://localhost:3000/api/journalEntries/create',
+            {
+              user_id: user.id,
+              content: '',
+              date: format(new Date(), 'MM-dd-yyyy')
+            }
+          );
+          setText('');
+          alert('Journal successfully cleared.');
+          }
+        }
+      ]
+    );
+  };
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -24,7 +72,7 @@ const Journal = () => {
             borderRadius={8}
             style={styles.button}
             onPress={() => {
-              setJournal('');
+              clearJournal();
             }}
           >
           Clear Entry
@@ -42,10 +90,24 @@ const Journal = () => {
             placeholder="Type something"
             numberOfLines={10}
             multiline={true}
-            onChangeText={setJournal}
-            value={journal}
+            onChangeText={setText}
+            value={text}
           />
         </View>
+        <AwesomeButton
+            backgroundColor={'#1D426D'}
+            textColor={'#FAFAFA'}
+            height={35}
+            width={125}
+            raiseLevel={0}
+            borderRadius={8}
+            style={styles.submit}
+            onPress={() => {
+              saveJournal();
+            }}
+          >
+          Save
+          </AwesomeButton>
       </View>
     </ImageBackground>
   );
@@ -78,10 +140,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 20
   },
+  submit: {
+    alignSelf: 'flex-end',
+    marginTop: 10,
+    marginRight: 20,
+  },
   textArea: {
-    height: '82%',
-    width: 350,
-    justifyContent: 'flex-start'
+    height: '75%',
+    justifyContent: 'flex-start',
+    marginTop: 20
   },
   textAreaContainer: {
     backgroundColor: '#8ebac6',

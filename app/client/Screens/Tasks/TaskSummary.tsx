@@ -33,19 +33,19 @@ const TaskSummary = () => {
   return (
     <View>
       <FlatList
-        ListHeaderComponent={() => <ListHeader heading="this week" />}
+        ListHeaderComponent={() => <ListHeader heading="Today" />}
         data={thisWeek}
         renderItem={TaskList}
         style={styles.listContainer}
       />
       <FlatList
-        ListHeaderComponent={() => <ListHeader heading="this month" />}
+        ListHeaderComponent={() => <ListHeader heading="This Week" />}
         data={thisMonth}
         renderItem={TaskList}
         style={styles.listContainer}
       />
       <FlatList
-        ListHeaderComponent={() => <ListHeader heading="maybe later" />}
+        ListHeaderComponent={() => <ListHeader heading="Later" />}
         data={beyond}
         renderItem={TaskList}
         style={styles.listContainer}
@@ -56,30 +56,23 @@ const TaskSummary = () => {
 
 const styles = StyleSheet.create({
   listContainer: {
-    backgroundColor: '#FAFAFA',
-    borderColor: '#FAFAFA',
-    borderWidth: 1,
-    borderRadius: 20,
-    padding: 5,
+    backgroundColor: '#8ebac6',
+    borderRadius: 10,
     marginTop: 30,
     marginRight: 20,
     marginLeft: 20,
-    opacity: 0.2,
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 10,
-    paddingRight: 10,
+    padding: 20
   },
   listHeader: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 5,
-    textDecorationLine: 'underline',
+    paddingBottom: 5,
+    color: '#1D426D'
   },
   taskText: {
-    fontSize: 17,
-    paddingTop: 2,
-    paddingBottom: 2,
+    fontSize: 14,
+    paddingTop: 5,
+    color: '#1D426D'
   },
 });
 
