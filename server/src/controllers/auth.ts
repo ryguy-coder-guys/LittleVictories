@@ -33,5 +33,7 @@ export const registerUser: RequestHandler = async (req, res) => {
 export const loginUser: RequestHandler = async (req, res): Promise<void> => {
   const { username, password } = req.body as LoginUserReqBody;
   const user = await validate(username, password);
+  // const tasks = await Task.findAll({where: {user_id: user.id}});
+  // return {...user, tasks}
   res.send(user);
 };
