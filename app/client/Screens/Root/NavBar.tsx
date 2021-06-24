@@ -22,28 +22,28 @@ const BottomTabs = () => {
     >
       <AppBottomNavigator.Screen
         name="Home"
-        children={Home}
+        component={Home}
         options={{
           tabBarIcon: () => <IconA name="home" size={25} color="#FAFAFA" />
         }}
       />
       <AppBottomNavigator.Screen
         name="Tasks"
-        children={Tasks}
+        component={Tasks}
         options={{
           tabBarIcon: () => <IconB name="tasks" size={25} color="#FAFAFA" />
         }}
       />
       <AppBottomNavigator.Screen
         name="Journal"
-        children={Journal}
+        component={Journal}
         options={{
           tabBarIcon: () => <IconA name="journal" size={25} color="#FAFAFA" />
         }}
       />
       <AppBottomNavigator.Screen
         name="Settings"
-        children={Settings}
+        component={Settings}
         options={{
           tabBarIcon: () => <IconA name="settings" size={25} color="#FAFAFA" />
         }}
