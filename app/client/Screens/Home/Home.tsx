@@ -100,7 +100,6 @@ const Home = ({ navigation }) => {
     </ImageBackground>
   );
 };
-
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
@@ -157,6 +156,4 @@ const styles = StyleSheet.create({
     width: '80%',
   }
 });
-
-
 export default Home;
