@@ -10,12 +10,38 @@ import {
   Button,
   Alert,
 } from 'react-native';
+import axios from 'axios';
 import { FAB } from 'react-native-paper';
-import Modal from 'react-native-modal';
+import Slider from './Slider';
+import { Switch } from 'react-native-switch';
+
 
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const [showForm, setShowForm] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [tasks, setTasks] = useState([])
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
+  const [timeToComplete, setTimeToComplete] = useState('');
+  const [isImportant, setIsImportant] = useState(false);
+
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  // const handleSubmit = () => {
+
+
+  // }
+
+  const handleSubmit = async () => {
+    const { data: tasks } = await axios.post('http://localhost:3000/api/tasks', {
+      description,
+      date,
+      timeToComplete,
+      isImportant,
+    });
+    setTasks((task) => [...task, tasks]);
+  };
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -49,7 +75,21 @@ const Task = () => {
               autoCapitalize='none'
             />
             </View>
-            <Button title="submit" onPress={() => setShowForm(false)}/>
+            <Slider/>
+            <Text>Is Important?</Text>
+            <Switch
+          style={styles.switch}
+          circleActiveColor={'#9ee7ff'}
+          circleInActiveColor={'#f4f3f4'}
+          backgroundActive={'rgb(7, 40, 82)'}
+          backgroundInactive={'rgb(7, 40, 82)'}
+          switchLeftPx={5}
+          switchRightPx={5}
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+          />
+            <Button title="submit" onPress={() => handleSubmit()}/>
+            <Button title="x" onPress={() => setShowForm(false)}/>
           </View>
         ) : null}
       </View>
@@ -135,7 +175,10 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginRight: 20,
     marginLeft: 20,
-  }
+  },
+  switch: {
+    marginBottom: '30%',
+  },
 
 });
 export default Task;
