@@ -105,7 +105,8 @@ const Task = () => {
           onValueChange={toggleSwitch}
           value={isImportant}
           />
-            <Button title="submit" onPress={() => handleSubmit() && setShowForm(false)}/>
+            <Button title="submit" onPress={() => handleSubmit()}/>
+            <Button title="exit" onPress={() => setShowForm(false)}/>
           </View>
         ) : null}
       </View>
