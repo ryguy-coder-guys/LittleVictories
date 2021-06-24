@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AwesomeButton from 'react-native-really-awesome-button';
-import { View, TextInput, StyleSheet, Text, ImageBackground } from 'react-native';
+import { View, TextInput, StyleSheet, Text, ImageBackground, Alert } from 'react-native';
 import { format } from 'date-fns';
 import IconA from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
@@ -31,16 +31,31 @@ const Journal = () => {
     alert('Journal successfully saved.')
   };
 
-  const clearJournal = async () => {
-    await axios.post(
-      'http://localhost:3000/api/journalEntries/create',
-      {
-        user_id: user.id,
-        content: '',
-        date: format(new Date(), 'MM-dd-yyyy')
-      }
+  const clearJournal = () => {
+    const areYouSure = Alert.alert(
+      "Are you sure?",
+      "Once deleted, you cannot get this journal entry back.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Clear Entry", onPress: async () => {
+          await axios.post(
+            'http://localhost:3000/api/journalEntries/create',
+            {
+              user_id: user.id,
+              content: '',
+              date: format(new Date(), 'MM-dd-yyyy')
+            }
+          );
+          setText('');
+          alert('Journal successfully cleared.');
+          }
+        }
+      ]
     );
-    alert('Journal successfully cleared.')
   };
 
   return (
@@ -57,7 +72,6 @@ const Journal = () => {
             borderRadius={8}
             style={styles.button}
             onPress={() => {
-              setText('');
               clearJournal();
             }}
           >
