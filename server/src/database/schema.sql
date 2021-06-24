@@ -18,7 +18,7 @@ create table Users (
 
 create table Habits (
 	id int primary key auto_increment,
-  user_id varchar(25) not null,
+  user_id varchar(36) not null,
   description varchar(50) not null,
   frequency enum('daily', 'weekly', 'monthly') not null,
   days_of_week varchar(11),
@@ -53,14 +53,14 @@ create table Tasks (
 create table TaskHabits (
 	id int primary key auto_increment,
 	task_id int not null,
-  user_id varchar(25) not null,
+  user_id varchar(36) not null,
   foreign key (user_id) references Users(id),
   foreign key (task_id) references Tasks(id)
 );
 
 create table Comments (
 	id int primary key auto_increment,
-  user_id varchar(25) not null,
+  user_id varchar(36) not null,
 	task_id int not null,
   content varchar(50) not null,
   created_at datetime default now(),
@@ -71,22 +71,24 @@ create table Comments (
 create table CommentHearts (
 	id int primary key auto_increment,
 	comment_id int not null,
-  user_id varchar(25) not null,
+  user_id varchar(36) not null,
   foreign key (user_id) references Users(id),
   foreign key (comment_id) references Comments(id)
 );
 
 create table JournalEntries (
 	id int primary key auto_increment,
-	user_id varchar(25) not null,
-  created_at datetime not null default now(),
+	user_id varchar(36) not null,
+  createdAt datetime not null default now(),
+  updatedAt datetime,
   content text not null,
+  date varchar(10) not null,
   foreign key (user_id) references Users(id)
 );
 
 create table UserStats (
 	id int primary key auto_increment,
-	user_id varchar(25) not null,
+	user_id varchar(36) not null,
   created_at datetime not null default now(),
   sleep_hours int,
   eaten_well bool,
