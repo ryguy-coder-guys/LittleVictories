@@ -9,27 +9,19 @@ import {
   Pressable,
   Button,
   Alert,
-  ScrollView,
 } from 'react-native';
 import { FAB } from 'react-native-paper';
-import { white } from 'react-native-paper/lib/typescript/styles/colors';
-import TaskSummary from './TaskSummary';
+import Modal from 'react-native-modal';
 
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
-  const [isModalVisible, setModalVisible] = useState(false);
-
   const [showForm, setShowForm] = useState(false);
-
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <ScrollView style={styles.container}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={styles.header}>Tasks</Text>
+      <View style={styles.container}>
+        <Text style={styles.header}>Tasks</Text>
+        <View>
           <FAB
             style={styles.fab}
             small
@@ -38,27 +30,31 @@ const Task = () => {
           />
         </View>
         {showForm ? (
-          <View style={styles.textAreaContainer}>
-            <View style={styles.textArea}></View>
-            {/* </View>
-      <View style={styles.textAreaContainer}>
-      <View style={styles.textArea}>
-
-      </View>
-      </View>
-      <View style={styles.textAreaContainer}>
-        <View style={styles.textArea}>
-
-        </View> */}
-            <Button title="Press Me" onPress={() => setShowForm(false)} />
+          <View style={styles.view}>
+            <View style={{ alignItems: 'center' }}>
+            <Text style={styles.prompt}>Add Task</Text>
+            <TextInput
+              style={styles.input}
+              // onChangeText={setSleepHours}
+              // value={sleepHours}
+              placeholder='Enter Task Description'
+              autoCapitalize='none'
+            />
+            <TextInput
+              style={styles.input}
+              // onChangeText={setSleepHours}
+              // value={sleepHours}
+              placeholder='Due Date'
+              autoCapitalize='none'
+            />
+            </View>
+            <Button title="submit" onPress={() => setShowForm(false)}/>
           </View>
         ) : null}
-        <TaskSummary />
-      </ScrollView>
+      </View>
     </ImageBackground>
   );
 };
-
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
@@ -136,7 +132,28 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginRight: 20,
     marginLeft: 20
+  },
+  prompt: {
+    alignSelf: 'flex-start',
+    color: '#1D426D',
+    marginTop: 10
+  },
+  input: {
+    borderRadius: 10,
+    backgroundColor: '#9ec5cf',
+    color: '#1D426D',
+    height: 40,
+    padding: 10,
+    width: '100%',
+    marginTop: 10
+  },
+  view: {
+    backgroundColor: '#8ebac6',
+    borderRadius: 20,
+    padding: 5,
+    marginTop: 30,
+    marginRight: 20,
+    marginLeft: 20,
   }
 });
-
 export default Task;
