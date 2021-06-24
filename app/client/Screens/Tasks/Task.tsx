@@ -12,8 +12,10 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
-import Slider from './Slider';
+// import Slider from './Slider';
 import { Switch } from 'react-native-switch';
+import { useUserContext } from '../../Contexts/userContext';
+import Slider from '@react-native-community/slider';
 
 
 const Task = () => {
@@ -23,24 +25,23 @@ const Task = () => {
   const [tasks, setTasks] = useState([])
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
-  const [timeToComplete, setTimeToComplete] = useState('');
+  const [timeToComplete, setTimeToComplete] = useState(0);
   const [isImportant, setIsImportant] = useState(false);
-
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-
-  // const handleSubmit = () => {
+  const { user, setUser } = useUserContext();
 
 
-  // }
+  const toggleSwitch = () => setIsImportant((previousState) => !previousState);
+
 
   const handleSubmit = async () => {
-    const { data: tasks } = await axios.post('http://localhost:3000/api/tasks', {
+    const { data: tasks } = await axios.post('http://localhost:3000/api/tasks/', {
+      user_id: user.id,
       description,
       date,
       timeToComplete,
-      isImportant,
+      is_important: isImportant,
     });
-    setTasks((task) => [...task, tasks]);
+    setTasks([...tasks]);
   };
 
   return (
@@ -59,24 +60,41 @@ const Task = () => {
         {showForm ? (
           <View style={styles.view}>
             <View style={{ alignItems: 'center' }}>
-            <Text style={styles.prompt}>Add Task</Text>
+            <Text style={styles.taskPrompt}>Add Task</Text>
             <TextInput
               style={styles.input}
-              // onChangeText={setSleepHours}
-              // value={sleepHours}
+              onChangeText={setDescription}
+              value={description}
               placeholder='Enter Task Description'
               autoCapitalize='none'
             />
             <TextInput
               style={styles.input}
-              // onChangeText={setSleepHours}
-              // value={sleepHours}
+              onChangeText={setDate}
+              value={date}
               placeholder='Due Date'
               autoCapitalize='none'
             />
             </View>
-            <Slider/>
-            <Text>Is Important?</Text>
+            <View>
+        <Text style={styles.taskPrompt}>
+        How much time to complete this task?
+        </Text>
+        <Slider
+          step={5}
+          minimumValue={0}
+          maximumValue={60}
+          value={timeToComplete}
+          onValueChange={value => setTimeToComplete(value)}
+          minimumTrackTintColor="#1fb28a"
+          maximumTrackTintColor="#d3d3d3"
+          thumbTintColor="#b9e4c9"
+        />
+        <Text style={styles.taskPrompt}>
+          Min: {timeToComplete}min
+        </Text>
+      </View>
+            <Text style={styles.taskPrompt}>Is Important?</Text>
             <Switch
           style={styles.switch}
           circleActiveColor={'#9ee7ff'}
@@ -86,10 +104,9 @@ const Task = () => {
           switchLeftPx={5}
           switchRightPx={5}
           onValueChange={toggleSwitch}
-          value={isEnabled}
+          value={isImportant}
           />
-            <Button title="submit" onPress={() => handleSubmit()}/>
-            <Button title="x" onPress={() => setShowForm(false)}/>
+            <Button title="submit" onPress={() => handleSubmit() && setShowForm(false)}/>
           </View>
         ) : null}
       </View>
@@ -130,12 +147,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20,
   },
-  submitButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
   backgroundImage: {
     flex: 1,
     width: '100%',
@@ -157,7 +168,14 @@ const styles = StyleSheet.create({
   prompt: {
     alignSelf: 'flex-start',
     color: '#1D426D',
-    marginTop: 10
+    marginTop: 10,
+  },
+  taskPrompt: {
+    alignSelf: 'flex-start',
+    color: '#1D426D',
+    marginTop: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   input: {
     borderRadius: 10,

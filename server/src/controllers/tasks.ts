@@ -14,32 +14,39 @@ export const addTask: RequestHandler = async (req, res) => {
     user_id,
     description,
     due_date,
-    minutes_to_complete,
+    //minutes_to_complete,
     is_important,
     list_id,
   } = req.body as AddTaskReqBody;
+  console.log(req.body)
+  try {
 
-  const user = await User.findOne({ where: { id: user_id } });
-  if (!user) {
-    return res.send(`no user found with id of ${user_id}`);
+    const user = await User.findOne({ where: { id: user_id } });
+    if (!user) {
+      return res.send(`no user found with id of ${user_id}`);
+    }
+
+    // const list = await List.findOne({ where: { id: list_id } });
+    // if (!list) {
+    //   return res.send(`no list found with id of ${list_id}`);
+    // }
+
+    const newTask = await Task.create({
+      user_id,
+      description,
+      due_date,
+      // minutes_to_complete,
+      is_important,
+      is_complete: false,
+      is_public: false,
+      //list_id,
+    });
+    res.send(newTask);
   }
-
-  const list = await List.findOne({ where: { id: list_id } });
-  if (!list) {
-    return res.send(`no list found with id of ${list_id}`);
+  catch (err) {
+    console.log('entry submission error', err.message);
+    res.sendStatus(500);
   }
-
-  const newTask = await Task.create({
-    user_id,
-    description,
-    due_date,
-    minutes_to_complete,
-    is_important,
-    is_complete: false,
-    is_public: false,
-    list_id,
-  });
-  res.send(newTask);
 };
 
 export const removeTask: RequestHandler<{ id: string }> = async (req, res) => {
