@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import AwesomeButton from 'react-native-really-awesome-button';
-import { View, TextInput, StyleSheet, Text, ImageBackground, Alert } from 'react-native';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  Text,
+  ImageBackground,
+  Alert,
+} from 'react-native';
 import { format } from 'date-fns';
 import IconA from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
@@ -10,50 +17,49 @@ import { useJournalContext } from '../../Contexts/journalContext';
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
 
-  const [ text, setText ] = useState('');
-  const [ date ] = useState(format(new Date(), 'MMMM do y'));
+  const [text, setText] = useState('');
+  const [date] = useState(format(new Date(), 'MMMM do y'));
   const { user } = useUserContext();
   const { journal } = useJournalContext();
 
   useEffect(() => {
     setText(journal);
-  }, [])
+  }, []);
 
   const saveJournal = async () => {
-    await axios.post(
-      'http://localhost:3000/api/journalEntries/create',
-      {
-        user_id: user.id,
-        content: text,
-        date: format(new Date(), 'MM-dd-yyyy')
-      }
-    );
-    alert('Journal successfully saved.')
+    await axios.post('http://localhost:3000/api/journalEntries/create', {
+      user_id: user.id,
+      content: text,
+      date: format(new Date(), 'MM-dd-yyyy'),
+    });
+    alert('Journal successfully saved.');
   };
 
   const clearJournal = () => {
     const areYouSure = Alert.alert(
-      "Are you sure?",
-      "Once deleted, you cannot get this journal entry back.",
+      'Are you sure?',
+      'Once deleted, you cannot get this journal entry back.',
       [
         {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
         },
-        { text: "Clear Entry", onPress: async () => {
-          await axios.post(
-            'http://localhost:3000/api/journalEntries/create',
-            {
-              user_id: user.id,
-              content: '',
-              date: format(new Date(), 'MM-dd-yyyy')
-            }
-          );
-          setText('');
-          alert('Journal successfully cleared.');
-          }
-        }
+        {
+          text: 'Clear Entry',
+          onPress: async () => {
+            await axios.post(
+              'http://localhost:3000/api/journalEntries/create',
+              {
+                user_id: user.id,
+                content: '',
+                date: format(new Date(), 'MM-dd-yyyy'),
+              }
+            );
+            setText('');
+            alert('Journal successfully cleared.');
+          },
+        },
       ]
     );
   };
@@ -61,7 +67,7 @@ const Journal = () => {
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <View style={styles.container}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.header}> User's Journal </Text>
           <AwesomeButton
             backgroundColor={'#1D426D'}
@@ -75,14 +81,14 @@ const Journal = () => {
               clearJournal();
             }}
           >
-          Clear Entry
+            Clear Entry
           </AwesomeButton>
         </View>
         <View style={{ flexDirection: 'row', marginLeft: 20 }}>
           <IconA name="caret-back" size={35} color="#1D426D" />
           <IconA name="caret-forward" size={35} color="#1D426D" />
         </View>
-        <View style={styles.textAreaContainer} >
+        <View style={styles.textAreaContainer}>
           <Text style={styles.date}>{date}</Text>
           <TextInput
             style={styles.textArea}
@@ -95,19 +101,19 @@ const Journal = () => {
           />
         </View>
         <AwesomeButton
-            backgroundColor={'#1D426D'}
-            textColor={'#FAFAFA'}
-            height={35}
-            width={125}
-            raiseLevel={0}
-            borderRadius={8}
-            style={styles.submit}
-            onPress={() => {
-              saveJournal();
-            }}
-          >
+          backgroundColor={'#1D426D'}
+          textColor={'#FAFAFA'}
+          height={35}
+          width={125}
+          raiseLevel={0}
+          borderRadius={8}
+          style={styles.submit}
+          onPress={() => {
+            saveJournal();
+          }}
+        >
           Save
-          </AwesomeButton>
+        </AwesomeButton>
       </View>
     </ImageBackground>
   );
@@ -122,7 +128,7 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 10,
-    marginRight: 20
+    marginRight: 20,
   },
   container: {
     flex: 1,
@@ -132,13 +138,13 @@ const styles = StyleSheet.create({
   date: {
     color: '#1D426D',
     fontSize: 14,
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   header: {
     color: '#1D426D',
     fontSize: 22,
     fontWeight: 'bold',
-    marginLeft: 20
+    marginLeft: 20,
   },
   submit: {
     alignSelf: 'flex-end',
@@ -148,7 +154,7 @@ const styles = StyleSheet.create({
   textArea: {
     height: '75%',
     justifyContent: 'flex-start',
-    marginTop: 20
+    marginTop: 20,
   },
   textAreaContainer: {
     backgroundColor: '#8ebac6',
@@ -157,7 +163,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginRight: 20,
     marginLeft: 20,
-  }
+  },
 });
 
 export default Journal;

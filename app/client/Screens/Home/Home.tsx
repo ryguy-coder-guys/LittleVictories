@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
+import axios from 'axios';
 import Loading from '../Root/Loading';
 
 const exampleTaskData = [
@@ -32,9 +33,11 @@ const Home = ({ navigation }) => {
   const [didExercise, setDidExercise] = useState('');
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
+
   const handleSubmit = () => {
     setHasSubmitted(true);
   };
+
   if (!user) {
     return <Loading />;
   }
@@ -174,4 +177,5 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 });
+
 export default Home;

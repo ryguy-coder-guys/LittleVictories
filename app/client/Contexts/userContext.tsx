@@ -1,11 +1,17 @@
 import React, { createContext, useContext, useState } from 'react';
 
-interface User {
+export interface Task {
+  description: string;
+  due_date: Date;
+  id: number;
+  is_complete: boolean;
+  is_important: boolean;
+  minutes_to_complete: number;
+}
+export interface User {
   id: string;
   username: string;
-  hash: string;
-  createdAt: Date;
-  updatedAt: Date;
+  tasks: Task[];
 }
 
 interface UserContextState {
