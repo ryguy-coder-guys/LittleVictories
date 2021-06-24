@@ -31,6 +31,18 @@ const Journal = () => {
     alert('Journal successfully saved.')
   };
 
+  const clearJournal = async () => {
+    await axios.post(
+      'http://localhost:3000/api/journalEntries/create',
+      {
+        user_id: user.id,
+        content: '',
+        date: format(new Date(), 'MM-dd-yyyy')
+      }
+    );
+    alert('Journal successfully cleared.')
+  };
+
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <View style={styles.container}>
@@ -46,6 +58,7 @@ const Journal = () => {
             style={styles.button}
             onPress={() => {
               setText('');
+              clearJournal();
             }}
           >
           Clear Entry

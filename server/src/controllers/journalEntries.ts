@@ -47,11 +47,4 @@ export const addJournalEntry: RequestHandler = async (req, res) => {
   }
 };
 
-// remove journal entry
-export const removeJournalEntry: RequestHandler<{ id: number }> = async (req, res) => {
-  const { id } = req.params;
-  await JournalEntry.destroy({ where: { id } });
-  res.send(`journal entry with id of ${id} has been removed from db`);
-};
-
 // remove all journal entries
