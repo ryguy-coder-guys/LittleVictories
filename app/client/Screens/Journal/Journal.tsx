@@ -3,12 +3,25 @@ import AwesomeButton from 'react-native-really-awesome-button';
 import { View, TextInput, StyleSheet, Text, ImageBackground } from 'react-native';
 import { format } from 'date-fns';
 import IconA from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import { useUserContext } from '../../Contexts/userContext';
 
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
 
   const [ journal, setJournal ] = useState('');
-  const [ date ] = useState(format(new Date(), 'MMMM do y'))
+  const [ date ] = useState(format(new Date(), 'MMMM do y'));
+  const { user } = useUserContext();
+
+  const saveJournal = async () => {
+    await axios.post(
+      'http://localhost:3000/api/journalEntries/create',
+      {
+        user_id: user.id,
+        content: journal
+      }
+    );
+  };
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -46,6 +59,20 @@ const Journal = () => {
             value={journal}
           />
         </View>
+        <AwesomeButton
+            backgroundColor={'#1D426D'}
+            textColor={'#FAFAFA'}
+            height={35}
+            width={125}
+            raiseLevel={0}
+            borderRadius={8}
+            style={styles.button}
+            onPress={() => {
+              saveJournal();
+            }}
+          >
+          Save
+          </AwesomeButton>
       </View>
     </ImageBackground>
   );
