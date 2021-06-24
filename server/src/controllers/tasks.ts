@@ -45,7 +45,7 @@ export const addTask: RequestHandler = async (req, res) => {
 export const removeTask: RequestHandler<{ id: string }> = async (req, res) => {
   const { id } = req.params;
   await Task.destroy({ where: { id } });
-  res.send(`task with id of ${id} has been removed from db`);
+  res.send(true);
 };
 
 export const markTaskAsComplete: RequestHandler<{ id: string }> = async (
@@ -54,7 +54,8 @@ export const markTaskAsComplete: RequestHandler<{ id: string }> = async (
 ) => {
   const { id } = req.params;
   await Task.update({ is_complete: true }, { where: { id } });
-  res.send(`task with id of ${id} has been set to complete`);
+  const task = await Task.findOne({ where: { id } });
+  res.send(task);
 };
 
 export const markTaskAsIncomplete: RequestHandler<{ id: string }> = async (
@@ -63,5 +64,6 @@ export const markTaskAsIncomplete: RequestHandler<{ id: string }> = async (
 ) => {
   const { id } = req.params;
   await Task.update({ is_complete: false }, { where: { id } });
-  res.send(`task with id of ${id} has been set to incomplete`);
+  const task = await Task.findOne({ where: { id } });
+  res.send(task);
 };

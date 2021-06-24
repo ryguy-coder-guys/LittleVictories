@@ -35,7 +35,7 @@ create table Lists (
 
 create table Tasks (
 	id int primary key auto_increment,
-  user_id varchar(25) not null,
+  user_id varchar(36) not null,
 	description varchar(150) not null,
   due_date date,
   minutes_to_complete int not null,
