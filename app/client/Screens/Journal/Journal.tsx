@@ -1,25 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { View, TextInput, StyleSheet, Text, ImageBackground } from 'react-native';
-
 
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
 
+  const [ journal, setJournal ] = useState('');
+
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <View style={styles.container}>
-        <Text style={styles.header}> User's Journal </Text>
-        <AwesomeButton
-          height={30}
-          width={100}
-          style={styles.button}
-          progress
-          onPress={() => {
-          }}
-        >
-        Clear Entry
-        </AwesomeButton>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={styles.header}> User's Journal </Text>
+          <AwesomeButton
+            backgroundColor={'#1D426D'}
+            textColor={'#FAFAFA'}
+            height={35}
+            width={125}
+            raiseLevel={0}
+            borderRadius={8}
+            style={styles.button}
+            onPress={() => {
+              setJournal('');
+            }}
+          >
+          Clear Entry
+          </AwesomeButton>
+        </View>
         <View style={styles.textAreaContainer} >
           <TextInput
             style={styles.textArea}
@@ -27,6 +34,8 @@ const Journal = () => {
             placeholder="Type something"
             numberOfLines={10}
             multiline={true}
+            onChangeText={setJournal}
+            value={journal}
           />
         </View>
       </View>
@@ -41,18 +50,15 @@ const styles = StyleSheet.create({
     paddingTop: 65,
   },
   textAreaContainer: {
-    backgroundColor: '#FAFAFA',
-    borderColor: '#FAFAFA',
-    borderWidth: 1,
-    borderRadius: 20,
-    padding: 5,
-    marginTop: 30,
+    backgroundColor: '#8ebac6',
+    borderRadius: 10,
+    padding: 20,
+    marginTop: 20,
     marginRight: 20,
     marginLeft: 20,
-    opacity: 0.2
   },
   textArea: {
-    height: 550,
+    height: '90%',
     width: 350,
     justifyContent: 'flex-start'
   },
@@ -63,10 +69,8 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   button: {
-    flexDirection: 'row',
-    marginLeft: 20,
-    marginTop: 15,
-    padding: 10
+    padding: 10,
+    marginRight: 20
   },
   backgroundImage: {
     flex: 1,
