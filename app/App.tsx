@@ -5,6 +5,7 @@ import Journal from './client/Screens/Journal/Journal';
 import RootNavigator from './client/Screens/Root/Root';
 import * as Google from 'expo-google-app-auth';
 import { UserContextProvider } from './client/Contexts/userContext';
+import { QuoteContextProvider } from './client/Contexts/quoteContext';
 
 export default function App() {
   return (
@@ -13,9 +14,11 @@ export default function App() {
     //   <StatusBar style="auto" /> */}
     //   <Journal/>
     // </View>
-    <UserContextProvider>
-      <RootNavigator />
-    </UserContextProvider>
+    <QuoteContextProvider>
+      <UserContextProvider>
+        <RootNavigator />
+      </UserContextProvider>
+    </QuoteContextProvider>
   );
 }
 
