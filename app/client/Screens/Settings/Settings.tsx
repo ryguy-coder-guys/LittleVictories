@@ -61,6 +61,7 @@ const SettingsScreen = ({ navigation, route }) => {
           borderRadius={8}
           style={styles.button}
           onPress={() => {
+            logout();
             navigation.navigate('login');
           }}
         >
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    marginTop: 20
+    marginTop: 20,
   },
   container: {
     flex: 1,
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     color: '#1D426D',
     fontSize: 26,
     marginBottom: 40,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   input: {
     height: 40,
@@ -101,8 +102,8 @@ const styles = StyleSheet.create({
   value: {
     color: '#1D426D',
     fontSize: 18,
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });
 
 export default SettingsScreen;
