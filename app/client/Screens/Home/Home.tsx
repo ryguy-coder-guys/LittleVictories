@@ -10,6 +10,7 @@ import {
 import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
+import Loading from '../Root/Loading';
 
 const exampleTaskData = [
   {
@@ -24,33 +25,9 @@ const exampleTaskData = [
   },
 ];
 
-const Loading = () => {
-  const bgImage = require('../../../assets/blue-gradient.png');
-  const [quote, setQuote] = useState('');
-  const [author, setAuthor] = useState('');
-  if (quote === '') {
-    const getQuote = async () => {
-      const { data } = await axios.get('https://zenquotes.io/api/random');
-      console.log(data);
-      setQuote(data.q);
-      setAuthor(data.a);
-    };
-  }
-  return (
-    <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <View>
-        <Text>{quote}</Text>
-        <Text>-{author}</Text>
-      </View>
-    </ImageBackground>
-  );
-};
-
 const Home = ({ navigation }) => {
   const { user } = useUserContext();
-
   const bgImage = require('../../../assets/blue-gradient.png');
-
   const [sleepHours, setSleepHours] = useState('');
   const [didSkipMeals, setSkipMeals] = useState('');
   const [didExercise, setDidExercise] = useState('');
@@ -64,7 +41,6 @@ const Home = ({ navigation }) => {
   if (!user) {
     return <Loading />;
   }
-
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
@@ -145,7 +121,6 @@ const Home = ({ navigation }) => {
     </ImageBackground>
   );
 };
-
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,

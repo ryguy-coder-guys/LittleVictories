@@ -25,10 +25,9 @@ const SettingsScreen = ({ navigation, route }) => {
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <View style={styles.container}>
-        <Text style={styles.value}>Settings</Text>
+        <Text style={styles.header}>Settings</Text>
         <Text style={styles.value}>Push Notifications</Text>
         <Switch
-          style={styles.switch}
           circleActiveColor={'#9ee7ff'}
           circleInActiveColor={'#f4f3f4'}
           backgroundActive={'rgb(7, 40, 82)'}
@@ -40,9 +39,13 @@ const SettingsScreen = ({ navigation, route }) => {
         />
         <Text></Text>
         <AwesomeButton
-          style={styles.button}
-          width={200}
+          backgroundColor={'#1D426D'}
+          textColor={'#FAFAFA'}
           height={50}
+          width={125}
+          raiseLevel={0}
+          borderRadius={8}
+          style={styles.button}
           onPress={() => {
             navigation.navigate('login');
           }}
@@ -50,12 +53,14 @@ const SettingsScreen = ({ navigation, route }) => {
           Delete Account
         </AwesomeButton>
         <AwesomeButton
-          style={styles.button}
-          width={200}
+          backgroundColor={'#1D426D'}
+          textColor={'#FAFAFA'}
           height={50}
-          progress
+          width={125}
+          raiseLevel={0}
+          borderRadius={8}
+          style={styles.button}
           onPress={() => {
-            logout();
             navigation.navigate('login');
           }}
         >
@@ -67,19 +72,25 @@ const SettingsScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+  },
+  button: {
+    marginTop: 20
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  value: {
-    marginVertical: 12,
-  },
-  button: {
-    marginBottom: '10%',
-  },
-  switch: {
-    marginBottom: '30%',
+  header: {
+    color: '#1D426D',
+    fontSize: 26,
+    marginBottom: 40,
+    fontWeight: 'bold'
   },
   input: {
     height: 40,
@@ -87,12 +98,11 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
   },
-  backgroundImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-  },
+  value: {
+    color: '#1D426D',
+    fontSize: 18,
+    marginBottom: 10
+  }
 });
 
 export default SettingsScreen;

@@ -57,9 +57,8 @@ const Login = ({ navigation }) => {
       if (user) {
         // if successful navigate to home
         setTimeout(() => {
-          console.log(user);
           setUser(user);
-        }, 3000);
+        }, 5000);
         navigation.navigate('index');
       } else {
         // if not successful, will need to toggle wrongLogin
