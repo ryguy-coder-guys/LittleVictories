@@ -24,25 +24,36 @@ export const addJournalEntry: RequestHandler = async (req, res) => {
     date
   } = req.body as AddJournalEntryReqBody;
 
-  // check for already existing journalEntry
-  const journalEntry = await JournalEntry.findOne({ where: { date: date } });
-  // if it exists, edit the existing one's content
-  if (journalEntry) {
-    const updatedEntry = await journalEntry.update({ content: content });
-    res.sendStatus(201).send(updatedEntry);
-  } else {
-    // if it does not, create it
+  if (content === '') {
     try {
-      const newJournalEntry = await JournalEntry.create({
-        user_id,
-        content,
-        date
-      });
-      console.log('entry successfully submitted');
-      res.status(201).send(newJournalEntry);
+      await JournalEntry.destroy({ where: { date: date, user_id: user_id } });
+      console.log('entry successfully deleted');
+      res.sendStatus(201);
     } catch (err) {
-      console.log('entry submission error', err.message);
+      console.log('error deleting entry', err.message);
       res.sendStatus(500);
+    }
+  } else {
+    // check for already existing journalEntry
+    const journalEntry = await JournalEntry.findOne({ where: { date: date } });
+    // if it exists, edit the existing one's content
+    if (journalEntry) {
+      const updatedEntry = await journalEntry.update({ content: content });
+      res.sendStatus(201);
+    } else {
+      // if it does not, create it
+      try {
+        const newJournalEntry = await JournalEntry.create({
+          user_id,
+          content,
+          date
+        });
+        console.log('entry successfully submitted');
+        res.status(201);
+      } catch (err) {
+        console.log('entry submission error', err.message);
+        res.sendStatus(500);
+      }
     }
   }
 };
