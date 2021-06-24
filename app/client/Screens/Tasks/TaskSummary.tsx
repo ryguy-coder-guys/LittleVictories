@@ -9,7 +9,7 @@ import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
 
 const getEndOfWeek = () => new Date().getDate() + (6 - new Date().getDay());
 
-const Task = ({ item }) => {
+const SingleTask = ({ item }) => {
   const { user, setUser } = useUserContext();
   const [finished, setFinished] = useState(item.is_complete);
 
@@ -81,7 +81,7 @@ const Task = ({ item }) => {
 };
 
 const TaskList = ({ item }) => {
-  return <Task item={item} />;
+  return <SingleTask item={item} />;
 };
 
 const ListHeader = ({ heading }) => {
