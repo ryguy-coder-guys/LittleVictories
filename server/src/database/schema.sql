@@ -38,12 +38,12 @@ create table Tasks (
   user_id varchar(36) not null,
 	description varchar(150) not null,
   due_date date,
-  minutes_to_complete int not null,
+  minutes_to_complete int,
   is_important bool not null,
-  is_complete bool not null,
+  is_complete bool,
   completed_at date,
   is_public bool not null default false,
-  list_id int not null,
+  list_id int,
   createdAt datetime not null,
   updatedAt datetime not null,
   foreign key (list_id) references Lists(id),
@@ -100,4 +100,4 @@ create table UserStats (
 
 
 /* run from project root
-/* mysql -u root < ./server/src/database/schema.sql
+/* mysql -u root < server/src/database/schema.sql

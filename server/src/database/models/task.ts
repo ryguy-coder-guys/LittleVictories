@@ -52,7 +52,7 @@ export const Task = dbConnection.define<TaskInstance>(
     },
     minutes_to_complete: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      //allowNull: false,
     },
     is_important: {
       type: DataTypes.BOOLEAN,
@@ -72,7 +72,7 @@ export const Task = dbConnection.define<TaskInstance>(
     },
     list_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      //allowNull: false,
       references: {
         model: List,
         key: 'id',

@@ -10,12 +10,39 @@ import {
   Button,
   Alert,
 } from 'react-native';
+import axios from 'axios';
 import { FAB } from 'react-native-paper';
-import Modal from 'react-native-modal';
+// import Slider from './Slider';
+import { Switch } from 'react-native-switch';
+import { useUserContext } from '../../Contexts/userContext';
+import Slider from '@react-native-community/slider';
+
 
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const [showForm, setShowForm] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [tasks, setTasks] = useState([])
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
+  const [timeToComplete, setTimeToComplete] = useState(0);
+  const [isImportant, setIsImportant] = useState(false);
+  const { user, setUser } = useUserContext();
+
+
+  const toggleSwitch = () => setIsImportant((previousState) => !previousState);
+
+
+  const handleSubmit = async () => {
+    const { data: tasks } = await axios.post('http://localhost:3000/api/tasks/', {
+      user_id: user.id,
+      description,
+      date,
+      timeToComplete,
+      is_important: isImportant,
+    });
+    setTasks([...tasks]);
+  };
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -32,23 +59,54 @@ const Task = () => {
         {showForm ? (
           <View style={styles.view}>
             <View style={{ alignItems: 'center' }}>
-            <Text style={styles.prompt}>Add Task</Text>
+            <Text style={styles.taskPrompt}>Add Task</Text>
             <TextInput
               style={styles.input}
-              // onChangeText={setSleepHours}
-              // value={sleepHours}
+              onChangeText={setDescription}
+              value={description}
               placeholder='Enter Task Description'
               autoCapitalize='none'
             />
             <TextInput
               style={styles.input}
-              // onChangeText={setSleepHours}
-              // value={sleepHours}
+              onChangeText={setDate}
+              value={date}
               placeholder='Due Date'
               autoCapitalize='none'
             />
             </View>
-            <Button title="submit" onPress={() => setShowForm(false)}/>
+            <View>
+        <Text style={styles.taskPrompt}>
+        How much time to complete this task?
+        </Text>
+        <Slider
+          step={5}
+          minimumValue={0}
+          maximumValue={60}
+          value={timeToComplete}
+          onValueChange={value => setTimeToComplete(value)}
+          minimumTrackTintColor="#1fb28a"
+          maximumTrackTintColor="#d3d3d3"
+          thumbTintColor="#b9e4c9"
+        />
+        <Text style={styles.taskPrompt}>
+          Min: {timeToComplete}min
+        </Text>
+      </View>
+            <Text style={styles.taskPrompt}>Is Important?</Text>
+            <Switch
+          style={styles.switch}
+          circleActiveColor={'#9ee7ff'}
+          circleInActiveColor={'#f4f3f4'}
+          backgroundActive={'rgb(7, 40, 82)'}
+          backgroundInactive={'rgb(7, 40, 82)'}
+          switchLeftPx={5}
+          switchRightPx={5}
+          onValueChange={toggleSwitch}
+          value={isImportant}
+          />
+            <Button title="submit" onPress={() => handleSubmit()}/>
+            <Button title="exit" onPress={() => setShowForm(false)}/>
           </View>
         ) : null}
       </View>
@@ -136,7 +194,14 @@ const styles = StyleSheet.create({
   prompt: {
     alignSelf: 'flex-start',
     color: '#1D426D',
-    marginTop: 10
+    marginTop: 10,
+  },
+  taskPrompt: {
+    alignSelf: 'flex-start',
+    color: '#1D426D',
+    marginTop: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   input: {
     borderRadius: 10,
@@ -154,6 +219,10 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginRight: 20,
     marginLeft: 20,
-  }
+  },
+  switch: {
+    marginBottom: '30%',
+  },
+
 });
 export default Task;
