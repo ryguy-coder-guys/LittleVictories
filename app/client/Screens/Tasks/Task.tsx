@@ -5,14 +5,10 @@ import {
   StyleSheet,
   Text,
   ImageBackground,
-  SafeAreaView,
-  Pressable,
-  Button,
-  Alert,
+  Button
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
-// import Slider from './Slider';
 import { Switch } from 'react-native-switch';
 import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
@@ -21,7 +17,6 @@ import TaskSummary from './TaskSummary';
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const [showForm, setShowForm] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
@@ -48,8 +43,8 @@ const Task = () => {
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <View style={styles.container}>
-        <Text style={styles.header}>Tasks</Text>
-        <View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.header}>Tasks</Text>
           <FAB
             style={styles.fab}
             small
@@ -59,27 +54,29 @@ const Task = () => {
         </View>
         {showForm ? (
           <View style={styles.view}>
-            <View style={{ alignItems: 'center' }}>
-              <Text style={styles.taskPrompt}>Add Task</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={setDescription}
-                value={description}
-                placeholder="Enter Task Description"
-                autoCapitalize="none"
-              />
-              <TextInput
-                style={styles.input}
-                onChangeText={setDate}
-                value={date}
-                placeholder="Due Date"
-                autoCapitalize="none"
-              />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={styles.subheader}>Add Task</Text>
+              <Button title="Cancel" onPress={() => setShowForm(false)} />
             </View>
+            <TextInput
+              style={styles.input}
+              onChangeText={setDescription}
+              value={description}
+              placeholder="Enter Task Description"
+              autoCapitalize="none"
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={setDate}
+              value={date}
+              placeholder="Due Date"
+              autoCapitalize="none"
+            />
             <View>
-              <Text style={styles.taskPrompt}>
-                How much time to complete this task?
+              <Text style={styles.prompt}>
+                How long will it take to complete this task?
               </Text>
+              <Text style={styles.text}>{timeToComplete} minutes</Text>
               <Slider
                 step={5}
                 minimumValue={0}
@@ -90,9 +87,8 @@ const Task = () => {
                 maximumTrackTintColor="#d3d3d3"
                 thumbTintColor="#b9e4c9"
               />
-              <Text style={styles.taskPrompt}>Min: {timeToComplete}min</Text>
             </View>
-            <Text style={styles.taskPrompt}>Is Important?</Text>
+            <Text style={styles.prompt}>Is Important?</Text>
             <Switch
               circleActiveColor={'#9ee7ff'}
               circleInActiveColor={'#f4f3f4'}
@@ -103,8 +99,7 @@ const Task = () => {
               onValueChange={toggleSwitch}
               value={isImportant}
             />
-            <Button title="submit" onPress={() => handleSubmit()} />
-            <Button title="exit" onPress={() => setShowForm(false)} />
+            <Button title="Submit" onPress={() => handleSubmit()} />
           </View>
         ) : null}
         <TaskSummary />
@@ -119,18 +114,6 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
   },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
   container: {
     flex: 1,
     padding: 20,
@@ -139,68 +122,13 @@ const styles = StyleSheet.create({
   fab: {
     backgroundColor: '#1D426D',
     height: 40,
-    marginRight: 20,
+    marginRight: 20
   },
   header: {
     color: '#1D426D',
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: 'bold',
-    marginLeft: 20,
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  submitButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
-  textArea: {
-    height: 200,
-    width: 100,
-    justifyContent: 'flex-start',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  textAreaContainer: {
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    padding: 5,
-    marginTop: 30,
-    marginRight: 20,
-    marginLeft: 20,
-  },
-  prompt: {
-    alignSelf: 'flex-start',
-    color: '#1D426D',
-    marginTop: 10,
-  },
-  taskPrompt: {
-    alignSelf: 'flex-start',
-    color: '#1D426D',
-    marginTop: 10,
-    fontSize: 16,
-    fontWeight: 'bold',
+    marginLeft: 20
   },
   input: {
     borderRadius: 10,
@@ -209,18 +137,40 @@ const styles = StyleSheet.create({
     height: 40,
     padding: 10,
     width: '100%',
+    marginTop: 10
+  },
+  prompt: {
+    alignSelf: 'flex-start',
+    color: '#1D426D',
     marginTop: 10,
+    marginBottom: 10,
+    fontSize: 16
+  },
+  subheader: {
+    color: '#1D426D',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 5
+  },
+  submitButton: {
+    marginTop: 20,
+  },
+  text: {
+    color: '#1D426D',
+    marginBottom: 10
+  },
+  textArea: {
+    height: 200,
+    width: 100,
+    justifyContent: 'flex-start',
   },
   view: {
     backgroundColor: '#8ebac6',
     borderRadius: 20,
-    padding: 5,
+    padding: 20,
     marginTop: 30,
     marginRight: 20,
     marginLeft: 20,
-  },
-  switch: {
-    marginBottom: '30%',
-  },
+  }
 });
 export default Task;

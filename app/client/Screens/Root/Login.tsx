@@ -59,6 +59,8 @@ const Login = ({ navigation }) => {
         setTimeout(() => {
           setUser(user);
         }, 5000);
+        setUsername('');
+        setPasswordAttempt('');
         navigation.navigate('index');
       } else {
         // if not successful, will need to toggle wrongLogin
@@ -84,6 +86,9 @@ const Login = ({ navigation }) => {
         // if they match, create a new user
         // then navigate to home
         setUser(user);
+        setUsername('');
+        setPasswordAttempt('');
+        setPasswordAttempt2('');
         navigation.navigate('index');
       } else {
         setMismatchPasswords(true);

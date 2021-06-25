@@ -85,7 +85,7 @@ const TaskList = ({ item }) => {
 };
 
 const ListHeader = ({ heading }) => {
-  return <Text style={styles.listHeader}>{heading}</Text>;
+  return <Text style={styles.subheader}>{heading}</Text>;
 };
 
 const TaskSummary = () => {
@@ -153,11 +153,11 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     padding: 20,
   },
-  listHeader: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    paddingBottom: 5,
+  subheader: {
     color: '#1D426D',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10
   },
   taskText: {
     fontSize: 14,
