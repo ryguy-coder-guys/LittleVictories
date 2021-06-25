@@ -5,6 +5,7 @@ import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import { serializeUser } from 'passport';
 import { userInfo } from 'os';
+import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
 const getEndOfWeek = () => new Date().getDate() + (6 - new Date().getDay());
 const SingleTask = ({ item }) => {
   const { user, setUser } = useUserContext();
@@ -76,7 +77,7 @@ const TaskList = ({ item }) => {
   return <SingleTask item={item} />;
 };
 const ListHeader = ({ heading }) => {
-  return <Text style={styles.subheader}>{heading}</Text>;
+  return <Text style={styles.listHeader}>{heading}</Text>;
 };
 const TaskSummary = () => {
   const { user } = useUserContext();
@@ -141,14 +142,14 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     padding: 20,
   },
-  subheader: {
-    color: '#1D426D',
-    fontSize: 22,
+  listHeader: {
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10
+    paddingBottom: 5,
+    color: '#1D426D',
   },
   taskText: {
-    fontSize: 18,
+    fontSize: 14,
     paddingTop: 5,
     color: '#1D426D',
   },

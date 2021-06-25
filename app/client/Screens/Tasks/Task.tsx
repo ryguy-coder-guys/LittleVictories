@@ -6,6 +6,8 @@ import {
   Text,
   ImageBackground,
   Button,
+  Alert,
+  Platform,
   ScrollView
 } from 'react-native';
 import axios from 'axios';
@@ -33,16 +35,17 @@ const Task = () => {
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-
+console.log(timeToComplete);
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
 
   const handleSubmit = async () => {
+    console.log(timeToComplete, 'timeToComplete')
     const { data: task } = await axios.post(
       'http://localhost:3000/api/tasks/',
       {
         user_id: user.id,
         description,
-        due_date: new Date(),
+        due_date: date,
         minutes_to_complete: timeToComplete,
         is_important: isImportant,
       }
@@ -109,20 +112,6 @@ const Task = () => {
       )}
     </View>
             </View>
-            <TextInput
-              style={styles.input}
-              onChangeText={setDescription}
-              value={description}
-              placeholder="Enter Task Description"
-              autoCapitalize="none"
-            />
-            {/* <TextInput
-              style={styles.input}
-              onChangeText={setDate}
-              value={date}
-              placeholder="Due Date"
-              autoCapitalize="none"
-            /> */}
             <View>
               <Text style={styles.prompt}>
                 How long will it take to complete this task?
@@ -133,7 +122,7 @@ const Task = () => {
                 minimumValue={0}
                 maximumValue={60}
                 value={timeToComplete}
-                onValueChange={(value) => setTimeToComplete(value)}
+                onValueChange={setTimeToComplete}
                 minimumTrackTintColor="#1fb28a"
                 maximumTrackTintColor="#fafafa"
                 thumbTintColor="#b9e4c9"
