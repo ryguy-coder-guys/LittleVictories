@@ -5,7 +5,6 @@ import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import { serializeUser } from 'passport';
 import { userInfo } from 'os';
-import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
 
 const getEndOfWeek = () => new Date().getDate() + (6 - new Date().getDay());
 
@@ -155,12 +154,12 @@ const styles = StyleSheet.create({
   },
   subheader: {
     color: '#1D426D',
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 10
   },
   taskText: {
-    fontSize: 14,
+    fontSize: 18,
     paddingTop: 5,
     color: '#1D426D',
   },

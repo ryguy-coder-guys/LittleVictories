@@ -121,10 +121,7 @@ const Journal = () => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
+    flex: 1
   },
   button: {
     padding: 10,
@@ -137,12 +134,12 @@ const styles = StyleSheet.create({
   },
   date: {
     color: '#1D426D',
-    fontSize: 14,
+    fontSize: 18,
     alignSelf: 'flex-end',
   },
   header: {
     color: '#1D426D',
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: 'bold',
     marginLeft: 20,
   },
@@ -155,6 +152,8 @@ const styles = StyleSheet.create({
     height: '75%',
     justifyContent: 'flex-start',
     marginTop: 20,
+    color: '#1D426D',
+    fontSize: 18
   },
   textAreaContainer: {
     backgroundColor: '#8ebac6',

@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Text,
   ImageBackground,
-  Button
+  Button,
+  ScrollView
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
@@ -42,7 +43,7 @@ const Task = () => {
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.header}>Tasks</Text>
           <FAB
@@ -84,35 +85,34 @@ const Task = () => {
                 value={timeToComplete}
                 onValueChange={(value) => setTimeToComplete(value)}
                 minimumTrackTintColor="#1fb28a"
-                maximumTrackTintColor="#d3d3d3"
+                maximumTrackTintColor="#fafafa"
                 thumbTintColor="#b9e4c9"
               />
             </View>
-            <Text style={styles.prompt}>Is Important?</Text>
-            <Switch
-              circleActiveColor={'#9ee7ff'}
-              circleInActiveColor={'#f4f3f4'}
-              backgroundActive={'rgb(7, 40, 82)'}
-              backgroundInactive={'rgb(7, 40, 82)'}
-              switchLeftPx={5}
-              switchRightPx={5}
-              onValueChange={toggleSwitch}
-              value={isImportant}
-            />
+            <View style={styles.important}>
+              <Text style={{ fontSize: 18, color: '#1D426D', paddingRight: 15, paddingTop: 2}}>Mark task as important?</Text>
+              <Switch
+                circleActiveColor={'#fafafa'}
+                circleInActiveColor={'#b9e4c9'}
+                backgroundActive={'#1D426D'}
+                backgroundInactive={'#1D426D'}
+                switchLeftPx={5}
+                switchRightPx={5}
+                onValueChange={toggleSwitch}
+                value={isImportant}
+              />
+            </View>
             <Button title="Submit" onPress={() => handleSubmit()} />
           </View>
         ) : null}
         <TaskSummary />
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 };
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
+    flex: 1
   },
   container: {
     flex: 1,
@@ -130,6 +130,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 20
   },
+  important: {
+    flexDirection: 'row',
+    color: '#1D426D',
+    marginTop: 25,
+    marginBottom: 10,
+    fontSize: 18
+  },
   input: {
     borderRadius: 10,
     backgroundColor: '#9ec5cf',
@@ -142,13 +149,13 @@ const styles = StyleSheet.create({
   prompt: {
     alignSelf: 'flex-start',
     color: '#1D426D',
-    marginTop: 10,
+    marginTop: 25,
     marginBottom: 10,
-    fontSize: 16
+    fontSize: 18
   },
   subheader: {
     color: '#1D426D',
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     marginTop: 5
   },
@@ -157,7 +164,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#1D426D',
-    marginBottom: 10
+    marginBottom: 10,
+    fontSize: 16
   },
   textArea: {
     height: 200,
