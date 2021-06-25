@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
-import axios from 'axios';
+import React from 'react';
+import { ImageBackground, StyleSheet, Text } from 'react-native';
 import { useQuoteContext } from '../../Contexts/quoteContext';
 
 const Loading = () => {
@@ -9,27 +8,32 @@ const Loading = () => {
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={styles.quote}>"{quote}"</Text>
-        <Text style={styles.quote}>-{author}</Text>
-      </View>
+      <Text style={styles.quote}>"{quote.trim()}"</Text>
+      <Text style={styles.author}>{author.trim()}</Text>
     </ImageBackground>
   )
 }
 
 const styles = StyleSheet.create({
+  author: {
+    fontSize: 20,
+    color: '#1D426D',
+    marginLeft: 55,
+    marginRight: 55,
+    marginTop: 5,
+    textAlign: 'center'
+  },
   backgroundImage: {
     flex: 1,
-    width: '100%',
-    height: '100%',
     justifyContent: 'center',
   },
   quote: {
-    fontSize: 16,
+    fontSize: 20,
     color: '#1D426D',
-    marginLeft: 50,
-    marginRight: 50,
-    marginTop: 5
+    marginLeft: 55,
+    marginRight: 55,
+    fontWeight: 'bold',
+    textAlign: 'center'
   }
 });
 

@@ -59,6 +59,8 @@ const Login = ({ navigation }) => {
         setTimeout(() => {
           setUser(user);
         }, 5000);
+        setUsername('');
+        setPasswordAttempt('');
         navigation.navigate('index');
       } else {
         // if not successful, will need to toggle wrongLogin
@@ -84,6 +86,9 @@ const Login = ({ navigation }) => {
         // if they match, create a new user
         // then navigate to home
         setUser(user);
+        setUsername('');
+        setPasswordAttempt('');
+        setPasswordAttempt2('');
         navigation.navigate('index');
       } else {
         setMismatchPasswords(true);
@@ -212,7 +217,7 @@ const Login = ({ navigation }) => {
                 Register
               </AwesomeButton>
             </View>
-            <Text style={styles.text}>Choose a Username:</Text>
+            <Text style={styles.text}>Username:</Text>
             <TextInput
               style={styles.input}
               onChangeText={setUsername}
@@ -225,7 +230,7 @@ const Login = ({ navigation }) => {
                 <Text style={styles.error2}>Please try again.</Text>
               </View>
             ) : null}
-            <Text style={styles.text}>Choose a Password:</Text>
+            <Text style={styles.text}>Password:</Text>
             <TextInput
               style={styles.input}
               onChangeText={setPasswordAttempt}
@@ -264,10 +269,7 @@ const Login = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
+    flex: 1
   },
   button: {
     marginLeft: 5,

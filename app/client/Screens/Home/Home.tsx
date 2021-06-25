@@ -11,6 +11,7 @@ import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import Loading from '../Root/Loading';
+import { v4 as getKey } from 'uuid';
 
 const exampleTaskData = [
   {
@@ -25,7 +26,7 @@ const exampleTaskData = [
   },
 ];
 
-const Home = ({ navigation }) => {
+const Home = () => {
   const { user } = useUserContext();
   const bgImage = require('../../../assets/blue-gradient.png');
   const [sleepHours, setSleepHours] = useState('');
@@ -48,7 +49,7 @@ const Home = ({ navigation }) => {
           <Text style={styles.heading}>Upcoming Tasks</Text>
           {exampleTaskData.map((task) => {
             return (
-              <View style={styles.task} key={task.id}>
+              <View style={styles.task} key={getKey()}>
                 <Text style={styles.desc}>
                   {task.description} - {task.due_date}
                 </Text>
@@ -123,23 +124,21 @@ const Home = ({ navigation }) => {
 };
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
-    height: '100%',
-    justifyContent: 'center',
-    width: '100%',
+    flex: 1
   },
   button: {
     marginTop: 20,
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-end'
   },
   desc: {
     color: '#1D426D',
-    fontSize: 14,
+    fontSize: 18,
   },
   heading: {
     color: '#1D426D',
     fontSize: 22,
     fontWeight: 'bold',
+    marginBottom: 10
   },
   input: {
     borderRadius: 10,
@@ -149,6 +148,8 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '100%',
     marginTop: 10,
+    marginBottom: 10,
+    fontSize: 18
   },
   task: {
     paddingTop: 10,
@@ -157,6 +158,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     color: '#1D426D',
     marginTop: 10,
+    fontSize: 18
   },
   subheader: {
     color: '#1D426D',
@@ -166,7 +168,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#1D426D',
-    fontSize: 14,
+    fontSize: 16,
     marginTop: 5,
   },
   view: {
