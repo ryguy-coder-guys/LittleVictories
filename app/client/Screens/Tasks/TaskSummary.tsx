@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Text, Button } from 'react-native';
 import { v4 as getKey } from 'uuid';
 import { useUserContext } from '../../Contexts/userContext';
@@ -8,6 +8,7 @@ import { userInfo } from 'os';
 import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
 import isThisWeek from 'date-fns/isThisWeek';
 import isThisMonth from 'date-fns/isThisMonth';
+import isPast from 'date-fns/isThisMonth';
 import SingleTask from './SingleTask';
 
 const TaskList = ({ item }) => {
@@ -18,52 +19,69 @@ const ListHeader = ({ heading }) => (
   <Text style={styles.subheader}>{heading}</Text>
 );
 
+const sortTasks = (tasks) => {
+  const thisWeek = [];
+  const thisMonth = [];
+  const maybeLater = [];
+  for (const task of tasks) {
+    const dueDate = new Date(task.due_date);
+    if (isThisWeek(dueDate)) {
+      thisWeek.push(task);
+      continue;
+    }
+    if (isPast(dueDate)) {
+      thisWeek.push(task);
+      continue;
+    }
+    if (isThisMonth(dueDate)) {
+      thisMonth.push(task);
+      continue;
+    }
+    maybeLater.push(task);
+  }
+  return { thisWeek, thisMonth, maybeLater };
+};
+
 const TaskSummary = () => {
   const { user } = useUserContext();
+  const [thisWeek, setThisWeek] = useState([]);
+  const [thisMonth, setThisMonth] = useState([]);
+  const [maybeLater, setMaybeLater] = useState([]);
+
+  useEffect(() => {
+    const {
+      thisWeek: _thisWeek,
+      thisMonth: _thisMonth,
+      maybeLater: _maybelater,
+    } = sortTasks(user.tasks);
+    setThisWeek(_thisWeek);
+    setThisMonth(_thisMonth);
+    setMaybeLater(_maybelater);
+  }, [user]);
+
   return (
     <View>
       <FlatList
         ListHeaderComponent={() => <ListHeader heading="This Week" />}
-        data={
-          user
-            ? user.tasks.filter((task) => isThisWeek(new Date(task.due_date)))
-            : []
-        }
+        data={thisWeek}
         renderItem={TaskList}
         style={styles.listContainer}
       />
       <FlatList
         ListHeaderComponent={() => <ListHeader heading="This Month" />}
-        data={
-          user
-            ? user.tasks.filter(
-                (task) =>
-                  !isThisWeek(new Date(task.due_date)) &&
-                  isThisMonth(new Date(task.due_date))
-              )
-            : []
-        }
+        data={thisMonth}
         renderItem={TaskList}
         style={styles.listContainer}
       />
       <FlatList
         ListHeaderComponent={() => <ListHeader heading="Maybe Later" />}
-        data={
-          user
-            ? user.tasks.filter(
-                (task) =>
-                  !isThisWeek(new Date(task.due_date)) &&
-                  !isThisMonth(new Date(task.due_date))
-              )
-            : []
-        }
+        data={maybeLater}
         renderItem={TaskList}
         style={styles.listContainer}
       />
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   listContainer: {
     backgroundColor: '#8ebac6',
@@ -85,5 +103,4 @@ const styles = StyleSheet.create({
     color: '#1D426D',
   },
 });
-
 export default TaskSummary;

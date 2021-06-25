@@ -6,8 +6,9 @@ import {
   Text,
   ImageBackground,
   Button,
+  Alert,
+  Platform,
   ScrollView,
-  SafeAreaView,
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
@@ -15,17 +16,22 @@ import { Switch } from 'react-native-switch';
 import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 import TaskSummary from './TaskSummary';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const [showForm, setShowForm] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState('');
+  // const [date, setDate] = useState('');
   const [timeToComplete, setTimeToComplete] = useState(0);
   const [isImportant, setIsImportant] = useState(false);
   const { user, setUser } = useUserContext();
 
+  //for date selector
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
 
   const handleSubmit = async () => {
@@ -34,12 +40,31 @@ const Task = () => {
       {
         user_id: user.id,
         description,
-        due_date: new Date(),
+        due_date: date,
         minutes_to_complete: timeToComplete,
         is_important: isImportant,
       }
     );
     setUser({ ...user, tasks: [...user.tasks, task] });
+  };
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
   };
 
   return (
@@ -62,29 +87,39 @@ const Task = () => {
         </View>
         {showForm ? (
           <View style={styles.view}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Text style={styles.subheader}>Add Task</Text>
-              <Button title="Cancel" onPress={() => setShowForm(false)} />
+            <View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Text style={styles.subheader}>Add Task</Text>
+                <Button title="Cancel" onPress={() => setShowForm(false)} />
+              </View>
+              <TextInput
+                style={styles.input}
+                onChangeText={setDescription}
+                value={description}
+                placeholder="Enter Task Description"
+                autoCapitalize="none"
+              />
+              <View>
+                <View>
+                  <Button onPress={showDatepicker} title="Due Date" />
+                </View>
+                {show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
+                  />
+                )}
+              </View>
             </View>
-            <TextInput
-              style={styles.input}
-              onChangeText={setDescription}
-              value={description}
-              placeholder="Enter Task Description"
-              autoCapitalize="none"
-            />
-            <TextInput
-              style={styles.input}
-              onChangeText={setDate}
-              value={date}
-              placeholder="Due Date"
-              autoCapitalize="none"
-            />
             <View>
               <Text style={styles.prompt}>
                 How long will it take to complete this task?
@@ -95,7 +130,7 @@ const Task = () => {
                 minimumValue={0}
                 maximumValue={60}
                 value={timeToComplete}
-                onValueChange={(value) => setTimeToComplete(value)}
+                onValueChange={setTimeToComplete}
                 minimumTrackTintColor="#1fb28a"
                 maximumTrackTintColor="#fafafa"
                 thumbTintColor="#b9e4c9"
