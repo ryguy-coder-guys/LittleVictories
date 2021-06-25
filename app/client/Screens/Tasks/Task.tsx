@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Pressable,
   Button,
+  ScrollView,
   Alert,
 } from 'react-native';
 import axios from 'axios';
@@ -22,7 +23,6 @@ const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const [showForm, setShowForm] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
-  const [tasks, setTasks] = useState([]);
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [timeToComplete, setTimeToComplete] = useState(0);
@@ -32,24 +32,24 @@ const Task = () => {
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
 
   const handleSubmit = async () => {
-    const { data: tasks } = await axios.post(
+    const { data: task } = await axios.post(
       'http://localhost:3000/api/tasks/',
       {
         user_id: user.id,
         description,
-        date,
-        timeToComplete,
+        due_date: new Date(),
+        minutes_to_complete: timeToComplete,
         is_important: isImportant,
       }
     );
-    setTasks([...tasks]);
+    setUser({ ...user, tasks: [...user.tasks, task] });
   };
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <View style={styles.container}>
-        <Text style={styles.header}>Tasks</Text>
-        <View>
+      <ScrollView style={styles.container}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.header}>Tasks</Text>
           <FAB
             style={styles.fab}
             small
@@ -109,7 +109,7 @@ const Task = () => {
           </View>
         ) : null}
         <TaskSummary />
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 };

@@ -16,11 +16,10 @@ export const addTask: RequestHandler = async (req, res) => {
     due_date,
     //minutes_to_complete,
     is_important,
-    list_id,
+    // list_id,
   } = req.body as AddTaskReqBody;
-  console.log(req.body)
+  console.log(req.body);
   try {
-
     const user = await User.findOne({ where: { id: user_id } });
     if (!user) {
       return res.send(`no user found with id of ${user_id}`);
@@ -42,8 +41,7 @@ export const addTask: RequestHandler = async (req, res) => {
       //list_id,
     });
     res.send(newTask);
-  }
-  catch (err) {
+  } catch (err) {
     console.log('entry submission error', err.message);
     res.sendStatus(500);
   }

@@ -11,6 +11,7 @@ import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import Loading from '../Root/Loading';
+import { v4 as getKey } from 'uuid';
 
 const exampleTaskData = [
   {
@@ -48,7 +49,7 @@ const Home = ({ navigation }) => {
           <Text style={styles.heading}>Upcoming Tasks</Text>
           {exampleTaskData.map((task) => {
             return (
-              <View style={styles.task} key={task.id}>
+              <View style={styles.task} key={getKey()}>
                 <Text style={styles.desc}>
                   {task.description} - {task.due_date}
                 </Text>
