@@ -38,7 +38,7 @@ create table Tasks (
   user_id varchar(36) not null,
 	description varchar(150) not null,
   due_date date,
-  minutes_to_complete int,
+  minutes_to_complete int not null,
   is_important bool not null,
   is_complete bool,
   completed_at date,

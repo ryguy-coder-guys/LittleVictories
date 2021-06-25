@@ -14,7 +14,7 @@ export const addTask: RequestHandler = async (req, res) => {
     user_id,
     description,
     due_date,
-    //minutes_to_complete,
+    minutes_to_complete,
     is_important,
     list_id,
   } = req.body as AddTaskReqBody;
@@ -35,7 +35,7 @@ export const addTask: RequestHandler = async (req, res) => {
       user_id,
       description,
       due_date,
-      // minutes_to_complete,
+      minutes_to_complete,
       is_important,
       is_complete: false,
       is_public: false,

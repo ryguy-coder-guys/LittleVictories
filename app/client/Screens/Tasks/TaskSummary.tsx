@@ -5,13 +5,10 @@ import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import { serializeUser } from 'passport';
 import { userInfo } from 'os';
-
 const getEndOfWeek = () => new Date().getDate() + (6 - new Date().getDay());
-
 const SingleTask = ({ item }) => {
   const { user, setUser } = useUserContext();
   const [finished, setFinished] = useState(item.is_complete);
-
   const markTaskComplete = async () => {
     try {
       const { data: task } = await axios.patch(
@@ -25,10 +22,9 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: mappedTasks });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
-
   const markTaskIncomplete = async () => {
     try {
       const { data: task } = await axios.patch(
@@ -42,10 +38,9 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: mappedTasks });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
-
   const removeTask = async () => {
     try {
       const { data: deleteSuccessful } = await axios.delete(
@@ -56,10 +51,9 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: filteredTasks });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
-
   return (
     <Text style={styles.taskText}>
       <Text
@@ -78,18 +72,14 @@ const SingleTask = ({ item }) => {
     </Text>
   );
 };
-
 const TaskList = ({ item }) => {
   return <SingleTask item={item} />;
 };
-
 const ListHeader = ({ heading }) => {
   return <Text style={styles.subheader}>{heading}</Text>;
 };
-
 const TaskSummary = () => {
   const { user } = useUserContext();
-
   return (
     <View>
       <FlatList
@@ -142,7 +132,6 @@ const TaskSummary = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   listContainer: {
     backgroundColor: '#8ebac6',
@@ -164,5 +153,4 @@ const styles = StyleSheet.create({
     color: '#1D426D',
   },
 });
-
 export default TaskSummary;
