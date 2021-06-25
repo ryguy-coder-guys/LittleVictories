@@ -5,7 +5,6 @@ import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import { serializeUser } from 'passport';
 import { userInfo } from 'os';
-import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
 const getEndOfWeek = () => new Date().getDate() + (6 - new Date().getDay());
 const SingleTask = ({ item }) => {
   const { user, setUser } = useUserContext();
@@ -23,7 +22,7 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: mappedTasks });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
   const markTaskIncomplete = async () => {
@@ -39,7 +38,7 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: mappedTasks });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
   const removeTask = async () => {
@@ -52,7 +51,7 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: filteredTasks });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
   return (
@@ -77,7 +76,7 @@ const TaskList = ({ item }) => {
   return <SingleTask item={item} />;
 };
 const ListHeader = ({ heading }) => {
-  return <Text style={styles.listHeader}>{heading}</Text>;
+  return <Text style={styles.subheader}>{heading}</Text>;
 };
 const TaskSummary = () => {
   const { user } = useUserContext();
@@ -142,14 +141,14 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     padding: 20,
   },
-  listHeader: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    paddingBottom: 5,
+  subheader: {
     color: '#1D426D',
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10
   },
   taskText: {
-    fontSize: 14,
+    fontSize: 18,
     paddingTop: 5,
     color: '#1D426D',
   },
