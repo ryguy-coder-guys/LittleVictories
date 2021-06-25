@@ -26,20 +26,14 @@ const Task = () => {
   //for tasks, to create tasks
   const [tasks, setTasks] = useState([]);
   const [description, setDescription] = useState('');
-  // const [date, setDate] = useState('');
   const [timeToComplete, setTimeToComplete] = useState(0);
   const [isImportant, setIsImportant] = useState(false);
   const { user, setUser } = useUserContext();
-
   //for date selector
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-console.log(timeToComplete);
+  const [date, setDate] = useState(new Date());
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
 
   const handleSubmit = async () => {
-    console.log(timeToComplete, 'timeToComplete')
     const { data: task } = await axios.post(
       'http://localhost:3000/api/tasks/',
       {
@@ -52,26 +46,6 @@ console.log(timeToComplete);
     );
     setUser({ ...user, tasks: [...user.tasks, task] });
   };
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
-  };
-
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -87,8 +61,11 @@ console.log(timeToComplete);
         </View>
         {showForm ? (
           <View style={styles.view}>
-            <View style={{ alignItems: 'center' }}>
-              <Text style={styles.taskPrompt}>Add Task</Text>
+            <View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={styles.subheader}>Add Task</Text>
+              <Button title="Cancel" onPress={() => setShowForm(false)} />
+            </View>
               <TextInput
                 style={styles.input}
                 onChangeText={setDescription}
@@ -96,21 +73,15 @@ console.log(timeToComplete);
                 placeholder="Enter Task Description"
                 autoCapitalize="none"
               />
-               <View>
-      <View>
-        <Button onPress={showDatepicker} title="Due Date" />
-      </View>
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={mode}
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
-      )}
-    </View>
+              <View>
+                <Text style={styles.prompt}>Set Due Date:</Text>
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  display="default"
+                  onChange={() => setDate(date)}
+                />
+              </View>
             </View>
             <View>
               <Text style={styles.prompt}>
@@ -183,7 +154,8 @@ const styles = StyleSheet.create({
     height: 40,
     padding: 10,
     width: '100%',
-    marginTop: 10
+    marginTop: 10,
+    fontSize: 16
   },
   prompt: {
     alignSelf: 'flex-start',
