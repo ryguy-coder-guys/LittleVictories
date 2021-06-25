@@ -7,12 +7,15 @@ import {
   Text,
   ImageBackground,
   Alert,
+  Platform,
+  Button
 } from 'react-native';
 import { format } from 'date-fns';
 import IconA from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
 import { useJournalContext } from '../../Contexts/journalContext';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
@@ -21,6 +24,12 @@ const Journal = () => {
   const [date] = useState(format(new Date(), 'MMMM do y'));
   const { user } = useUserContext();
   const { journal } = useJournalContext();
+
+  //state for selecting date
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const [dates, setDates] = useState(new Date(1598051730000));
+
 
   useEffect(() => {
     setText(journal);
@@ -64,6 +73,27 @@ const Journal = () => {
     );
   };
 
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDates(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
+
+
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <View style={styles.container}>
@@ -87,6 +117,21 @@ const Journal = () => {
         <View style={{ flexDirection: 'row', marginLeft: 20 }}>
           <IconA name="caret-back" size={35} color="#1D426D" />
           <IconA name="caret-forward" size={35} color="#1D426D" />
+          <View>
+      <View>
+        <Button onPress={showDatepicker} title="Select A Date" />
+      </View>
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={dates}
+          mode={mode}
+          is24Hour={true}
+          display="default"
+          onChange={onChange}
+        />
+      )}
+    </View>
         </View>
         <View style={styles.textAreaContainer}>
           <Text style={styles.date}>{date}</Text>

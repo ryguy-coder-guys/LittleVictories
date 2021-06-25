@@ -9,6 +9,7 @@ import {
   Pressable,
   Button,
   Alert,
+  Platform
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
@@ -17,33 +18,61 @@ import { Switch } from 'react-native-switch';
 import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 import TaskSummary from './TaskSummary';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const [showForm, setShowForm] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
+  //for tasks, to create tasks
   const [tasks, setTasks] = useState([]);
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState('');
+  // const [date, setDate] = useState('');
   const [timeToComplete, setTimeToComplete] = useState(0);
   const [isImportant, setIsImportant] = useState(false);
   const { user, setUser } = useUserContext();
 
+  //for date selector
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
 
   const handleSubmit = async () => {
-    const { data: tasks } = await axios.post(
+    const { data: task } = await axios.post(
       'http://localhost:3000/api/tasks/',
       {
         user_id: user.id,
         description,
-        date,
-        timeToComplete,
+        due_date: new Date(),
+        minutes_to_complete: timeToComplete,
         is_important: isImportant,
       }
     );
-    setTasks([...tasks]);
+    setUser({ ...user, tasks: [...user.tasks, task] });
   };
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
+
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -68,13 +97,21 @@ const Task = () => {
                 placeholder="Enter Task Description"
                 autoCapitalize="none"
               />
-              <TextInput
-                style={styles.input}
-                onChangeText={setDate}
-                value={date}
-                placeholder="Due Date"
-                autoCapitalize="none"
-              />
+               <View>
+      <View>
+        <Button onPress={showDatepicker} title="Due Date" />
+      </View>
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={mode}
+          is24Hour={true}
+          display="default"
+          onChange={onChange}
+        />
+      )}
+    </View>
             </View>
             <View>
               <Text style={styles.taskPrompt}>
