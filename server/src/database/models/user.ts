@@ -7,14 +7,9 @@ interface UserInstance extends Model {
   hash: string;
   createdAt: Date;
   updatedAt: Date;
+  points: number;
+  level: number;
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-// interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
-
-// interface UserInstance
-//   extends Model<UserAttributes, UserCreationAttributes>,
-//     UserAttributes {}
 
 export const User = dbConnection.define<UserInstance>(
   'User',
@@ -40,50 +35,18 @@ export const User = dbConnection.define<UserInstance>(
       type: DataTypes.DATE,
       allowNull: false,
     },
-    // activationKey: {
-    //   type: DataTypes.FLOAT,
-    //   allowNull: false,
-    // },
-    // resetPasswordKey: {
-    //   type: DataTypes.FLOAT,
-    //   allowNull: false,
-    // },
-    // verified: {
-    //   type: DataTypes.BOOLEAN,
-    //   allowNull: false,
-    // },
+    points: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    level: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
+    },
   },
   {
     timestamps: true,
   }
 );
-
-// export const User = dbConnection.define<UserInstance>(
-//   'User',
-//   {
-//     id: {
-//       type: DataTypes.STRING,
-//       allowNull: false,
-//       primaryKey: true,
-//     },
-//     fName: {
-//       type: DataTypes.STRING,
-//       allowNull: false,
-//     },
-//     lName: {
-//       type: DataTypes.STRING,
-//       allowNull: true,
-//     },
-//     createdAt: {
-//       type: DataTypes.DATE,
-//       allowNull: false,
-//     },
-//     updatedAt: {
-//       type: DataTypes.DATE,
-//       allowNull: false,
-//     },
-//   },
-//   {
-//     timestamps: true,
-//   }
-// );

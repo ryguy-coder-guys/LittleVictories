@@ -13,7 +13,6 @@ export const JournalContextProvider = ({ children }) => {
   const getJournal = async () => {
     const user_id = user.id;
     const date = format(new Date(), 'MM-dd-yyyy')
-    console.log('THISIISSSS:', user_id, date);
     try {
       const { data } = await axios.get(
         `http://localhost:3000/api/journalEntries/${user_id}/${date}`

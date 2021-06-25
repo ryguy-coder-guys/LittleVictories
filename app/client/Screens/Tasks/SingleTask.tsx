@@ -9,16 +9,19 @@ const SingleTask = ({ item }) => {
 
   const markTaskComplete = async () => {
     try {
-      const { data: task } = await axios.patch(
+      const {
+        data: { task, points, level },
+      } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/complete`
       );
+      console.log('points', points, 'level', level);
       const mappedTasks = user.tasks.map((task) => {
         if (task.id === item.id) {
           return { ...task, is_complete: true };
         }
         return task;
       });
-      setUser({ ...user, tasks: mappedTasks });
+      setUser({ ...user, tasks: mappedTasks, points, level });
     } catch (error) {
       console.log(error);
     }
@@ -26,16 +29,19 @@ const SingleTask = ({ item }) => {
 
   const markTaskIncomplete = async () => {
     try {
-      const { data: task } = await axios.patch(
+      const {
+        data: { task, points, level },
+      } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/incomplete`
       );
+      console.log('points', points, 'level', level);
       const mappedTasks = user.tasks.map((task) => {
         if (task.id === item.id) {
           return { ...task, is_complete: false };
         }
         return task;
       });
-      setUser({ ...user, tasks: mappedTasks });
+      setUser({ ...user, tasks: mappedTasks, points, level });
     } catch (error) {
       console.log(error);
     }

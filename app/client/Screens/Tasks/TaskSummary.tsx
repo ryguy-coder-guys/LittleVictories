@@ -14,13 +14,12 @@ const TaskList = ({ item }) => {
   return <SingleTask item={item} />;
 };
 
-const ListHeader = ({ heading }) => {
-  return <Text style={styles.listHeader}>{heading}</Text>;
-};
+const ListHeader = ({ heading }) => (
+  <Text style={styles.subheader}>{heading}</Text>
+);
 
 const TaskSummary = () => {
   const { user } = useUserContext();
-
   return (
     <View>
       <FlatList
@@ -74,10 +73,15 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     padding: 20,
   },
-  listHeader: {
-    fontSize: 18,
+  subheader: {
+    color: '#1D426D',
+    fontSize: 22,
     fontWeight: 'bold',
-    paddingBottom: 5,
+    marginBottom: 10,
+  },
+  taskText: {
+    fontSize: 18,
+    paddingTop: 5,
     color: '#1D426D',
   },
 });

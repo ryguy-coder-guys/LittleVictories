@@ -6,14 +6,12 @@ grant all on *.* to 'root'@'localhost' with grant option;
 
 create table Users (
   id varchar(36) primary key,
+  username varchar(25) not null,
+  hash text not null,
   createdAt datetime not null,
   updatedAt datetime not null,
-  username varchar(25) not null,
-  hash text not null
-  -- salt text not null,
-  -- activationKey float not null,
-  -- resetPasswordKey float not null,
-  -- verified bool not null
+  points int not null default 0,
+  level int not null default 1
 );
 
 create table Habits (

@@ -74,10 +74,7 @@ const SettingsScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
+    flex: 1
   },
   button: {
     marginTop: 20,

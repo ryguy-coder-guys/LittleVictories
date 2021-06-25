@@ -12,6 +12,8 @@ export interface User {
   id: string;
   username: string;
   tasks: Task[];
+  points: number;
+  level: number;
 }
 
 interface UserContextState {

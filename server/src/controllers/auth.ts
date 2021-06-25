@@ -50,12 +50,15 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
   const mappedUser = {
     id: user.getDataValue('id'),
     username: user.getDataValue('username'),
+    points: user.getDataValue('points'),
+    level: user.getDataValue('level'),
   };
   const mappedTasks = tasks
     .filter((task) => {
       return (
-        !isPast(new Date(task.getDataValue('due date'))) ||
-        !task.getDataValue('is_complete')
+        (isPast(new Date(task.getDataValue('due_date'))) &&
+          !task.getDataValue('is_complete')) ||
+        !isPast(new Date(task.getDataValue('due_date')))
       );
     })
     .map((task) => {
