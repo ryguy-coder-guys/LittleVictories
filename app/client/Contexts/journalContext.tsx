@@ -19,7 +19,7 @@ export const JournalContextProvider = ({ children }) => {
       )
       setJournal(data.content);
     } catch (err) {
-      console.log('journal load error', err.message);
+      console.warn('journal load error', err.message);
     }
   }
 

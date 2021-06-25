@@ -25,7 +25,7 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: mappedTasks });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
@@ -42,7 +42,7 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: mappedTasks });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
@@ -56,7 +56,7 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: filteredTasks });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
