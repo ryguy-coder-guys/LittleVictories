@@ -5,8 +5,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
-  TextInput,
   ImageBackground,
   Switch,
 } from 'react-native';
@@ -20,7 +18,7 @@ const SettingsScreen = ({ navigation, route }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const bgImage = require('../../../assets/blue-gradient.png');
-  const { setUser } = useUserContext();
+  const { setUser, setUserStats } = useUserContext();
   const { getQuote } = useQuoteContext();
   const { setJournal } = useJournalContext();
 
@@ -66,6 +64,7 @@ const SettingsScreen = ({ navigation, route }) => {
           style={styles.button}
           onPress={() => {
             logout();
+            setUserStats(null);
             navigation.navigate('login');
           }}
         >

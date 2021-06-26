@@ -4,8 +4,9 @@ import { User } from '../database/models/user';
 import { v4 as getId } from 'uuid';
 import bcrypt from 'bcrypt';
 import { Task } from '../database/models/task';
-import isPast from 'date-fns/isPast';
 import { JournalEntry } from '../database/models/journalEntry';
+import { isPast, isToday, format } from 'date-fns';
+import { UserStat } from '../database/models/stat';
 
 const getHash = async (password: string): Promise<string> =>
   await bcrypt.hash(password, 12);
@@ -48,6 +49,12 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     where: { user_id: user.id },
     order: [['due_date', 'ASC']],
   });
+
+  const userStats = await UserStat.findOne({
+    where: { date: format(new Date(), 'MM-dd-yyyy'), user_id: user.id },
+  });
+  // console.log(userStats, 'THIS THING IS USERSTATS'); // returns null if no stats
+
   const mappedUser = {
     id: user.getDataValue('id'),
     username: user.getDataValue('username'),
@@ -76,8 +83,11 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     where: { user_id: user.id },
     order: [['createdAt', 'DESC']],
   });
-  console.log(entries);
-  const formattedUser = { ...mappedUser, tasks: mappedTasks, entries };
-  console.log(formattedUser);
+  const formattedUser = {
+    ...mappedUser,
+    tasks: mappedTasks,
+    userStats: userStats,
+    entries,
+  };
   res.send(formattedUser);
 };

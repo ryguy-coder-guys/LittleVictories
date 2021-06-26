@@ -7,9 +7,8 @@ import IconB from 'react-native-vector-icons/FontAwesome5';
 import Journal from '../Journal/Journal';
 import Home from '../Home/Home';
 import Settings from '../Settings/Settings';
-import Tasks from '../Tasks/Task';
+import Tasks from '../Tasks/Tasks';
 import { View, Text } from 'react-native';
-import TaskSummary from '../Tasks/TaskSummary';
 
 const AppBottomNavigator = createMaterialBottomTabNavigator();
 
@@ -30,7 +29,7 @@ const BottomTabs = () => {
       />
       <AppBottomNavigator.Screen
         name="Tasks"
-        component={TaskSummary}
+        component={Tasks}
         options={{
           tabBarIcon: () => <IconB name="tasks" size={25} color="#FAFAFA" />,
         }}

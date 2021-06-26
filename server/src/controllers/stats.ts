@@ -9,20 +9,22 @@ export const addStats: RequestHandler = async (req, res) => {
     eaten_well,
     exercised,
     notes,
+    date,
     mood
   } = req.body as AddStatsReqBody;
 
   try {
-    await UserStat.create({
+    const stats = await UserStat.create({
       user_id,
       sleep_hours,
       eaten_well,
       exercised,
       notes,
-      mood
+      mood,
+      date
     });
     console.log('stats successfully submitted');
-    res.sendStatus(201);
+    res.status(201).send(stats);
   } catch (err) {
     console.log('stat submission error: ', err.message);
     res.sendStatus(500);
