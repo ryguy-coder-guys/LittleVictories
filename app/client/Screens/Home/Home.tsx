@@ -16,6 +16,7 @@ import { v4 as getKey } from 'uuid';
 import { format } from 'date-fns';
 import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { isThisWeek } from 'date-fns';
+import ProgressBar from '../Root/ProgressBar';
 const exampleTaskData = [
   {
     id: 1,
@@ -83,6 +84,7 @@ const Home = () => {
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
+        <ProgressBar />
         <View style={styles.view}>
           <Text style={styles.heading}>Upcoming Tasks</Text>
           {user.tasks.slice(0, 5).map((task) => {

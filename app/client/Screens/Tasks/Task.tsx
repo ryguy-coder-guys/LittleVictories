@@ -18,6 +18,7 @@ import Slider from '@react-native-community/slider';
 // import TaskSummary from './TaskSummary';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format, isPast, isBefore } from 'date-fns';
+import ProgressBar from '../Root/ProgressBar';
 
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
@@ -62,6 +63,7 @@ const Task = () => {
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
+      <ProgressBar></ProgressBar>
       <View style={styles.container}>
         {user && (
           <View>

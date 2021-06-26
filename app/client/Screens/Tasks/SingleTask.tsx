@@ -72,10 +72,11 @@ const SingleTask = ({ item }) => {
       5: 'Saturday',
       6: 'Sunday',
     };
-    if (differenceInDays(new Date(date), new Date()) <= 6) {
-      return `due ${days[getDay(new Date(date))]}`;
+    const dueDate = new Date(date);
+    if (differenceInDays(dueDate, new Date()) <= 6) {
+      return `due ${days[getDay(dueDate)]}`;
     }
-    return `due in ${differenceInWeeks(new Date(date), new Date())} weeks`;
+    return `due in ${differenceInWeeks(dueDate, new Date())} weeks`;
   };
 
   return (
