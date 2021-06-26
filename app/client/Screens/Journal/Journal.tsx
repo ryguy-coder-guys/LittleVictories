@@ -7,7 +7,7 @@ import {
   Text,
   ImageBackground,
   Alert,
-  SafeAreaView
+  SafeAreaView,
 } from 'react-native';
 import { format } from 'date-fns';
 import IconA from 'react-native-vector-icons/Ionicons';
@@ -16,28 +16,24 @@ import { useUserContext } from '../../Contexts/userContext';
 import { useJournalContext } from '../../Contexts/journalContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ProgressBar from '../Root/ProgressBar';
+import { setDate, isToday } from 'date-fns/esm';
 
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
 
-  const [text, setText] = useState('');
-  const [date] = useState(format(new Date(), 'MMMM do y'));
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const { journal } = useJournalContext();
 
-
-  //state for selecting date
   const [datePicked, setDatePicked] = useState(new Date());
+  const [text, setText] = useState(journal ? journal : '');
+  const [date, setDate] = useState(format(new Date(), 'MMMM do y'));
+
+  const [index, setIndex] = useState(0);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || datePicked;
     setDatePicked(currentDate);
   };
-
-  useEffect(() => {
-    setText(journal);
-  }, []);
-
 
   const saveJournal = async () => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
@@ -46,6 +42,7 @@ const Journal = () => {
       date: format(new Date(datePicked), 'MM-dd-yyy'),
       //date: format(new Date(), 'MM-dd-yyyy')
     });
+    // unshift
     alert('Journal successfully saved.');
   };
 
@@ -73,6 +70,7 @@ const Journal = () => {
                 date: format(new Date(), 'MM-dd-yyyy'),
               }
             );
+            // shift
             setText('');
             alert('Journal successfully cleared.');
           },
@@ -81,12 +79,36 @@ const Journal = () => {
     );
   };
 
+  const forward = () => {
+    if (user) {
+      if (!index) {
+        return;
+      }
+      setIndex(index - 1);
+      setText(user.entries[index].content);
+      setDate(user.entries[index].date);
+    }
+  };
+
+  const back = () => {
+    if (user) {
+      if (index === user.entries.length - 1) {
+        return;
+      }
+      setIndex(index + 1);
+      setText(user.entries[index].content);
+      setDate(user.entries[index].date);
+    }
+  };
+
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <ProgressBar />
       <SafeAreaView style={styles.container}>
         <View style={styles.main}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+          >
             <Text style={styles.header}> User's Journal </Text>
             <AwesomeButton
               backgroundColor={'#1D426D'}
@@ -104,9 +126,23 @@ const Journal = () => {
             </AwesomeButton>
           </View>
           <View style={{ flexDirection: 'row', marginLeft: 20 }}>
-            <IconA name="caret-back" size={35} color="#1D426D" />
-            <IconA name="caret-forward" size={35} color="#1D426D" />
-            <View>
+            {index < user?.entries.length - 1 && (
+              <IconA
+                name="caret-back"
+                size={35}
+                color="#1D426D"
+                onPress={back}
+              />
+            )}
+            {index > 0 && (
+              <IconA
+                name="caret-forward"
+                size={35}
+                color="#1D426D"
+                onPress={forward}
+              />
+            )}
+            {/* <View>
               <View>
                 <Text style={styles.text}>Select a Date:</Text>
               </View>
@@ -116,7 +152,7 @@ const Journal = () => {
                 display="default"
                 onChange={onChange}
               />
-            </View>
+            </View> */}
           </View>
           <View style={styles.textAreaContainer}>
             <Text style={styles.date}>{date}</Text>
@@ -128,6 +164,9 @@ const Journal = () => {
               multiline={true}
               onChangeText={setText}
               value={text}
+              editable={
+                user ? isToday(new Date(user.entries[index].createdAt)) : false
+              }
             />
           </View>
           <AwesomeButton
@@ -173,7 +212,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   main: {
-    padding: 20
+    padding: 20,
   },
   submit: {
     alignSelf: 'flex-end',

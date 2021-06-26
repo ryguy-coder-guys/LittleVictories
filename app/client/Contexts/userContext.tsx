@@ -1,5 +1,14 @@
 import React, { createContext, useContext, useState } from 'react';
 
+export interface Entry {
+  id: number;
+  user_id: string;
+  createdAt: Date;
+  content: string;
+  date: string;
+  updatedAt: Date;
+}
+
 export interface Task {
   description: string;
   due_date: Date;
@@ -15,6 +24,7 @@ export interface User {
   journals: Journal[];
   points: number;
   level: number;
+  entries: Entry[];
 }
 
 export interface Journal {
@@ -32,7 +42,7 @@ interface UserContextState {
 }
 
 const UserDefaultValues: UserContextState = {
-  user: {id: '', username: '', tasks: [], journals: [], points: 0, level: 0},
+  user: { id: '', username: '', tasks: [], points: 0, level: 0, entries: [] },
   setUser: (user: User): void => {},
   userStats: null,
   setUserStats: (userStats: UserStat): void => {},

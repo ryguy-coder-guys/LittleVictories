@@ -4,17 +4,16 @@ import * as Progress from 'react-native-progress';
 import { useUserContext } from '../../Contexts/userContext';
 
 const ProgressBar = () => {
-  const {
-    user: { points, level, username },
-  } = useUserContext();
-  if (points === undefined || level === undefined) {
-    return null;
+  const { user } = useUserContext();
+  if (!user) {
+    return <View></View>;
   }
+  const { points, level, username } = user;
   return (
     <View style={styles.topNav}>
-      <View style={{flexDirection: 'column'}}>
-        <Text style={styles.toptext}>{username}  </Text>
-        <Text style={styles.text}>lvl {level}  </Text>
+      <View style={{ flexDirection: 'column' }}>
+        <Text style={styles.toptext}>{username} </Text>
+        <Text style={styles.text}>lvl {level} </Text>
       </View>
       <Progress.Bar
         animated={true}
@@ -32,22 +31,22 @@ const ProgressBar = () => {
 const styles = StyleSheet.create({
   progressBar: {
     marginBottom: 20,
-    marginTop: 50
+    marginTop: 50,
   },
   text: {
-    color:'#FAFAFA',
+    color: '#FAFAFA',
   },
   topNav: {
     flexDirection: 'row',
     backgroundColor: '#3E6592',
     width: '100%',
     height: '10%',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   toptext: {
-    color:'#FAFAFA',
-    marginTop: 40
-  }
+    color: '#FAFAFA',
+    marginTop: 40,
+  },
 });
 
 export default ProgressBar;
