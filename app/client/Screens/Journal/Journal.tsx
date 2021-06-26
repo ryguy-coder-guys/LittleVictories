@@ -77,8 +77,8 @@ const Journal = () => {
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
+      <ProgressBar />
       <SafeAreaView style={styles.container}>
-        <ProgressBar />
         <View style={styles.main}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.header}> User's Journal </Text>
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   textArea: {
-    height: '72%',
+    height: '70%',
     justifyContent: 'flex-start',
     marginTop: 20,
     color: '#1D426D',

@@ -4,25 +4,17 @@ import {
   TextInput,
   StyleSheet,
   Text,
-  ImageBackground,
   Button,
-  Alert,
-  Platform,
-  ScrollView,
   Switch,
-  SafeAreaView
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
 import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
-// import TaskSummary from './TaskSummary';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format, isPast, isBefore } from 'date-fns';
-import ProgressBar from '../Root/ProgressBar';
 
-const Task = () => {
-  const bgImage = require('../../../assets/blue-gradient.png');
+const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const [description, setDescription] = useState('');
@@ -63,16 +55,7 @@ const Task = () => {
   };
 
   return (
-    <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <SafeAreaView>
-        <ProgressBar></ProgressBar>
         <View style={styles.container}>
-          {user && (
-            <View>
-              <Text>Points: {user.points}</Text>
-              <Text>Level: {user.level}</Text>
-            </View>
-          )}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.header}>Tasks</Text>
             <FAB
@@ -83,7 +66,7 @@ const Task = () => {
             />
           </View>
           {showForm ? (
-            <View style={styles.view}>
+            <View style={styles.addTaskComponent}>
               <View>
                 <View
                   style={{
@@ -148,20 +131,22 @@ const Task = () => {
               <Button title="Submit" onPress={() => handleSubmit()} />
             </View>
           ) : null}
-          {/* <TaskSummary /> */}
         </View>
-      </SafeAreaView>
-    </ImageBackground>
   );
 };
 const styles = StyleSheet.create({
+  addTaskComponent: {
+    backgroundColor: '#8ebac6',
+    padding: 20,
+    borderRadius: 10,
+    marginTop: 20
+  },
   backgroundImage: {
     flex: 1,
   },
   container: {
     flex: 1,
     padding: 20,
-    paddingTop: 65,
   },
   fab: {
     backgroundColor: '#1D426D',
@@ -217,13 +202,5 @@ const styles = StyleSheet.create({
     width: 100,
     justifyContent: 'flex-start',
   },
-  view: {
-    backgroundColor: '#8ebac6',
-    borderRadius: 20,
-    padding: 20,
-    marginTop: 30,
-    marginRight: 20,
-    marginLeft: 20,
-  },
 });
-export default Task;
+export default TaskForm;
