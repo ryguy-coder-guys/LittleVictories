@@ -9,7 +9,7 @@ import {
   Alert,
   Platform,
   ScrollView,
-  Switch
+  Switch,
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
@@ -17,7 +17,8 @@ import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 // import TaskSummary from './TaskSummary';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { format, isPast } from 'date-fns';
+import { format, isPast, isBefore } from 'date-fns';
+import ProgressBar from '../Root/ProgressBar';
 
 
 const Task = () => {
@@ -46,10 +47,16 @@ const Task = () => {
           minutes_to_complete: timeToComplete,
           is_important: isImportant,
         }
-        );
-        setUser({ ...user, tasks: [...user.tasks, task] });
-      }
-    };
+      );
+      const sortedTasks = [...user.tasks, task].sort((t1, t2) =>
+        isBefore(new Date(t1.due_date), new Date(t2.due_date)) ? -1 : 1
+      );
+      setUser({
+        ...user,
+        tasks: sortedTasks,
+      });
+    }
+  };
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -67,6 +74,7 @@ const Task = () => {
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
+      <ProgressBar></ProgressBar>
       <View style={styles.container}>
         {user && (
           <View>
@@ -134,7 +142,7 @@ const Task = () => {
                 Mark task as important?
               </Text>
               <Switch
-                trackColor={{ false: '#767577', true: '#81b0ff'}}
+                trackColor={{ false: '#767577', true: '#81b0ff' }}
                 thumbColor={'#FAFAFA'}
                 onValueChange={toggleSwitch}
                 value={isImportant}
@@ -183,7 +191,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '100%',
     marginTop: 10,
-    fontSize: 16
+    fontSize: 16,
   },
   prompt: {
     alignSelf: 'flex-start',

@@ -8,7 +8,7 @@ import {
   ImageBackground,
   Alert,
   Platform,
-  Button
+  Button,
 } from 'react-native';
 import { format } from 'date-fns';
 import IconA from 'react-native-vector-icons/Ionicons';
@@ -16,6 +16,7 @@ import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
 import { useJournalContext } from '../../Contexts/journalContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import ProgressBar from '../Root/ProgressBar';
 
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
@@ -84,6 +85,7 @@ const Journal = () => {
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <View style={styles.container}>
+        <ProgressBar />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.header}> User's Journal </Text>
           <AwesomeButton
@@ -105,15 +107,15 @@ const Journal = () => {
           <IconA name="caret-back" size={35} onPress={() => previosJournal()} color="#1D426D" />
           <IconA name="caret-forward" size={35} onPress={() => console.log('hi')} color="#1D426D" />
           <View>
-          <View>
-            <Text style={styles.text}>Select a Date:</Text>
-          </View>
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={datePicked}
-            display="default"
-            onChange={onChange}
-          />
+            <View>
+              <Text style={styles.text}>Select a Date:</Text>
+            </View>
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={datePicked}
+              display="default"
+              onChange={onChange}
+            />
           </View>
         </View>
         <View style={styles.textAreaContainer}>
@@ -149,7 +151,7 @@ const Journal = () => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1
+    flex: 1,
   },
   button: {
     padding: 10,
@@ -178,14 +180,14 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#1D426D',
-    fontSize: 16
+    fontSize: 16,
   },
   textArea: {
     height: '75%',
     justifyContent: 'flex-start',
     marginTop: 20,
     color: '#1D426D',
-    fontSize: 18
+    fontSize: 18,
   },
   textAreaContainer: {
     backgroundColor: '#8ebac6',

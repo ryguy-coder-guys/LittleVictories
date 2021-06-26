@@ -2,6 +2,7 @@ import axios from 'axios';
 import { View, StyleSheet, FlatList, Text, Button } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { useState } from 'react';
+import { differenceInDays, differenceInWeeks, getDay } from 'date-fns';
 
 const SingleTask = ({ item }) => {
   const { user, setUser } = useUserContext();
@@ -61,6 +62,23 @@ const SingleTask = ({ item }) => {
     }
   };
 
+  const fn = (date: Date) => {
+    const days = {
+      0: 'Monday',
+      1: 'Tuesday',
+      2: 'Wednesday',
+      3: 'Thursday',
+      4: 'Friday',
+      5: 'Saturday',
+      6: 'Sunday',
+    };
+    const dueDate = new Date(date);
+    if (differenceInDays(dueDate, new Date()) <= 6) {
+      return `due ${days[getDay(dueDate)]}`;
+    }
+    return `due in ${differenceInWeeks(dueDate, new Date())} weeks`;
+  };
+
   return (
     <Text style={styles.taskText}>
       <Text
@@ -72,7 +90,7 @@ const SingleTask = ({ item }) => {
         {finished ? '✓ ' : '☐ '}
       </Text>
       <Text>
-        {item.description} - {item.due_date}
+        {item.description} - {fn(item.due_date)}
       </Text>
       <Button title="Remove" onPress={removeTask} />
     </Text>

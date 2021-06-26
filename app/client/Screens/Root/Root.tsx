@@ -4,39 +4,37 @@ import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
 import BottomTabs from './NavBar';
 import Login from './Login';
-// import LoginModal from './Login';
-// import { useUserContext } from '../../Contexts/userContext';
-// import Loading from './Loading';
-// import { View } from 'react-native'; 
-
+import { useQuoteContext } from '../../Contexts/quoteContext';
+import { View, Text } from 'react-native';
+import Loading from './Loading';
 
 const AppNavigation = createStackNavigator();
 
-
 const RootNavigator = () => {
-  // const [loading, setLoading]  = useState(true);
-  // const { user } = useUserContext();
-
-  // useEffect(() => {
-  //     setLoading(user ? false : true);
-  // }, [user]);
-
-
-
+  const { quote } = useQuoteContext();
+  if (!quote) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>PLEASE WAIT WHILE QUOTE LOADS</Text>
+      </View>
+    );
+  }
   return (
     <NavigationContainer>
       <AppNavigation.Navigator
         mode="modal"
         initialRouteName="login"
         screenOptions={{
-          header: () => null
+          header: () => null,
         }}
       >
         {/* eslint-disable-next-line react/no-children-prop */}
         <AppNavigation.Screen name="index" children={BottomTabs} />
         <AppNavigation.Screen name="login" component={Login} />
+        <AppNavigation.Screen name="loading" component={Loading} />
       </AppNavigation.Navigator>
     </NavigationContainer>
   );
 };
+
 export default RootNavigator;
