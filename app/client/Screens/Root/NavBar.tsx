@@ -1,5 +1,6 @@
 // eslint-disable react/no-children-prop */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useUserContext } from '../../Contexts/userContext';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import IconA from 'react-native-vector-icons/Ionicons';
 import IconB from 'react-native-vector-icons/FontAwesome5';
@@ -7,6 +8,7 @@ import Journal from '../Journal/Journal';
 import Home from '../Home/Home';
 import Settings from '../Settings/Settings';
 import Tasks from '../Tasks/Task';
+import { View, Text } from 'react-native';
 import TaskSummary from '../Tasks/TaskSummary';
 
 const AppBottomNavigator = createMaterialBottomTabNavigator();

@@ -43,7 +43,7 @@ export const addJournalEntry: RequestHandler = async (req, res) => {
     } else {
       // if it does not, create it
       try {
-        const newJournalEntry = await JournalEntry.create({
+        await JournalEntry.create({
           user_id,
           content,
           date
