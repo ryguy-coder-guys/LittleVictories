@@ -12,6 +12,7 @@ import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import Loading from '../Root/Loading';
 import { v4 as getKey } from 'uuid';
+import { isPast, isThisWeek } from 'date-fns';
 
 const exampleTaskData = [
   {
@@ -47,15 +48,20 @@ const Home = () => {
       <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
         <View style={styles.view}>
           <Text style={styles.heading}>Upcoming Tasks</Text>
-          {exampleTaskData.map((task) => {
-            return (
-              <View style={styles.task} key={getKey()}>
-                <Text style={styles.desc}>
-                  {task.description} - {task.due_date}
-                </Text>
-              </View>
-            );
-          })}
+          {user.tasks
+            .filter((task) => {
+              const dueDate = new Date(task.due_date);
+              return isPast(dueDate) || isThisWeek(dueDate);
+            })
+            .map((task) => {
+              return (
+                <View style={styles.task} key={getKey()}>
+                  <Text style={styles.desc}>
+                    {task.description} - {task.due_date}
+                  </Text>
+                </View>
+              );
+            })}
         </View>
         <View style={styles.view}>
           <Text style={styles.heading}>Daily Reflection</Text>

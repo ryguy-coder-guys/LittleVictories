@@ -1,21 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Text,
-  Button,
-  SectionList,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native';
 import { v4 as getKey } from 'uuid';
+import {
+  isThisWeek,
+  isThisMonth,
+  isPast,
+  isFirstDayOfMonth,
+  getDate,
+} from 'date-fns';
+
+import { StyleSheet, Text, SectionList, SafeAreaView } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
-import axios from 'axios';
-import { serializeUser } from 'passport';
-import { userInfo } from 'os';
-import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
-import { isThisWeek, isThisMonth, isPast } from 'date-fns';
 import SingleTask from './SingleTask';
 import Task from './Task';
 
@@ -32,7 +26,6 @@ const TaskSummary = () => {
   const [data, setData] = useState([]);
 
   const sortTasks = (tasks) => {
-    console.log('sorting');
     const thisWeek = [];
     const thisMonth = [];
     const maybeLater = [];
