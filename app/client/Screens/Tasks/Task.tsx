@@ -19,6 +19,7 @@ import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format, isPast } from 'date-fns';
 
+
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const [showForm, setShowForm] = useState(false);
@@ -30,6 +31,7 @@ const Task = () => {
   //for date selector
   const [date, setDate] = useState(new Date());
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
+
 
   const handleSubmit = async () => {
     if (isPast(date)) {
@@ -44,15 +46,24 @@ const Task = () => {
           minutes_to_complete: timeToComplete,
           is_important: isImportant,
         }
-      );
-      setUser({ ...user, tasks: [...user.tasks, task] });
-    }
-  };
+        );
+        setUser({ ...user, tasks: [...user.tasks, task] });
+      }
+    };
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
   };
+
+  //clear inputs once you click submit
+  const clearInput = () => {
+    setShowForm(false)
+    setDescription('')
+    setDate(new Date())
+    setTimeToComplete(0)
+    setIsImportant(false)
+  }
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -77,7 +88,6 @@ const Task = () => {
             <View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text style={styles.subheader}>Add Task</Text>
-              <Button title="Cancel" onPress={() => setShowForm(false)} />
             </View>
               <TextInput
                 style={styles.input}
@@ -130,7 +140,7 @@ const Task = () => {
                 value={isImportant}
               />
             </View>
-            <Button title="Submit" onPress={() => handleSubmit()} />
+            <Button title="Submit" onPress={() => handleSubmit() && clearInput()} />
           </View>
         ) : null}
         {/* <TaskSummary /> */}
