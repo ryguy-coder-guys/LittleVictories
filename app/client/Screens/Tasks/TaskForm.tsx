@@ -46,6 +46,11 @@ const TaskForm = () => {
         ...user,
         tasks: sortedTasks,
       });
+      setShowForm(false);
+      setDescription('');
+      setDate(new Date());
+      setTimeToComplete(0);
+      setIsImportant(false);
     }
   };
 
@@ -139,7 +144,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#8ebac6',
     padding: 20,
     borderRadius: 10,
-    marginTop: 20
+    marginTop: 20,
+    marginRight: 20,
+    marginLeft: 20
   },
   backgroundImage: {
     flex: 1,

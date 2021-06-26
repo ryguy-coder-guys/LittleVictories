@@ -6,7 +6,6 @@ import {
   Text,
   ImageBackground,
   SafeAreaView,
-  ScrollView,
 } from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
@@ -38,6 +37,7 @@ const Home = () => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [mood, setMood] = useState('');
   const [notes, setNotes] = useState('');
+  const [activeIcon, setActiveIcon] = useState(null);
 
   const submitStats = async () => {
     try {
@@ -65,6 +65,7 @@ const Home = () => {
 
   const handleFace = (value) => {
     setMood(value);
+    setActiveIcon(value);
   };
 
   const getIcon = (mood) => {
@@ -87,7 +88,7 @@ const Home = () => {
       <SafeAreaView style={{ flex: 1, alignItems: 'center', marginTop: 20 }}>
         <View style={styles.view}>
           <Text style={styles.heading}>Upcoming Tasks</Text>
-          {user.tasks.slice(0, 5).map((task) => {
+          {user.tasks?.slice(0, 5).map((task) => {
             return (
               <View style={styles.task} key={getKey()}>
                 <Text style={styles.desc}>
@@ -167,11 +168,36 @@ const Home = () => {
               />
               <Text style={styles.prompt}>What's your mood?</Text>
               <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                <FaceIcon name="emoticon-angry-outline" onPress={() => handleFace('terrible')} size={35} color="#FAFAFA" />
-                <FaceIcon name="emoticon-sad-outline" onPress={() => handleFace('bad')} size={35} color="#FAFAFA" />
-                <FaceIcon name="emoticon-neutral-outline" onPress={() => handleFace('ok')} size={35} color="#FAFAFA" />
-                <FaceIcon name="emoticon-happy-outline" onPress={() => handleFace('good')} size={35} color="#FAFAFA" />
-                <FaceIcon name="emoticon-excited-outline" onPress={() => handleFace('great')} size={35} color="#FAFAFA" />
+                <FaceIcon
+                  name="emoticon-angry-outline"
+                  onPress={() => handleFace('terrible')}
+                  size={35}
+                  style={activeIcon === 'terrible' ? styles.activeIcon : styles.inactiveIcon}
+                />
+                <FaceIcon
+                  name="emoticon-sad-outline"
+                  onPress={() => handleFace('bad')}
+                  size={35}
+                  style={activeIcon === 'bad' ? styles.activeIcon : styles.inactiveIcon}
+                />
+                <FaceIcon
+                  name="emoticon-neutral-outline"
+                  onPress={() => handleFace('ok')}
+                  size={35}
+                  style={activeIcon === 'ok' ? styles.activeIcon : styles.inactiveIcon}
+                />
+                <FaceIcon
+                  name="emoticon-happy-outline"
+                  onPress={() => handleFace('good')}
+                  size={35}
+                  style={activeIcon === 'good' ? styles.activeIcon : styles.inactiveIcon}
+                />
+                <FaceIcon
+                  name="emoticon-excited-outline"
+                  onPress={() => handleFace('great')}
+                  size={35}
+                  style={activeIcon === 'great' ? styles.activeIcon : styles.inactiveIcon}
+                />
               </View>
               <AwesomeButton
                 backgroundColor={'#1D426D'}
@@ -214,6 +240,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 10,
+  },
+  activeIcon: {
+    color: '#FAFAFA'
+  },
+  inactiveIcon: {
+    color: '#9b9a9a'
   },
   input: {
     borderRadius: 10,
