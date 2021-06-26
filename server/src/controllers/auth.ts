@@ -33,33 +33,34 @@ export const registerUser: RequestHandler = async (req, res) => {
 };
 
 export const loginUser: RequestHandler = async (req, res): Promise<any> => {
-  const { username, password } = req.body as LoginUserReqBody;
-  const user = await validate(username, password);
-  if (!user) {
-    return false;
-  }
-  const tasks = await Task.findAll({ where: { user_id: user.id } });
-  const mappedUser = {
-    id: user.getDataValue('id'),
-    username: user.getDataValue('username'),
-  };
-  const mappedTasks = tasks
+    const { username, password } = req.body as LoginUserReqBody;
+    const user = await validate(username, password);
+    if (!user) {
+      return false;
+    }
+    const tasks = await Task.findAll({ where: { user_id: user.id } });
+    const mappedUser = {
+      id: user.getDataValue('id'),
+      username: user.getDataValue('username'),
+    };
+    const mappedTasks = tasks
     .filter((task) => {
       return (
         new Date(task.getDataValue('due_date')).getDate() >=
-          new Date().getDate() || !task.getDataValue('is_complete')
-      );
-    })
-    .map((task) => {
-      return {
-        id: task.getDataValue('id'),
-        description: task.getDataValue('description'),
-        due_date: task.getDataValue('due_date'),
-        minutes_to_complete: task.getDataValue('minutes_to_complete'),
-        is_important: task.getDataValue('is_important'),
-        is_complete: task.getDataValue('is_complete'),
-      };
-    });
-  const formattedUser = { ...mappedUser, tasks: mappedTasks };
-  res.send(formattedUser);
-};
+        new Date().getDate() || !task.getDataValue('is_complete')
+        );
+      })
+      .map((task) => {
+        return {
+          id: task.getDataValue('id'),
+          description: task.getDataValue('description'),
+          due_date: task.getDataValue('due_date'),
+          minutes_to_complete: task.getDataValue('minutes_to_complete'),
+          is_important: task.getDataValue('is_important'),
+          is_complete: task.getDataValue('is_complete'),
+        };
+      });
+      const formattedUser = { ...mappedUser, tasks: mappedTasks };
+      res.send(formattedUser);
+    };
+    

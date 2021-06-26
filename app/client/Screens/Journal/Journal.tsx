@@ -28,6 +28,10 @@ const Journal = () => {
   //state for selecting date
   const [datePicked, setDatePicked] = useState(new Date());
 
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || datePicked;
+    setDatePicked(currentDate);
+  };
 
   useEffect(() => {
     setText(journal);
@@ -102,7 +106,7 @@ const Journal = () => {
             testID="dateTimePicker"
             value={datePicked}
             display="default"
-            onChange={() => setDatePicked(datePicked)}
+            onChange={onChange}
           />
           </View>
         </View>

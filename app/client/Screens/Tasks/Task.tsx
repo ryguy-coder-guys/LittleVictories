@@ -17,6 +17,7 @@ import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 import TaskSummary from './TaskSummary';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { format, isPast } from 'date-fns';
 
 
 const Task = () => {
@@ -34,17 +35,26 @@ const Task = () => {
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
 
   const handleSubmit = async () => {
-    const { data: task } = await axios.post(
-      'http://localhost:3000/api/tasks/',
-      {
-        user_id: user.id,
-        description,
-        due_date: date,
-        minutes_to_complete: timeToComplete,
-        is_important: isImportant,
-      }
-    );
-    setUser({ ...user, tasks: [...user.tasks, task] });
+    if (isPast(date)) {
+      alert('this date is in the past, please select a future date.');
+    } else {
+      const { data: task } = await axios.post(
+        'http://localhost:3000/api/tasks/',
+        {
+          user_id: user.id,
+          description,
+          due_date: date,
+          minutes_to_complete: timeToComplete,
+          is_important: isImportant,
+        }
+      );
+      setUser({ ...user, tasks: [...user.tasks, task] });
+    }
+  };
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
   };
 
   return (
@@ -79,7 +89,7 @@ const Task = () => {
                   testID="dateTimePicker"
                   value={date}
                   display="default"
-                  onChange={() => setDate(date)}
+                  onChange={onChange}
                 />
               </View>
             </View>

@@ -47,18 +47,18 @@ const Login = ({ navigation }) => {
     }
     if (loginSelected) {
       // attempt a login for the user
-      const { data: user } = await axios.post(
+      const { data: userObj } = await axios.post(
         'http://localhost:3000/api/auth/login',
         {
           username,
           password: passwordAttempt,
         }
       );
-      if (user) {
+      if (userObj) {
         // if successful navigate to home
-        setTimeout(() => {
-          setUser(user);
-        }, 5000);
+        // setTimeout(() => {
+          setUser(userObj);
+        // }, 5000);
         setUsername('');
         setPasswordAttempt('');
         navigation.navigate('index');
