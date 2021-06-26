@@ -12,7 +12,7 @@ import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 
 const Login = ({ navigation }) => {
-  const { user, setUser } = useUserContext();
+  const { setUser, setUserStats } = useUserContext();
 
   const bgImage = require('../../../assets/blue-gradient.png');
   const logo = require('../../../assets/logo.png');
@@ -58,6 +58,7 @@ const Login = ({ navigation }) => {
         // if successful navigate to home
         setTimeout(() => {
           setUser(userObj);
+          setUserStats(userObj.userStats);
           navigation.navigate('index');
         }, 5000);
         setUsername('');

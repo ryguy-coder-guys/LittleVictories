@@ -15,7 +15,6 @@ import Loading from '../Root/Loading';
 import { v4 as getKey } from 'uuid';
 import { format } from 'date-fns';
 import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Okay from 'react-native-vector-icons/MaterialCommunityIcons';
 import { isThisWeek } from 'date-fns';
 import ProgressBar from '../Root/ProgressBar';
 const exampleTaskData = [
@@ -38,28 +37,47 @@ const Home = () => {
   const [didExercise, setDidExercise] = useState('');
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [mood, setMood] = useState('');
+  const [notes, setNotes] = useState('');
+
   const submitStats = async () => {
     try {
-      const { data } = await axios.post('http://localhost:3000/api/stats', {
-        user_id: user.id,
-        sleep_hours: sleepHours,
-        eaten_well: didEatWell === 'yes',
-        exercised: didExercise === 'yes',
-        notes: 'default notes, need to add to form',
-        mood: mood,
-        date: format(new Date(), 'MM-dd-yyyy'),
-      });
+      const { data } = await axios.post(
+        'http://localhost:3000/api/stats',
+        {
+          user_id: user.id,
+          sleep_hours: sleepHours,
+          eaten_well: didEatWell === 'yes',
+          exercised: didExercise === 'yes',
+          notes: notes,
+          mood: mood,
+          date: format(new Date(), 'MM-dd-yyyy')
+        }
+      )
     } catch (err) {
       console.warn('had issues posting stats (client)');
     }
   };
+
   const handleSubmit = () => {
     submitStats();
     setHasSubmitted(true);
   };
+
   const handleFace = (value) => {
     setMood(value);
   };
+
+  const getIcon = (mood) => {
+    const icons = {
+      'great': 'emoticon-excited-outline',
+      'good': 'emoticon-happy-outline',
+      'ok': 'emoticon-neutral-outline',
+      'bad': 'emoticon-sad-outline',
+      'terrible': 'emoticon-angry-outline',
+    }
+    return <FaceIcon name={icons[mood]} size={35} color="#FAFAFA" />
+  }
+
   if (!user) {
     return <Loading />;
   }
@@ -92,12 +110,21 @@ const Home = () => {
                 Hours of sleep: {userStats?.sleep_hours || sleepHours}
               </Text>
               <Text style={styles.text}>
-                Did you eat well?:{' '}
+                Did you eat well?{' '}
                 {userStats?.eaten_well ? 'yes' : 'no' || didEatWell}
               </Text>
               <Text style={styles.text}>
-                Exercised?: {userStats?.exercised ? 'yes' : 'no' || didExercise}
+                Exercised? {userStats?.exercised ? 'yes' : 'no' || didExercise}
               </Text>
+              <Text style={styles.text}>
+                Notes: {userStats?.notes || notes}
+              </Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.text}>
+                  Mood
+                </Text>
+                { getIcon(userStats?.mood) || getIcon(mood) }
+              </View>
             </View>
           ) : (
             <View style={{ alignItems: 'center' }}>
@@ -127,37 +154,24 @@ const Home = () => {
                 placeholder="yes or no"
                 autoCapitalize="none"
               />
-              <View style={{ flexDirection: 'row' }}>
-                <FaceIcon
-                  name="emoticon-angry-outline"
-                  onPress={() => handleFace('terrible')}
-                  size={35}
-                  color="#FAFAFA"
-                />
-                <FaceIcon
-                  name="emoticon-sad-outline"
-                  onPress={() => handleFace('bad')}
-                  size={35}
-                  color="#FAFAFA"
-                />
-                <FaceIcon
-                  name="emoticon-neutral-outline"
-                  onPress={() => handleFace('ok')}
-                  size={35}
-                  color="#FAFAFA"
-                />
-                <FaceIcon
-                  name="emoticon-happy-outline"
-                  onPress={() => handleFace('good')}
-                  size={35}
-                  color="#FAFAFA"
-                />
-                <FaceIcon
-                  name="emoticon-excited-outline"
-                  onPress={() => handleFace('great')}
-                  size={35}
-                  color="#FAFAFA"
-                />
+              <Text style={styles.prompt}>Daily Notes</Text>
+              <TextInput
+                style={styles.multi_input}
+                multiline
+                numberOfLines={4}
+                value={notes}
+                maxLength={250}
+                onChangeText={setNotes}
+                editable={true}
+                placeholder="Enter notes here."
+              />
+              <Text style={styles.prompt}>What's your mood?</Text>
+              <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                <FaceIcon name="emoticon-angry-outline" onPress={() => handleFace('terrible')} size={35} color="#FAFAFA" />
+                <FaceIcon name="emoticon-sad-outline" onPress={() => handleFace('bad')} size={35} color="#FAFAFA" />
+                <FaceIcon name="emoticon-neutral-outline" onPress={() => handleFace('ok')} size={35} color="#FAFAFA" />
+                <FaceIcon name="emoticon-happy-outline" onPress={() => handleFace('good')} size={35} color="#FAFAFA" />
+                <FaceIcon name="emoticon-excited-outline" onPress={() => handleFace('great')} size={35} color="#FAFAFA" />
               </View>
               <AwesomeButton
                 backgroundColor={'#1D426D'}
@@ -212,6 +226,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 18,
   },
+  multi_input: {
+    borderRadius: 10,
+    backgroundColor: '#9ec5cf',
+    color: '#1D426D',
+    padding: 10,
+    width: '100%',
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 18,
+  },
   task: {
     paddingTop: 10,
   },
@@ -230,7 +254,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#1D426D',
     fontSize: 16,
-    marginTop: 5,
+    marginTop: 10,
   },
   view: {
     backgroundColor: '#8ebac6',

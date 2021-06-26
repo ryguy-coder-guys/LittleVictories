@@ -5,18 +5,22 @@ import axios from 'axios';
 import BottomTabs from './NavBar';
 import Login from './Login';
 import { useQuoteContext } from '../../Contexts/quoteContext';
-import { View, Text } from 'react-native';
+import { View, Image, ImageBackground, StyleSheet } from 'react-native';
 import Loading from './Loading';
 
 const AppNavigation = createStackNavigator();
 
 const RootNavigator = () => {
+  const bgImage = require('../../../assets/blue-gradient.png');
+  const logo = require('../../../assets/logo.png');
   const { quote } = useQuoteContext();
   if (!quote) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>PLEASE WAIT WHILE QUOTE LOADS</Text>
-      </View>
+      <ImageBackground style={styles.backgroundImage} source={bgImage}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Image source={logo} />
+        </View>
+      </ImageBackground>
     );
   }
   return (
@@ -36,5 +40,12 @@ const RootNavigator = () => {
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    justifyContent: 'center'
+  }
+})
 
 export default RootNavigator;

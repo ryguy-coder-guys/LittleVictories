@@ -14,6 +14,7 @@ interface UserStatInstance extends Model {
   exercised: boolean;
   notes: string;
   mood: moodType;
+  date: string;
 }
 
 export const UserStat = dbConnection.define<UserStatInstance>(
@@ -55,6 +56,10 @@ export const UserStat = dbConnection.define<UserStatInstance>(
     mood: {
       type: DataTypes.ENUM({values: ['great', 'good', 'ok', 'bad', 'terrible']})
     },
+    date: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
   },
   {
     timestamps: true
