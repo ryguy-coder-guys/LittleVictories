@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 import { Task } from '../database/models/task';
 import { JournalEntry } from '../database/models/journalEntry'
 import { log } from 'console';
+const { Op } = require("sequelize");
 import isPast from 'date-fns/isPast';
 
 const getHash = async (password: string): Promise<string> =>
@@ -75,6 +76,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     });
   const formattedUser = { ...mappedUser, tasks: mappedTasks };
 
+  //const journals = await JournalEntry.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
   const journals = await JournalEntry.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
   console.log(journals, 'line 67');
   console.log(formattedUser);
