@@ -59,10 +59,11 @@ const Login = ({ navigation }) => {
         setTimeout(() => {
           setUser(userObj);
           setUserStats(userObj.userStats);
+          navigation.navigate('index');
         }, 5000);
         setUsername('');
         setPasswordAttempt('');
-        navigation.navigate('index');
+        navigation.navigate('loading');
       } else {
         // if not successful, will need to toggle wrongLogin
         toggleWrongLogin(true);
@@ -270,7 +271,7 @@ const Login = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1
+    flex: 1,
   },
   button: {
     marginLeft: 5,

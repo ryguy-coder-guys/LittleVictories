@@ -8,19 +8,24 @@ import {
   Button,
   TextInput,
   ImageBackground,
-  Switch
+  Switch,
 } from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUserContext } from '../../Contexts/userContext';
+import { useQuoteContext } from '../../Contexts/quoteContext';
 
 const SettingsScreen = ({ navigation, route }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const bgImage = require('../../../assets/blue-gradient.png');
   const { setUser, setUserStats } = useUserContext();
+  const { getQuote } = useQuoteContext();
 
-  const logout = (): void => setUser(null);
+  const logout = (): void => {
+    getQuote();
+    setUser(null);
+  };
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -28,7 +33,7 @@ const SettingsScreen = ({ navigation, route }) => {
         <Text style={styles.header}>Settings</Text>
         <Text style={styles.value}>Push Notifications</Text>
         <Switch
-          trackColor={{ false: '#767577', true: '#81b0ff'}}
+          trackColor={{ false: '#767577', true: '#81b0ff' }}
           thumbColor={'#FAFAFA'}
           onValueChange={toggleSwitch}
           value={isEnabled}
@@ -71,7 +76,7 @@ const SettingsScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1
+    flex: 1,
   },
   button: {
     marginTop: 20,

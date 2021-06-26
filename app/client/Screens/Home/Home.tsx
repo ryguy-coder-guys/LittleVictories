@@ -6,6 +6,7 @@ import {
   Text,
   ImageBackground,
   SafeAreaView,
+  ScrollView,
 } from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
@@ -14,7 +15,7 @@ import Loading from '../Root/Loading';
 import { v4 as getKey } from 'uuid';
 import { format } from 'date-fns';
 import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import { isThisWeek } from 'date-fns';
 const exampleTaskData = [
   {
     id: 1,
@@ -27,7 +28,6 @@ const exampleTaskData = [
     due_date: '6/25/21',
   },
 ];
-
 const Home = () => {
   const { user, userStats, setUserStats } = useUserContext();
   const bgImage = require('../../../assets/blue-gradient.png');
@@ -56,7 +56,7 @@ const Home = () => {
       console.warn('had issues posting stats (client)');
     }
   };
-
+  
   const handleSubmit = () => {
     submitStats();
     setHasSubmitted(true);
@@ -64,7 +64,7 @@ const Home = () => {
 
   const handleFace = (value) => {
     setMood(value);
-  }
+  };
 
   if (!user) {
     return <Loading />;
@@ -74,7 +74,7 @@ const Home = () => {
       <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
         <View style={styles.view}>
           <Text style={styles.heading}>Upcoming Tasks</Text>
-          {exampleTaskData.map((task) => {
+          {user.tasks.slice(0, 5).map((task) => {
             return (
               <View style={styles.task} key={getKey()}>
                 <Text style={styles.desc}>
@@ -93,9 +93,16 @@ const Home = () => {
                 accurate Weekly Stats.
               </Text>
               <Text style={styles.subheader}>Today's Data:</Text>
-              <Text style={styles.text}>Hours of sleep: {userStats?.sleep_hours || sleepHours}</Text>
-              <Text style={styles.text}>Did you eat well?: {userStats?.eaten_well ? 'yes' : 'no' || didEatWell}</Text>
-              <Text style={styles.text}>Exercised?: {userStats?.exercised ? 'yes' : 'no' || didExercise}</Text>
+              <Text style={styles.text}>
+                Hours of sleep: {userStats?.sleep_hours || sleepHours}
+              </Text>
+              <Text style={styles.text}>
+                Did you eat well?:{' '}
+                {userStats?.eaten_well ? 'yes' : 'no' || didEatWell}
+              </Text>
+              <Text style={styles.text}>
+                Exercised?: {userStats?.exercised ? 'yes' : 'no' || didExercise}
+              </Text>
             </View>
           ) : (
             <View style={{ alignItems: 'center' }}>
@@ -235,5 +242,4 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 });
-
 export default Home;
