@@ -54,6 +54,14 @@ const TaskForm = () => {
     setDate(currentDate);
   };
 
+  const clearInput = () => {
+    setShowForm(false)
+    setDescription('')
+    setDate(new Date())
+    setTimeToComplete(0)
+    setIsImportant(false)
+  }
+
   return (
         <View style={styles.container}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -128,7 +136,7 @@ const TaskForm = () => {
                   value={isImportant}
                 />
               </View>
-              <Button title="Submit" onPress={() => handleSubmit()} />
+              <Button title="Submit" onPress={() => handleSubmit() && clearInput()} />
             </View>
           ) : null}
         </View>
