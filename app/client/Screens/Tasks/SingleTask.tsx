@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { View, StyleSheet, FlatList, Text, Button } from 'react-native';
+import { View, StyleSheet, Text, Button } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { useState } from 'react';
 import { differenceInDays, differenceInWeeks, getDay } from 'date-fns';
@@ -80,27 +80,40 @@ const SingleTask = ({ item }) => {
   };
 
   return (
-    <Text style={styles.taskText}>
-      <Text
-        onPress={() => {
-          finished ? markTaskIncomplete() : markTaskComplete();
-          setFinished(!finished);
-        }}
-      >
-        {finished ? '✓ ' : '☐ '}
-      </Text>
-      <Text>
-        {item.description} - {fn(item.due_date)}
-      </Text>
+    <View style={styles.task_view}>
+      <View style={{flexDirection: 'row'}}>
+        <Text
+          style={styles.text}
+          onPress={() => {
+            finished ? markTaskIncomplete() : markTaskComplete();
+            setFinished(!finished);
+          }}
+        >
+          {finished ? '✓ ' : '☐ '}
+        </Text>
+        <Text style={styles.text}>
+          {item.description} - {fn(item.due_date)}
+        </Text>
+      </View>
       <Button title="Remove" onPress={removeTask} />
-    </Text>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  taskText: {
-    fontSize: 14,
-    paddingTop: 5,
+  task_view: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 10,
+    backgroundColor: '#8ebac6',
+    borderRadius: 10,
+    padding: 10
+  },
+  text: {
+    fontSize: 18,
     color: '#1D426D',
   },
 });

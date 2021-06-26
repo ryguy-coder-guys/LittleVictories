@@ -83,8 +83,8 @@ const Home = () => {
   }
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
-        <ProgressBar />
+      <ProgressBar />
+      <SafeAreaView style={{ flex: 1, alignItems: 'center', marginTop: 20 }}>
         <View style={styles.view}>
           <Text style={styles.heading}>Upcoming Tasks</Text>
           {user.tasks.slice(0, 5).map((task) => {
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
     padding: 20,
-    width: '80%',
+    width: '80%'
   },
 });
 export default Home;
