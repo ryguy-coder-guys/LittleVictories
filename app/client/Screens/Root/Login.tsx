@@ -58,11 +58,7 @@ const Login = ({ navigation }) => {
         // if successful navigate to home
         setTimeout(() => {
           setUser(userObj);
-<<<<<<< HEAD
-
-=======
           navigation.navigate('index');
->>>>>>> f05c3f6338b12eb55be817c1eeaf08f845b55952
         }, 5000);
         setUsername('');
         setPasswordAttempt('');
