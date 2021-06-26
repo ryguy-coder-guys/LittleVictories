@@ -8,8 +8,8 @@ import {
   Button,
   TextInput,
   ImageBackground,
+  Switch
 } from 'react-native';
-import { Switch } from 'react-native-switch';
 import AwesomeButton from 'react-native-really-awesome-button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUserContext } from '../../Contexts/userContext';
@@ -28,12 +28,8 @@ const SettingsScreen = ({ navigation, route }) => {
         <Text style={styles.header}>Settings</Text>
         <Text style={styles.value}>Push Notifications</Text>
         <Switch
-          circleActiveColor={'#9ee7ff'}
-          circleInActiveColor={'#f4f3f4'}
-          backgroundActive={'rgb(7, 40, 82)'}
-          backgroundInactive={'rgb(7, 40, 82)'}
-          switchLeftPx={5}
-          switchRightPx={5}
+          trackColor={{ false: '#767577', true: '#81b0ff'}}
+          thumbColor={'#FAFAFA'}
           onValueChange={toggleSwitch}
           value={isEnabled}
         />

@@ -9,10 +9,10 @@ import {
   Alert,
   Platform,
   ScrollView,
+  Switch
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
-import { Switch } from 'react-native-switch';
 import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 // import TaskSummary from './TaskSummary';
@@ -124,12 +124,8 @@ const Task = () => {
                 Mark task as important?
               </Text>
               <Switch
-                circleActiveColor={'#fafafa'}
-                circleInActiveColor={'#b9e4c9'}
-                backgroundActive={'#1D426D'}
-                backgroundInactive={'#1D426D'}
-                switchLeftPx={5}
-                switchRightPx={5}
+                trackColor={{ false: '#767577', true: '#81b0ff'}}
+                thumbColor={'#FAFAFA'}
                 onValueChange={toggleSwitch}
                 value={isImportant}
               />

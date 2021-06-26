@@ -22,7 +22,7 @@ interface UserContextState {
 }
 
 const UserDefaultValues: UserContextState = {
-  user: null,
+  user: {id: '', username: '', tasks: [], points: 0, level: 0},
   setUser: (user: User): void => {},
 };
 
