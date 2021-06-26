@@ -143,11 +143,11 @@ const Home = () => {
 };
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1
+    flex: 1,
   },
   button: {
     marginTop: 20,
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   desc: {
     color: '#1D426D',
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     color: '#1D426D',
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 10
+    marginBottom: 10,
   },
   input: {
     borderRadius: 10,
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10,
     marginBottom: 10,
-    fontSize: 18
+    fontSize: 18,
   },
   task: {
     paddingTop: 10,
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     color: '#1D426D',
     marginTop: 10,
-    fontSize: 18
+    fontSize: 18,
   },
   subheader: {
     color: '#1D426D',

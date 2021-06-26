@@ -8,24 +8,21 @@ import {
   Button,
   Alert,
   Platform,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
 import { Switch } from 'react-native-switch';
 import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
-import TaskSummary from './TaskSummary';
+// import TaskSummary from './TaskSummary';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format, isPast } from 'date-fns';
-
 
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const [showForm, setShowForm] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
-  //for tasks, to create tasks
-  const [tasks, setTasks] = useState([]);
   const [description, setDescription] = useState('');
   const [timeToComplete, setTimeToComplete] = useState(0);
   const [isImportant, setIsImportant] = useState(false);
@@ -59,7 +56,13 @@ const Task = () => {
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
+        {user && (
+          <View>
+            <Text>Points: {user.points}</Text>
+            <Text>Level: {user.level}</Text>
+          </View>
+        )}
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.header}>Tasks</Text>
           <FAB
@@ -110,7 +113,16 @@ const Task = () => {
               />
             </View>
             <View style={styles.important}>
-              <Text style={{ fontSize: 18, color: '#1D426D', paddingRight: 15, paddingTop: 2}}>Mark task as important?</Text>
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: '#1D426D',
+                  paddingRight: 15,
+                  paddingTop: 2,
+                }}
+              >
+                Mark task as important?
+              </Text>
               <Switch
                 circleActiveColor={'#fafafa'}
                 circleInActiveColor={'#b9e4c9'}
@@ -125,14 +137,14 @@ const Task = () => {
             <Button title="Submit" onPress={() => handleSubmit()} />
           </View>
         ) : null}
-        <TaskSummary />
-      </ScrollView>
+        {/* <TaskSummary /> */}
+      </View>
     </ImageBackground>
   );
 };
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1
+    flex: 1,
   },
   container: {
     flex: 1,
@@ -142,20 +154,20 @@ const styles = StyleSheet.create({
   fab: {
     backgroundColor: '#1D426D',
     height: 40,
-    marginRight: 20
+    marginRight: 20,
   },
   header: {
     color: '#1D426D',
     fontSize: 26,
     fontWeight: 'bold',
-    marginLeft: 20
+    marginLeft: 20,
   },
   important: {
     flexDirection: 'row',
     color: '#1D426D',
     marginTop: 25,
     marginBottom: 10,
-    fontSize: 18
+    fontSize: 18,
   },
   input: {
     borderRadius: 10,
@@ -172,13 +184,13 @@ const styles = StyleSheet.create({
     color: '#1D426D',
     marginTop: 25,
     marginBottom: 10,
-    fontSize: 18
+    fontSize: 18,
   },
   subheader: {
     color: '#1D426D',
     fontSize: 22,
     fontWeight: 'bold',
-    marginTop: 5
+    marginTop: 5,
   },
   submitButton: {
     marginTop: 20,
@@ -186,7 +198,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#1D426D',
     marginBottom: 10,
-    fontSize: 16
+    fontSize: 16,
   },
   textArea: {
     height: 200,
@@ -200,6 +212,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginRight: 20,
     marginLeft: 20,
-  }
+  },
 });
 export default Task;
