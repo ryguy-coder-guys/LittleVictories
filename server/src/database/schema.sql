@@ -87,7 +87,8 @@ create table JournalEntries (
 create table UserStats (
 	id int primary key auto_increment,
 	user_id varchar(36) not null,
-  created_at datetime not null default now(),
+  createdAt datetime not null default now(),
+  updatedAt datetime,
   sleep_hours int,
   eaten_well bool,
   exercised bool,

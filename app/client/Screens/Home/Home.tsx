@@ -31,12 +31,31 @@ const Home = () => {
   const { user } = useUserContext();
   const bgImage = require('../../../assets/blue-gradient.png');
   const [sleepHours, setSleepHours] = useState('');
-  const [didSkipMeals, setSkipMeals] = useState('');
+  const [didEatWell, setDidEatWell] = useState('');
   const [didExercise, setDidExercise] = useState('');
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  const submitStats = async () => {
+    try {
+      await axios.post(
+        'http://localhost:3000/api/stats',
+        {
+          user_id: user.id,
+          sleep_hours: sleepHours,
+          eaten_well: didEatWell === 'yes' ? true : false,
+          exercised: didExercise === 'yes' ? true : false,
+          notes: 'default notes, need to add to form',
+          mood: 'good'
+        }
+      )
+    } catch (err) {
+      console.warn('had issues posting stats (client)');
+    }
+  };
+
   const handleSubmit = () => {
+    submitStats();
     setHasSubmitted(true);
   };
 
@@ -73,7 +92,7 @@ const Home = () => {
               </Text>
               <Text style={styles.subheader}>Today's Data:</Text>
               <Text style={styles.text}>Hours of sleep: {sleepHours}</Text>
-              <Text style={styles.text}>Skipped meals?: {didSkipMeals}</Text>
+              <Text style={styles.text}>Did you eat well?: {didEatWell}</Text>
               <Text style={styles.text}>Exercised?: {didExercise}</Text>
             </View>
           ) : (
@@ -91,8 +110,8 @@ const Home = () => {
               <Text style={styles.prompt}>Did you skip any meals?</Text>
               <TextInput
                 style={styles.input}
-                onChangeText={setSkipMeals}
-                value={didSkipMeals}
+                onChangeText={setDidEatWell}
+                value={didEatWell}
                 placeholder="yes or no"
                 autoCapitalize="none"
               />

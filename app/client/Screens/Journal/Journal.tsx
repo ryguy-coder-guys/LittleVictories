@@ -26,10 +26,12 @@ const Journal = () => {
   const { journal } = useJournalContext();
 
   //state for selecting date
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-  const [dates, setDates] = useState(new Date(1598051730000));
+  const [datePicked, setDatePicked] = useState(new Date());
 
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || datePicked;
+    setDatePicked(currentDate);
+  };
 
   useEffect(() => {
     setText(journal);
@@ -73,27 +75,6 @@ const Journal = () => {
     );
   };
 
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDates(currentDate);
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
-  };
-
-
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <View style={styles.container}>
@@ -118,20 +99,16 @@ const Journal = () => {
           <IconA name="caret-back" size={35} color="#1D426D" />
           <IconA name="caret-forward" size={35} color="#1D426D" />
           <View>
-      <View>
-        <Button onPress={showDatepicker} title="Select A Date" />
-      </View>
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={dates}
-          mode={mode}
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
-      )}
-    </View>
+          <View>
+            <Text style={styles.text}>Select a Date:</Text>
+          </View>
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={datePicked}
+            display="default"
+            onChange={onChange}
+          />
+          </View>
         </View>
         <View style={styles.textAreaContainer}>
           <Text style={styles.date}>{date}</Text>
@@ -192,6 +169,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     marginTop: 10,
     marginRight: 20,
+  },
+  text: {
+    color: '#1D426D',
+    fontSize: 16
   },
   textArea: {
     height: '75%',
