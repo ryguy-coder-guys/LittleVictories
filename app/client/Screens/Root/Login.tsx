@@ -72,8 +72,12 @@ const Login = ({ navigation }) => {
       if (
         !username.length ||
         !passwordAttempt.length ||
-        !passwordAttempt2.length
+        !passwordAttempt2.length ||
+        passwordAttempt !== passwordAttempt2
       ) {
+        if (passwordAttempt !== passwordAttempt2) {
+          setMismatchPasswords(true);
+        }
         return;
       }
       const { data: user } = await axios.post(
@@ -108,7 +112,7 @@ const Login = ({ navigation }) => {
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
           <>
-            <Image source={logo} />
+            <Image source={logo} style={{resizeMode: 'contain', width: '50%', height: '25%'}} />
             <View style={{ flexDirection: 'row' }}>
               <AwesomeButton
                 backgroundColor={'#5c83b1'}
@@ -188,7 +192,7 @@ const Login = ({ navigation }) => {
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
           <>
-            <Image source={logo} />
+            <Image source={logo} style={{resizeMode: 'contain', width: '50%', height: '25%'}} />
             <View style={{ flexDirection: 'row' }}>
               <AwesomeButton
                 backgroundColor={'#1D426D'}
@@ -228,7 +232,8 @@ const Login = ({ navigation }) => {
             />
             {mismatchPasswords ? (
               <View>
-                <Text style={styles.error}>Passwords did not match.</Text>
+                <Text style={styles.error}>Passwords did not match</Text>
+                <Text style={styles.error}>or username is already taken.</Text>
                 <Text style={styles.error2}>Please try again.</Text>
               </View>
             ) : null}
