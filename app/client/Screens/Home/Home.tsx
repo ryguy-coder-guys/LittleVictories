@@ -56,7 +56,7 @@ const Home = () => {
       console.warn('had issues posting stats (client)');
     }
   };
-  
+
   const handleSubmit = () => {
     submitStats();
     setHasSubmitted(true);
@@ -65,6 +65,17 @@ const Home = () => {
   const handleFace = (value) => {
     setMood(value);
   };
+
+  const getIcon = (mood) => {
+    const icons = {
+      'great': 'emoticon-excited-outline',
+      'good': 'emoticon-happy-outline',
+      'ok': 'emoticon-neutral-outline',
+      'bad': 'emoticon-sad-outline',
+      'terrible': 'emoticon-angry-outline',
+    }
+    return <FaceIcon name={icons[mood]} size={35} color="#FAFAFA" />
+  }
 
   if (!user) {
     return <Loading />;
@@ -97,12 +108,21 @@ const Home = () => {
                 Hours of sleep: {userStats?.sleep_hours || sleepHours}
               </Text>
               <Text style={styles.text}>
-                Did you eat well?:{' '}
+                Did you eat well?{' '}
                 {userStats?.eaten_well ? 'yes' : 'no' || didEatWell}
               </Text>
               <Text style={styles.text}>
-                Exercised?: {userStats?.exercised ? 'yes' : 'no' || didExercise}
+                Exercised? {userStats?.exercised ? 'yes' : 'no' || didExercise}
               </Text>
+              <Text style={styles.text}>
+                Notes: {userStats?.notes || notes}
+              </Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.text}>
+                  Mood
+                </Text>
+                { getIcon(userStats?.mood) || getIcon(mood) }
+              </View>
             </View>
           ) : (
             <View style={{ alignItems: 'center' }}>
