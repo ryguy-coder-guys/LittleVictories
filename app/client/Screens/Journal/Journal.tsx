@@ -165,7 +165,9 @@ const Journal = () => {
               onChangeText={setText}
               value={text}
               editable={
-                user ? isToday(new Date(user.entries[index].createdAt)) : false
+                user?.entries[index]
+                 ? isToday(new Date(user.entries[index].createdAt))
+                 : false
               }
             />
           </View>
