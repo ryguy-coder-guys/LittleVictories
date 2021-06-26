@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Text, Button } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Text,
+  Button,
+  SectionList,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
 import { v4 as getKey } from 'uuid';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import { serializeUser } from 'passport';
 import { userInfo } from 'os';
 import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
-import isThisWeek from 'date-fns/isThisWeek';
-import isThisMonth from 'date-fns/isThisMonth';
-import isPast from 'date-fns/isThisMonth';
+import { isThisWeek, isThisMonth, isPast } from 'date-fns';
 import SingleTask from './SingleTask';
+import Task from './Task';
 
 const TaskList = ({ item }) => {
   return <SingleTask item={item} />;
@@ -19,67 +27,63 @@ const ListHeader = ({ heading }) => (
   <Text style={styles.subheader}>{heading}</Text>
 );
 
-const sortTasks = (tasks) => {
-  const thisWeek = [];
-  const thisMonth = [];
-  const maybeLater = [];
-  for (const task of tasks) {
-    const dueDate = new Date(task.due_date);
-    if (isThisWeek(dueDate)) {
-      thisWeek.push(task);
-      continue;
-    }
-    if (isPast(dueDate)) {
-      thisWeek.push(task);
-      continue;
-    }
-    if (isThisMonth(dueDate)) {
-      thisMonth.push(task);
-      continue;
-    }
-    maybeLater.push(task);
-  }
-  return { thisWeek, thisMonth, maybeLater };
-};
-
 const TaskSummary = () => {
   const { user } = useUserContext();
-  const [thisWeek, setThisWeek] = useState([]);
-  const [thisMonth, setThisMonth] = useState([]);
-  const [maybeLater, setMaybeLater] = useState([]);
+  const [data, setData] = useState([]);
+
+  const sortTasks = (tasks) => {
+    console.log('sorting');
+    const thisWeek = [];
+    const thisMonth = [];
+    const maybeLater = [];
+    for (const task of tasks) {
+      const dueDate = new Date(task.due_date);
+      if (isPast(dueDate)) {
+        thisWeek.push(task);
+      } else if (isThisWeek(dueDate)) {
+        thisWeek.push(task);
+      } else if (isThisMonth(dueDate)) {
+        thisMonth.push(task);
+      } else {
+        maybeLater.push(task);
+      }
+    }
+    return { thisWeek, thisMonth, maybeLater };
+  };
 
   useEffect(() => {
-    const {
-      thisWeek: _thisWeek,
-      thisMonth: _thisMonth,
-      maybeLater: _maybelater,
-    } = sortTasks(user.tasks);
-    setThisWeek(_thisWeek);
-    setThisMonth(_thisMonth);
-    setMaybeLater(_maybelater);
+    if (user) {
+      const { thisWeek, thisMonth, maybeLater } = sortTasks(user.tasks);
+      const newData = [
+        {
+          title: 'This Week',
+          data: thisWeek,
+        },
+        {
+          title: 'This Month',
+          data: thisMonth,
+        },
+        {
+          title: 'Maybe Later',
+          data: maybeLater,
+        },
+      ];
+      setData(newData);
+    }
   }, [user]);
 
   return (
-    <View>
-      <FlatList
-        ListHeaderComponent={() => <ListHeader heading="This Week" />}
-        data={thisWeek}
+    <SafeAreaView>
+      <SectionList
+        sections={data}
+        keyExtractor={() => getKey()}
         renderItem={TaskList}
-        style={styles.listContainer}
+        renderSectionHeader={({ section: { title } }) => (
+          <ListHeader heading={title} />
+        )}
+        ListHeaderComponent={<Task />}
       />
-      <FlatList
-        ListHeaderComponent={() => <ListHeader heading="This Month" />}
-        data={thisMonth}
-        renderItem={TaskList}
-        style={styles.listContainer}
-      />
-      <FlatList
-        ListHeaderComponent={() => <ListHeader heading="Maybe Later" />}
-        data={maybeLater}
-        renderItem={TaskList}
-        style={styles.listContainer}
-      />
-    </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

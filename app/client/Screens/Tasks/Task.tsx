@@ -15,7 +15,7 @@ import { FAB } from 'react-native-paper';
 import { Switch } from 'react-native-switch';
 import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
-import TaskSummary from './TaskSummary';
+// import TaskSummary from './TaskSummary';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const Task = () => {
@@ -69,7 +69,7 @@ const Task = () => {
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         {user && (
           <View>
             <Text>Points: {user.points}</Text>
@@ -161,8 +161,8 @@ const Task = () => {
             <Button title="Submit" onPress={() => handleSubmit()} />
           </View>
         ) : null}
-        <TaskSummary />
-      </ScrollView>
+        {/* <TaskSummary /> */}
+      </View>
     </ImageBackground>
   );
 };
