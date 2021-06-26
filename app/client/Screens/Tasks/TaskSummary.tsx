@@ -13,7 +13,6 @@ import {
 import { useUserContext } from '../../Contexts/userContext';
 import SingleTask from './SingleTask';
 import Task from './Task';
-import ProgressBar from '../Root/ProgressBar';
 
 const TaskList = ({ item }) => {
   return <SingleTask item={item} />;
@@ -31,14 +30,14 @@ const TaskSummary = () => {
   const { user } = useUserContext();
 
   return (
-    <SafeAreaView>
+    <View>
       <FlatList
         keyExtractor={() => getKey()}
         data={user ? user.tasks : []}
         renderItem={TaskList}
         ListHeaderComponent={<ListHeader />}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -7,8 +7,7 @@ import {
   Text,
   ImageBackground,
   Alert,
-  Platform,
-  Button,
+  SafeAreaView
 } from 'react-native';
 import { format } from 'date-fns';
 import IconA from 'react-native-vector-icons/Ionicons';
@@ -78,10 +77,53 @@ const Journal = () => {
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <ProgressBar />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={styles.header}> User's Journal </Text>
+        <View style={styles.main}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={styles.header}> User's Journal </Text>
+            <AwesomeButton
+              backgroundColor={'#1D426D'}
+              textColor={'#FAFAFA'}
+              height={35}
+              width={125}
+              raiseLevel={0}
+              borderRadius={8}
+              style={styles.button}
+              onPress={() => {
+                clearJournal();
+              }}
+            >
+              Clear Entry
+            </AwesomeButton>
+          </View>
+          <View style={{ flexDirection: 'row', marginLeft: 20 }}>
+            <IconA name="caret-back" size={35} color="#1D426D" />
+            <IconA name="caret-forward" size={35} color="#1D426D" />
+            <View>
+              <View>
+                <Text style={styles.text}>Select a Date:</Text>
+              </View>
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={datePicked}
+                display="default"
+                onChange={onChange}
+              />
+            </View>
+          </View>
+          <View style={styles.textAreaContainer}>
+            <Text style={styles.date}>{date}</Text>
+            <TextInput
+              style={styles.textArea}
+              underlineColorAndroid="transparent"
+              placeholder="Type something"
+              numberOfLines={10}
+              multiline={true}
+              onChangeText={setText}
+              value={text}
+            />
+          </View>
           <AwesomeButton
             backgroundColor={'#1D426D'}
             textColor={'#FAFAFA'}
@@ -89,56 +131,15 @@ const Journal = () => {
             width={125}
             raiseLevel={0}
             borderRadius={8}
-            style={styles.button}
+            style={styles.submit}
             onPress={() => {
-              clearJournal();
+              saveJournal();
             }}
           >
-            Clear Entry
+            Save
           </AwesomeButton>
         </View>
-        <View style={{ flexDirection: 'row', marginLeft: 20 }}>
-          <IconA name="caret-back" size={35} color="#1D426D" />
-          <IconA name="caret-forward" size={35} color="#1D426D" />
-          <View>
-            <View>
-              <Text style={styles.text}>Select a Date:</Text>
-            </View>
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={datePicked}
-              display="default"
-              onChange={onChange}
-            />
-          </View>
-        </View>
-        <View style={styles.textAreaContainer}>
-          <Text style={styles.date}>{date}</Text>
-          <TextInput
-            style={styles.textArea}
-            underlineColorAndroid="transparent"
-            placeholder="Type something"
-            numberOfLines={10}
-            multiline={true}
-            onChangeText={setText}
-            value={text}
-          />
-        </View>
-        <AwesomeButton
-          backgroundColor={'#1D426D'}
-          textColor={'#FAFAFA'}
-          height={35}
-          width={125}
-          raiseLevel={0}
-          borderRadius={8}
-          style={styles.submit}
-          onPress={() => {
-            saveJournal();
-          }}
-        >
-          Save
-        </AwesomeButton>
-      </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 };
@@ -153,8 +154,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 20,
-    paddingTop: 65,
   },
   date: {
     color: '#1D426D',
@@ -167,6 +166,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 20,
   },
+  main: {
+    padding: 20
+  },
   submit: {
     alignSelf: 'flex-end',
     marginTop: 10,
@@ -177,7 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   textArea: {
-    height: '75%',
+    height: '72%',
     justifyContent: 'flex-start',
     marginTop: 20,
     color: '#1D426D',

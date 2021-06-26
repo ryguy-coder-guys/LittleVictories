@@ -15,8 +15,15 @@ const ProgressBar = () => {
       width={300}
       height={13}
       borderRadius={5}
+      style={styles.progressBar}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  progressBar: {
+    alignSelf: 'center'
+  }
+});
 
 export default ProgressBar;
