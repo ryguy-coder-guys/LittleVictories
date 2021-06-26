@@ -18,7 +18,7 @@ const SettingsScreen = ({ navigation, route }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const bgImage = require('../../../assets/blue-gradient.png');
-  const { setUser } = useUserContext();
+  const { setUser, setUserStats } = useUserContext();
 
   const logout = (): void => setUser(null);
 
@@ -58,6 +58,7 @@ const SettingsScreen = ({ navigation, route }) => {
           style={styles.button}
           onPress={() => {
             logout();
+            setUserStats(null);
             navigation.navigate('login');
           }}
         >
