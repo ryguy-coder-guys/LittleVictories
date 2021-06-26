@@ -25,6 +25,7 @@ const Journal = () => {
   const { user } = useUserContext();
   const { journal } = useJournalContext();
 
+
   //state for selecting date
   const [datePicked, setDatePicked] = useState(new Date());
 
@@ -37,6 +38,7 @@ const Journal = () => {
     setText(journal);
   }, []);
 
+
   const saveJournal = async () => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
@@ -46,6 +48,9 @@ const Journal = () => {
     });
     alert('Journal successfully saved.');
   };
+
+
+
 
   const clearJournal = () => {
     const areYouSure = Alert.alert(
@@ -97,8 +102,8 @@ const Journal = () => {
           </AwesomeButton>
         </View>
         <View style={{ flexDirection: 'row', marginLeft: 20 }}>
-          <IconA name="caret-back" size={35} color="#1D426D" />
-          <IconA name="caret-forward" size={35} color="#1D426D" />
+          <IconA name="caret-back" size={35} onPress={() => previosJournal()} color="#1D426D" />
+          <IconA name="caret-forward" size={35} onPress={() => console.log('hi')} color="#1D426D" />
           <View>
           <View>
             <Text style={styles.text}>Select a Date:</Text>

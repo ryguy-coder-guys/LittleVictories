@@ -50,6 +50,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     where: { user_id: user.id },
     order: [['due_date', 'ASC']],
   });
+
   const mappedUser = {
     id: user.getDataValue('id'),
     username: user.getDataValue('username'),
@@ -74,10 +75,10 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
         is_complete: task.getDataValue('is_complete'),
       };
     });
-  const formattedUser = { ...mappedUser, tasks: mappedTasks };
+  const journals = await JournalEntry.findAll({where: {user_id: user.id }, order: [['createdAt', 'DESC']]});
+  const formattedUser = { ...mappedUser, tasks: mappedTasks, journals: journals };
 
   //const journals = await JournalEntry.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
-  const journals = await JournalEntry.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
   console.log(journals, 'line 67');
   console.log(formattedUser);
   res.send(formattedUser);
