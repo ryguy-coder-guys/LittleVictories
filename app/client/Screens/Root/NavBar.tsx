@@ -7,6 +7,7 @@ import Journal from '../Journal/Journal';
 import Home from '../Home/Home';
 import Settings from '../Settings/Settings';
 import Tasks from '../Tasks/Task';
+import TaskSummary from '../Tasks/TaskSummary';
 
 const AppBottomNavigator = createMaterialBottomTabNavigator();
 
@@ -27,7 +28,7 @@ const BottomTabs = () => {
       />
       <AppBottomNavigator.Screen
         name="Tasks"
-        component={Tasks}
+        component={TaskSummary}
         options={{
           tabBarIcon: () => <IconB name="tasks" size={25} color="#FAFAFA" />,
         }}
