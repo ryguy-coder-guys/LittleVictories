@@ -14,6 +14,7 @@ import AwesomeButton from 'react-native-really-awesome-button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUserContext } from '../../Contexts/userContext';
 import { useQuoteContext } from '../../Contexts/quoteContext';
+import { useJournalContext } from '../../Contexts/journalContext';
 
 const SettingsScreen = ({ navigation, route }) => {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -21,10 +22,12 @@ const SettingsScreen = ({ navigation, route }) => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const { setUser } = useUserContext();
   const { getQuote } = useQuoteContext();
+  const { setJournal } = useJournalContext();
 
   const logout = (): void => {
     getQuote();
     setUser(null);
+    setJournal(null);
   };
 
   return (

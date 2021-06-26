@@ -12,25 +12,25 @@ export const JournalContextProvider = ({ children }) => {
   // get today's journal
   const getJournal = async () => {
     const user_id = user.id;
-    const date = format(new Date(), 'MM-dd-yyyy')
+    const date = format(new Date(), 'MM-dd-yyyy');
     try {
       const { data } = await axios.get(
         `http://localhost:3000/api/journalEntries/${user_id}/${date}`
-      )
+      );
       setJournal(data.content);
     } catch (err) {
       console.warn('journal load error', err.message);
     }
-  }
+  };
 
   useEffect(() => {
-    if (user) {
+    if (user?.id?.length) {
       getJournal();
     }
   }, [user]);
 
   return (
-    <JournalContext.Provider value={{ journal }}>
+    <JournalContext.Provider value={{ journal, setJournal }}>
       {children}
     </JournalContext.Provider>
   );

@@ -23,10 +23,10 @@ const Journal = () => {
 
   const [text, setText] = useState('');
   const [date] = useState(format(new Date(), 'MMMM do y'));
-  const { user } = useUserContext();
-  const { journal } = useJournalContext();
 
-  //state for selecting date
+  const { user } = useUserContext();
+  const { entries } = user;
+
   const [datePicked, setDatePicked] = useState(new Date());
 
   const onChange = (event, selectedDate) => {
@@ -42,7 +42,8 @@ const Journal = () => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
       content: text,
-      date: format(new Date(), 'MM-dd-yyyy'),
+      date: format(new Date(datePicked), 'MM-dd-yyy'),
+      //date: format(new Date(), 'MM-dd-yyyy')
     });
     alert('Journal successfully saved.');
   };
@@ -99,7 +100,12 @@ const Journal = () => {
         </View>
         <View style={{ flexDirection: 'row', marginLeft: 20 }}>
           <IconA name="caret-back" size={35} color="#1D426D" />
-          <IconA name="caret-forward" size={35} color="#1D426D" />
+          <IconA
+            name="caret-forward"
+            size={35}
+            onPress={() => console.log('hi')}
+            color="#1D426D"
+          />
           <View>
             <View>
               <Text style={styles.text}>Select a Date:</Text>
@@ -113,7 +119,9 @@ const Journal = () => {
           </View>
         </View>
         <View style={styles.textAreaContainer}>
-          <Text style={styles.date}>{date}</Text>
+          <Text style={styles.date}>
+            {format(new Date(datePicked), 'MM-dd-yyy')}
+          </Text>
           <TextInput
             style={styles.textArea}
             underlineColorAndroid="transparent"

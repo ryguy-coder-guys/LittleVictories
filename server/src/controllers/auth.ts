@@ -5,6 +5,7 @@ import { v4 as getId } from 'uuid';
 import bcrypt from 'bcrypt';
 import { Task } from '../database/models/task';
 import isPast from 'date-fns/isPast';
+import { JournalEntry } from '../database/models/journalEntry';
 
 const getHash = async (password: string): Promise<string> =>
   await bcrypt.hash(password, 12);
@@ -71,7 +72,12 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
         is_complete: task.getDataValue('is_complete'),
       };
     });
-  const formattedUser = { ...mappedUser, tasks: mappedTasks };
+  const entries = await JournalEntry.findAll({
+    where: { user_id: user.id },
+    order: [['createdAt', 'DESC']],
+  });
+  console.log(entries);
+  const formattedUser = { ...mappedUser, tasks: mappedTasks, entries };
   console.log(formattedUser);
   res.send(formattedUser);
 };

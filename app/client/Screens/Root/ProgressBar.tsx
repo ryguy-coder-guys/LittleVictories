@@ -7,6 +7,9 @@ const ProgressBar = () => {
   const {
     user: { points, level },
   } = useUserContext();
+  if (points === undefined || level === undefined) {
+    return null;
+  }
   return (
     <Progress.Bar
       animated={true}
