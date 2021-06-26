@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#1D426D',
     fontSize: 16,
-    marginTop: 5,
+    marginTop: 10,
   },
   view: {
     backgroundColor: '#8ebac6',
