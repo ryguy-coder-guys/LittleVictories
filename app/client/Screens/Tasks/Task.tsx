@@ -9,60 +9,50 @@ import {
   Alert,
   Platform,
   ScrollView,
+  Switch
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
-import { Switch } from 'react-native-switch';
 import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 // import TaskSummary from './TaskSummary';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { format, isPast } from 'date-fns';
 
 const Task = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const [showForm, setShowForm] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const [description, setDescription] = useState('');
-  // const [date, setDate] = useState('');
   const [timeToComplete, setTimeToComplete] = useState(0);
   const [isImportant, setIsImportant] = useState(false);
   const { user, setUser } = useUserContext();
-
   //for date selector
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
 
   const handleSubmit = async () => {
-    const { data: task } = await axios.post(
-      'http://localhost:3000/api/tasks/',
-      {
-        user_id: user.id,
-        description,
-        due_date: date,
-        minutes_to_complete: timeToComplete,
-        is_important: isImportant,
-      }
-    );
-    setUser({ ...user, tasks: [...user.tasks, task] });
+    if (isPast(date)) {
+      alert('this date is in the past, please select a future date.');
+    } else {
+      const { data: task } = await axios.post(
+        'http://localhost:3000/api/tasks/',
+        {
+          user_id: user.id,
+          description,
+          due_date: date,
+          minutes_to_complete: timeToComplete,
+          is_important: isImportant,
+        }
+      );
+      setUser({ ...user, tasks: [...user.tasks, task] });
+    }
   };
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -85,15 +75,10 @@ const Task = () => {
         {showForm ? (
           <View style={styles.view}>
             <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Text style={styles.subheader}>Add Task</Text>
-                <Button title="Cancel" onPress={() => setShowForm(false)} />
-              </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={styles.subheader}>Add Task</Text>
+              <Button title="Cancel" onPress={() => setShowForm(false)} />
+            </View>
               <TextInput
                 style={styles.input}
                 onChangeText={setDescription}
@@ -102,19 +87,13 @@ const Task = () => {
                 autoCapitalize="none"
               />
               <View>
-                <View>
-                  <Button onPress={showDatepicker} title="Due Date" />
-                </View>
-                {show && (
-                  <DateTimePicker
-                    testID="dateTimePicker"
-                    value={date}
-                    mode={mode}
-                    is24Hour={true}
-                    display="default"
-                    onChange={onChange}
-                  />
-                )}
+                <Text style={styles.prompt}>Set Due Date:</Text>
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  display="default"
+                  onChange={onChange}
+                />
               </View>
             </View>
             <View>
@@ -145,12 +124,8 @@ const Task = () => {
                 Mark task as important?
               </Text>
               <Switch
-                circleActiveColor={'#fafafa'}
-                circleInActiveColor={'#b9e4c9'}
-                backgroundActive={'#1D426D'}
-                backgroundInactive={'#1D426D'}
-                switchLeftPx={5}
-                switchRightPx={5}
+                trackColor={{ false: '#767577', true: '#81b0ff'}}
+                thumbColor={'#FAFAFA'}
                 onValueChange={toggleSwitch}
                 value={isImportant}
               />
@@ -198,6 +173,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '100%',
     marginTop: 10,
+    fontSize: 16
   },
   prompt: {
     alignSelf: 'flex-start',

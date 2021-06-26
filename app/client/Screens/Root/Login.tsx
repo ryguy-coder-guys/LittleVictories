@@ -40,24 +40,24 @@ const Login = ({ navigation }) => {
   };
 
   const handleLogin = async () => {
-    console.log('username: ', username);
-    console.log('password attempt: ', passwordAttempt);
+    // console.log('username: ', username);
+    // console.log('password attempt: ', passwordAttempt);
     if (!username.length || !passwordAttempt.length) {
       return;
     }
     if (loginSelected) {
       // attempt a login for the user
-      const { data: user } = await axios.post(
+      const { data: userObj } = await axios.post(
         'http://localhost:3000/api/auth/login',
         {
           username,
           password: passwordAttempt,
         }
       );
-      if (user) {
+      if (userObj) {
         // if successful navigate to home
         setTimeout(() => {
-          setUser(user);
+          setUser(userObj);
         }, 5000);
         setUsername('');
         setPasswordAttempt('');
