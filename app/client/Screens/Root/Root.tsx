@@ -18,7 +18,7 @@ const RootNavigator = () => {
     return (
       <ImageBackground style={styles.backgroundImage} source={bgImage}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Image source={logo} />
+          <Image source={logo} style={{resizeMode: 'contain', width: '60%', height: '50%'}} />
         </View>
       </ImageBackground>
     );

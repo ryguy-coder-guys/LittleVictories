@@ -105,12 +105,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginLeft: 20,
-    marginRight: 20,
+    marginLeft: 40,
+    marginRight: 40,
     marginTop: 10,
     backgroundColor: '#8ebac6',
     borderRadius: 10,
-    padding: 10
+    padding: 10,
+    flexWrap: 'wrap'
   },
   text: {
     fontSize: 18,
