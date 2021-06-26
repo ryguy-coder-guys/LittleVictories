@@ -24,19 +24,19 @@ export const UserStat = dbConnection.define<UserStatInstance>(
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     user_id: {
       type: DataTypes.STRING,
       allowNull: false,
       references: {
         model: User,
-        key: 'id'
+        key: 'id',
       },
     },
     createdAt: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
     },
     updatedAt: {
       type: DataTypes.DATE,
@@ -54,7 +54,9 @@ export const UserStat = dbConnection.define<UserStatInstance>(
       type: DataTypes.STRING,
     },
     mood: {
-      type: DataTypes.ENUM({values: ['great', 'good', 'ok', 'bad', 'terrible']})
+      type: DataTypes.ENUM({
+        values: ['great', 'good', 'ok', 'bad', 'terrible'],
+      }),
     },
     date: {
       type: DataTypes.STRING,
@@ -62,6 +64,6 @@ export const UserStat = dbConnection.define<UserStatInstance>(
     }
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );

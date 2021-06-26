@@ -41,18 +41,15 @@ const Home = () => {
 
   const submitStats = async () => {
     try {
-      const { data } = await axios.post(
-        'http://localhost:3000/api/stats',
-        {
-          user_id: user.id,
-          sleep_hours: sleepHours,
-          eaten_well: didEatWell === 'yes',
-          exercised: didExercise === 'yes',
-          notes: notes,
-          mood: mood,
-          date: format(new Date(), 'MM-dd-yyyy')
-        }
-      )
+      const { data } = await axios.post('http://localhost:3000/api/stats', {
+        user_id: user.id,
+        sleep_hours: sleepHours,
+        eaten_well: didEatWell === 'yes',
+        exercised: didExercise === 'yes',
+        notes: notes,
+        mood: mood,
+        date: format(new Date(), 'MM-dd-yyyy'),
+      });
     } catch (err) {
       console.warn('had issues posting stats (client)');
     }
@@ -70,14 +67,14 @@ const Home = () => {
 
   const getIcon = (mood) => {
     const icons = {
-      'great': 'emoticon-excited-outline',
-      'good': 'emoticon-happy-outline',
-      'ok': 'emoticon-neutral-outline',
-      'bad': 'emoticon-sad-outline',
-      'terrible': 'emoticon-angry-outline',
-    }
-    return <FaceIcon name={icons[mood]} size={35} color="#FAFAFA" />
-  }
+      great: 'emoticon-excited-outline',
+      good: 'emoticon-happy-outline',
+      ok: 'emoticon-neutral-outline',
+      bad: 'emoticon-sad-outline',
+      terrible: 'emoticon-angry-outline',
+    };
+    return <FaceIcon name={icons[mood]} size={35} color="#FAFAFA" />;
+  };
 
   if (!user) {
     return <Loading />;
@@ -120,11 +117,9 @@ const Home = () => {
               <Text style={styles.text}>
                 Notes: {userStats?.notes || notes}
               </Text>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={styles.text}>
-                  Mood
-                </Text>
-                { getIcon(userStats?.mood) || getIcon(mood) }
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={styles.text}>Mood</Text>
+                {getIcon(userStats?.mood) || getIcon(mood)}
               </View>
             </View>
           ) : (
@@ -172,31 +167,51 @@ const Home = () => {
                   name="emoticon-angry-outline"
                   onPress={() => handleFace('terrible')}
                   size={35}
-                  style={activeIcon === 'terrible' ? styles.activeIcon : styles.inactiveIcon}
+                  style={
+                    activeIcon === 'terrible'
+                      ? styles.activeIcon
+                      : styles.inactiveIcon
+                  }
                 />
                 <FaceIcon
                   name="emoticon-sad-outline"
                   onPress={() => handleFace('bad')}
                   size={35}
-                  style={activeIcon === 'bad' ? styles.activeIcon : styles.inactiveIcon}
+                  style={
+                    activeIcon === 'bad'
+                      ? styles.activeIcon
+                      : styles.inactiveIcon
+                  }
                 />
                 <FaceIcon
                   name="emoticon-neutral-outline"
                   onPress={() => handleFace('ok')}
                   size={35}
-                  style={activeIcon === 'ok' ? styles.activeIcon : styles.inactiveIcon}
+                  style={
+                    activeIcon === 'ok'
+                      ? styles.activeIcon
+                      : styles.inactiveIcon
+                  }
                 />
                 <FaceIcon
                   name="emoticon-happy-outline"
                   onPress={() => handleFace('good')}
                   size={35}
-                  style={activeIcon === 'good' ? styles.activeIcon : styles.inactiveIcon}
+                  style={
+                    activeIcon === 'good'
+                      ? styles.activeIcon
+                      : styles.inactiveIcon
+                  }
                 />
                 <FaceIcon
                   name="emoticon-excited-outline"
                   onPress={() => handleFace('great')}
                   size={35}
-                  style={activeIcon === 'great' ? styles.activeIcon : styles.inactiveIcon}
+                  style={
+                    activeIcon === 'great'
+                      ? styles.activeIcon
+                      : styles.inactiveIcon
+                  }
                 />
               </View>
               <AwesomeButton
@@ -242,10 +257,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   activeIcon: {
-    color: '#FAFAFA'
+    color: '#FAFAFA',
   },
   inactiveIcon: {
-    color: '#9b9a9a'
+    color: '#9b9a9a',
   },
   input: {
     borderRadius: 10,
@@ -293,7 +308,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
     padding: 20,
-    width: '80%'
+    width: '80%',
   },
 });
 export default Home;

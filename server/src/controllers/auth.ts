@@ -4,6 +4,7 @@ import { User } from '../database/models/user';
 import { v4 as getId } from 'uuid';
 import bcrypt from 'bcrypt';
 import { Task } from '../database/models/task';
+import { JournalEntry } from '../database/models/journalEntry';
 import { isPast, isToday, format } from 'date-fns';
 import { UserStat } from '../database/models/stat';
 
@@ -50,8 +51,8 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
   });
 
   const userStats = await UserStat.findOne({
-    where: { date: format(new Date(), 'MM-dd-yyyy'), user_id: user.id }
-  })
+    where: { date: format(new Date(), 'MM-dd-yyyy'), user_id: user.id },
+  });
   // console.log(userStats, 'THIS THING IS USERSTATS'); // returns null if no stats
 
   const mappedUser = {
@@ -78,8 +79,15 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
         is_complete: task.getDataValue('is_complete'),
       };
     });
-
-  const formattedUser = { ...mappedUser, tasks: mappedTasks, userStats: userStats };
-  console.log(formattedUser);
+  const entries = await JournalEntry.findAll({
+    where: { user_id: user.id },
+    order: [['createdAt', 'DESC']],
+  });
+  const formattedUser = {
+    ...mappedUser,
+    tasks: mappedTasks,
+    userStats: userStats,
+    entries,
+  };
   res.send(formattedUser);
 };

@@ -1,5 +1,14 @@
 import React, { createContext, useContext, useState } from 'react';
 
+export interface Entry {
+  id: number;
+  user_id: string;
+  createdAt: Date;
+  content: string;
+  date: string;
+  updatedAt: Date;
+}
+
 export interface Task {
   description: string;
   due_date: Date;
@@ -14,6 +23,7 @@ export interface User {
   tasks: Task[];
   points: number;
   level: number;
+  entries: Entry[];
 }
 
 type moodType = 'great' | 'good' | 'ok' | 'bad' | 'terrible';
@@ -35,7 +45,7 @@ interface UserContextState {
 }
 
 const UserDefaultValues: UserContextState = {
-  user: {id: '', username: '', tasks: [], points: 0, level: 0},
+  user: { id: '', username: '', tasks: [], points: 0, level: 0, entries: [] },
   setUser: (user: User): void => {},
   userStats: null,
   setUserStats: (userStats: UserStat): void => {},
