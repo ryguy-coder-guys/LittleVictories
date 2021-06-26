@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Text,
-  Button,
-  SectionList,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native';
 import { v4 as getKey } from 'uuid';
+import { isThisWeek, isThisMonth, isPast, getDate, addHours } from 'date-fns';
+
+import {
+  StyleSheet,
+  Text,
+  SectionList,
+  SafeAreaView,
+  FlatList,
+  View,
+} from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
-import axios from 'axios';
-import { serializeUser } from 'passport';
-import { userInfo } from 'os';
-import { setAutoLogAppEventsEnabledAsync } from 'expo-facebook';
-import { isThisWeek, isThisMonth, isPast } from 'date-fns';
 import SingleTask from './SingleTask';
 import Task from './Task';
 
@@ -29,63 +24,77 @@ const ListHeader = ({ heading }) => (
 
 const TaskSummary = () => {
   const { user } = useUserContext();
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
 
-  const sortTasks = (tasks) => {
-    console.log('sorting');
-    const thisWeek = [];
-    const thisMonth = [];
-    const maybeLater = [];
-    for (const task of tasks) {
-      const dueDate = new Date(task.due_date);
-      if (isPast(dueDate)) {
-        thisWeek.push(task);
-      } else if (isThisWeek(dueDate)) {
-        thisWeek.push(task);
-      } else if (isThisMonth(dueDate)) {
-        thisMonth.push(task);
-      } else {
-        maybeLater.push(task);
-      }
-    }
-    return { thisWeek, thisMonth, maybeLater };
-  };
+  // const sortTasks = (tasks) => {
+  //   console.log('sorting');
 
-  useEffect(() => {
-    if (user) {
-      const { thisWeek, thisMonth, maybeLater } = sortTasks(user.tasks);
-      const newData = [
-        {
-          title: 'This Week',
-          data: thisWeek,
-        },
-        {
-          title: 'This Month',
-          data: thisMonth,
-        },
-        {
-          title: 'Maybe Later',
-          data: maybeLater,
-        },
-      ];
-      setData(newData);
-    }
-  }, [user]);
+  //   const thisWeek = [];
+  //   const thisMonth = [];
+  //   const maybeLater = [];
+  //   for (const task of tasks) {
+  //     const dueDate = addHours(new Date(task.due_date), 1);
+  //     // console.log(dueDate);
+
+  //     console.log(dueDate.toString().slice(8, 10));
+
+  //     if (isPast(dueDate)) {
+  //       thisWeek.push(task);
+  //     } else if (isThisWeek(dueDate)) {
+  //       thisWeek.push(task);
+  //     } else if (isThisMonth(dueDate)) {
+  //       thisMonth.push(task);
+  //     } else {
+  //       maybeLater.push(task);
+  //     }
+  //   }
+  //   return { thisWeek, thisMonth, maybeLater };
+  // };
+
+  // useEffect(() => {
+  //   if (user) {
+  // const { thisWeek, thisMonth, maybeLater } = sortTasks(user.tasks);
+  // const newData = [
+  //   {
+  //     title: 'This Week',
+  //     data: thisWeek,
+  //   },
+  //   {
+  //     title: 'This Month',
+  //     data: thisMonth,
+  //   },
+  //   {
+  //     title: 'Maybe Later',
+  //     data: maybeLater,
+  //   },
+  // ];
+  //     setData(user.tasks);
+  //   }
+  // }, [user]);
 
   return (
-    <SafeAreaView>
-      <SectionList
-        sections={data}
+    // <SafeAreaView>
+    //   <SectionList
+    //     sections={data}
+    //     keyExtractor={() => getKey()}
+    //     renderItem={TaskList}
+    //     renderSectionHeader={({ section: { title } }) => (
+    //       <ListHeader heading={title} />
+    //     )}
+    //     ListHeaderComponent={<Task />}
+    //   />
+    // </SafeAreaView>
+    <View>
+      <FlatList
         keyExtractor={() => getKey()}
+        data={user ? user.tasks : []}
         renderItem={TaskList}
-        renderSectionHeader={({ section: { title } }) => (
-          <ListHeader heading={title} />
-        )}
         ListHeaderComponent={<Task />}
       />
-    </SafeAreaView>
+    </View>
   );
 };
+
 const styles = StyleSheet.create({
   listContainer: {
     backgroundColor: '#8ebac6',
@@ -107,4 +116,5 @@ const styles = StyleSheet.create({
     color: '#1D426D',
   },
 });
+
 export default TaskSummary;

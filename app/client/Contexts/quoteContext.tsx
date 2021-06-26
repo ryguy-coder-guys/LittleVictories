@@ -8,17 +8,17 @@ export const QuoteContextProvider = ({ children }) => {
   const [author, setAuthor] = useState(null);
 
   const getQuote = async () => {
-    const { data } = await axios.get('https://zenquotes.io/api/random')
+    const { data } = await axios.get('https://zenquotes.io/api/random');
     setQuote(data[0].q);
     setAuthor(data[0].a);
-  }
+  };
 
   useEffect(() => {
     getQuote();
   }, []);
 
   return (
-    <QuoteContext.Provider value={{ quote, author }}>
+    <QuoteContext.Provider value={{ quote, author, getQuote }}>
       {children}
     </QuoteContext.Provider>
   );

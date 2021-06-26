@@ -6,13 +6,17 @@ import {
   Text,
   ImageBackground,
   SafeAreaView,
+  ScrollView,
 } from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import Loading from '../Root/Loading';
 import { v4 as getKey } from 'uuid';
-
+import { format } from 'date-fns';
+import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Okay from 'react-native-vector-icons/MaterialCommunityIcons';
+import { isThisWeek } from 'date-fns';
 const exampleTaskData = [
   {
     id: 1,
@@ -25,39 +29,36 @@ const exampleTaskData = [
     due_date: '6/25/21',
   },
 ];
-
 const Home = () => {
-  const { user } = useUserContext();
+  const { user, userStats, setUserStats } = useUserContext();
   const bgImage = require('../../../assets/blue-gradient.png');
   const [sleepHours, setSleepHours] = useState('');
   const [didEatWell, setDidEatWell] = useState('');
   const [didExercise, setDidExercise] = useState('');
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
-
+  const [mood, setMood] = useState('');
   const submitStats = async () => {
     try {
-      await axios.post(
-        'http://localhost:3000/api/stats',
-        {
-          user_id: user.id,
-          sleep_hours: sleepHours,
-          eaten_well: didEatWell === 'yes' ? true : false,
-          exercised: didExercise === 'yes' ? true : false,
-          notes: 'default notes, need to add to form',
-          mood: 'good'
-        }
-      )
+      const { data } = await axios.post('http://localhost:3000/api/stats', {
+        user_id: user.id,
+        sleep_hours: sleepHours,
+        eaten_well: didEatWell === 'yes',
+        exercised: didExercise === 'yes',
+        notes: 'default notes, need to add to form',
+        mood: mood,
+        date: format(new Date(), 'MM-dd-yyyy'),
+      });
     } catch (err) {
       console.warn('had issues posting stats (client)');
     }
   };
-
   const handleSubmit = () => {
     submitStats();
     setHasSubmitted(true);
   };
-
+  const handleFace = (value) => {
+    setMood(value);
+  };
   if (!user) {
     return <Loading />;
   }
@@ -66,7 +67,7 @@ const Home = () => {
       <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
         <View style={styles.view}>
           <Text style={styles.heading}>Upcoming Tasks</Text>
-          {exampleTaskData.map((task) => {
+          {user.tasks.slice(0, 5).map((task) => {
             return (
               <View style={styles.task} key={getKey()}>
                 <Text style={styles.desc}>
@@ -78,16 +79,23 @@ const Home = () => {
         </View>
         <View style={styles.view}>
           <Text style={styles.heading}>Daily Reflection</Text>
-          {hasSubmitted ? (
+          {hasSubmitted || userStats ? (
             <View>
               <Text style={styles.text}>
                 Fill out your Daily Reflection data tomorrow for the most
                 accurate Weekly Stats.
               </Text>
               <Text style={styles.subheader}>Today's Data:</Text>
-              <Text style={styles.text}>Hours of sleep: {sleepHours}</Text>
-              <Text style={styles.text}>Did you eat well?: {didEatWell}</Text>
-              <Text style={styles.text}>Exercised?: {didExercise}</Text>
+              <Text style={styles.text}>
+                Hours of sleep: {userStats?.sleep_hours || sleepHours}
+              </Text>
+              <Text style={styles.text}>
+                Did you eat well?:{' '}
+                {userStats?.eaten_well ? 'yes' : 'no' || didEatWell}
+              </Text>
+              <Text style={styles.text}>
+                Exercised?: {userStats?.exercised ? 'yes' : 'no' || didExercise}
+              </Text>
             </View>
           ) : (
             <View style={{ alignItems: 'center' }}>
@@ -117,6 +125,38 @@ const Home = () => {
                 placeholder="yes or no"
                 autoCapitalize="none"
               />
+              <View style={{ flexDirection: 'row' }}>
+                <FaceIcon
+                  name="emoticon-angry-outline"
+                  onPress={() => handleFace('terrible')}
+                  size={35}
+                  color="#FAFAFA"
+                />
+                <FaceIcon
+                  name="emoticon-sad-outline"
+                  onPress={() => handleFace('bad')}
+                  size={35}
+                  color="#FAFAFA"
+                />
+                <FaceIcon
+                  name="emoticon-neutral-outline"
+                  onPress={() => handleFace('ok')}
+                  size={35}
+                  color="#FAFAFA"
+                />
+                <FaceIcon
+                  name="emoticon-happy-outline"
+                  onPress={() => handleFace('good')}
+                  size={35}
+                  color="#FAFAFA"
+                />
+                <FaceIcon
+                  name="emoticon-excited-outline"
+                  onPress={() => handleFace('great')}
+                  size={35}
+                  color="#FAFAFA"
+                />
+              </View>
               <AwesomeButton
                 backgroundColor={'#1D426D'}
                 textColor={'#FAFAFA'}
@@ -198,5 +238,4 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 });
-
 export default Home;
