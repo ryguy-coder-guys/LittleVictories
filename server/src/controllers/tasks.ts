@@ -16,11 +16,10 @@ export const addTask: RequestHandler = async (req, res) => {
     due_date,
     minutes_to_complete,
     is_important,
-    list_id,
+    // list_id,
   } = req.body as AddTaskReqBody;
-  console.log(req.body)
+  console.log(req.body);
   try {
-
     const user = await User.findOne({ where: { id: user_id } });
     if (!user) {
       return res.send(`no user found with id of ${user_id}`);
@@ -42,9 +41,10 @@ export const addTask: RequestHandler = async (req, res) => {
       //list_id,
     });
     res.send(newTask);
-  }
-  catch (err) {
-    console.log('entry submission error', err.message);
+  } catch (err) {
+    if (err instanceof Error) {
+      console.log('entry submission error', err.message);
+    }
     res.sendStatus(500);
   }
 };
@@ -59,18 +59,68 @@ export const markTaskAsComplete: RequestHandler<{ id: string }> = async (
   req,
   res
 ) => {
-  const { id } = req.params;
-  await Task.update({ is_complete: true }, { where: { id } });
-  const task = await Task.findOne({ where: { id } });
-  res.send(task);
+  try {
+    const { id } = req.params;
+    await Task.update({ is_complete: true }, { where: { id } });
+    const task = await Task.findOne({ where: { id } });
+    if (!task) {
+      throw new Error(`task with ${id} isn't in db`);
+    }
+    const minutes = task.getDataValue('minutes_to_complete');
+    const user = await User.findOne({ where: { id: task.user_id } });
+    if (!user) {
+      throw new Error(`user with ${task.user_id} isn't in db`);
+    }
+    const currentPoints = user.getDataValue('points');
+    const currentLevel = user.getDataValue('level');
+    const returnVal = await User.update(
+      {
+        points:
+          currentPoints + minutes < 100
+            ? currentPoints + minutes
+            : (currentPoints + minutes) % 100,
+        level: currentPoints + minutes < 100 ? currentLevel : currentLevel + 1,
+      },
+      { where: { id: task.user_id }, returning: true }
+    );
+    const updatedUser = await User.findOne({ where: { id: task.user_id } });
+    res.send({ task, points: updatedUser?.points, level: updatedUser?.level });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const markTaskAsIncomplete: RequestHandler<{ id: string }> = async (
   req,
   res
 ) => {
-  const { id } = req.params;
-  await Task.update({ is_complete: false }, { where: { id } });
-  const task = await Task.findOne({ where: { id } });
-  res.send(task);
+  try {
+    const { id } = req.params;
+    await Task.update({ is_complete: false }, { where: { id } });
+    const task = await Task.findOne({ where: { id } });
+    if (!task) {
+      throw new Error(`task with ${id} isn't in db`);
+    }
+    const minutes = task.getDataValue('minutes_to_complete');
+    const user = await User.findOne({ where: { id: task.user_id } });
+    if (!user) {
+      throw new Error(`user with ${task.user_id} isn't in db`);
+    }
+    const currentPoints = user.getDataValue('points');
+    const currentLevel = user.getDataValue('level');
+    await User.update(
+      {
+        points:
+          currentPoints - minutes < 0
+            ? 100 - (minutes - currentPoints)
+            : currentPoints - minutes,
+        level: currentPoints - minutes < 0 ? currentLevel - 1 : currentLevel,
+      },
+      { where: { id: task.user_id } }
+    );
+    const updatedUser = await User.findOne({ where: { id: task.user_id } });
+    res.send({ task, points: updatedUser?.points, level: updatedUser?.level });
+  } catch (error) {
+    console.log(error);
+  }
 };
