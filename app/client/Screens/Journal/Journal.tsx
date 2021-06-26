@@ -21,7 +21,7 @@ import { setDate, isToday } from 'date-fns/esm';
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
 
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const { journal } = useJournalContext();
 
   const [datePicked, setDatePicked] = useState(new Date());
@@ -42,6 +42,7 @@ const Journal = () => {
       date: format(new Date(datePicked), 'MM-dd-yyy'),
       //date: format(new Date(), 'MM-dd-yyyy')
     });
+    // unshift
     alert('Journal successfully saved.');
   };
 
@@ -66,6 +67,7 @@ const Journal = () => {
                 date: format(new Date(), 'MM-dd-yyyy'),
               }
             );
+            // shift
             setText('');
             alert('Journal successfully cleared.');
           },
@@ -75,21 +77,25 @@ const Journal = () => {
   };
 
   const forward = () => {
-    if (!index) {
-      return;
+    if (user) {
+      if (!index) {
+        return;
+      }
+      setIndex(index - 1);
+      setText(user.entries[index].content);
+      setDate(user.entries[index].date);
     }
-    setIndex(index - 1);
-    setText(user.entries[index].content);
-    setDate(user.entries[index].date);
   };
 
   const back = () => {
-    if (index === user.entries.length - 1) {
-      return;
+    if (user) {
+      if (index === user.entries.length - 1) {
+        return;
+      }
+      setIndex(index + 1);
+      setText(user.entries[index].content);
+      setDate(user.entries[index].date);
     }
-    setIndex(index + 1);
-    setText(user.entries[index].content);
-    setDate(user.entries[index].date);
   };
 
   return (
@@ -117,7 +123,7 @@ const Journal = () => {
             </AwesomeButton>
           </View>
           <View style={{ flexDirection: 'row', marginLeft: 20 }}>
-            {index < user.entries.length - 1 && (
+            {index < user?.entries.length - 1 && (
               <IconA
                 name="caret-back"
                 size={35}
@@ -155,7 +161,9 @@ const Journal = () => {
               multiline={true}
               onChangeText={setText}
               value={text}
-              editable={isToday(new Date(user.entries[index].createdAt))}
+              editable={
+                user ? isToday(new Date(user.entries[index].createdAt)) : false
+              }
             />
           </View>
           <AwesomeButton
