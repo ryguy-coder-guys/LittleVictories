@@ -16,22 +16,38 @@ export interface User {
   level: number;
 }
 
+type moodType = 'great' | 'good' | 'ok' | 'bad' | 'terrible';
+export interface UserStat {
+  id: number,
+  sleep_hours: number,
+  eaten_well: boolean,
+  exercised: boolean,
+  notes: string,
+  mood: moodType,
+  date: string
+}
+
 interface UserContextState {
   user: User;
   setUser: (user: User) => void;
+  userStats: UserStat | null;
+  setUserStats: (userStats: UserStat) => void;
 }
 
 const UserDefaultValues: UserContextState = {
   user: {id: '', username: '', tasks: [], points: 0, level: 0},
   setUser: (user: User): void => {},
+  userStats: null,
+  setUserStats: (userStats: UserStat): void => {},
 };
 
 const UserContext = createContext<UserContextState>(UserDefaultValues);
 
 export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   const [user, setUser] = useState<User>(UserDefaultValues.user);
+  const [userStats, setUserStats] = useState<UserStat>(UserDefaultValues.userStats);
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, userStats, setUserStats }}>
       {children}
     </UserContext.Provider>
   );

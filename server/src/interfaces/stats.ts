@@ -7,4 +7,5 @@ export interface AddStatsReqBody {
   exercised: boolean;
   notes: string;
   mood: moodType;
+  date: string;
 }

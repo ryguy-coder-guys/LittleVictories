@@ -93,6 +93,7 @@ create table UserStats (
   eaten_well bool,
   exercised bool,
   notes varchar(150),
+  date varchar(10) not null,
   mood enum('great', 'good', 'ok', 'bad', 'terrible'),
   foreign key (user_id) references Users(id)
 );
