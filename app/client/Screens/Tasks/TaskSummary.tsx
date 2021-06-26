@@ -13,85 +13,32 @@ import {
 import { useUserContext } from '../../Contexts/userContext';
 import SingleTask from './SingleTask';
 import Task from './Task';
+import ProgressBar from '../Root/ProgressBar';
 
 const TaskList = ({ item }) => {
   return <SingleTask item={item} />;
 };
 
-const ListHeader = ({ heading }) => (
-  <Text style={styles.subheader}>{heading}</Text>
-);
+const ListHeader = () => {
+  return (
+    <View>
+      <Task />
+    </View>
+  );
+};
 
 const TaskSummary = () => {
   const { user } = useUserContext();
-  // const [data, setData] = useState([]);
-
-  // const sortTasks = (tasks) => {
-  //   console.log('sorting');
-
-  //   const thisWeek = [];
-  //   const thisMonth = [];
-  //   const maybeLater = [];
-  //   for (const task of tasks) {
-  //     const dueDate = addHours(new Date(task.due_date), 1);
-  //     // console.log(dueDate);
-
-  //     console.log(dueDate.toString().slice(8, 10));
-
-  //     if (isPast(dueDate)) {
-  //       thisWeek.push(task);
-  //     } else if (isThisWeek(dueDate)) {
-  //       thisWeek.push(task);
-  //     } else if (isThisMonth(dueDate)) {
-  //       thisMonth.push(task);
-  //     } else {
-  //       maybeLater.push(task);
-  //     }
-  //   }
-  //   return { thisWeek, thisMonth, maybeLater };
-  // };
-
-  // useEffect(() => {
-  //   if (user) {
-  // const { thisWeek, thisMonth, maybeLater } = sortTasks(user.tasks);
-  // const newData = [
-  //   {
-  //     title: 'This Week',
-  //     data: thisWeek,
-  //   },
-  //   {
-  //     title: 'This Month',
-  //     data: thisMonth,
-  //   },
-  //   {
-  //     title: 'Maybe Later',
-  //     data: maybeLater,
-  //   },
-  // ];
-  //     setData(user.tasks);
-  //   }
-  // }, [user]);
 
   return (
-    // <SafeAreaView>
-    //   <SectionList
-    //     sections={data}
-    //     keyExtractor={() => getKey()}
-    //     renderItem={TaskList}
-    //     renderSectionHeader={({ section: { title } }) => (
-    //       <ListHeader heading={title} />
-    //     )}
-    //     ListHeaderComponent={<Task />}
-    //   />
-    // </SafeAreaView>
-    <View>
+    <SafeAreaView>
       <FlatList
         keyExtractor={() => getKey()}
         data={user ? user.tasks : []}
         renderItem={TaskList}
-        ListHeaderComponent={<Task />}
+        ListHeaderComponent={<ListHeader />}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
