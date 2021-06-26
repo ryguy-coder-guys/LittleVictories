@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, Button } from 'react-native';
+import { View, StyleSheet, FlatList, Text, Button, SafeAreaView } from 'react-native';
 import { v4 as getKey } from 'uuid';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
@@ -81,7 +81,7 @@ const ListHeader = ({ heading }) => {
 const TaskSummary = () => {
   const { user } = useUserContext();
   return (
-    <View>
+    <SafeAreaView  style={{ flex: 1 }}>
       <FlatList
         ListHeaderComponent={() => <ListHeader heading="This Week" />}
         data={
@@ -129,7 +129,7 @@ const TaskSummary = () => {
         renderItem={TaskList}
         style={styles.listContainer}
       />
-    </View>
+      </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

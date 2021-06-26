@@ -4,6 +4,7 @@ import { User } from '../database/models/user';
 import { v4 as getId } from 'uuid';
 import bcrypt from 'bcrypt';
 import { Task } from '../database/models/task';
+import { JournalEntry } from '../database/models/journalEntry'
 import { log } from 'console';
 
 const getHash = async (password: string): Promise<string> =>
@@ -61,5 +62,8 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
       };
     });
   const formattedUser = { ...mappedUser, tasks: mappedTasks };
+
+  const journals = await JournalEntry.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
+  console.log(journals, 'line 67');
   res.send(formattedUser);
 };

@@ -28,7 +28,7 @@ const Journal = () => {
   //state for selecting date
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [dates, setDates] = useState(new Date(1598051730000));
+  const [datePicked, setDatePicked] = useState(new Date());
 
 
   useEffect(() => {
@@ -39,7 +39,8 @@ const Journal = () => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
       content: text,
-      date: format(new Date(), 'MM-dd-yyyy'),
+      //date: date,
+      date: format(new Date(), 'MM-dd-yyyy')
     });
     alert('Journal successfully saved.');
   };
@@ -73,26 +74,14 @@ const Journal = () => {
     );
   };
 
+  const previousJournal = () => {
+
+  }
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDates(currentDate);
+    const currentDate = selectedDate || datePicked;
+    setDatePicked(currentDate);
   };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
-  };
-
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
@@ -119,18 +108,14 @@ const Journal = () => {
           <IconA name="caret-forward" size={35} color="#1D426D" />
           <View>
       <View>
-        <Button onPress={showDatepicker} title="Select A Date" />
+        <Text>Select a date:</Text>
       </View>
-      {show && (
         <DateTimePicker
           testID="dateTimePicker"
-          value={dates}
-          mode={mode}
-          is24Hour={true}
+          value={datePicked}
           display="default"
           onChange={onChange}
         />
-      )}
     </View>
         </View>
         <View style={styles.textAreaContainer}>

@@ -24,7 +24,6 @@ const Task = () => {
   const [showForm, setShowForm] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   //for tasks, to create tasks
-  const [tasks, setTasks] = useState([]);
   const [description, setDescription] = useState('');
   // const [date, setDate] = useState('');
   const [timeToComplete, setTimeToComplete] = useState(0);
@@ -32,7 +31,7 @@ const Task = () => {
   const { user, setUser } = useUserContext();
 
   //for date selector
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 console.log(timeToComplete);
@@ -68,9 +67,6 @@ console.log(timeToComplete);
     showMode('date');
   };
 
-  const showTimepicker = () => {
-    showMode('time');
-  };
 
 
   return (
@@ -87,8 +83,11 @@ console.log(timeToComplete);
         </View>
         {showForm ? (
           <View style={styles.view}>
-            <View style={{ alignItems: 'center' }}>
-              <Text style={styles.taskPrompt}>Add Task</Text>
+            <View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={styles.subheader}>Add Task</Text>
+            <Button title="Cancel" onPress={() => setShowForm(false)} />
+            </View>
               <TextInput
                 style={styles.input}
                 onChangeText={setDescription}
@@ -100,7 +99,6 @@ console.log(timeToComplete);
       <View>
         <Button onPress={showDatepicker} title="Due Date" />
       </View>
-      {show && (
         <DateTimePicker
           testID="dateTimePicker"
           value={date}
@@ -109,7 +107,6 @@ console.log(timeToComplete);
           display="default"
           onChange={onChange}
         />
-      )}
     </View>
             </View>
             <View>
