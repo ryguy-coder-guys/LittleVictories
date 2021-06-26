@@ -41,8 +41,8 @@ const Journal = () => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
       content: text,
-      //date: date,
-      date: format(new Date(), 'MM-dd-yyyy')
+      date: format(new Date(datePicked), 'MM-dd-yyy'),
+      //date: format(new Date(), 'MM-dd-yyyy')
     });
     alert('Journal successfully saved.');
   };
@@ -112,7 +112,7 @@ const Journal = () => {
           </View>
         </View>
         <View style={styles.textAreaContainer}>
-          <Text style={styles.date}>{date}</Text>
+          <Text style={styles.date}>{format(new Date(datePicked), 'MM-dd-yyy')}</Text>
           <TextInput
             style={styles.textArea}
             underlineColorAndroid="transparent"
