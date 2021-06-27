@@ -17,6 +17,8 @@ export interface Task {
   is_important: boolean;
   minutes_to_complete: number;
 }
+
+type moodType = 'great' | 'good' | 'ok' | 'bad' | 'terrible';
 export interface User {
   id: string;
   username: string;
@@ -33,6 +35,16 @@ export interface Journal {
   createdAt: Date;
   content: string;
   date: string;
+}
+
+export interface UserStat {
+  id: number,
+  sleep_hours: number,
+  eaten_well: boolean,
+  exercised: boolean,
+  notes: string,
+  mood: moodType,
+  date: string
 }
 interface UserContextState {
   user: User;

@@ -165,7 +165,7 @@ const Journal = () => {
               onChangeText={setText}
               value={text}
               editable={
-                user?.entries[index]
+                user?.entries.length
                  ? isToday(new Date(user.entries[index].createdAt))
                  : false
               }

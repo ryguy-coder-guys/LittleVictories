@@ -46,11 +46,6 @@ const TaskForm = () => {
         ...user,
         tasks: sortedTasks,
       });
-      setShowForm(false);
-      setDescription('');
-      setDate(new Date());
-      setTimeToComplete(0);
-      setIsImportant(false);
     }
   };
 
