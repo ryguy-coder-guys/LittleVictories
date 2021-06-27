@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AwesomeButton from 'react-native-really-awesome-button';
 import {
   View,
@@ -16,12 +16,12 @@ import { useUserContext } from '../../Contexts/userContext';
 import { useJournalContext } from '../../Contexts/journalContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ProgressBar from '../Root/ProgressBar';
-import { setDate, isToday } from 'date-fns/esm';
+import { isToday } from 'date-fns/esm';
 
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
 
-  const { user, setUser } = useUserContext();
+  const { user } = useUserContext();
   const { journal } = useJournalContext();
 
   const [datePicked, setDatePicked] = useState(new Date());
@@ -153,18 +153,29 @@ const Journal = () => {
           </View>
           <View style={styles.textAreaContainer}>
             <Text style={styles.date}>{date}</Text>
-            <TextInput
-              style={styles.textArea}
-              underlineColorAndroid="transparent"
-              placeholder="Type something"
-              numberOfLines={10}
-              multiline={true}
-              onChangeText={setText}
-              value={text}
-              editable={
-                user ? isToday(new Date(user.entries[index].createdAt)) : false
-              }
-            />
+            {
+              user?.entries.length ?
+              <TextInput
+                style={styles.textArea}
+                placeholder="Type something"
+                numberOfLines={10}
+                multiline={true}
+                onChangeText={setText}
+                value={text}
+                editable={
+                  isToday(new Date(user.entries[index].createdAt)) ? true : false
+                }
+              /> :
+              <TextInput
+                style={styles.textArea}
+                placeholder="Type something"
+                numberOfLines={10}
+                multiline={true}
+                onChangeText={setText}
+                value={text}
+                editable={true}
+              />
+            }
           </View>
           <AwesomeButton
             backgroundColor={'#1D426D'}
