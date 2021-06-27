@@ -46,6 +46,9 @@ const Journal = () => {
     alert('Journal successfully saved.');
   };
 
+
+
+
   const clearJournal = () => {
     const areYouSure = Alert.alert(
       'Are you sure?',
@@ -162,7 +165,9 @@ const Journal = () => {
               onChangeText={setText}
               value={text}
               editable={
-                user ? isToday(new Date(user.entries[index].createdAt)) : false
+                user?.entries.length
+                 ? isToday(new Date(user.entries[index].createdAt))
+                 : false
               }
             />
           </View>
