@@ -46,6 +46,9 @@ const Journal = () => {
     alert('Journal successfully saved.');
   };
 
+
+
+
   const clearJournal = () => {
     const areYouSure = Alert.alert(
       'Are you sure?',

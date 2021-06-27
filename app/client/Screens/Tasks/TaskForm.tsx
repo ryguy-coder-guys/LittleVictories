@@ -46,11 +46,6 @@ const TaskForm = () => {
         ...user,
         tasks: sortedTasks,
       });
-      setShowForm(false);
-      setDescription('');
-      setDate(new Date());
-      setTimeToComplete(0);
-      setIsImportant(false);
     }
   };
 
@@ -58,6 +53,14 @@ const TaskForm = () => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
   };
+
+  const clearInput = () => {
+    setShowForm(false)
+    setDescription('')
+    setDate(new Date())
+    setTimeToComplete(0)
+    setIsImportant(false)
+  }
 
   return (
         <View style={styles.container}>
@@ -133,7 +136,7 @@ const TaskForm = () => {
                   value={isImportant}
                 />
               </View>
-              <Button title="Submit" onPress={() => handleSubmit()} />
+              <Button title="Submit" onPress={() => handleSubmit() && clearInput()} />
             </View>
           ) : null}
         </View>

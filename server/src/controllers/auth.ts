@@ -79,6 +79,12 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
         is_complete: task.getDataValue('is_complete'),
       };
     });
+  // const journals = await JournalEntry.findAll({where: {user_id: user.id }, order: [['createdAt', 'DESC']]});
+  // const formattedUser = { ...mappedUser, tasks: mappedTasks, journals: journals };
+
+  //const journals = await JournalEntry.findAll({ limit: 10, order: [['updatedAt', 'DESC']]});
+  // console.log(journals, 'line 67');
+  // console.log(formattedUser);
   const entries = await JournalEntry.findAll({
     where: { user_id: user.id },
     order: [['createdAt', 'DESC']],
