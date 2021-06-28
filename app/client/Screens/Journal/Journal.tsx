@@ -39,18 +39,15 @@ const Journal = () => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
       content: text,
-      date: format(new Date(datePicked), 'MM-dd-yyy'),
+      date: format(new Date(datePicked), 'MM-dd-yyyy'),
       //date: format(new Date(), 'MM-dd-yyyy')
     });
     // unshift
     alert('Journal successfully saved.');
   };
 
-
-
-
   const clearJournal = () => {
-    const areYouSure = Alert.alert(
+    Alert.alert(
       'Are you sure?',
       'Once deleted, you cannot get this journal entry back.',
       [
@@ -235,7 +232,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   textArea: {
-    height: '70%',
+    height: '80%',
     justifyContent: 'flex-start',
     marginTop: 20,
     color: '#1D426D',

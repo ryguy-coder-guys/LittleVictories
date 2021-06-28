@@ -21,6 +21,9 @@ create table Habits (
   frequency enum('daily', 'weekly', 'monthly') not null,
   days_of_week varchar(11),
   calendar_date int,
+  is_complete bool not null default false,
+  createdAt datetime not null,
+  updatedAt datetime not null,
   foreign key (user_id) references Users(id)
 );
 
