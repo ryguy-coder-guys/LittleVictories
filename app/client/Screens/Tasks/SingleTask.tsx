@@ -2,7 +2,7 @@ import axios from 'axios';
 import { View, StyleSheet, Text, Button } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { useState } from 'react';
-import { differenceInDays, differenceInWeeks, getDay } from 'date-fns';
+import { differenceInDays, differenceInWeeks, getDay, isThisWeek } from 'date-fns';
 
 const SingleTask = ({ item }) => {
   const { user, setUser } = useUserContext();
@@ -74,7 +74,11 @@ const SingleTask = ({ item }) => {
     };
     const dueDate = new Date(date);
     if (differenceInDays(dueDate, new Date()) <= 6) {
-      return `due ${days[getDay(dueDate)]}`;
+      return `due ${days[getDay(dueDate)]}${
+        !isThisWeek(dueDate)
+          ? ' ' + dueDate.getMonth() + '/' + dueDate.getDate()
+          : ''
+      }`;
     }
     return `due in ${differenceInWeeks(dueDate, new Date())} weeks`;
   };

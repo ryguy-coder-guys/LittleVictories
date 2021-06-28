@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AwesomeButton from 'react-native-really-awesome-button';
 import {
   View,
@@ -16,41 +16,31 @@ import { useUserContext } from '../../Contexts/userContext';
 import { useJournalContext } from '../../Contexts/journalContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ProgressBar from '../Root/ProgressBar';
-import { setDate, isToday } from 'date-fns/esm';
-
+import { isToday } from 'date-fns/esm';
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
-
-  const { user, setUser } = useUserContext();
+  const { user } = useUserContext();
   const { journal } = useJournalContext();
-
   const [datePicked, setDatePicked] = useState(new Date());
   const [text, setText] = useState(journal ? journal : '');
   const [date, setDate] = useState(format(new Date(), 'MMMM do y'));
-
   const [index, setIndex] = useState(0);
-
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || datePicked;
     setDatePicked(currentDate);
   };
-
   const saveJournal = async () => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
       content: text,
-      date: format(new Date(datePicked), 'MM-dd-yyy'),
+      date: format(new Date(datePicked), 'MM-dd-yyyy'),
       //date: format(new Date(), 'MM-dd-yyyy')
     });
     // unshift
     alert('Journal successfully saved.');
   };
-
-
-
-
   const clearJournal = () => {
-    const areYouSure = Alert.alert(
+    Alert.alert(
       'Are you sure?',
       'Once deleted, you cannot get this journal entry back.',
       [
@@ -78,7 +68,6 @@ const Journal = () => {
       ]
     );
   };
-
   const forward = () => {
     if (user) {
       if (!index) {
@@ -89,7 +78,6 @@ const Journal = () => {
       setDate(user.entries[index].date);
     }
   };
-
   const back = () => {
     if (user) {
       if (index === user.entries.length - 1) {
@@ -100,7 +88,6 @@ const Journal = () => {
       setDate(user.entries[index].date);
     }
   };
-
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <ProgressBar />
@@ -156,20 +143,27 @@ const Journal = () => {
           </View>
           <View style={styles.textAreaContainer}>
             <Text style={styles.date}>{date}</Text>
-            <TextInput
-              style={styles.textArea}
-              underlineColorAndroid="transparent"
-              placeholder="Type something"
-              numberOfLines={10}
-              multiline={true}
-              onChangeText={setText}
-              value={text}
-              editable={
-                user?.entries.length
-                 ? isToday(new Date(user.entries[index].createdAt))
-                 : false
-              }
-            />
+            {
+              user?.entries.length ?
+              <TextInput
+                style={styles.textArea}
+                placeholder="Type something"
+                numberOfLines={10}
+                multiline={true}
+                onChangeText={setText}
+                value={text}
+                editable={true}
+              /> :
+              <TextInput
+                style={styles.textArea}
+                placeholder="Type something"
+                numberOfLines={10}
+                multiline={true}
+                onChangeText={setText}
+                value={text}
+                // editable={  isToday(new Date(user.entries[index].createdAt)) ? true : false }
+              />
+            }
           </View>
           <AwesomeButton
             backgroundColor={'#1D426D'}
@@ -190,7 +184,6 @@ const Journal = () => {
     </ImageBackground>
   );
 };
-
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
@@ -241,5 +234,4 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
 });
-
 export default Journal;
