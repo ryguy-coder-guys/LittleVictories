@@ -16,7 +16,7 @@ import { useUserContext } from '../../Contexts/userContext';
 import { useJournalContext } from '../../Contexts/journalContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ProgressBar from '../Root/ProgressBar';
-import { isToday } from 'date-fns/esm';
+import { isToday, isEqual, isBefore } from 'date-fns/esm';
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const { user } = useUserContext();
@@ -152,7 +152,7 @@ const Journal = () => {
                 multiline={true}
                 onChangeText={setText}
                 value={text}
-                editable={true}
+                editable={isToday(new Date(user.entries[index].createdAt))}
               /> :
               <TextInput
                 style={styles.textArea}
@@ -161,6 +161,7 @@ const Journal = () => {
                 multiline={true}
                 onChangeText={setText}
                 value={text}
+                 editable={ true }
                 // editable={  isToday(new Date(user.entries[index].createdAt)) ? true : false }
               />
             }
