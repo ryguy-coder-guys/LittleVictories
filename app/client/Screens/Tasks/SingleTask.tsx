@@ -2,11 +2,47 @@ import axios from 'axios';
 import { View, StyleSheet, Text, Button } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { useState } from 'react';
-import { differenceInDays, differenceInWeeks, getDay } from 'date-fns';
+import {
+  differenceInDays,
+  differenceInWeeks,
+  getDay,
+  isThisWeek,
+} from 'date-fns';
 
 const SingleTask = ({ item }) => {
   const { user, setUser } = useUserContext();
   const [finished, setFinished] = useState(item.is_complete);
+  const [taskPublic, setTaskPublic] = useState(item.is_public);
+
+  const unshareTask = async () => {
+    try {
+      const { data: updateSuccessful } = await axios.patch(
+        `http://localhost:3000/api/tasks/${item.id}/private`
+      );
+      if (!updateSuccessful) {
+        return;
+      }
+      setTaskPublic(false);
+      console.log('update successful');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const shareTask = async () => {
+    try {
+      const { data: updateSuccessful } = await axios.patch(
+        `http://localhost:3000/api/tasks/${item.id}/public`
+      );
+      if (!updateSuccessful) {
+        return;
+      }
+      setTaskPublic(true);
+      console.log('update successful');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const markTaskComplete = async () => {
     try {
@@ -35,7 +71,7 @@ const SingleTask = ({ item }) => {
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/incomplete`
       );
-      console.log('points', points, 'level', level);
+      unshareTask();
       const mappedTasks = user.tasks.map((task) => {
         if (task.id === item.id) {
           return { ...task, is_complete: false };
@@ -74,14 +110,18 @@ const SingleTask = ({ item }) => {
     };
     const dueDate = new Date(date);
     if (differenceInDays(dueDate, new Date()) <= 6) {
-      return `due ${days[getDay(dueDate)]}`;
+      return `due ${days[getDay(dueDate)]}${
+        !isThisWeek(dueDate)
+          ? ' ' + dueDate.getMonth() + '/' + dueDate.getDate()
+          : ''
+      }`;
     }
-    return `due in ${differenceInWeeks(dueDate, new Date())} weeks`;
+    return `due in ${differenceInWeeks(dueDate, new Date()) + 1} weeks`;
   };
 
   return (
     <View style={styles.task_view}>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{ flexDirection: 'row' }}>
         <Text
           style={styles.text}
           onPress={() => {
@@ -96,6 +136,12 @@ const SingleTask = ({ item }) => {
         </Text>
       </View>
       <Button title="Remove" onPress={removeTask} />
+      {finished && !taskPublic ? (
+        <Button title="Add to Feed" onPress={shareTask} />
+      ) : null}
+      {finished && taskPublic ? (
+        <Button title="Remove from Feed" onPress={unshareTask} />
+      ) : null}
     </View>
   );
 };
@@ -111,7 +157,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#8ebac6',
     borderRadius: 10,
     padding: 10,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   text: {
     fontSize: 18,

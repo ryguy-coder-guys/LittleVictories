@@ -77,6 +77,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
         minutes_to_complete: task.getDataValue('minutes_to_complete'),
         is_important: task.getDataValue('is_important'),
         is_complete: task.getDataValue('is_complete'),
+        is_public: task.getDataValue('is_public'),
       };
     });
   const entries = await JournalEntry.findAll({

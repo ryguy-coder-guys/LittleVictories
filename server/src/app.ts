@@ -4,6 +4,8 @@ import listRouter from './routers/lists';
 import authRouter from './routers/auth';
 import journalEntryRouter from './routers/journalEntry';
 import statRouter from './routers/stats';
+import likeRouter from './routers/likes';
+import commentRouter from './routers/comments';
 
 const app = express();
 
@@ -15,5 +17,7 @@ app.use('/api/lists', listRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/journalEntries', journalEntryRouter);
 app.use('/api/stats', statRouter);
+app.use('/api/likes', likeRouter);
+app.use('/api/comments', commentRouter);
 
 export default app;
