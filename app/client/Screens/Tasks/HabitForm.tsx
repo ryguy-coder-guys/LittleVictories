@@ -40,6 +40,11 @@ const TaskForm = () => {
         days_of_week: daysSelected(selectedDayIndices),
         calendar_date: parseInt(format(date, 'dd'))
       });
+      setShowForm(false);
+      setDescription('');
+      setDate(new Date());
+      setSelectedFrequencyIndex(0);
+      setSelectedDayIndices([]);
     } catch (err) {
       console.log('error with post habit: ', err)
     }
@@ -94,27 +99,35 @@ const TaskForm = () => {
                 textStyle={{fontSize: 16, color: '#ada6a6'}}
                 innerBorderStyle={{color: '#1D426D'}}
               />
-              <Text style={styles.prompt}>Habit Day(s)</Text>
-              <ButtonGroup
-                onPress={setSelectedDayIndices}
-                selectedIndexes={selectedDayIndices}
-                buttons={dayArr}
-                containerStyle={{height: 40, borderRadius: 5, borderColor: '#5c83b1'}}
-                selectedButtonStyle={{backgroundColor: '#5c83b1', borderColor: '#5c83b1'}}
-                buttonStyle={{backgroundColor: '#1D426D', borderColor: '#5c83b1'}}
-                textStyle={{fontSize: 16, color: '#ada6a6'}}
-                innerBorderStyle={{color: '#1D426D'}}
-                selectMultiple={true}
-              />
-              <View>
-                <Text style={styles.prompt}>Monthly Repeat Date</Text>
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={date}
-                  display="default"
-                  onChange={onChange}
-                />
-              </View>
+              {
+                selectedFrequencyIndex === 1 ?
+                  <View>
+                    <Text style={styles.prompt}>Habit Day(s)</Text>
+                    <ButtonGroup
+                      onPress={setSelectedDayIndices}
+                      selectedIndexes={selectedDayIndices}
+                      buttons={dayArr}
+                      containerStyle={{height: 40, borderRadius: 5, borderColor: '#5c83b1'}}
+                      selectedButtonStyle={{backgroundColor: '#5c83b1', borderColor: '#5c83b1'}}
+                      buttonStyle={{backgroundColor: '#1D426D', borderColor: '#5c83b1'}}
+                      textStyle={{fontSize: 16, color: '#ada6a6'}}
+                      innerBorderStyle={{color: '#1D426D'}}
+                      selectMultiple={true}
+                    />
+                  </View> : null
+              }
+              {
+                selectedFrequencyIndex === 2 ?
+                <View>
+                  <Text style={styles.prompt}>Monthly Repeat Date</Text>
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    display="default"
+                    onChange={onChange}
+                  />
+                </View> : null
+              }
               <View style={{margin: 15}} />
               <Button title="Submit" onPress={() => handleSubmit()} />
             </View>
