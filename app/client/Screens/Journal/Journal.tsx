@@ -17,13 +17,17 @@ import { useJournalContext } from '../../Contexts/journalContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ProgressBar from '../Root/ProgressBar';
 import { isToday, isEqual, isBefore } from 'date-fns/esm';
+import moment from 'moment'
+
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const { user } = useUserContext();
   const { journal } = useJournalContext();
   const [datePicked, setDatePicked] = useState(new Date());
+  //const [datePicked, setDatePicked] = useState(moment().format());
   const [text, setText] = useState(journal ? journal : '');
-  const [date, setDate] = useState(format(new Date(), 'MMMM do y'));
+  // const [date, setDate] = useState(format(new Date(), 'MMMM do y'));
+  const [date, setDate] = useState(moment().format("MMM Do Y"));
   const [index, setIndex] = useState(0);
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || datePicked;
@@ -33,8 +37,8 @@ const Journal = () => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
       content: text,
-      date: format(new Date(datePicked), 'MM-dd-yyyy'),
-      //date: format(new Date(), 'MM-dd-yyyy')
+      //date: format(new Date(datePicked), 'MM-dd-yyyy'),
+      date: moment().format('MM-D-Y')
     });
     // unshift
     alert('Journal successfully saved.');
@@ -88,6 +92,9 @@ const Journal = () => {
       setDate(user.entries[index].date);
     }
   };
+
+
+
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <ProgressBar />
@@ -144,6 +151,7 @@ const Journal = () => {
           <View style={styles.textAreaContainer}>
             <Text style={styles.date}>{date}</Text>
             {
+             // user?.entries[index].date === format(new Date(datePicked), 'MM-dd-yyyy') ?
               user?.entries.length ?
               <TextInput
                 style={styles.textArea}
@@ -152,7 +160,8 @@ const Journal = () => {
                 multiline={true}
                 onChangeText={setText}
                 value={text}
-                editable={isToday(new Date(user.entries[index].createdAt))}
+                //editable={ user.entries[index].date >=  moment().format('M-D-Y')}
+                editable={ true }
               /> :
               <TextInput
                 style={styles.textArea}
@@ -161,9 +170,10 @@ const Journal = () => {
                 multiline={true}
                 onChangeText={setText}
                 value={text}
-                 editable={ true }
-                // editable={  isToday(new Date(user.entries[index].createdAt)) ? true : false }
+                 editable={ false }
+               // editable={  isToday(new Date(user.entries[index].createdAt)) ? true : false }
               />
+              //null
             }
           </View>
           <AwesomeButton
