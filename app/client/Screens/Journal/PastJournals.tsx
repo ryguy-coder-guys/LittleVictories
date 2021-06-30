@@ -119,76 +119,21 @@ const Journal1 = () => {
   }
 
   const list = () => {
-    if(date){
-      return(
-        <View style={styles.textAreaContainer}>
-        <Text style={styles.date}>{date}</Text>
-          <TextInput
-            style={styles.textArea}
-            placeholder="Type something"
-            numberOfLines={10}
-            multiline={true}
-            onChangeText={setText}
-            value={text}
-            editable={ true }
-          />
-          </View>
-      )
-
-    } else if (journals){
    return journals.map(journal => {
-      if(journal.date === moment().format('MM-D-Y')){
+      if(journal.date < moment().format('MM-D-Y')){
         return (
           <View>
+            <Text></Text>
           <View style={{ flexDirection: 'row', marginLeft: 20 }}>
-          {index < user?.entries.length - 1 && (
-            <IconA
-              name="caret-back"
-              size={35}
-              color="#1D426D"
-              onPress={back}
-            />
-          )}
-          {index > 0 && (
-            <IconA
-              name="caret-forward"
-              size={35}
-              color="#1D426D"
-              onPress={forward}
-            />
-          )}
         </View>
           <View style={styles.textAreaContainer}>
           <Text style={styles.date}>{journal.date}</Text>
-            <TextInput
-              style={styles.textArea}
-              placeholder="Type something"
-              numberOfLines={10}
-              multiline={true}
-              onChangeText={setText}
-              value={journal.content}
-              editable={ true }
-            />
+         <Text>
+           {journal.content}
+         </Text>
+         <Text></Text>
         </View>
-          </View>
-        )
-          }
-        }
-    )
-      }
-  }
-
-
-  return (
-    <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <ProgressBar />
-      <SafeAreaView style={styles.container}>
-        <View style={styles.main}>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-          >
-            <Text style={styles.header}> User's Journal </Text>
-            <AwesomeButton
+               {/* <AwesomeButton
               backgroundColor={'#1D426D'}
               textColor={'#FAFAFA'}
               height={35}
@@ -201,74 +146,45 @@ const Journal1 = () => {
               }}
             >
               Clear Entry
-            </AwesomeButton>
+            </AwesomeButton> */}
           </View>
-          <View style={{ flexDirection: 'row', marginLeft: 20 }}>
-            {index < journals?.length - 1 && (
-              <IconA
-                name="caret-back"
-                size={35}
-                color="#1D426D"
-                onPress={back}
-              />
-            )}
-            {index > 0 && (
-              <IconA
-                name="caret-forward"
-                size={35}
-                color="#1D426D"
-                onPress={forward}
-              />
-            )}
-            {/* <View>
-              <View>
-                <Text style={styles.text}>Select a Date:</Text>
-              </View>
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={datePicked}
-                display="default"
-                onChange={onChange}
-              />
-            </View> */}
-          </View>
-          <View style={styles.textAreaContainer}>
-            <Text style={styles.date}>{date}</Text>
-            {
-              //using map,
-              //the journals are stored in state
-              //render just the text
-             journals?.length ?
-              <TextInput
-                style={styles.textArea}
-                placeholder="Type something"
-                numberOfLines={10}
-                multiline={true}
-                onChangeText={setText}
-                value={text}
-                editable={ true }
-              /> :
-               <Text
-                >{text}</Text>
-            }
-          </View>
-          <AwesomeButton
-            backgroundColor={'#1D426D'}
-            textColor={'#FAFAFA'}
-            height={35}
-            width={125}
-            raiseLevel={0}
-            borderRadius={8}
-            style={styles.submit}
-            onPress={() => {
-              saveJournal();
-            }}
-          >
-            Save
-          </AwesomeButton>
-        </View>
-      </SafeAreaView>
-    </ImageBackground>
+        )
+        //yoooo
+          }
+        })
+  }
+
+
+  return (
+    //       <View
+    //         style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+    //       >
+    // <ImageBackground style={styles.backgroundImage} source={bgImage}>
+    //   <ProgressBar />
+    //   <ScrollView>
+    //   <SafeAreaView style={styles.container}>
+    //     <View style={styles.main}>
+    //         <Text style={styles.header}> User's Journals </Text>
+    //       </View>
+    //               {list()}
+    //               <Text></Text>
+    //   </SafeAreaView>
+    //   </ScrollView>
+    // </ImageBackground>
+    //     </View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <ImageBackground
+                style={styles.backgroundImage}
+                source={bgImage}>
+                <Text style={styles.header}>Previous Journals</Text>
+                {/* <ScrollView
+                  style={styles.scrollview}
+                > */}
+                  {list()}
+                  <Text></Text>
+                {/* </ScrollView> */}
+              </ImageBackground>
+            </View>
   );
 };
 const styles = StyleSheet.create({
@@ -299,7 +215,6 @@ const styles = StyleSheet.create({
   scrollview: {
     textAlign: 'center',
     alignContent: 'center',
-
   },
   submit: {
     alignSelf: 'flex-end',

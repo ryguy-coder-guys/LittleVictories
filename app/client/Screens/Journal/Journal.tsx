@@ -97,9 +97,6 @@ const Journal = () => {
 
 
   return (
-    <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <ProgressBar />
-      <SafeAreaView style={styles.container}>
         <View style={styles.main}>
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
@@ -121,7 +118,7 @@ const Journal = () => {
             </AwesomeButton>
           </View>
           <View style={{ flexDirection: 'row', marginLeft: 20 }}>
-            {index < user?.entries.length - 1 && (
+            {/* {index < user?.entries.length - 1 && (
               <IconA
                 name="caret-back"
                 size={35}
@@ -136,7 +133,7 @@ const Journal = () => {
                 color="#1D426D"
                 onPress={forward}
               />
-            )}
+            )} */}
             {/* <View>
               <View>
                 <Text style={styles.text}>Select a Date:</Text>
@@ -151,9 +148,6 @@ const Journal = () => {
           </View>
           <View style={styles.textAreaContainer}>
             <Text style={styles.date}>{date}</Text>
-            {
-             user?.entries.length ?
-              // user?.entries[index].createdAt === new Date() ?
               <TextInput
                 style={styles.textArea}
                 placeholder="Type something"
@@ -161,23 +155,8 @@ const Journal = () => {
                 multiline={true}
                 onChangeText={setText}
                 value={text}
-                //editable={ user.entries[index].date >=  moment().format('M-D-Y')}
                 editable={ true }
-              /> :
-              // <TextInput
-              //   style={styles.textArea}
-              //   placeholder="Type something"
-              //   numberOfLines={10}
-              //   multiline={true}
-              //   onChangeText={setText}
-              //   value={text}
-              //    editable={ false }
-              //  // editable={  isToday(new Date(user.entries[index].createdAt)) ? true : false }
-              // />
-               <Text
-                >{text}</Text>
-              //null
-            }
+              />
           </View>
           <AwesomeButton
             backgroundColor={'#1D426D'}
@@ -194,8 +173,6 @@ const Journal = () => {
             Save
           </AwesomeButton>
         </View>
-      </SafeAreaView>
-    </ImageBackground>
   );
 };
 const styles = StyleSheet.create({
@@ -235,14 +212,14 @@ const styles = StyleSheet.create({
   textArea: {
     height: '80%',
     justifyContent: 'flex-start',
-    marginTop: 20,
+    marginTop: 5,
     color: '#1D426D',
     fontSize: 18,
   },
   textAreaContainer: {
     backgroundColor: '#8ebac6',
     borderRadius: 10,
-    padding: 20,
+    padding: 5,
     marginTop: 20,
     marginRight: 20,
     marginLeft: 20,
