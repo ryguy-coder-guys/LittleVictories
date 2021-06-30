@@ -38,13 +38,13 @@ export interface Journal {
 }
 
 export interface UserStat {
-  id: number,
-  sleep_hours: number,
-  eaten_well: boolean,
-  exercised: boolean,
-  notes: string,
-  mood: moodType,
-  date: string
+  id: number;
+  sleep_hours: number;
+  eaten_well: boolean;
+  exercised: boolean;
+  notes: string;
+  mood: moodType;
+  date: string;
 }
 interface UserContextState {
   user: User;
@@ -53,7 +53,7 @@ interface UserContextState {
   setUserStats: (userStats: UserStat) => void;
 }
 
-const UserDefaultValues: UserContextState = {
+export const UserDefaultValues: UserContextState = {
   user: { id: '', username: '', tasks: [], points: 0, level: 0, entries: [] },
   setUser: (user: User): void => {},
   userStats: null,
@@ -64,7 +64,9 @@ const UserContext = createContext<UserContextState>(UserDefaultValues);
 
 export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   const [user, setUser] = useState<User>(UserDefaultValues.user);
-  const [userStats, setUserStats] = useState<UserStat>(UserDefaultValues.userStats);
+  const [userStats, setUserStats] = useState<UserStat>(
+    UserDefaultValues.userStats
+  );
   return (
     <UserContext.Provider value={{ user, setUser, userStats, setUserStats }}>
       {children}

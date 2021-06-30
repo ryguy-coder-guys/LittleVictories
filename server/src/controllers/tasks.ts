@@ -1,8 +1,11 @@
+import sequelize from 'sequelize';
 import { Task } from '../database/models/task';
 import { RequestHandler } from 'express';
 import { AddTaskReqBody } from '../interfaces/tasks';
 import { User } from '../database/models/user';
 import { List } from '../database/models/list';
+import { Like } from '../database/models/like';
+import { Comment } from '../database/models/comment';
 
 export const getTasks: RequestHandler = async (req, res) => {
   const tasks = await Task.findAll();
@@ -61,7 +64,10 @@ export const markTaskAsComplete: RequestHandler<{ id: string }> = async (
 ) => {
   try {
     const { id } = req.params;
-    await Task.update({ is_complete: true }, { where: { id } });
+    await Task.update(
+      { is_complete: true, completed_at: new Date() },
+      { where: { id } }
+    );
     const task = await Task.findOne({ where: { id } });
     if (!task) {
       throw new Error(`task with ${id} isn't in db`);
@@ -122,5 +128,73 @@ export const markTaskAsIncomplete: RequestHandler<{ id: string }> = async (
     res.send({ task, points: updatedUser?.points, level: updatedUser?.level });
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const markTaskAsPublic: RequestHandler<{ id: string }> = async (
+  req,
+  res
+) => {
+  try {
+    const { id } = req.params;
+    await Task.update({ is_public: true }, { where: { id } });
+    res.send(true);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+export const markTaskAsPrivate: RequestHandler<{ id: string }> = async (
+  req,
+  res
+) => {
+  try {
+    const { id } = req.params;
+    await Task.update({ is_public: false }, { where: { id } });
+    res.send(true);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+export const getFeedItems: RequestHandler<{ id: string }> = async (
+  req,
+  res
+) => {
+  try {
+    console.log('fetching feed items');
+    const feed = await Task.findAll({
+      where: {
+        is_public: true,
+        user_id: { [sequelize.Op.not]: req.params.id },
+      },
+      order: [['completed_at', 'DESC']],
+      limit: 10,
+    });
+    const mappedFeed = await Promise.all(
+      feed.map(async (feedItem) => {
+        const foundUser = await User.findOne({
+          where: { id: feedItem.getDataValue('user_id') },
+        });
+        const foundUsername = foundUser?.getDataValue('username');
+        let likes = await Like.findAll({
+          where: { task_id: feedItem.getDataValue('id') },
+        });
+        const comments = await Comment.findAll({
+          where: { task_id: feedItem.getDataValue('id') },
+        });
+        return {
+          id: feedItem.getDataValue('id'),
+          username: foundUsername,
+          description: feedItem.getDataValue('description'),
+          completed_at: feedItem.getDataValue('completed_at'),
+          likes,
+          comments,
+        };
+      })
+    );
+    res.send(mappedFeed);
+  } catch (error) {
+    res.status(500).send(error);
   }
 };

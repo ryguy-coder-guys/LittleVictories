@@ -39,8 +39,7 @@ const Journal = () => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
       content: text,
-      date: format(new Date(datePicked), 'MM-dd-yyy'),
-      //date: format(new Date(), 'MM-dd-yyyy')
+      date: format(new Date(datePicked), 'MM-dd-yyyy'),
     });
     // unshift
     alert('Journal successfully saved.');
@@ -156,7 +155,7 @@ const Journal = () => {
           </View>
           <View style={styles.textAreaContainer}>
             <Text style={styles.date}>{date}</Text>
-            <TextInput
+            {/* <TextInput
               style={styles.textArea}
               underlineColorAndroid="transparent"
               placeholder="Type something"
@@ -164,12 +163,33 @@ const Journal = () => {
               multiline={true}
               onChangeText={setText}
               value={text}
-              editable={
-                user?.entries.length
-                 ? isToday(new Date(user.entries[index].createdAt))
-                 : false
-              }
-            />
+              editable={isToday(new Date(date))}
+            /> */}
+            {user?.entries?.length ? (
+              <TextInput
+                style={styles.textArea}
+                placeholder="Type something"
+                numberOfLines={10}
+                multiline={true}
+                onChangeText={setText}
+                value={text}
+                editable={
+                  isToday(new Date(user.entries[index].createdAt))
+                    ? true
+                    : false
+                }
+              />
+            ) : (
+              <TextInput
+                style={styles.textArea}
+                placeholder="Type something"
+                numberOfLines={10}
+                multiline={true}
+                onChangeText={setText}
+                value={text}
+                editable={true}
+              />
+            )}
           </View>
           <AwesomeButton
             backgroundColor={'#1D426D'}
