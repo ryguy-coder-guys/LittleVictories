@@ -119,39 +119,41 @@ const Journal1 = () => {
   }
 
   const list = () => {
-   return journals.map(journal => {
-      if(journal.date < moment().format('MM-D-Y')){
-        return (
-          <View>
+    if(user){
+      return journals.map(journal => {
+         if(journal.date < moment().format('MM-D-Y')){
+           return (
+             <View>
+               <Text></Text>
+             <View style={{ flexDirection: 'row', marginLeft: 20 }}>
+           </View>
+             <View style={styles.textAreaContainer}>
+             <Text style={styles.date}>{journal.date}</Text>
+            <Text>
+              {journal.content}
+            </Text>
             <Text></Text>
-          <View style={{ flexDirection: 'row', marginLeft: 20 }}>
-        </View>
-          <View style={styles.textAreaContainer}>
-          <Text style={styles.date}>{journal.date}</Text>
-         <Text>
-           {journal.content}
-         </Text>
-         <Text></Text>
-        </View>
-               {/* <AwesomeButton
-              backgroundColor={'#1D426D'}
-              textColor={'#FAFAFA'}
-              height={35}
-              width={125}
-              raiseLevel={0}
-              borderRadius={8}
-              style={styles.button}
-              onPress={() => {
-                clearJournal();
-              }}
-            >
-              Clear Entry
-            </AwesomeButton> */}
-          </View>
-        )
-        //yoooo
-          }
-        })
+           </View>
+                  {/* <AwesomeButton
+                 backgroundColor={'#1D426D'}
+                 textColor={'#FAFAFA'}
+                 height={35}
+                 width={125}
+                 raiseLevel={0}
+                 borderRadius={8}
+                 style={styles.button}
+                 onPress={() => {
+                   clearJournal();
+                 }}
+               >
+                 Clear Entry
+               </AwesomeButton> */}
+             </View>
+           )
+           //yoooo
+             }
+            })
+    }
   }
 
 
