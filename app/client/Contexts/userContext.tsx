@@ -18,12 +18,24 @@ export interface Task {
   minutes_to_complete: number;
 }
 
+export interface Habit {
+  id: number;
+  description: string;
+  frequency: string;
+  days_of_week: string;
+  calendar_date: number;
+  is_complete: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 type moodType = 'great' | 'good' | 'ok' | 'bad' | 'terrible';
 export interface User {
   id: string;
   username: string;
   tasks: Task[];
   journals: Journal[];
+  habits: Habit[];
   points: number;
   level: number;
   entries: Entry[];
@@ -38,13 +50,13 @@ export interface Journal {
 }
 
 export interface UserStat {
-  id: number,
-  sleep_hours: number,
-  eaten_well: boolean,
-  exercised: boolean,
-  notes: string,
-  mood: moodType,
-  date: string
+  id: number;
+  sleep_hours: number;
+  eaten_well: boolean;
+  exercised: boolean;
+  notes: string;
+  mood: moodType;
+  date: string;
 }
 interface UserContextState {
   user: User;
@@ -54,7 +66,7 @@ interface UserContextState {
 }
 
 const UserDefaultValues: UserContextState = {
-  user: { id: '', username: '', tasks: [], points: 0, level: 0, entries: [] },
+  user: { id: '', username: '', tasks: [], habits: [], journals: [], points: 0, level: 0, entries: [] },
   setUser: (user: User): void => {},
   userStats: null,
   setUserStats: (userStats: UserStat): void => {},
@@ -64,7 +76,9 @@ const UserContext = createContext<UserContextState>(UserDefaultValues);
 
 export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   const [user, setUser] = useState<User>(UserDefaultValues.user);
-  const [userStats, setUserStats] = useState<UserStat>(UserDefaultValues.userStats);
+  const [userStats, setUserStats] = useState<UserStat>(
+    UserDefaultValues.userStats
+  );
   return (
     <UserContext.Provider value={{ user, setUser, userStats, setUserStats }}>
       {children}

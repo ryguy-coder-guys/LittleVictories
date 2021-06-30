@@ -18,13 +18,6 @@ interface TaskInstance extends Model {
   updatedAt: Date;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-// interface TaskCreationAttributes extends Optional<TaskAttributes, 'id'> {}
-
-// interface TaskInstance
-//   extends Model<TaskAttributes, TaskCreationAttributes>,
-//     TaskAttributes {}
-
 export const Task = dbConnection.define<TaskInstance>(
   'Task',
   {

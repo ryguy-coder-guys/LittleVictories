@@ -12,8 +12,8 @@ const ProgressBar = () => {
   return (
     <View style={styles.topNav}>
       <View style={{ flexDirection: 'column' }}>
-        <Text style={styles.toptext}>{username} </Text>
-        <Text style={styles.text}>lvl {level} </Text>
+        <Text style={styles.toptext}>{username}  </Text>
+        <Text style={styles.text}>Level  {level} </Text>
       </View>
       <Progress.Bar
         animated={true}

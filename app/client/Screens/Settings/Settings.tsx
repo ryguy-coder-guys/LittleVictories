@@ -1,13 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  Switch,
-} from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Switch } from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUserContext } from '../../Contexts/userContext';

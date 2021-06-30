@@ -9,6 +9,7 @@ import Journal1 from '../Journal/Journal1';
 import Home from '../Home/Home';
 import Settings from '../Settings/Settings';
 import Tasks from '../Tasks/Tasks';
+import Feed from '../Feed/Feed';
 import { View, Text } from 'react-native';
 
 const AppBottomNavigator = createMaterialBottomTabNavigator();
@@ -24,6 +25,13 @@ const BottomTabs = () => {
       <AppBottomNavigator.Screen
         name="Home"
         component={Home}
+        options={{
+          tabBarIcon: () => <IconA name="home" size={25} color="#FAFAFA" />,
+        }}
+      />
+      <AppBottomNavigator.Screen
+        name="Feed"
+        component={Feed}
         options={{
           tabBarIcon: () => <IconA name="home" size={25} color="#FAFAFA" />,
         }}

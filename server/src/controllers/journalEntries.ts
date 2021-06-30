@@ -2,14 +2,16 @@ import { JournalEntry } from '../database/models/journalEntry';
 import { RequestHandler } from 'express';
 import { AddJournalEntryReqBody } from '../interfaces/journalEntries';
 
-export const getJournalEntry: RequestHandler<{user_id: string, date: string}> = async (req, res) => {
-  const {
-    user_id,
-    date
-  } = req.params;
+export const getJournalEntry: RequestHandler<{
+  user_id: string;
+  date: string;
+}> = async (req, res) => {
+  const { user_id, date } = req.params;
   console.log(req.params);
   try {
-    const journalEntry = await JournalEntry.findOne({ where: { date: date, user_id: user_id } });
+    const journalEntry = await JournalEntry.findOne({
+      where: { date: date, user_id: user_id },
+    });
     res.status(200).send(journalEntry);
   } catch (err) {
     console.log('error fetching journal Entry', err.message);
@@ -29,11 +31,7 @@ export const getAllJournals: RequestHandler = async (req, res) => {
 }
 
 export const addJournalEntry: RequestHandler = async (req, res) => {
-  const {
-    user_id,
-    content,
-    date
-  } = req.body as AddJournalEntryReqBody;
+  const { user_id, content, date } = req.body as AddJournalEntryReqBody;
 
   if (content === '') {
     try {
@@ -57,7 +55,7 @@ export const addJournalEntry: RequestHandler = async (req, res) => {
         await JournalEntry.create({
           user_id,
           content,
-          date
+          date,
         });
         console.log('entry successfully submitted');
         res.status(201);

@@ -304,6 +304,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#FAFAFA',
     marginBottom: 5,
+    fontSize: 16
   },
 });
 

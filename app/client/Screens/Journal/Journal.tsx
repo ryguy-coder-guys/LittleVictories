@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   textArea: {
-    height: '70%',
+    height: '80%',
     justifyContent: 'flex-start',
     marginTop: 20,
     color: '#1D426D',
