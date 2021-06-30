@@ -17,6 +17,17 @@ export const getJournalEntry: RequestHandler<{user_id: string, date: string}> = 
   }
 };
 
+//get all the journals
+export const getAllJournals: RequestHandler = async (req, res) => {
+  try {
+    const allJournals = await JournalEntry.findAll();
+    res.status(200).send(allJournals);
+  } catch (err) {
+    console.log('error fetching journal Entry', err.message);
+    res.sendStatus(500);
+  }
+}
+
 export const addJournalEntry: RequestHandler = async (req, res) => {
   const {
     user_id,

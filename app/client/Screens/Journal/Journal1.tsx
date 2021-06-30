@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AwesomeButton from 'react-native-really-awesome-button';
 import {
   View,
@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Alert,
   SafeAreaView,
+  ScrollView
 } from 'react-native';
 import { format } from 'date-fns';
 import IconA from 'react-native-vector-icons/Ionicons';
@@ -19,8 +20,7 @@ import ProgressBar from '../Root/ProgressBar';
 import { isToday, isEqual, isBefore } from 'date-fns/esm';
 import moment from 'moment'
 
-
-const Journal = () => {
+const Journal1 = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const { user } = useUserContext();
   const { journal } = useJournalContext();
@@ -29,11 +29,17 @@ const Journal = () => {
   const [text, setText] = useState(journal ? journal : '');
   // const [date, setDate] = useState(format(new Date(), 'MMMM do y'));
   const [date, setDate] = useState(moment().format("MMM Do Y"));
-  const [index, setIndex] = useState(-1);
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || datePicked;
-    setDatePicked(currentDate);
-  };
+  const [index, setIndex] = useState(0);
+  const [journals, setJournals] = useState([]);
+
+  // const onChange = (event, selectedDate) => {
+  //   const currentDate = selectedDate || datePicked;
+  //   setDatePicked(currentDate);
+
+  //     return (
+  //       <Text>Hi</Text>
+  //     )
+  // };
   const saveJournal = async () => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
@@ -79,21 +85,98 @@ const Journal = () => {
         return;
       }
       setIndex(index - 1);
-      setText(user.entries[index].content);
-      setDate(user.entries[index].date);
+      // setText(user.entries[index].content);
+      // setDate(user.entries[index].date);
+      setText(journals[index].content);
+      setDate(journals[index].date);
     }
   };
   const back = () => {
     if (user) {
-      if (index === user.entries.length - 1) {
+      if (index === journals.length - 1) {
         return;
       }
       setIndex(index + 1);
-      setText(user.entries[index].content);
-      setDate(user.entries[index].date);
+      // setText(user.entries[index].content);
+      // setDate(user.entries[index].date);
+      setText(journals[index].content);
+      setDate(journals[index].date);
     }
   };
 
+  useEffect(() => {
+    getJournal()
+
+  }, [])
+
+  const getJournal = async () => {
+    await axios.get('http://localhost:3000/api/journalEntries/all')
+    .then(({data}) => {
+      console.log(data, 'getJournal Data');
+        setJournals(data)
+    } )
+    .catch(err => console.warn(err))
+  }
+
+  const list = () => {
+    if(date){
+      return(
+        <View style={styles.textAreaContainer}>
+        <Text style={styles.date}>{date}</Text>
+          <TextInput
+            style={styles.textArea}
+            placeholder="Type something"
+            numberOfLines={10}
+            multiline={true}
+            onChangeText={setText}
+            value={text}
+            editable={ true }
+          />
+          </View>
+      )
+
+    } else if (journals){
+   return journals.map(journal => {
+      if(journal.date === moment().format('MM-D-Y')){
+        return (
+          <View>
+          <View style={{ flexDirection: 'row', marginLeft: 20 }}>
+          {index < user?.entries.length - 1 && (
+            <IconA
+              name="caret-back"
+              size={35}
+              color="#1D426D"
+              onPress={back}
+            />
+          )}
+          {index > 0 && (
+            <IconA
+              name="caret-forward"
+              size={35}
+              color="#1D426D"
+              onPress={forward}
+            />
+          )}
+        </View>
+          <View style={styles.textAreaContainer}>
+          <Text style={styles.date}>{journal.date}</Text>
+            <TextInput
+              style={styles.textArea}
+              placeholder="Type something"
+              numberOfLines={10}
+              multiline={true}
+              onChangeText={setText}
+              value={journal.content}
+              editable={ true }
+            />
+        </View>
+          </View>
+        )
+          }
+        }
+    )
+      }
+  }
 
 
   return (
@@ -121,7 +204,7 @@ const Journal = () => {
             </AwesomeButton>
           </View>
           <View style={{ flexDirection: 'row', marginLeft: 20 }}>
-            {index < user?.entries.length - 1 && (
+            {index < journals?.length - 1 && (
               <IconA
                 name="caret-back"
                 size={35}
@@ -152,8 +235,10 @@ const Journal = () => {
           <View style={styles.textAreaContainer}>
             <Text style={styles.date}>{date}</Text>
             {
-             user?.entries.length ?
-              // user?.entries[index].createdAt === new Date() ?
+              //using map,
+              //the journals are stored in state
+              //render just the text
+             journals?.length ?
               <TextInput
                 style={styles.textArea}
                 placeholder="Type something"
@@ -161,22 +246,10 @@ const Journal = () => {
                 multiline={true}
                 onChangeText={setText}
                 value={text}
-                //editable={ user.entries[index].date >=  moment().format('M-D-Y')}
                 editable={ true }
               /> :
-              // <TextInput
-              //   style={styles.textArea}
-              //   placeholder="Type something"
-              //   numberOfLines={10}
-              //   multiline={true}
-              //   onChangeText={setText}
-              //   value={text}
-              //    editable={ false }
-              //  // editable={  isToday(new Date(user.entries[index].createdAt)) ? true : false }
-              // />
                <Text
                 >{text}</Text>
-              //null
             }
           </View>
           <AwesomeButton
@@ -223,6 +296,11 @@ const styles = StyleSheet.create({
   main: {
     padding: 20,
   },
+  scrollview: {
+    textAlign: 'center',
+    alignContent: 'center',
+
+  },
   submit: {
     alignSelf: 'flex-end',
     marginTop: 10,
@@ -248,4 +326,4 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
 });
-export default Journal;
+export default Journal1;
