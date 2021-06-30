@@ -15,7 +15,7 @@ import { Button, ButtonGroup } from 'react-native-elements';
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
   const [ description, setDescription ] = useState('');
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const [ date, setDate ] = useState(new Date());
   const [ selectedFrequencyIndex, setSelectedFrequencyIndex ] = useState(0);
   const [ selectedDayIndices, setSelectedDayIndices ] = useState([]);
@@ -33,12 +33,17 @@ const TaskForm = () => {
     const frequencies = ['daily', 'weekly', 'monthly'];
     console.log(format(date, 'MM-dd-yyyy'));
     try {
-      await axios.post('http://localhost:3000/api/habits/', {
+      const { data: habit } = await axios.post('http://localhost:3000/api/habits/', {
         user_id: user.id,
         description: description,
         frequency: frequencies[selectedFrequencyIndex],
         days_of_week: daysSelected(selectedDayIndices),
         calendar_date: parseInt(format(date, 'dd'))
+      });
+      const habitArr = [...user.habits, habit];
+      setUser({
+        ...user,
+        habits: habitArr,
       });
       setShowForm(false);
       setDescription('');

@@ -26,3 +26,13 @@ export const addHabit: RequestHandler = async (req, res) => {
     res.sendStatus(500);
   }
 };
+
+export const removeHabit: RequestHandler<{ id: string }> = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Habit.destroy({ where: { id } });
+    res.send(true);
+  } catch (err) {
+    console.log('error removing habit: ', err)
+  }
+};

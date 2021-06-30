@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { StyleSheet, FlatList, Text, View } from 'react-native';
 import { v4 as getKey } from 'uuid';
 import { isThisWeek, isThisMonth, isPast, getDate, addHours } from 'date-fns';
 import HabitForm from './HabitForm';
-
-import {
-  StyleSheet,
-  FlatList,
-  Text,
-  View,
-} from 'react-native';
+import SingleHabit from './SingleHabit';
 import { useUserContext } from '../../Contexts/userContext';
-// import SingleTask from './SingleTask';
-// import TaskForm from './TaskForm';
+
 
 const HabitList = ({ item }) => {
-  return <Text>Each habit will render here.</Text>;
+  return <SingleHabit item={item} />
 };
 
 const ListHeader = () => {
@@ -32,7 +26,7 @@ const HabitSummary = () => {
     <View>
       <FlatList
         keyExtractor={() => getKey()}
-        data={[]}
+        data={user ? user.habits : []}
         renderItem={HabitList}
         ListHeaderComponent={<ListHeader />}
       />

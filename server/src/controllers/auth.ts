@@ -7,6 +7,7 @@ import { Task } from '../database/models/task';
 import { JournalEntry } from '../database/models/journalEntry';
 import { isPast, isToday, format } from 'date-fns';
 import { UserStat } from '../database/models/stat';
+import { Habit } from '../database/models/habit';
 
 const getHash = async (password: string): Promise<string> =>
   await bcrypt.hash(password, 12);
@@ -55,6 +56,8 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
   });
   // console.log(userStats, 'THIS THING IS USERSTATS'); // returns null if no stats
 
+  const habits = await Habit.findAll({where: { user_id: user.id }});
+
   const mappedUser = {
     id: user.getDataValue('id'),
     username: user.getDataValue('username'),
@@ -94,6 +97,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     tasks: mappedTasks,
     userStats: userStats,
     entries,
+    habits,
   };
   res.send(formattedUser);
 };
