@@ -9,45 +9,49 @@ const SingleHabit = ({ item }) => {
   const { user, setUser } = useUserContext();
   const [finished, setFinished] = useState(item.is_complete);
 
-  // const markTaskComplete = async () => {
-  //   try {
-  //     const {
-  //       data: { task, points, level },
-  //     } = await axios.patch(
-  //       `http://localhost:3000/api/tasks/${item.id}/complete`
-  //     );
-  //     console.log('points', points, 'level', level);
-  //     const mappedTasks = user.tasks.map((task) => {
-  //       if (task.id === item.id) {
-  //         return { ...task, is_complete: true };
-  //       }
-  //       return task;
-  //     });
-  //     setUser({ ...user, tasks: mappedTasks, points, level });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const markHabitComplete = async () => {
+    try {
+      const {
+        // data: { habit, points, level },
+        data: { habit },
+      } = await axios.patch(
+        `http://localhost:3000/api/habits/${item.id}/complete`
+      );
+      // console.log('points', points, 'level', level);
+      const mappedHabits = user.habits.map((habit) => {
+        if (habit.id === item.id) {
+          return { ...habit, is_complete: true };
+        }
+        return habit;
+      });
+      setUser({ ...user, habits: mappedHabits });
+      // setUser({ ...user, habits: mappedHabits, points, level });
+    } catch (err) {
+      console.log('client-side complete habit error: ', err);
+    }
+  };
 
-  // const markTaskIncomplete = async () => {
-  //   try {
-  //     const {
-  //       data: { points, level },
-  //     } = await axios.patch(
-  //       `http://localhost:3000/api/tasks/${item.id}/incomplete`
-  //     );
-  //     console.log('points', points, 'level', level);
-  //     const mappedTasks = user.tasks.map((task) => {
-  //       if (task.id === item.id) {
-  //         return { ...task, is_complete: false };
-  //       }
-  //       return task;
-  //     });
-  //     setUser({ ...user, tasks: mappedTasks, points, level });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const markHabitIncomplete = async () => {
+    try {
+      const {
+        data
+        // data: { points, level },
+      } = await axios.patch(
+        `http://localhost:3000/api/habits/${item.id}/incomplete`
+      );
+      // console.log('points', points, 'level', level);
+      const mappedHabits = user.habits.map((habit) => {
+        if (habit.id === item.id) {
+          return { ...habit, is_complete: false };
+        }
+        return habit;
+      });
+      // setUser({ ...user, habits: mappedHabits, points, level });
+      setUser({ ...user, habits: mappedHabits });
+    } catch (err) {
+      console.log('client-side error marking habit incomplete, error: ', err);
+    }
+  };
 
   const removeHabit = async () => {
     try {
@@ -90,8 +94,8 @@ const SingleHabit = ({ item }) => {
         <Text
           style={styles.text}
           onPress={() => {
-            console.log('habit pressed');
-            setFinished(true);
+            finished ? markHabitIncomplete() : markHabitComplete();
+            setFinished(!finished);
           }}
         >
           {finished ? '✓ ' : '☐ '}
@@ -99,8 +103,11 @@ const SingleHabit = ({ item }) => {
         <View style={{flexDirection: 'column'}}>
         <Text style={styles.text}>{item.description}</Text>
         <Text style={styles.text}>{item.frequency}</Text>
-        <Text style={styles.text}>{item.days_of_week}</Text>
-        <Text style={styles.text}>{item.date}</Text>
+        { item.days_of_week === '' ?
+          <Text style={styles.text}>{item.calendar_date}</Text>
+          :
+          <Text style={styles.text}>{item.days_of_week}</Text>
+        }
         </View>
       </View>
       <Button title="Remove" onPress={removeHabit} />

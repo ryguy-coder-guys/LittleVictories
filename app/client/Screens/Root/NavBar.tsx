@@ -1,6 +1,4 @@
-// eslint-disable react/no-children-prop */
-import React, { useEffect, useState } from 'react';
-import { useUserContext } from '../../Contexts/userContext';
+import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import IconA from 'react-native-vector-icons/Ionicons';
 import IconB from 'react-native-vector-icons/FontAwesome5';
@@ -9,7 +7,6 @@ import Home from '../Home/Home';
 import Settings from '../Settings/Settings';
 import Tasks from '../Tasks/Tasks';
 import Feed from '../Feed/Feed';
-import { View, Text } from 'react-native';
 
 const AppBottomNavigator = createMaterialBottomTabNavigator();
 
@@ -25,35 +22,35 @@ const BottomTabs = () => {
         name="Home"
         component={Home}
         options={{
-          tabBarIcon: () => <IconA name="home" size={25} color="#FAFAFA" />,
+          tabBarIcon: () => <IconA name="home" size={22} color="#FAFAFA" />,
         }}
       />
       <AppBottomNavigator.Screen
         name="Feed"
         component={Feed}
         options={{
-          tabBarIcon: () => <IconA name="home" size={25} color="#FAFAFA" />,
+          tabBarIcon: () => <IconB name="user-friends" size={22} color="#FAFAFA" />,
         }}
       />
       <AppBottomNavigator.Screen
         name="Tasks"
         component={Tasks}
         options={{
-          tabBarIcon: () => <IconB name="tasks" size={25} color="#FAFAFA" />,
+          tabBarIcon: () => <IconB name="tasks" size={22} color="#FAFAFA" />,
         }}
       />
       <AppBottomNavigator.Screen
         name="Journal"
         component={Journal}
         options={{
-          tabBarIcon: () => <IconA name="journal" size={25} color="#FAFAFA" />,
+          tabBarIcon: () => <IconA name="journal" size={22} color="#FAFAFA" />,
         }}
       />
       <AppBottomNavigator.Screen
         name="Settings"
         component={Settings}
         options={{
-          tabBarIcon: () => <IconA name="settings" size={25} color="#FAFAFA" />,
+          tabBarIcon: () => <IconA name="settings" size={22} color="#FAFAFA" />,
         }}
       />
     </AppBottomNavigator.Navigator>
