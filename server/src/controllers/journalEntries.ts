@@ -21,8 +21,10 @@ export const getJournalEntry: RequestHandler<{
 
 //get all the journals
 export const getAllJournals: RequestHandler = async (req, res) => {
+  const { user_id } = req.params;
+  console.log(req.params);
   try {
-    const allJournals = await JournalEntry.findAll();
+    const allJournals = await JournalEntry.findAll({where : {user_id: user_id}});
     res.status(200).send(allJournals);
   } catch (err) {
     console.log('error fetching journal Entry', err.message);

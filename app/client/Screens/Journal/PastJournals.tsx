@@ -106,13 +106,13 @@ const Journal1 = () => {
 
   useEffect(() => {
     getJournal()
-
+    console.log(user, 'user')
   }, [])
 
   const getJournal = async () => {
-    await axios.get('http://localhost:3000/api/journalEntries/all')
+    await axios.get(`http://localhost:3000/api/journalEntries/${user.id}`)
     .then(({data}) => {
-      console.log(data, 'getJournal Data');
+      // console.log(data, 'getJournal Data');
         setJournals(data)
     } )
     .catch(err => console.warn(err))
