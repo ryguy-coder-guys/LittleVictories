@@ -2,12 +2,7 @@ import axios from 'axios';
 import { View, StyleSheet, Text, Button } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { useState } from 'react';
-import {
-  differenceInDays,
-  differenceInWeeks,
-  getDay,
-  isThisWeek,
-} from 'date-fns';
+import { differenceInDays, differenceInWeeks, getDay, isThisWeek } from 'date-fns';
 
 const SingleTask = ({ item }) => {
   const { user, setUser } = useUserContext();
@@ -67,7 +62,7 @@ const SingleTask = ({ item }) => {
   const markTaskIncomplete = async () => {
     try {
       const {
-        data: { task, points, level },
+        data: { points, level },
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/incomplete`
       );

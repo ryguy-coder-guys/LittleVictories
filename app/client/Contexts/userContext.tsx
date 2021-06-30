@@ -18,12 +18,24 @@ export interface Task {
   minutes_to_complete: number;
 }
 
+export interface Habit {
+  id: number;
+  description: string;
+  frequency: string;
+  days_of_week: string;
+  calendar_date: number;
+  is_complete: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 type moodType = 'great' | 'good' | 'ok' | 'bad' | 'terrible';
 export interface User {
   id: string;
   username: string;
   tasks: Task[];
   journals: Journal[];
+  habits: Habit[];
   points: number;
   level: number;
   entries: Entry[];
@@ -53,8 +65,8 @@ interface UserContextState {
   setUserStats: (userStats: UserStat) => void;
 }
 
-export const UserDefaultValues: UserContextState = {
-  user: { id: '', username: '', tasks: [], points: 0, level: 0, entries: [] },
+const UserDefaultValues: UserContextState = {
+  user: { id: '', username: '', tasks: [], habits: [], journals: [], points: 0, level: 0, entries: [] },
   setUser: (user: User): void => {},
   userStats: null,
   setUserStats: (userStats: UserStat): void => {},

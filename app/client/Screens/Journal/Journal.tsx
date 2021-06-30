@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AwesomeButton from 'react-native-really-awesome-button';
 import {
   View,
@@ -16,12 +16,12 @@ import { useUserContext } from '../../Contexts/userContext';
 import { useJournalContext } from '../../Contexts/journalContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ProgressBar from '../Root/ProgressBar';
-import { setDate, isToday } from 'date-fns/esm';
+import { isToday } from 'date-fns/esm';
 
 const Journal = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
 
-  const { user, setUser } = useUserContext();
+  const { user } = useUserContext();
   const { journal } = useJournalContext();
 
   const [datePicked, setDatePicked] = useState(new Date());
@@ -45,11 +45,8 @@ const Journal = () => {
     alert('Journal successfully saved.');
   };
 
-
-
-
   const clearJournal = () => {
-    const areYouSure = Alert.alert(
+    Alert.alert(
       'Are you sure?',
       'Once deleted, you cannot get this journal entry back.',
       [
@@ -246,7 +243,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   textArea: {
-    height: '70%',
+    height: '80%',
     justifyContent: 'flex-start',
     marginTop: 20,
     color: '#1D426D',
