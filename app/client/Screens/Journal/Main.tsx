@@ -24,7 +24,7 @@ const  Main = () => {
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      {/* <ProgressBar /> */}
+      <ProgressBar />
       <SafeAreaView>
         <ButtonGroup
           onPress={updateIndex}
