@@ -12,20 +12,18 @@ const SingleHabit = ({ item }) => {
   const markHabitComplete = async () => {
     try {
       const {
-        // data: { habit, points, level },
-        data: { habit },
+        data: { habit, points, level },
       } = await axios.patch(
         `http://localhost:3000/api/habits/${item.id}/complete`
       );
-      // console.log('points', points, 'level', level);
+      console.log('points', points, 'level', level);
       const mappedHabits = user.habits.map((habit) => {
         if (habit.id === item.id) {
           return { ...habit, is_complete: true };
         }
         return habit;
       });
-      setUser({ ...user, habits: mappedHabits });
-      // setUser({ ...user, habits: mappedHabits, points, level });
+      setUser({ ...user, habits: mappedHabits, points, level });
     } catch (err) {
       console.log('client-side complete habit error: ', err);
     }
@@ -34,20 +32,18 @@ const SingleHabit = ({ item }) => {
   const markHabitIncomplete = async () => {
     try {
       const {
-        data
-        // data: { points, level },
+        data: { points, level },
       } = await axios.patch(
         `http://localhost:3000/api/habits/${item.id}/incomplete`
       );
-      // console.log('points', points, 'level', level);
+      console.log('points', points, 'level', level);
       const mappedHabits = user.habits.map((habit) => {
         if (habit.id === item.id) {
           return { ...habit, is_complete: false };
         }
         return habit;
       });
-      // setUser({ ...user, habits: mappedHabits, points, level });
-      setUser({ ...user, habits: mappedHabits });
+      setUser({ ...user, habits: mappedHabits, points, level });
     } catch (err) {
       console.log('client-side error marking habit incomplete, error: ', err);
     }

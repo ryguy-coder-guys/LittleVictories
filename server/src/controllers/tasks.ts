@@ -7,6 +7,8 @@ import { List } from '../database/models/list';
 import { Like } from '../database/models/like';
 import { Comment } from '../database/models/comment';
 
+const ptsToLvlUp = 250;
+
 export const getTasks: RequestHandler = async (req, res) => {
   const tasks = await Task.findAll();
   res.send(tasks);
@@ -82,10 +84,10 @@ export const markTaskAsComplete: RequestHandler<{ id: string }> = async (
     const returnVal = await User.update(
       {
         points:
-          currentPoints + minutes < 100
+          currentPoints + minutes < ptsToLvlUp
             ? currentPoints + minutes
-            : (currentPoints + minutes) % 100,
-        level: currentPoints + minutes < 100 ? currentLevel : currentLevel + 1,
+            : (currentPoints + minutes) % ptsToLvlUp,
+        level: currentPoints + minutes < ptsToLvlUp ? currentLevel : currentLevel + 1,
       },
       { where: { id: task.user_id }, returning: true }
     );
@@ -118,7 +120,7 @@ export const markTaskAsIncomplete: RequestHandler<{ id: string }> = async (
       {
         points:
           currentPoints - minutes < 0
-            ? 100 - (minutes - currentPoints)
+            ? ptsToLvlUp - (minutes - currentPoints)
             : currentPoints - minutes,
         level: currentPoints - minutes < 0 ? currentLevel - 1 : currentLevel,
       },
