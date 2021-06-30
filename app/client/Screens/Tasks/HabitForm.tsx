@@ -3,11 +3,11 @@ import {
   View,
   TextInput,
   StyleSheet,
-  Text,
+  Text
 } from 'react-native';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { FAB } from 'react-native-paper';
-import { useUserContext } from '../../Contexts/userContext';
+import { useUserContext, Habit } from '../../Contexts/userContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import { Button, ButtonGroup } from 'react-native-elements';
@@ -20,27 +20,27 @@ const TaskForm = () => {
   const [ selectedFrequencyIndex, setSelectedFrequencyIndex ] = useState(0);
   const [ selectedDayIndices, setSelectedDayIndices ] = useState([]);
 
-  const daysSelected = (selectedDayIndices) => {
-    const days = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'];
-    let dayStr = '';
-    for (let i = 0; i < selectedDayIndices.length; i++) {
+  const daysSelected = (selectedDayIndices: number[]): string => {
+    const days: string[] = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'];
+    let dayStr: string = '';
+    for (let i: number = 0; i < selectedDayIndices.length; i++) {
       dayStr = dayStr + days[selectedDayIndices[i]];
     }
     return dayStr;
   }
 
-  const handleSubmit = async () => {
-    const frequencies = ['daily', 'weekly', 'monthly'];
+  const handleSubmit = async (): Promise<any> => {
+    const frequencies: string[] = ['daily', 'weekly', 'monthly'];
     console.log(format(date, 'MM-dd-yyyy'));
     try {
-      const { data: habit } = await axios.post('http://localhost:3000/api/habits/', {
+      const { data: habit }: AxiosResponse<Habit> = await axios.post('http://localhost:3000/api/habits/', {
         user_id: user.id,
         description: description,
         frequency: frequencies[selectedFrequencyIndex],
         days_of_week: daysSelected(selectedDayIndices),
         calendar_date: parseInt(format(date, 'dd'))
       });
-      const habitArr = [...user.habits, habit];
+      const habitArr: Habit[] = [...user.habits, habit];
       setUser({
         ...user,
         habits: habitArr,
@@ -51,27 +51,32 @@ const TaskForm = () => {
       setSelectedFrequencyIndex(0);
       setSelectedDayIndices([]);
     } catch (err) {
-      console.log('error with post habit: ', err)
+      console.warn('error with post habit: ', err)
     }
   };
 
-  const onChange = (event, selectedDate) => {
+  const onChange = (selectedDate): void => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
   };
 
-  const dayArr = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'];
+  const dayArr: string[] = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'];
 
   return (
         <View style={styles.container}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={styles.header}>Habits</Text>
-            <FAB
-              style={styles.fab}
-              small
-              icon="plus"
-              onPress={() => setShowForm(true)}
-            />
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View style={{flexDirection: 'column', alignItems: 'center'}}>
+              </View>
+              <Text>  </Text>
+              <FAB
+                style={styles.fab}
+                small
+                icon="plus"
+                onPress={() => setShowForm(true)}
+              />
+            </View>
           </View>
           {showForm ? (
             <View style={styles.addHabitComponent}>

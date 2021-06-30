@@ -2,8 +2,6 @@ import axios from 'axios';
 import { View, StyleSheet, Text, Button } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { useState } from 'react';
-import { differenceInDays, differenceInWeeks, getDay, isThisWeek } from 'date-fns';
-import { Habit } from '../../../../server/src/database/models/habit';
 
 const SingleHabit = ({ item }) => {
   const { user, setUser } = useUserContext();
@@ -12,7 +10,7 @@ const SingleHabit = ({ item }) => {
   const markHabitComplete = async () => {
     try {
       const {
-        data: { habit, points, level },
+        data: { points, level },
       } = await axios.patch(
         `http://localhost:3000/api/habits/${item.id}/complete`
       );
@@ -51,7 +49,7 @@ const SingleHabit = ({ item }) => {
 
   const removeHabit = async () => {
     try {
-      const { data: deleteSuccessful } = await axios.delete(
+      await axios.delete(
         `http://localhost:3000/api/habits/${item.id}`
       );
       const filteredHabits = user.habits.filter((habit) => {
@@ -62,27 +60,6 @@ const SingleHabit = ({ item }) => {
       console.log('client side remove habit error', error);
     }
   };
-
-  // const fn = (date: Date) => {
-  //   const days = {
-  //     0: 'Monday',
-  //     1: 'Tuesday',
-  //     2: 'Wednesday',
-  //     3: 'Thursday',
-  //     4: 'Friday',
-  //     5: 'Saturday',
-  //     6: 'Sunday',
-  //   };
-  //   const dueDate = new Date(date);
-  //   if (differenceInDays(dueDate, new Date()) <= 6) {
-  //     return `due ${days[getDay(dueDate)]}${
-  //       !isThisWeek(dueDate)
-  //         ? ' ' + dueDate.getMonth() + '/' + dueDate.getDate()
-  //         : ''
-  //     }`;
-  //   }
-  //   return `due in ${differenceInWeeks(dueDate, new Date())} weeks`;
-  // };
 
   return (
     <View style={styles.habit_view}>
@@ -99,11 +76,8 @@ const SingleHabit = ({ item }) => {
         <View style={{flexDirection: 'column'}}>
         <Text style={styles.text}>{item.description}</Text>
         <Text style={styles.text}>{item.frequency}</Text>
-        { item.days_of_week === '' ?
-          <Text style={styles.text}>{item.calendar_date}</Text>
-          :
-          <Text style={styles.text}>{item.days_of_week}</Text>
-        }
+        { item.frequency === 'weekly' ? <Text style={styles.text}>{item.days_of_week}</Text> : null }
+        { item.frequency === 'monthly' ? <Text style={styles.text}>{item.calendar_date}</Text>: null }
         </View>
       </View>
       <Button title="Remove" onPress={removeHabit} />
