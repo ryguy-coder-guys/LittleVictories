@@ -80,6 +80,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
         minutes_to_complete: task.getDataValue('minutes_to_complete'),
         is_important: task.getDataValue('is_important'),
         is_complete: task.getDataValue('is_complete'),
+        is_public: task.getDataValue('is_public'),
       };
     });
   // const journals = await JournalEntry.findAll({where: {user_id: user.id }, order: [['createdAt', 'DESC']]});

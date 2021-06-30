@@ -40,7 +40,6 @@ const Journal = () => {
       user_id: user.id,
       content: text,
       date: format(new Date(datePicked), 'MM-dd-yyyy'),
-      //date: format(new Date(), 'MM-dd-yyyy')
     });
     // unshift
     alert('Journal successfully saved.');
@@ -153,8 +152,17 @@ const Journal = () => {
           </View>
           <View style={styles.textAreaContainer}>
             <Text style={styles.date}>{date}</Text>
-            {
-              user?.entries.length ?
+            {/* <TextInput
+              style={styles.textArea}
+              underlineColorAndroid="transparent"
+              placeholder="Type something"
+              numberOfLines={10}
+              multiline={true}
+              onChangeText={setText}
+              value={text}
+              editable={isToday(new Date(date))}
+            /> */}
+            {user?.entries?.length ? (
               <TextInput
                 style={styles.textArea}
                 placeholder="Type something"
@@ -163,9 +171,12 @@ const Journal = () => {
                 onChangeText={setText}
                 value={text}
                 editable={
-                  isToday(new Date(user.entries[index].createdAt)) ? true : false
+                  isToday(new Date(user.entries[index].createdAt))
+                    ? true
+                    : false
                 }
-              /> :
+              />
+            ) : (
               <TextInput
                 style={styles.textArea}
                 placeholder="Type something"
@@ -175,7 +186,7 @@ const Journal = () => {
                 value={text}
                 editable={true}
               />
-            }
+            )}
           </View>
           <AwesomeButton
             backgroundColor={'#1D426D'}
