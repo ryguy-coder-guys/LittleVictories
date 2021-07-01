@@ -96,7 +96,7 @@ const Journal = () => {
           placeholder="Type something"
           numberOfLines={10}
           multiline={true}
-          onChangeText={setJournal}
+          onChangeText={(text) => setJournal({ ...journal, content: text })}
           value={journal.content}
           editable={true}
         />

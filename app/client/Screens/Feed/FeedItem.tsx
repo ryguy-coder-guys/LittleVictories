@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
 import { useFeedContext } from '../../Contexts/feedContext';
+import { useSocketContext } from '../../Contexts/socketContext';
 import {
   Text,
   Button,
@@ -23,6 +24,7 @@ const FeedItem = ({
 }) => {
   const { user } = useUserContext();
   const { feed, setFeed } = useFeedContext();
+  const { socket } = useSocketContext();
 
   const [showCommentInput, setShowCommentInput] = React.useState(false);
   const [commentText, setCommentText] = React.useState('');
@@ -36,13 +38,14 @@ const FeedItem = ({
       }
     );
     if (newLike) {
-      const mappedFeed = feed.map((feedItem) => {
-        if (feedItem.id === id) {
-          return { ...feedItem, likes: [...likes, newLike] };
-        }
-        return feedItem;
-      });
-      setFeed(mappedFeed);
+      socket.emit('addLike', newLike);
+      // const mappedFeed = feed.map((feedItem) => {
+      //   if (feedItem.id === id) {
+      //     return { ...feedItem, likes: [...likes, newLike] };
+      //   }
+      //   return feedItem;
+      // });
+      // setFeed(mappedFeed);
     }
   };
 
@@ -51,16 +54,17 @@ const FeedItem = ({
       `http://localhost:3000/api/likes/${user.id}/${taskId}`
     );
     if (removeSuccessful) {
-      const mappedFeed = feed.map((feedItem) => {
-        if (feedItem.id === id) {
-          return {
-            ...feedItem,
-            likes: likes.filter((like) => like.user_id !== user.id),
-          };
-        }
-        return feedItem;
-      });
-      setFeed(mappedFeed);
+      // const mappedFeed = feed.map((feedItem) => {
+      //   if (feedItem.id === id) {
+      //     return {
+      //       ...feedItem,
+      //       likes: likes?.filter((like) => like.user_id !== user.id),
+      //     };
+      //   }
+      //   return feedItem;
+      // });
+      // setFeed(mappedFeed);
+      socket.emit('removeLike', taskId);
     }
   };
 
@@ -74,14 +78,15 @@ const FeedItem = ({
       }
     );
     if (newComment) {
-      const mappedFeed = feed.map((feedItem) => {
-        if (feedItem.id === id) {
-          return { ...feedItem, comments: [...comments, newComment] };
-        }
-        return feedItem;
-      });
-      setFeed(mappedFeed);
-      setCommentText('');
+      // const mappedFeed = feed.map((feedItem) => {
+      //   if (feedItem.id === id) {
+      //     return { ...feedItem, comments: [...comments, newComment] };
+      //   }
+      //   return feedItem;
+      // });
+      // setFeed(mappedFeed);
+      // setCommentText('');
+      socket.emit('addComment', newComment);
     }
   };
 
@@ -90,22 +95,23 @@ const FeedItem = ({
       `http://localhost:3000/api/comments/${commentId}`
     );
     if (removeSuccessful) {
-      const mappedFeed = feed.map((feedItem) => {
-        if (feedItem.id === id) {
-          return {
-            ...feedItem,
-            comments: comments.filter((comment) => comment.id !== commentId),
-          };
-        }
-        return feedItem;
-      });
-      setFeed(mappedFeed);
+      // const mappedFeed = feed.map((feedItem) => {
+      //   if (feedItem.id === id) {
+      //     return {
+      //       ...feedItem,
+      //       comments: comments.filter((comment) => comment.id !== commentId),
+      //     };
+      //   }
+      //   return feedItem;
+      // });
+      // setFeed(mappedFeed);
+      socket.emit('removeComment', id);
     }
   };
 
   const canLike = () => {
     if (user?.id) {
-      return likes.reduce((canLike, like) => {
+      return likes?.reduce((canLike, like) => {
         if (like.user_id === user.id) {
           return false;
         }
@@ -119,7 +125,7 @@ const FeedItem = ({
       <Text style={{ ...styles.text, fontWeight: 'bold' }}>{username}</Text>
       <Text style={styles.text}>{description}</Text>
       <Text style={styles.text}>{completed_at}</Text>
-      <Text style={styles.text}>{likes.length} likes</Text>
+      <Text style={styles.text}>{likes?.length} likes</Text>
       <View style={styles.btnContainer}>
         <Button
           title={`${canLike() ? 'Add Like' : 'Remove Like'}`}
@@ -130,7 +136,7 @@ const FeedItem = ({
           onPress={() => setShowCommentInput(!showCommentInput)}
         />
       </View>
-      {comments.length ? (
+      {comments?.length ? (
         <FlatList
           data={comments}
           renderItem={({ item }) => (
