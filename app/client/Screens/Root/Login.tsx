@@ -40,8 +40,6 @@ const Login = ({ navigation }) => {
   };
 
   const handleLogin = async () => {
-    // console.log('username: ', username);
-    // console.log('password attempt: ', passwordAttempt);
     if (!username.length || !passwordAttempt.length) {
       return;
     }

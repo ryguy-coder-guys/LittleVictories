@@ -6,6 +6,6 @@ const router = Router();
 
 router.post('/create', addJournalEntry);
 router.get('/:user_id/:date', getJournalEntry);
-router.get('/user', getAllJournals)
+router.get('/:user_id', getAllJournals)
 
 export default router;
