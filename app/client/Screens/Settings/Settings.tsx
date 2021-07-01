@@ -14,15 +14,14 @@ const SettingsScreen = ({ navigation, route }) => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const { setUser, setUserStats } = useUserContext();
   const { getQuote } = useQuoteContext();
-  const { setJournal } = useJournalContext();
+  const { setJournal, setJournals } = useJournalContext();
 
   const logout = (): void => {
     getQuote();
     setUser(null);
-    setJournal(null);
+    setJournal({});
+    setJournals([]);
   };
-
-
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
