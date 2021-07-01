@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from "react";
 
 export interface Entry {
   id: number;
@@ -29,24 +29,15 @@ export interface Habit {
   updatedAt: Date;
 }
 
-type moodType = 'great' | 'good' | 'ok' | 'bad' | 'terrible';
+type moodType = "great" | "good" | "ok" | "bad" | "terrible";
 export interface User {
   id: string;
   username: string;
   tasks: Task[];
-  journals: Journal[];
   habits: Habit[];
   points: number;
   level: number;
   entries: Entry[];
-}
-
-export interface Journal {
-  id: number;
-  user_id: string;
-  createdAt: Date;
-  content: string;
-  date: string;
 }
 
 export interface UserStat {
@@ -66,7 +57,15 @@ interface UserContextState {
 }
 
 const UserDefaultValues: UserContextState = {
-  user: { id: '', username: '', tasks: [], habits: [], journals: [], points: 0, level: 0, entries: [] },
+  user: {
+    id: "",
+    username: "",
+    tasks: [],
+    habits: [],
+    points: 0,
+    level: 0,
+    entries: [],
+  },
   setUser: (user: User): void => {},
   userStats: null,
   setUserStats: (userStats: UserStat): void => {},

@@ -1,38 +1,26 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
-import { useUserContext } from './userContext';
-import { format } from 'date-fns';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useUserContext } from "./userContext";
+import moment from "moment";
 
 const JournalContext = createContext(null);
 
 export const JournalContextProvider = ({ children }) => {
   const [journal, setJournal] = useState(null);
+  const [journals, setJournals] = useState([]);
   const { user } = useUserContext();
 
-  // get today's journal
-  const getJournal = async () => {
-    if (user) {
-      const user_id = user.id;
-      const date = format(new Date(), 'MM-dd-yyyy');
-      try {
-        const { data } = await axios.get(
-          `http://localhost:3000/api/journalEntries/${user_id}/${date}`
-        );
-        setJournal(data.content);
-      } catch (err) {
-        console.warn('journal load error', err.message);
-      }
-    }
-  };
-
   useEffect(() => {
-    if (user?.id?.length) {
-      getJournal();
+    const currentDate = moment().format("MM-D-Y");
+    if (user) {
+      setJournal(user.entries.find((entry) => entry.date === currentDate));
+      setJournals(user.entries);
     }
   }, [user]);
 
   return (
-    <JournalContext.Provider value={{ journal, setJournal }}>
+    <JournalContext.Provider
+      value={{ journal, setJournal, journals, setJournals }}
+    >
       {children}
     </JournalContext.Provider>
   );

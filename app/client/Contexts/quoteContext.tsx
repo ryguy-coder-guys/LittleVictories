@@ -7,7 +7,7 @@ export const QuoteContextProvider = ({ children }) => {
   const [quote, setQuote] = useState(null);
   const [author, setAuthor] = useState(null);
 
-  const getQuote = async () => {
+  const getQuote = async ():Promise<any> => {
     const { data } = await axios.get('https://zenquotes.io/api/random');
     setQuote(data[0].q);
     setAuthor(data[0].a);
