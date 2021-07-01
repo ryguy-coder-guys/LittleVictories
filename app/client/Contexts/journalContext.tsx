@@ -12,7 +12,11 @@ export const JournalContextProvider = ({ children }) => {
   useEffect(() => {
     const currentDate = moment().format("MM-D-Y");
     if (user) {
-      setJournal(user.entries.find((entry) => entry.date === currentDate));
+      setJournal(
+        user.entries.find((entry) => entry.date === currentDate)
+          ? user.entries.find((entry) => entry.date === currentDate)
+          : { content: "", date: currentDate }
+      );
       setJournals(user.entries);
     }
   }, [user]);

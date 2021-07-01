@@ -14,7 +14,7 @@ const Journal = () => {
   const saveJournal = async () => {
     await axios.post("http://localhost:3000/api/journalEntries/create", {
       user_id: user.id,
-      content: journal,
+      content: journal.content,
       date: moment().format("MM-D-Y"),
     });
 
