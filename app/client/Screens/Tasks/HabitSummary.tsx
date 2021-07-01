@@ -43,7 +43,7 @@ const habitsDueToday = () => {
       return habit;
     } else if (habit.frequency === 'weekly') {
       const currentDayOfWk = getDay(new Date());
-      // sunday = 0 > saturday = 6
+      // sunday = 0 -> saturday = 6
       if (currentDayOfWk === 0) {
         if (habit.days_of_week.includes('Su')) {
           return habit;

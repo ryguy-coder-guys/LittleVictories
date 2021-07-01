@@ -40,8 +40,6 @@ const Login = ({ navigation }) => {
   };
 
   const handleLogin = async () => {
-    // console.log('username: ', username);
-    // console.log('password attempt: ', passwordAttempt);
     if (!username.length || !passwordAttempt.length) {
       return;
     }
@@ -56,7 +54,6 @@ const Login = ({ navigation }) => {
       );
       if (userObj) {
         // if successful navigate to home
-        console.log('THIS is the userObj: ', userObj);
         setTimeout(() => {
           setUser(userObj);
           setUserStats(userObj.userStats);
