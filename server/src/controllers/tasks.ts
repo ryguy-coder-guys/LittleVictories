@@ -168,7 +168,7 @@ export const getFeedItems: RequestHandler<{ id: string }> = async (
     const feed = await Task.findAll({
       where: {
         is_public: true,
-        user_id: { [sequelize.Op.not]: req.params.id },
+        // user_id: { [sequelize.Op.not]: req.params.id },
       },
       order: [['completed_at', 'DESC']],
       limit: 10,

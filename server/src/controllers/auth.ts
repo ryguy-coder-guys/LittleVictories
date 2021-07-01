@@ -65,13 +65,11 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     level: user.getDataValue('level'),
   };
   const mappedTasks = tasks
-    .filter((task) => {
-      return (
-        (isPast(new Date(task.getDataValue('due_date'))) &&
-          !task.getDataValue('is_complete')) ||
-        !isPast(new Date(task.getDataValue('due_date')))
-      );
-    })
+    .filter(
+      (task) =>
+        task.getDataValue('is_complete') === 0 ||
+        !isPast(task.getDataValue('due_date'))
+    )
     .map((task) => {
       return {
         id: task.getDataValue('id'),
