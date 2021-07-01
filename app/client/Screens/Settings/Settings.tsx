@@ -22,6 +22,8 @@ const SettingsScreen = ({ navigation, route }) => {
     setJournal(null);
   };
 
+
+
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <View style={styles.container}>
