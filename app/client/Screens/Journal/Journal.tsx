@@ -101,7 +101,7 @@ const Journal = () => {
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
           >
-            <Text style={styles.header}> User's Journal </Text>
+            <Text style={styles.header}> {user.username}'s Journal </Text>
             <AwesomeButton
               backgroundColor={'#1D426D'}
               textColor={'#FAFAFA'}

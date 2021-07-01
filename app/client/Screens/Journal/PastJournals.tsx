@@ -32,14 +32,7 @@ const Journal1 = () => {
   const [index, setIndex] = useState(0);
   const [journals, setJournals] = useState([]);
 
-  // const onChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate || datePicked;
-  //   setDatePicked(currentDate);
 
-  //     return (
-  //       <Text>Hi</Text>
-  //     )
-  // };
   const saveJournal = async () => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
@@ -112,7 +105,7 @@ const Journal1 = () => {
   const getJournal = async () => {
     await axios.get(`http://localhost:3000/api/journalEntries/${user.id}`)
     .then(({data}) => {
-      // console.log(data, 'getJournal Data');
+      console.log(data, 'getJournal Data');
         setJournals(data)
     } )
     .catch(err => console.warn(err))

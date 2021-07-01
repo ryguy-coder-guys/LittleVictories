@@ -102,3 +102,19 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
   };
   res.send(formattedUser);
 };
+
+
+
+export const users: RequestHandler = async (req, res) => {
+ //const { username } = req.body
+    const { user_id } = req.params;
+    console.log(req.params);
+    try {
+      const user = await User.findAll();
+      res.status(200).send(user);
+    } catch (err) {
+      console.log('error fetching journal Entry', err.message);
+      res.sendStatus(500);
+    }
+};
+
