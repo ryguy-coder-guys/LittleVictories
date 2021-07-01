@@ -29,7 +29,7 @@ const SingleTask = ({ item }) => {
       setTaskPublic(false);
       socket.emit('removeFromFeed', item);
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
@@ -44,7 +44,7 @@ const SingleTask = ({ item }) => {
       setTaskPublic(true);
       socket.emit('addToFeed', item);
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
@@ -55,7 +55,6 @@ const SingleTask = ({ item }) => {
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/complete`
       );
-      console.log('points', points, 'level', level);
       const mappedTasks = user.tasks.map((task) => {
         if (task.id === item.id) {
           return { ...task, is_complete: true };
@@ -64,14 +63,14 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: mappedTasks, points, level });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
   const markTaskIncomplete = async () => {
     try {
       const {
-        data: { task, points, level },
+        data: { points, level },
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/incomplete`
       );
@@ -84,7 +83,7 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: mappedTasks, points, level });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
@@ -98,7 +97,7 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: filteredTasks });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 

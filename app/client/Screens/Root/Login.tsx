@@ -40,8 +40,6 @@ const Login = ({ navigation }) => {
   };
 
   const handleLogin = async () => {
-    // console.log('username: ', username);
-    // console.log('password attempt: ', passwordAttempt);
     if (!username.length || !passwordAttempt.length) {
       return;
     }
@@ -304,6 +302,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#FAFAFA',
     marginBottom: 5,
+    fontSize: 16
   },
 });
 

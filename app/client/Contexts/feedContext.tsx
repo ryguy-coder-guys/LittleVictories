@@ -110,10 +110,9 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
     if (user) {
       fetchFeed()
         .then((feed) => {
-          console.log(feed);
           setFeed(feed);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.warn(err));
     }
   }, [user]);
 

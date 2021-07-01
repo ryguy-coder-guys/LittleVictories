@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from "react";
 
 export interface Entry {
   id: number;
@@ -17,16 +17,29 @@ export interface Task {
   is_important: boolean;
   minutes_to_complete: number;
 }
+
+export interface Habit {
+  id: number;
+  description: string;
+  frequency: string;
+  days_of_week: string;
+  calendar_date: number;
+  is_complete: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+type moodType = "great" | "good" | "ok" | "bad" | "terrible";
 export interface User {
   id: string;
   username: string;
   tasks: Task[];
+  habits: Habit[];
   points: number;
   level: number;
   entries: Entry[];
 }
 
-type moodType = 'great' | 'good' | 'ok' | 'bad' | 'terrible';
 export interface UserStat {
   id: number;
   sleep_hours: number;
@@ -36,7 +49,6 @@ export interface UserStat {
   mood: moodType;
   date: string;
 }
-
 interface UserContextState {
   user: User;
   setUser: (user: User) => void;
@@ -44,8 +56,16 @@ interface UserContextState {
   setUserStats: (userStats: UserStat) => void;
 }
 
-export const UserDefaultValues: UserContextState = {
-  user: { id: '', username: '', tasks: [], points: 0, level: 0, entries: [] },
+const UserDefaultValues: UserContextState = {
+  user: {
+    id: "",
+    username: "",
+    tasks: [],
+    habits: [],
+    points: 0,
+    level: 0,
+    entries: [],
+  },
   setUser: (user: User): void => {},
   userStats: null,
   setUserStats: (userStats: UserStat): void => {},
