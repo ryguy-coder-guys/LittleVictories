@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useUserContext } from './userContext';
-import axios from 'axios';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useUserContext } from "./userContext";
+import axios from "axios";
 
 interface Like {}
 
@@ -43,10 +43,9 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
     if (user) {
       fetchFeed()
         .then((feed) => {
-          console.log(feed);
           setFeed(feed);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.warn(err));
     }
   }, [user]);
 

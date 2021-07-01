@@ -18,9 +18,8 @@ const SingleTask = ({ item }) => {
         return;
       }
       setTaskPublic(false);
-      console.log('update successful');
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
@@ -33,9 +32,8 @@ const SingleTask = ({ item }) => {
         return;
       }
       setTaskPublic(true);
-      console.log('update successful');
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
@@ -46,7 +44,6 @@ const SingleTask = ({ item }) => {
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/complete`
       );
-      console.log('points', points, 'level', level);
       const mappedTasks = user.tasks.map((task) => {
         if (task.id === item.id) {
           return { ...task, is_complete: true };
@@ -55,7 +52,7 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: mappedTasks, points, level });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
@@ -75,7 +72,7 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: mappedTasks, points, level });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
@@ -89,7 +86,7 @@ const SingleTask = ({ item }) => {
       });
       setUser({ ...user, tasks: filteredTasks });
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
