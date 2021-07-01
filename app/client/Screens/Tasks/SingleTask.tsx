@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { View, StyleSheet, Text, Button } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
+import { useFeedContext } from '../../Contexts/feedContext';
+import { useSocketContext } from '../../Contexts/socketContext';
 import React, { useState } from 'react';
 import {
   differenceInDays,
@@ -11,6 +13,8 @@ import {
 
 const SingleTask = ({ item }) => {
   const { user, setUser } = useUserContext();
+  const { feed, setFeed } = useFeedContext();
+  const { socket } = useSocketContext();
   const [finished, setFinished] = useState(item.is_complete);
   const [taskPublic, setTaskPublic] = useState(item.is_public);
 
@@ -23,7 +27,7 @@ const SingleTask = ({ item }) => {
         return;
       }
       setTaskPublic(false);
-      console.log('update successful');
+      socket.emit('removeFromFeed', item);
     } catch (error) {
       console.log(error);
     }
@@ -38,7 +42,7 @@ const SingleTask = ({ item }) => {
         return;
       }
       setTaskPublic(true);
-      console.log('update successful');
+      socket.emit('addToFeed', item);
     } catch (error) {
       console.log(error);
     }

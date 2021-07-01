@@ -6,8 +6,8 @@ const Comment = ({ id, content, user_id, removeComment }) => {
   const { user } = useUserContext();
 
   const canRemove = () => {
-    if (user.id) {
-      user_id === user.id;
+    if (user?.id) {
+      return user_id === user.id;
     }
     return false;
   };

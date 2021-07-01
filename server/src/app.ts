@@ -9,8 +9,10 @@ import commentRouter from './routers/comments';
 
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(
+  express.urlencoded({ extended: true, limit: '50mb', parameterLimit: 50000 })
+);
 
 app.use('/api/tasks', taskRouter);
 app.use('/api/lists', listRouter);
