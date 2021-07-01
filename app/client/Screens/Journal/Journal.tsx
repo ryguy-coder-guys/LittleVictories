@@ -14,7 +14,7 @@ const Journal = () => {
   const saveJournal = async () => {
     await axios.post("http://localhost:3000/api/journalEntries/create", {
       user_id: user.id,
-      content: journal,
+      content: journal.content,
       date: moment().format("MM-D-Y"),
     });
 
@@ -71,84 +71,6 @@ const Journal = () => {
   // };
 
   return (
-<<<<<<< HEAD
-        <View style={styles.main}>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-          >
-            <Text style={styles.header}> {user.username}'s Journal </Text>
-            <AwesomeButton
-              backgroundColor={'#1D426D'}
-              textColor={'#FAFAFA'}
-              height={35}
-              width={125}
-              raiseLevel={0}
-              borderRadius={8}
-              style={styles.button}
-              onPress={() => {
-                clearJournal();
-              }}
-            >
-              Clear Entry
-            </AwesomeButton>
-          </View>
-          <View style={{ flexDirection: 'row', marginLeft: 20 }}>
-            {/* {index < user?.entries.length - 1 && (
-              <IconA
-                name="caret-back"
-                size={35}
-                color="#1D426D"
-                onPress={back}
-              />
-            )}
-            {index > 0 && (
-              <IconA
-                name="caret-forward"
-                size={35}
-                color="#1D426D"
-                onPress={forward}
-              />
-            )} */}
-            {/* <View>
-              <View>
-                <Text style={styles.text}>Select a Date:</Text>
-              </View>
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={datePicked}
-                display="default"
-                onChange={onChange}
-              />
-            </View> */}
-          </View>
-          <View style={styles.textAreaContainer}>
-            <Text style={styles.date}>{date}</Text>
-              <TextInput
-                style={styles.textArea}
-                placeholder="Type something"
-                numberOfLines={10}
-                multiline={true}
-                onChangeText={setText}
-                value={text}
-                editable={ true }
-              />
-          </View>
-          <AwesomeButton
-            backgroundColor={'#1D426D'}
-            textColor={'#FAFAFA'}
-            height={35}
-            width={125}
-            raiseLevel={0}
-            borderRadius={8}
-            style={styles.submit}
-            onPress={() => {
-              saveJournal();
-            }}
-          >
-            Save
-          </AwesomeButton>
-        </View>
-=======
     <View style={styles.main}>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.header}> User's Journal </Text>
@@ -194,7 +116,6 @@ const Journal = () => {
         Save
       </AwesomeButton>
     </View>
->>>>>>> 7fc89d9ae0bc748fc32e5cfe348e21720b4e5543
   );
 };
 const styles = StyleSheet.create({
