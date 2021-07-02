@@ -9,6 +9,7 @@ import Home from '../Home/Home';
 import Settings from '../Settings/Settings';
 import Tasks from '../Tasks/Tasks';
 import Feed from '../Feed/Feed';
+import Friends from '../Feed/Friends'
 
 const AppBottomNavigator = createMaterialBottomTabNavigator();
 
@@ -29,7 +30,7 @@ const BottomTabs = () => {
       />
       <AppBottomNavigator.Screen
         name="Feed"
-        component={Feed}
+        component={Friends}
         options={{
           tabBarIcon: () => <IconB name="user-friends" size={22} color="#FAFAFA" />,
         }}

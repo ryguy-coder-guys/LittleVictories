@@ -1,10 +1,10 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { View, StyleSheet, Text, FlatList } from "react-native";
 import { useJournalContext } from "../../Contexts/journalContext";
 import moment from "moment";
 import { v4 as getKey } from "uuid";
 
-const Journal1 = () => {
+const Journal1 = () : ReactElement => {
   const { journals } = useJournalContext();
 
   // const clearJournal = () => {
@@ -37,7 +37,7 @@ const Journal1 = () => {
   //   );
   // };
 
-  const list = () => {
+  const list = () : ReactElement => {
     return (
       <View>
         <FlatList

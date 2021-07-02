@@ -52,7 +52,7 @@ const TaskForm = () => {
     }
   };
 
-  const onChange = (selectedDate): void => {
+  const onChange = (event, selectedDate): void => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
   };
