@@ -11,6 +11,7 @@ const Journal = () : React.ReactElement => {
   const { user } = useUserContext();
   const { journal, setJournal } = useJournalContext();
   const [date] = useState(moment().format('MMM Do Y'));
+
   const saveJournal = async () : Promise<void> => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,

@@ -30,7 +30,7 @@ const BottomTabs = () => {
       />
       <AppBottomNavigator.Screen
         name="Feed"
-        component={Friends}
+        component={Feed}
         options={{
           tabBarIcon: () => <IconB name="user-friends" size={22} color="#FAFAFA" />,
         }}

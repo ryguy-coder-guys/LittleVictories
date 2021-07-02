@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import { useUserContext } from '../../Contexts/userContext';
 import { View, Button, Text, FlatList, StyleSheet, TextInput, Alert } from 'react-native';
 import axios from 'axios';
 import { v4 as getKey } from "uuid";
 import filter from 'lodash.filter';
 
-const Friends = () => {
+const Friends = () : ReactElement => {
   const [users, setUsers] = useState([]);
   const [query, setQuery] = useState('');
   const [fullData, setFullData] = useState([]);
+  const { user } = useUserContext();
 
-  const getAllUsers = async () => {
+
+  const getAllUsers =  async () : Promise<void> => {
     await axios.get('http://localhost:3000/api/auth/users')
     .then(({data}) => {
        console.log(data, 'users');
@@ -25,66 +27,34 @@ const Friends = () => {
     }, [])
 
     //The user's name is filtered from the state variable fullData while the state variable users stores the final results after the search to render the //////correct user.
-    const handleSearch = text => {
-      const formattedQuery = text.toUpperCase();
+    const handleSearch = (text) => {
+      //const formattedQuery = query.toUpperCase();
       const filteredData = filter(fullData, user => {
-        return contains(user, formattedQuery);
+        //return contains(user, formattedQuery);
+        const itemData = user.username.toUpperCase();
+        const textData = text.toUpperCase();
+        //return user.username.toUpperCase().includes(formattedQuery)
+        return itemData.indexOf(textData) > -1
       });
       setUsers(filteredData);
       setQuery(text);
     };
 
-    //The contains handler method is going to look for the query. It accepts two parameters, the first and last name of the user and the formatted query to lowercase from handleSearch().
-    const contains = ({ username }, query) => {
-      //const { username } = name;
-      //console.log(username, 'yoyoyo')
-      // if (first.includes(query) || last.includes(query) || email.includes(query)) {
-      //   return true;
-      // }
-      console.log(username, 'yoyoy')
-      if (username.toUpperCase().includes(query)) {
-        return true;
-      }
-      return false;
-    };
-
-
-    const renderHeader = () => {
-      return (
-        <View
-          style={{
-            backgroundColor: '#fff',
-            padding: 10,
-            marginVertical: 10,
-            borderRadius: 20
-          }}
-        >
-          <TextInput
-            autoCapitalize="none"
-            autoCorrect={false}
-            clearButtonMode="always"
-            value={query}
-            onChangeText={queryText => handleSearch(queryText)}
-            placeholder="Search"
-            style={{ backgroundColor: '#fff', paddingHorizontal: 20 }}
-          />
-        </View>
-      );
-    }
 
     return(
-      <View style={styles.container}>
-      <Text style={styles.text}>Add Friends</Text>
+      <View >
+      <Text style={styles.header}>Add Friends</Text>
+      <TextInput
+         style={styles.textInput}
+         onChangeText={(text) => handleSearch(text)}
+         value={query}
+         underlineColorAndroid='transparent'
+         placeholder="Search Here" />
       <FlatList
-       ListHeaderComponent={renderHeader}
         keyExtractor={() => getKey()}
         data={users}
         renderItem={({ item }) => (
-          <View style={styles.listItem}>
-            {/* <Image
-              source={{ uri: item.picture.thumbnail }}
-              style={styles.coverImage}
-            /> */}
+          <View style={styles.textAreaContainer}>
             <View style={styles.metaInfo}>
               <Text style={styles.title}>{item.username}</Text>
               <Button
@@ -114,11 +84,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
     alignItems: 'center'
   },
-  text: {
-    fontSize: 20,
-    color: '#101010',
-    marginTop: 60,
-    fontWeight: '700'
+  header: {
+    color: "#1D426D",
+    fontSize: 26,
+    fontWeight: "bold",
+    marginLeft: 20,
+    marginTop: 20,
   },
   listItem: {
     marginTop: 10,
@@ -127,19 +98,38 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'row'
   },
-  coverImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 8
-  },
   metaInfo: {
     marginLeft: 10
+  },
+  text: {
+    fontSize: 20,
+    color: '#101010',
+    marginTop: 60,
+    fontWeight: '700'
+  },
+  textAreaContainer: {
+    backgroundColor: "#8ebac6",
+    borderRadius: 10,
+    padding: 20,
+    marginTop: 20,
+    marginRight: 20,
+    marginLeft: 20,
+  },
+  textInput: {
+
+    textAlign: 'center',
+    height: 42,
+    borderWidth: 1,
+    borderColor: '#009688',
+    borderRadius: 8,
+    backgroundColor: "#FFFF"
+
   },
   title: {
     fontSize: 18,
     width: 200,
     padding: 10
-  }
+  },
 });
 
 export default Friends;
