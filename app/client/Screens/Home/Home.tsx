@@ -6,7 +6,7 @@ import {
   Text,
   ImageBackground,
   SafeAreaView,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
@@ -102,7 +102,8 @@ const Home = () => {
                   {userStats?.eaten_well ? 'yes' : 'no' || didEatWell}
                 </Text>
                 <Text style={styles.text}>
-                  Exercised? {userStats?.exercised ? 'yes' : 'no' || didExercise}
+                  Exercised?{' '}
+                  {userStats?.exercised ? 'yes' : 'no' || didExercise}
                 </Text>
                 <Text style={styles.text}>
                   Notes: {userStats?.notes || notes}
@@ -224,7 +225,7 @@ const Home = () => {
             )}
           </View>
           <View style={styles.view}>
-          <Text style={styles.heading}>Weekly Stats</Text>
+            <Text style={styles.heading}>Weekly Stats</Text>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -302,7 +303,7 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     marginRight: 40,
     marginBottom: 20,
-    padding: 20
+    padding: 20,
   },
 });
 export default Home;

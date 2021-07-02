@@ -3,8 +3,6 @@ import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
-
 const DB_NAME = 'little_victories';
 const DB_USER = 'root';
 const DB_PASSWORD = process.env.DATABASE_PASSWORD;

@@ -110,7 +110,10 @@ const Login = ({ navigation }) => {
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
           <>
-            <Image source={logo} style={{resizeMode: 'contain', width: '50%', height: '25%'}} />
+            <Image
+              source={logo}
+              style={{ resizeMode: 'contain', width: '50%', height: '25%' }}
+            />
             <View style={{ flexDirection: 'row' }}>
               <AwesomeButton
                 backgroundColor={'#5c83b1'}
@@ -190,7 +193,10 @@ const Login = ({ navigation }) => {
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
           <>
-            <Image source={logo} style={{resizeMode: 'contain', width: '50%', height: '25%'}} />
+            <Image
+              source={logo}
+              style={{ resizeMode: 'contain', width: '50%', height: '25%' }}
+            />
             <View style={{ flexDirection: 'row' }}>
               <AwesomeButton
                 backgroundColor={'#1D426D'}
@@ -302,7 +308,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#FAFAFA',
     marginBottom: 5,
-    fontSize: 16
+    fontSize: 16,
   },
 });
 

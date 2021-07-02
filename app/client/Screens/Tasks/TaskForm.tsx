@@ -60,83 +60,83 @@ const TaskForm = () => {
   };
 
   return (
-        <View style={styles.container}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={styles.header}>Tasks</Text>
-            <FAB
-              style={styles.fab}
-              small
-              icon="plus"
-              onPress={() => setShowForm(true)}
+    <View style={styles.container}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={styles.header}>Tasks</Text>
+        <FAB
+          style={styles.fab}
+          small
+          icon="plus"
+          onPress={() => setShowForm(true)}
+        />
+      </View>
+      {showForm ? (
+        <View style={styles.addTaskComponent}>
+          <View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Text style={styles.subheader}>Add Task</Text>
+              <Button title="Cancel" onPress={() => setShowForm(false)} />
+            </View>
+            <TextInput
+              style={styles.input}
+              onChangeText={setDescription}
+              value={description}
+              placeholder="Enter Task Description"
+              autoCapitalize="none"
+            />
+            <View>
+              <Text style={styles.prompt}>Set Due Date:</Text>
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                display="default"
+                onChange={onChange}
+              />
+            </View>
+          </View>
+          <View>
+            <Text style={styles.prompt}>
+              How long will it take to complete this task?
+            </Text>
+            <Text style={styles.text}>{timeToComplete} minutes</Text>
+            <Slider
+              step={5}
+              minimumValue={0}
+              maximumValue={60}
+              value={timeToComplete}
+              onValueChange={setTimeToComplete}
+              minimumTrackTintColor="#1fb28a"
+              maximumTrackTintColor="#fafafa"
+              thumbTintColor="#b9e4c9"
             />
           </View>
-          {showForm ? (
-            <View style={styles.addTaskComponent}>
-              <View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <Text style={styles.subheader}>Add Task</Text>
-                  <Button title="Cancel" onPress={() => setShowForm(false)} />
-                </View>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={setDescription}
-                  value={description}
-                  placeholder="Enter Task Description"
-                  autoCapitalize="none"
-                />
-                <View>
-                  <Text style={styles.prompt}>Set Due Date:</Text>
-                  <DateTimePicker
-                    testID="dateTimePicker"
-                    value={date}
-                    display="default"
-                    onChange={onChange}
-                  />
-                </View>
-              </View>
-              <View>
-                <Text style={styles.prompt}>
-                  How long will it take to complete this task?
-                </Text>
-                <Text style={styles.text}>{timeToComplete} minutes</Text>
-                <Slider
-                  step={5}
-                  minimumValue={0}
-                  maximumValue={60}
-                  value={timeToComplete}
-                  onValueChange={setTimeToComplete}
-                  minimumTrackTintColor="#1fb28a"
-                  maximumTrackTintColor="#fafafa"
-                  thumbTintColor="#b9e4c9"
-                />
-              </View>
-              <View style={styles.important}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#1D426D',
-                    paddingRight: 15,
-                    paddingTop: 2,
-                  }}
-                >
-                  Mark task as important?
-                </Text>
-                <Switch
-                  trackColor={{ false: '#767577', true: '#81b0ff' }}
-                  thumbColor={'#FAFAFA'}
-                  onValueChange={toggleSwitch}
-                  value={isImportant}
-                />
-              </View>
-              <Button title="Submit" onPress={() => handleSubmit()} />
-            </View>
-          ) : null}
+          <View style={styles.important}>
+            <Text
+              style={{
+                fontSize: 18,
+                color: '#1D426D',
+                paddingRight: 15,
+                paddingTop: 2,
+              }}
+            >
+              Mark task as important?
+            </Text>
+            <Switch
+              trackColor={{ false: '#767577', true: '#81b0ff' }}
+              thumbColor={'#FAFAFA'}
+              onValueChange={toggleSwitch}
+              value={isImportant}
+            />
+          </View>
+          <Button title="Submit" onPress={() => handleSubmit()} />
         </View>
+      ) : null}
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 20,
     marginRight: 20,
-    marginLeft: 20
+    marginLeft: 20,
   },
   backgroundImage: {
     flex: 1,
