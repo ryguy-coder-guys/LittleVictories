@@ -46,6 +46,7 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "passport-local-sequelize": "^0.9.0",
+    "pm2": "^5.1.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
