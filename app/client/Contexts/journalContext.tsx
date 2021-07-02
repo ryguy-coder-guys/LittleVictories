@@ -15,7 +15,7 @@ export const JournalContextProvider = ({ children }) => {
       setJournal(
         user.entries.find((entry) => entry.date === currentDate)
           ? user.entries.find((entry) => entry.date === currentDate)
-          : { content: "", date: currentDate }
+          : journal
       );
       setJournals(user.entries);
     }
