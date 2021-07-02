@@ -18,7 +18,7 @@ const SingleTask = ({ item }) => {
   const [finished, setFinished] = useState(item.is_complete);
   const [taskPublic, setTaskPublic] = useState(item.is_public);
 
-  const unshareTask = async () => {
+  const unshareTask = async (): Promise<void> => {
     try {
       const { data: updateSuccessful } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/private`
