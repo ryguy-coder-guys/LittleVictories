@@ -26,7 +26,7 @@ const Friends = () : ReactElement => {
       //console.log(fullData, 'llll')
     }, [])
 
-    //The user's name is filtered from the state variable fullData while the state variable users stores the final results after the search to render the //////correct user.
+    //The user's name is filtered from the state variable fullData while the state variable users stores the final results after the search to render the //////correct user.//
     const handleSearch = (text) => {
       //const formattedQuery = query.toUpperCase();
       const filteredData = filter(fullData, user => {
@@ -48,8 +48,7 @@ const Friends = () : ReactElement => {
          style={styles.textInput}
          onChangeText={(text) => handleSearch(text)}
          value={query}
-         underlineColorAndroid='transparent'
-         placeholder="Search Here" />
+         placeholder="Search" />
       <FlatList
         keyExtractor={() => getKey()}
         data={users}
@@ -116,14 +115,12 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   textInput: {
-
     textAlign: 'center',
     height: 42,
     borderWidth: 1,
     borderColor: '#009688',
     borderRadius: 8,
     backgroundColor: "#FFFF"
-
   },
   title: {
     fontSize: 18,
