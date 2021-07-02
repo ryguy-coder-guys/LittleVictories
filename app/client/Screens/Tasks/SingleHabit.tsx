@@ -1,11 +1,14 @@
 import axios from 'axios';
-import { View, StyleSheet, Text, Button } from 'react-native';
+import { View, StyleSheet, Text, Image } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { useState } from 'react';
+import { Button, CheckBox } from 'react-native-elements';
+import { format } from 'date-fns';
 
 const SingleHabit = ({ item }) => {
   const { user, setUser } = useUserContext();
   const [finished, setFinished] = useState(item.is_complete);
+  const [removed, setRemoved] = useState(false);
 
   const markHabitComplete = async () => {
     try {
@@ -57,30 +60,79 @@ const SingleHabit = ({ item }) => {
     }
   };
 
+  const splitDays = (daysStr: string) => {
+    let daysSpacedStr: string = '';
+    if (daysStr.includes('M')) {
+      daysSpacedStr += 'Mon, ';
+    }
+    if (daysStr.includes('Tu')) {
+      daysSpacedStr += 'Tues, ';
+    }
+    if (daysStr.includes('W')) {
+      daysSpacedStr += 'Wed, ';
+    }
+    if (daysStr.includes('Th')) {
+      daysSpacedStr += 'Thurs, ';
+    }
+    if (daysStr.includes('F')) {
+      daysSpacedStr += 'Fri, ';
+    }
+    if (daysStr.includes('Sa')) {
+      daysSpacedStr += 'Sat, ';
+    }
+    if (daysStr.includes('Su')) {
+      daysSpacedStr += 'Sun, ';
+    }
+    return daysSpacedStr.slice(0, -2);
+  };
+
   return (
     <View style={styles.habit_view}>
       <View style={{ flexDirection: 'row' }}>
-        <Text
-          style={styles.text}
+        <CheckBox
+          checked={finished}
           onPress={() => {
-            finished ? markHabitIncomplete() : markHabitComplete();
             setFinished(!finished);
+            finished ? markHabitIncomplete() : markHabitComplete();
           }}
-        >
-          {finished ? '✓ ' : '☐ '}
-        </Text>
+        />
         <View style={{ flexDirection: 'column' }}>
           <Text style={styles.text}>{item.description}</Text>
-          <Text style={styles.text}>{item.frequency}</Text>
+          <Text style={styles.text}>Frequency: {item.frequency}</Text>
           {item.frequency === 'weekly' ? (
-            <Text style={styles.text}>{item.days_of_week}</Text>
+            <Text style={styles.text}>On {splitDays(item.days_of_week)}</Text>
           ) : null}
           {item.frequency === 'monthly' ? (
-            <Text style={styles.text}>{item.calendar_date}</Text>
+            <Text style={styles.text}>
+              Due Date: {format(new Date(), 'MMMM')} {item.calendar_date}
+            </Text>
           ) : null}
         </View>
       </View>
-      <Button title="Remove" onPress={removeHabit} />
+      <View style={{ width: '100%', alignItems: 'flex-end' }}>
+        <CheckBox
+          containerStyle={{
+            width: 115,
+            backgroundColor: '#8ebac6',
+            margin: 0,
+            borderColor: '#8ebac6',
+          }}
+          textStyle={{ color: '#1D426D', fontWeight: 'normal' }}
+          right
+          title="Delete Habit"
+          iconRight
+          iconType="material"
+          uncheckedIcon="clear"
+          uncheckedColor="red"
+          checkedIcon="clear"
+          checkedColor="black"
+          checked={removed}
+          onPress={() => {
+            removeHabit();
+            setRemoved(true);
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -89,18 +141,21 @@ const styles = StyleSheet.create({
   habit_view: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     marginLeft: 40,
     marginRight: 40,
     marginTop: 10,
     backgroundColor: '#8ebac6',
     borderRadius: 10,
-    padding: 10,
+    paddingRight: 20,
+    paddingBottom: 20,
+    paddingTop: 20,
+    alignItems: 'flex-start',
     flexWrap: 'wrap',
   },
   text: {
     fontSize: 18,
     color: '#1D426D',
+    maxWidth: 250,
   },
 });
 

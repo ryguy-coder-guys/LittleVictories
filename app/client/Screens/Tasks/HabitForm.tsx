@@ -52,7 +52,8 @@ const TaskForm = () => {
     }
   };
 
-  const onChange = (selectedDate): void => {
+  // event needs to stay, breaks date picker without it
+  const onChange = (event, selectedDate): void => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
   };
@@ -86,7 +87,11 @@ const TaskForm = () => {
               }}
             >
               <Text style={styles.subheader}>Add Habit</Text>
-              <Button title="Cancel" onPress={() => setShowForm(false)} />
+              <Button
+                title="Cancel"
+                buttonStyle={{ width: 80, borderRadius: 10 }}
+                onPress={() => setShowForm(false)}
+              />
             </View>
             <TextInput
               style={styles.input}
@@ -105,6 +110,8 @@ const TaskForm = () => {
               height: 40,
               borderRadius: 10,
               borderColor: '#5c83b1',
+              marginLeft: 0,
+              marginRight: 0,
             }}
             selectedButtonStyle={{
               backgroundColor: '#5c83b1',
@@ -151,8 +158,16 @@ const TaskForm = () => {
               />
             </View>
           ) : null}
-          <View style={{ margin: 15 }} />
-          <Button title="Submit" onPress={() => handleSubmit()} />
+          <Button
+            buttonStyle={{
+              width: 80,
+              alignSelf: 'flex-end',
+              marginTop: 15,
+              borderRadius: 10,
+            }}
+            title="Submit"
+            onPress={() => handleSubmit()}
+          />
         </View>
       ) : null}
     </View>
@@ -192,7 +207,7 @@ const styles = StyleSheet.create({
     height: 40,
     padding: 10,
     width: '100%',
-    marginTop: 10,
+    marginTop: 15,
     fontSize: 16,
   },
   prompt: {
@@ -207,9 +222,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginTop: 5,
-  },
-  submitButton: {
-    marginTop: 20,
   },
   text: {
     color: '#1D426D',

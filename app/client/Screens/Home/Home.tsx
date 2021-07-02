@@ -7,6 +7,7 @@ import {
   ImageBackground,
   SafeAreaView,
   ScrollView,
+  Image,
 } from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
@@ -18,7 +19,7 @@ import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressBar from '../Root/ProgressBar';
 
 const Home = () => {
-  const { user, userStats, setUserStats } = useUserContext();
+  const { user, userStats } = useUserContext();
   const bgImage = require('../../../assets/blue-gradient.png');
   const [sleepHours, setSleepHours] = useState('');
   const [didEatWell, setDidEatWell] = useState('');
@@ -227,6 +228,56 @@ const Home = () => {
           <View style={styles.view}>
             <Text style={styles.heading}>Weekly Stats</Text>
           </View>
+          <View style={styles.view}>
+            <Text style={styles.heading}>Achievements</Text>
+            <View style={styles.badge_container}>
+              {user.level >= 1 ? (
+                <View style={styles.badges}>
+                  <Image
+                    source={require('../../../assets/badge.png')}
+                    style={{
+                      resizeMode: 'contain',
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                  <Text style={{ color: '#1D426D', fontSize: 16 }}>
+                    Level 1
+                  </Text>
+                </View>
+              ) : null}
+              {user.level >= 5 ? (
+                <View style={styles.badges}>
+                  <Image
+                    source={require('../../../assets/badge.png')}
+                    style={{
+                      resizeMode: 'contain',
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                  <Text style={{ color: '#1D426D', fontSize: 16 }}>
+                    Level 5
+                  </Text>
+                </View>
+              ) : null}
+              {user.level >= 10 ? (
+                <View style={styles.badges}>
+                  <Image
+                    source={require('../../../assets/badge.png')}
+                    style={{
+                      resizeMode: 'contain',
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                  <Text style={{ color: '#1D426D', fontSize: 16 }}>
+                    Level 10
+                  </Text>
+                </View>
+              ) : null}
+            </View>
+          </View>
         </ScrollView>
       </SafeAreaView>
     </ImageBackground>
@@ -235,6 +286,16 @@ const Home = () => {
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
+  },
+  badge_container: {
+    flexDirection: 'row',
+  },
+  badges: {
+    height: 80,
+    width: 80,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
     marginTop: 20,

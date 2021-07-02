@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   Button,
-  Switch,
+  Switch
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
@@ -36,7 +36,7 @@ const TaskForm = () => {
           description,
           due_date: date,
           minutes_to_complete: timeToComplete,
-          is_important: isImportant,
+          is_important: isImportant
         }
       );
       const sortedTasks = [...user.tasks, task].sort((t1, t2) =>
@@ -44,7 +44,7 @@ const TaskForm = () => {
       );
       setUser({
         ...user,
-        tasks: sortedTasks,
+        tasks: sortedTasks
       });
       setShowForm(false);
       setDescription('');
@@ -66,7 +66,11 @@ const TaskForm = () => {
         <FAB
           style={styles.fab}
           small
+<<<<<<< HEAD
           icon="plus"
+=======
+          icon='plus'
+>>>>>>> 72369d0976950d0af7c5bcf86c5f1f7c96c439c9
           onPress={() => setShowForm(true)}
         />
       </View>
@@ -76,25 +80,44 @@ const TaskForm = () => {
             <View
               style={{
                 flexDirection: 'row',
+<<<<<<< HEAD
                 justifyContent: 'space-between',
               }}
             >
               <Text style={styles.subheader}>Add Task</Text>
               <Button title="Cancel" onPress={() => setShowForm(false)} />
+=======
+                justifyContent: 'space-between'
+              }}
+            >
+              <Text style={styles.subheader}>Add Task</Text>
+              <Button title='Cancel' onPress={() => setShowForm(false)} />
+>>>>>>> 72369d0976950d0af7c5bcf86c5f1f7c96c439c9
             </View>
             <TextInput
               style={styles.input}
               onChangeText={setDescription}
               value={description}
+<<<<<<< HEAD
               placeholder="Enter Task Description"
               autoCapitalize="none"
+=======
+              placeholder='Enter Task Description'
+              autoCapitalize='none'
+>>>>>>> 72369d0976950d0af7c5bcf86c5f1f7c96c439c9
             />
             <View>
               <Text style={styles.prompt}>Set Due Date:</Text>
               <DateTimePicker
+<<<<<<< HEAD
                 testID="dateTimePicker"
                 value={date}
                 display="default"
+=======
+                testID='dateTimePicker'
+                value={date}
+                display='default'
+>>>>>>> 72369d0976950d0af7c5bcf86c5f1f7c96c439c9
                 onChange={onChange}
               />
             </View>
@@ -110,9 +133,15 @@ const TaskForm = () => {
               maximumValue={60}
               value={timeToComplete}
               onValueChange={setTimeToComplete}
+<<<<<<< HEAD
               minimumTrackTintColor="#1fb28a"
               maximumTrackTintColor="#fafafa"
               thumbTintColor="#b9e4c9"
+=======
+              minimumTrackTintColor='#1fb28a'
+              maximumTrackTintColor='#fafafa'
+              thumbTintColor='#b9e4c9'
+>>>>>>> 72369d0976950d0af7c5bcf86c5f1f7c96c439c9
             />
           </View>
           <View style={styles.important}>
@@ -121,7 +150,11 @@ const TaskForm = () => {
                 fontSize: 18,
                 color: '#1D426D',
                 paddingRight: 15,
+<<<<<<< HEAD
                 paddingTop: 2,
+=======
+                paddingTop: 2
+>>>>>>> 72369d0976950d0af7c5bcf86c5f1f7c96c439c9
               }}
             >
               Mark task as important?
@@ -133,7 +166,11 @@ const TaskForm = () => {
               value={isImportant}
             />
           </View>
+<<<<<<< HEAD
           <Button title="Submit" onPress={() => handleSubmit()} />
+=======
+          <Button title='Submit' onPress={() => handleSubmit()} />
+>>>>>>> 72369d0976950d0af7c5bcf86c5f1f7c96c439c9
         </View>
       ) : null}
     </View>
@@ -149,29 +186,29 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   backgroundImage: {
-    flex: 1,
+    flex: 1
   },
   container: {
     flex: 1,
-    padding: 20,
+    padding: 20
   },
   fab: {
     backgroundColor: '#1D426D',
     height: 40,
-    marginRight: 20,
+    marginRight: 20
   },
   header: {
     color: '#1D426D',
     fontSize: 26,
     fontWeight: 'bold',
-    marginLeft: 20,
+    marginLeft: 20
   },
   important: {
     flexDirection: 'row',
     color: '#1D426D',
     marginTop: 25,
     marginBottom: 10,
-    fontSize: 18,
+    fontSize: 18
   },
   input: {
     borderRadius: 10,
@@ -181,33 +218,33 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '100%',
     marginTop: 10,
-    fontSize: 16,
+    fontSize: 16
   },
   prompt: {
     alignSelf: 'flex-start',
     color: '#1D426D',
     marginTop: 25,
     marginBottom: 10,
-    fontSize: 18,
+    fontSize: 18
   },
   subheader: {
     color: '#1D426D',
     fontSize: 22,
     fontWeight: 'bold',
-    marginTop: 5,
+    marginTop: 5
   },
   submitButton: {
-    marginTop: 20,
+    marginTop: 20
   },
   text: {
     color: '#1D426D',
     marginBottom: 10,
-    fontSize: 16,
+    fontSize: 16
   },
   textArea: {
     height: 200,
     width: 100,
-    justifyContent: 'flex-start',
-  },
+    justifyContent: 'flex-start'
+  }
 });
 export default TaskForm;
