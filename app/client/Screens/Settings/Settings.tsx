@@ -8,6 +8,7 @@ import { useQuoteContext } from '../../Contexts/quoteContext';
 import { useJournalContext } from '../../Contexts/journalContext';
 import moment from 'moment';
 import { Button } from 'react-native-elements';
+import { UserDefaultValues } from '../../Contexts/userContext';
 
 const SettingsScreen = ({ navigation }) => {
   const bgImage = require('../../../assets/blue-gradient.png');
@@ -17,7 +18,7 @@ const SettingsScreen = ({ navigation }) => {
 
   const logout = (): void => {
     getQuote();
-    setUser(null);
+    setUser(UserDefaultValues.user);
     setJournal({ content: '', date: moment().format('MM-D-Y') });
     setJournals([]);
   };

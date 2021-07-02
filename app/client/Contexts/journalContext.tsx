@@ -1,16 +1,19 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { useUserContext } from "./userContext";
-import moment from "moment";
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useUserContext } from './userContext';
+import moment from 'moment';
 
 const JournalContext = createContext(null);
 
 export const JournalContextProvider = ({ children }) => {
-  const [journal, setJournal] = useState(null);
+  const [journal, setJournal] = useState({
+    content: '',
+    date: moment().format('MM-D-Y')
+  });
   const [journals, setJournals] = useState([]);
   const { user } = useUserContext();
 
   useEffect(() => {
-    const currentDate = moment().format("MM-D-Y");
+    const currentDate = moment().format('MM-D-Y');
     if (user) {
       setJournal(
         user.entries.find((entry) => entry.date === currentDate)

@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState } from 'react';
 
 export interface Entry {
-  id: number;
-  user_id: string;
-  createdAt: Date;
+  id?: number;
+  user_id?: string;
+  createdAt?: Date;
   content: string;
   date: string;
-  updatedAt: Date;
+  updatedAt?: Date;
 }
 
 export interface Task {
@@ -57,7 +57,7 @@ interface UserContextState {
   setUserStats: (userStats: UserStat) => void;
 }
 
-const UserDefaultValues: UserContextState = {
+export const UserDefaultValues: UserContextState = {
   user: {
     id: '',
     username: '',

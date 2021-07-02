@@ -63,6 +63,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     username: user.getDataValue('username'),
     points: user.getDataValue('points'),
     level: user.getDataValue('level'),
+    readable_font: user.getDataValue('readable_font')
   };
   const mappedTasks = tasks
     .filter(

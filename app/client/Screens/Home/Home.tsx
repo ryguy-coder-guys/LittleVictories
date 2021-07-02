@@ -9,7 +9,6 @@ import {
   ScrollView,
   Image
 } from 'react-native';
-import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import Loading from '../Root/Loading';
@@ -17,6 +16,7 @@ import { v4 as getKey } from 'uuid';
 import { format } from 'date-fns';
 import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressBar from '../Root/ProgressBar';
+import { Button } from 'react-native-elements';
 
 const Home = () => {
   const { user, userStats } = useUserContext();
@@ -75,11 +75,17 @@ const Home = () => {
       <SafeAreaView style={{ flex: 1, alignItems: 'center', marginTop: 20 }}>
         <ScrollView>
           <View style={styles.view}>
-            <Text style={styles.heading}>Upcoming Tasks</Text>
+            <Text
+              style={user.readable_font ? styles.headingLarger : styles.heading}
+            >
+              Upcoming Tasks
+            </Text>
             {user.tasks?.slice(0, 5).map((task) => {
               return (
                 <View style={styles.task} key={getKey()}>
-                  <Text style={styles.desc}>
+                  <Text
+                    style={user.readable_font ? styles.descLarger : styles.desc}
+                  >
                     {task.description} - {task.due_date}
                   </Text>
                 </View>
@@ -87,65 +93,117 @@ const Home = () => {
             })}
           </View>
           <View style={styles.view}>
-            <Text style={styles.heading}>Daily Reflection</Text>
+            <Text
+              style={user.readable_font ? styles.headingLarger : styles.heading}
+            >
+              Daily Reflection
+            </Text>
             {hasSubmitted || userStats ? (
               <View>
-                <Text style={styles.text}>
+                <Text
+                  style={user.readable_font ? styles.textLarger : styles.text}
+                >
                   Fill out your Daily Reflection data tomorrow for the most
                   accurate Weekly Stats.
                 </Text>
-                <Text style={styles.subheader}>Today's Data:</Text>
-                <Text style={styles.text}>
+                <Text
+                  style={
+                    user.readable_font
+                      ? styles.subheaderLarger
+                      : styles.subheader
+                  }
+                >
+                  Today's Data:
+                </Text>
+                <Text
+                  style={user.readable_font ? styles.textLarger : styles.text}
+                >
                   Hours of sleep: {userStats?.sleep_hours || sleepHours}
                 </Text>
-                <Text style={styles.text}>
+                <Text
+                  style={user.readable_font ? styles.textLarger : styles.text}
+                >
                   Did you eat well?{' '}
                   {userStats?.eaten_well ? 'yes' : 'no' || didEatWell}
                 </Text>
-                <Text style={styles.text}>
+                <Text
+                  style={user.readable_font ? styles.textLarger : styles.text}
+                >
                   Exercised?{' '}
                   {userStats?.exercised ? 'yes' : 'no' || didExercise}
                 </Text>
-                <Text style={styles.text}>
+                <Text
+                  style={user.readable_font ? styles.textLarger : styles.text}
+                >
                   Notes: {userStats?.notes || notes}
                 </Text>
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={styles.text}>Mood: </Text>
+                  <Text
+                    style={user.readable_font ? styles.textLarger : styles.text}
+                  >
+                    Mood:{' '}
+                  </Text>
                   {userStats?.mood ? getIcon(userStats?.mood) : getIcon(mood)}
                 </View>
               </View>
             ) : (
               <View style={{ alignItems: 'center' }}>
-                <Text style={styles.prompt}>
+                <Text
+                  style={
+                    user.readable_font ? styles.promptLarger : styles.prompt
+                  }
+                >
                   How many hours did you sleep last night?
                 </Text>
                 <TextInput
-                  style={styles.input}
+                  style={user.readable_font ? styles.inputLarger : styles.input}
                   onChangeText={setSleepHours}
                   value={sleepHours}
                   placeholder='Enter 0 - 24'
                   autoCapitalize='none'
                 />
-                <Text style={styles.prompt}>Did you skip any meals?</Text>
+                <Text
+                  style={
+                    user.readable_font ? styles.promptLarger : styles.prompt
+                  }
+                >
+                  Did you skip any meals?
+                </Text>
                 <TextInput
-                  style={styles.input}
+                  style={user.readable_font ? styles.inputLarger : styles.input}
                   onChangeText={setDidEatWell}
                   value={didEatWell}
                   placeholder='yes or no'
                   autoCapitalize='none'
                 />
-                <Text style={styles.prompt}>Did you get any exercise?</Text>
+                <Text
+                  style={
+                    user.readable_font ? styles.promptLarger : styles.prompt
+                  }
+                >
+                  Did you get any exercise?
+                </Text>
                 <TextInput
-                  style={styles.input}
+                  style={user.readable_font ? styles.inputLarger : styles.input}
                   onChangeText={setDidExercise}
                   value={didExercise}
                   placeholder='yes or no'
                   autoCapitalize='none'
                 />
-                <Text style={styles.prompt}>Daily Notes</Text>
+                <Text
+                  style={
+                    user.readable_font ? styles.promptLarger : styles.prompt
+                  }
+                >
+                  Daily Notes
+                </Text>
                 <View style={{ width: '100%' }}>
                   <TextInput
-                    style={styles.multi_input}
+                    style={
+                      user.readable_font
+                        ? styles.multi_inputLarger
+                        : styles.multi_input
+                    }
                     multiline
                     numberOfLines={4}
                     value={notes}
@@ -155,7 +213,13 @@ const Home = () => {
                     placeholder='Enter notes here.'
                   />
                 </View>
-                <Text style={styles.prompt}>What's your mood?</Text>
+                <Text
+                  style={
+                    user.readable_font ? styles.promptLarger : styles.prompt
+                  }
+                >
+                  What's your mood?
+                </Text>
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
                   <FaceIcon
                     name='emoticon-angry-outline'
@@ -208,28 +272,41 @@ const Home = () => {
                     }
                   />
                 </View>
-                <AwesomeButton
-                  backgroundColor={'#1D426D'}
-                  textColor={'#FAFAFA'}
-                  height={35}
-                  width={100}
-                  raiseLevel={0}
-                  borderRadius={8}
-                  style={styles.button}
-                  onPress={() => {
-                    handleSubmit();
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end'
                   }}
                 >
-                  Submit
-                </AwesomeButton>
+                  <Button
+                    title='Submit'
+                    buttonStyle={styles.button}
+                    titleStyle={
+                      user.readable_font
+                        ? styles.buttonTextLarger
+                        : styles.buttonText
+                    }
+                    onPress={() => {
+                      handleSubmit();
+                    }}
+                  />
+                </View>
               </View>
             )}
           </View>
           <View style={styles.view}>
-            <Text style={styles.heading}>Weekly Stats</Text>
+            <Text
+              style={user.readable_font ? styles.headingLarger : styles.heading}
+            >
+              Weekly Stats
+            </Text>
           </View>
           <View style={styles.view}>
-            <Text style={styles.heading}>Achievements</Text>
+            <Text
+              style={user.readable_font ? styles.headingLarger : styles.heading}
+            >
+              Achievements
+            </Text>
             <View style={styles.badge_container}>
               {user.level >= 1 ? (
                 <View style={styles.badges}>
@@ -241,7 +318,13 @@ const Home = () => {
                       height: '100%'
                     }}
                   />
-                  <Text style={{ color: '#1D426D', fontSize: 16 }}>
+                  <Text
+                    style={
+                      user.readable_font
+                        ? styles.badgeTextLarger
+                        : styles.badgeText
+                    }
+                  >
                     Level 1
                   </Text>
                 </View>
@@ -256,7 +339,13 @@ const Home = () => {
                       height: '100%'
                     }}
                   />
-                  <Text style={{ color: '#1D426D', fontSize: 16 }}>
+                  <Text
+                    style={
+                      user.readable_font
+                        ? styles.badgeTextLarger
+                        : styles.badgeText
+                    }
+                  >
                     Level 5
                   </Text>
                 </View>
@@ -271,7 +360,13 @@ const Home = () => {
                       height: '100%'
                     }}
                   />
-                  <Text style={{ color: '#1D426D', fontSize: 16 }}>
+                  <Text
+                    style={
+                      user.readable_font
+                        ? styles.badgeTextLarger
+                        : styles.badgeText
+                    }
+                  >
                     Level 10
                   </Text>
                 </View>
@@ -297,17 +392,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  badgeText: {
+    color: '#1D426D',
+    fontSize: 16
+  },
+  badgeTextLarger: {
+    color: '#1D426D',
+    fontSize: 18
+  },
   button: {
     marginTop: 20,
-    alignSelf: 'flex-end'
+    backgroundColor: '#1D426D'
+  },
+  buttonText: {
+    fontSize: 18
+  },
+  buttonTextLarger: {
+    fontSize: 20
   },
   desc: {
     color: '#1D426D',
     fontSize: 18
   },
+  descLarger: {
+    color: '#1D426D',
+    fontSize: 20
+  },
   heading: {
     color: '#1D426D',
     fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10
+  },
+  headingLarger: {
+    color: '#1D426D',
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10
   },
@@ -327,6 +446,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 18
   },
+  inputLarger: {
+    borderRadius: 10,
+    backgroundColor: '#9ec5cf',
+    color: '#1D426D',
+    padding: 10,
+    width: '100%',
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 20
+  },
   multi_input: {
     borderRadius: 10,
     backgroundColor: '#9ec5cf',
@@ -338,6 +467,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 18
   },
+  multi_inputLarger: {
+    borderRadius: 10,
+    backgroundColor: '#9ec5cf',
+    color: '#1D426D',
+    padding: 10,
+    paddingTop: 10,
+    maxWidth: '100%',
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 20
+  },
   task: {
     paddingTop: 10
   },
@@ -347,15 +487,32 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 18
   },
+  promptLarger: {
+    alignSelf: 'flex-start',
+    color: '#1D426D',
+    marginTop: 10,
+    fontSize: 20
+  },
   subheader: {
     color: '#1D426D',
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 15
   },
+  subheaderLarger: {
+    color: '#1D426D',
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginTop: 15
+  },
   text: {
     color: '#1D426D',
     fontSize: 18,
+    marginTop: 10
+  },
+  textLarger: {
+    color: '#1D426D',
+    fontSize: 20,
     marginTop: 10
   },
   view: {
