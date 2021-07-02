@@ -7,6 +7,7 @@ import statRouter from './routers/stats';
 import habitRouter from './routers/habits';
 import likeRouter from './routers/likes';
 import commentRouter from './routers/comments';
+import fontRouter from './routers/readableFont';
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.use('/api/stats', statRouter);
 app.use('/api/habits', habitRouter);
 app.use('/api/likes', likeRouter);
 app.use('/api/comments', commentRouter);
+app.use('/api/font', fontRouter);
 
 export default app;

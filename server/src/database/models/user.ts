@@ -9,6 +9,7 @@ interface UserInstance extends Model {
   updatedAt: Date;
   points: number;
   level: number;
+  readable_font: boolean;
 }
 
 export const User = dbConnection.define<UserInstance>(
@@ -45,6 +46,11 @@ export const User = dbConnection.define<UserInstance>(
       allowNull: false,
       defaultValue: 1,
     },
+    readable_font: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    }
   },
   {
     timestamps: true,
