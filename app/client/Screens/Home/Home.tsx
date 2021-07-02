@@ -6,7 +6,8 @@ import {
   Text,
   ImageBackground,
   SafeAreaView,
-  ScrollView
+  ScrollView,
+  Image
 } from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
@@ -18,7 +19,7 @@ import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressBar from '../Root/ProgressBar';
 
 const Home = () => {
-  const { user, userStats, setUserStats } = useUserContext();
+  const { user, userStats } = useUserContext();
   const bgImage = require('../../../assets/blue-gradient.png');
   const [sleepHours, setSleepHours] = useState('');
   const [didEatWell, setDidEatWell] = useState('');
@@ -37,7 +38,7 @@ const Home = () => {
         exercised: didExercise === 'yes',
         notes: notes,
         mood: mood,
-        date: format(new Date(), 'MM-dd-yyyy'),
+        date: format(new Date(), 'MM-dd-yyyy')
       });
     } catch (err) {
       console.warn('had issues posting stats (client)');
@@ -60,9 +61,9 @@ const Home = () => {
       good: 'emoticon-happy-outline',
       ok: 'emoticon-neutral-outline',
       bad: 'emoticon-sad-outline',
-      terrible: 'emoticon-angry-outline',
+      terrible: 'emoticon-angry-outline'
     };
-    return <FaceIcon name={icons[mood]} size={35} color="#FAFAFA" />;
+    return <FaceIcon name={icons[mood]} size={35} color='#FAFAFA' />;
   };
 
   if (!user) {
@@ -102,7 +103,8 @@ const Home = () => {
                   {userStats?.eaten_well ? 'yes' : 'no' || didEatWell}
                 </Text>
                 <Text style={styles.text}>
-                  Exercised? {userStats?.exercised ? 'yes' : 'no' || didExercise}
+                  Exercised?{' '}
+                  {userStats?.exercised ? 'yes' : 'no' || didExercise}
                 </Text>
                 <Text style={styles.text}>
                   Notes: {userStats?.notes || notes}
@@ -121,24 +123,24 @@ const Home = () => {
                   style={styles.input}
                   onChangeText={setSleepHours}
                   value={sleepHours}
-                  placeholder="Enter 0 - 24"
-                  autoCapitalize="none"
+                  placeholder='Enter 0 - 24'
+                  autoCapitalize='none'
                 />
                 <Text style={styles.prompt}>Did you skip any meals?</Text>
                 <TextInput
                   style={styles.input}
                   onChangeText={setDidEatWell}
                   value={didEatWell}
-                  placeholder="yes or no"
-                  autoCapitalize="none"
+                  placeholder='yes or no'
+                  autoCapitalize='none'
                 />
                 <Text style={styles.prompt}>Did you get any exercise?</Text>
                 <TextInput
                   style={styles.input}
                   onChangeText={setDidExercise}
                   value={didExercise}
-                  placeholder="yes or no"
-                  autoCapitalize="none"
+                  placeholder='yes or no'
+                  autoCapitalize='none'
                 />
                 <Text style={styles.prompt}>Daily Notes</Text>
                 <View style={{ width: '100%' }}>
@@ -150,13 +152,13 @@ const Home = () => {
                     maxLength={250}
                     onChangeText={setNotes}
                     editable={true}
-                    placeholder="Enter notes here."
+                    placeholder='Enter notes here.'
                   />
                 </View>
                 <Text style={styles.prompt}>What's your mood?</Text>
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
                   <FaceIcon
-                    name="emoticon-angry-outline"
+                    name='emoticon-angry-outline'
                     onPress={() => handleFace('terrible')}
                     size={35}
                     style={
@@ -166,7 +168,7 @@ const Home = () => {
                     }
                   />
                   <FaceIcon
-                    name="emoticon-sad-outline"
+                    name='emoticon-sad-outline'
                     onPress={() => handleFace('bad')}
                     size={35}
                     style={
@@ -176,7 +178,7 @@ const Home = () => {
                     }
                   />
                   <FaceIcon
-                    name="emoticon-neutral-outline"
+                    name='emoticon-neutral-outline'
                     onPress={() => handleFace('ok')}
                     size={35}
                     style={
@@ -186,7 +188,7 @@ const Home = () => {
                     }
                   />
                   <FaceIcon
-                    name="emoticon-happy-outline"
+                    name='emoticon-happy-outline'
                     onPress={() => handleFace('good')}
                     size={35}
                     style={
@@ -196,7 +198,7 @@ const Home = () => {
                     }
                   />
                   <FaceIcon
-                    name="emoticon-excited-outline"
+                    name='emoticon-excited-outline'
                     onPress={() => handleFace('great')}
                     size={35}
                     style={
@@ -224,7 +226,57 @@ const Home = () => {
             )}
           </View>
           <View style={styles.view}>
-          <Text style={styles.heading}>Weekly Stats</Text>
+            <Text style={styles.heading}>Weekly Stats</Text>
+          </View>
+          <View style={styles.view}>
+            <Text style={styles.heading}>Achievements</Text>
+            <View style={styles.badge_container}>
+              {user.level >= 1 ? (
+                <View style={styles.badges}>
+                  <Image
+                    source={require('../../../assets/badge.png')}
+                    style={{
+                      resizeMode: 'contain',
+                      width: '100%',
+                      height: '100%'
+                    }}
+                  />
+                  <Text style={{ color: '#1D426D', fontSize: 16 }}>
+                    Level 1
+                  </Text>
+                </View>
+              ) : null}
+              {user.level >= 5 ? (
+                <View style={styles.badges}>
+                  <Image
+                    source={require('../../../assets/badge.png')}
+                    style={{
+                      resizeMode: 'contain',
+                      width: '100%',
+                      height: '100%'
+                    }}
+                  />
+                  <Text style={{ color: '#1D426D', fontSize: 16 }}>
+                    Level 5
+                  </Text>
+                </View>
+              ) : null}
+              {user.level >= 10 ? (
+                <View style={styles.badges}>
+                  <Image
+                    source={require('../../../assets/badge.png')}
+                    style={{
+                      resizeMode: 'contain',
+                      width: '100%',
+                      height: '100%'
+                    }}
+                  />
+                  <Text style={{ color: '#1D426D', fontSize: 16 }}>
+                    Level 10
+                  </Text>
+                </View>
+              ) : null}
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -233,27 +285,37 @@ const Home = () => {
 };
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
+    flex: 1
+  },
+  badge_container: {
+    flexDirection: 'row'
+  },
+  badges: {
+    height: 80,
+    width: 80,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   button: {
     marginTop: 20,
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-end'
   },
   desc: {
     color: '#1D426D',
-    fontSize: 18,
+    fontSize: 18
   },
   heading: {
     color: '#1D426D',
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 10
   },
   activeIcon: {
-    color: '#FAFAFA',
+    color: '#FAFAFA'
   },
   inactiveIcon: {
-    color: '#9b9a9a',
+    color: '#9b9a9a'
   },
   input: {
     borderRadius: 10,
@@ -263,7 +325,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10,
     marginBottom: 10,
-    fontSize: 18,
+    fontSize: 18
   },
   multi_input: {
     borderRadius: 10,
@@ -274,27 +336,27 @@ const styles = StyleSheet.create({
     maxWidth: '100%',
     marginTop: 10,
     marginBottom: 10,
-    fontSize: 18,
+    fontSize: 18
   },
   task: {
-    paddingTop: 10,
+    paddingTop: 10
   },
   prompt: {
     alignSelf: 'flex-start',
     color: '#1D426D',
     marginTop: 10,
-    fontSize: 18,
+    fontSize: 18
   },
   subheader: {
     color: '#1D426D',
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 15,
+    marginTop: 15
   },
   text: {
     color: '#1D426D',
     fontSize: 18,
-    marginTop: 10,
+    marginTop: 10
   },
   view: {
     backgroundColor: '#8ebac6',
@@ -303,6 +365,6 @@ const styles = StyleSheet.create({
     marginRight: 40,
     marginBottom: 20,
     padding: 20
-  },
+  }
 });
 export default Home;
