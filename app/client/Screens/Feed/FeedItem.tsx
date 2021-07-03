@@ -1,8 +1,8 @@
-import React from "react";
-import axios from "axios";
-import { useUserContext } from "../../Contexts/userContext";
-import { useFeedContext } from "../../Contexts/feedContext";
-import { useSocketContext } from "../../Contexts/socketContext";
+import React from 'react';
+import axios from 'axios';
+import { useUserContext } from '../../Contexts/userContext';
+import { useFeedContext } from '../../Contexts/feedContext';
+import { useSocketContext } from '../../Contexts/socketContext';
 import {
   Text,
   Button,
@@ -10,9 +10,9 @@ import {
   FlatList,
   TextInput,
   StyleSheet,
-} from "react-native";
-import Comment from "./Comment";
-import { v4 as getKey } from "uuid";
+} from 'react-native';
+import Comment from './Comment';
+import { v4 as getKey } from 'uuid';
 
 const FeedItem = ({
   username,
@@ -26,33 +26,33 @@ const FeedItem = ({
   const { socket } = useSocketContext();
 
   const [showCommentInput, setShowCommentInput] = React.useState(false);
-  const [commentText, setCommentText] = React.useState("");
+  const [commentText, setCommentText] = React.useState('');
 
   const addLike = async (taskId: number) => {
     const { data: newLike } = await axios.post(
-      "http://localhost:3000/api/likes/",
+      'http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/likes/',
       {
         userId: user.id,
         taskId,
       }
     );
     if (newLike) {
-      socket.emit("addLike", newLike);
+      socket.emit('addLike', newLike);
     }
   };
 
   const removeLike = async (taskId: number) => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://localhost:3000/api/likes/${user.id}/${taskId}`
+      `http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/likes/${user.id}/${taskId}`
     );
     if (removeSuccessful) {
-      socket.emit("removeLike", taskId);
+      socket.emit('removeLike', taskId);
     }
   };
 
   const addComment = async () => {
     const { data: newComment } = await axios.post(
-      "http://localhost:3000/api/comments",
+      'http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/comments',
       {
         user_id: user.id,
         task_id: id,
@@ -60,16 +60,16 @@ const FeedItem = ({
       }
     );
     if (newComment) {
-      socket.emit("addComment", newComment);
+      socket.emit('addComment', newComment);
     }
   };
 
   const removeComment = async (commentId) => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://localhost:3000/api/comments/${commentId}`
+      `http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/comments/${commentId}`
     );
     if (removeSuccessful) {
-      socket.emit("removeComment", id);
+      socket.emit('removeComment', id);
     }
   };
 
@@ -86,13 +86,13 @@ const FeedItem = ({
 
   return (
     <View style={styles.feedItemContainer}>
-      <Text style={{ ...styles.text, fontWeight: "bold" }}>{username}</Text>
+      <Text style={{ ...styles.text, fontWeight: 'bold' }}>{username}</Text>
       <Text style={styles.text}>{description}</Text>
       <Text style={styles.text}>{completed_at}</Text>
       <Text style={styles.text}>{likes?.length} likes</Text>
       <View style={styles.btnContainer}>
         <Button
-          title={`${canLike() ? "Add Like" : "Remove Like"}`}
+          title={`${canLike() ? 'Add Like' : 'Remove Like'}`}
           onPress={() => (canLike() ? addLike(id) : removeLike(id))}
         />
         <Button
@@ -132,25 +132,25 @@ const FeedItem = ({
 
 const styles = StyleSheet.create({
   feedItemContainer: {
-    backgroundColor: "#8ebac6",
+    backgroundColor: '#8ebac6',
     padding: 20,
     margin: 15,
     width: 335,
     borderRadius: 10,
   },
   btnContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   text: {
     fontSize: 18,
-    color: "#1D426D",
+    color: '#1D426D',
   },
   textInput: {
-    width: "100%",
+    width: '100%',
     padding: 10,
-    backgroundColor: "#9ec5cf",
+    backgroundColor: '#9ec5cf',
     fontSize: 18,
-    color: "#1D426D",
+    color: '#1D426D',
   },
 });
 

@@ -21,27 +21,29 @@ const SingleTask = ({ item }) => {
   const unshareTask = async (): Promise<void> => {
     try {
       const { data: updateSuccessful } = await axios.patch(
-        `http://localhost:3000/api/tasks/${item.id}/private`
+        `http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/tasks/${item.id}/private`
       );
       if (!updateSuccessful) {
         return;
       }
       setTaskPublic(false);
+      // setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
       socket.emit('removeFromFeed', item);
     } catch (error) {
       console.warn(error);
     }
   };
 
-  const shareTask = async () => {
+  const shareTask = async (): Promise<void> => {
     try {
       const { data: updateSuccessful } = await axios.patch(
-        `http://localhost:3000/api/tasks/${item.id}/public`
+        `http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/tasks/${item.id}/public`
       );
       if (!updateSuccessful) {
         return;
       }
       setTaskPublic(true);
+      // setFeed([...feed, item]);
       socket.emit('addToFeed', item);
     } catch (error) {
       console.warn(error);
@@ -53,7 +55,7 @@ const SingleTask = ({ item }) => {
       const {
         data: { task, points, level },
       } = await axios.patch(
-        `http://localhost:3000/api/tasks/${item.id}/complete`
+        `http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/tasks/${item.id}/complete`
       );
       const mappedTasks = user.tasks.map((task) => {
         if (task.id === item.id) {
@@ -72,7 +74,7 @@ const SingleTask = ({ item }) => {
       const {
         data: { points, level },
       } = await axios.patch(
-        `http://localhost:3000/api/tasks/${item.id}/incomplete`
+        `http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/tasks/${item.id}/incomplete`
       );
       unshareTask();
       const mappedTasks = user.tasks.map((task) => {
@@ -90,7 +92,7 @@ const SingleTask = ({ item }) => {
   const removeTask = async () => {
     try {
       const { data: deleteSuccessful } = await axios.delete(
-        `http://localhost:3000/api/tasks/${item.id}`
+        `http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/tasks/${item.id}`
       );
       const filteredTasks = user.tasks.filter((task) => {
         return task.id !== item.id;

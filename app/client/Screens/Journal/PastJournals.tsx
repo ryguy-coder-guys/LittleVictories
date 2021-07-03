@@ -1,8 +1,8 @@
-import React from "react";
-import { View, StyleSheet, Text, FlatList } from "react-native";
-import { useJournalContext } from "../../Contexts/journalContext";
-import moment from "moment";
-import { v4 as getKey } from "uuid";
+import React from 'react';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
+import { useJournalContext } from '../../Contexts/journalContext';
+import moment from 'moment';
+import { v4 as getKey } from 'uuid';
 
 const Journal1 = () => {
   const { journals } = useJournalContext();
@@ -21,7 +21,7 @@ const Journal1 = () => {
   //         text: 'Clear Entry',
   //         onPress: async () => {
   //           await axios.post(
-  //             'http://localhost:3000/api/journalEntries/create',
+  //             'http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/journalEntries/create',
   //             {
   //               user_id: user.id,
   //               content: '',
@@ -43,7 +43,7 @@ const Journal1 = () => {
         <FlatList
           keyExtractor={() => getKey()}
           data={journals.filter((journal) => {
-            return journal.date < moment().format("MM-D-Y");
+            return journal.date < moment().format('MM-D-Y');
           })}
           renderItem={({ item: journal }) => {
             return (
@@ -68,24 +68,24 @@ const Journal1 = () => {
 
 const styles = StyleSheet.create({
   date: {
-    color: "#1D426D",
+    color: '#1D426D',
     fontSize: 18,
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
     marginBottom: 20,
   },
   header: {
-    color: "#1D426D",
+    color: '#1D426D',
     fontSize: 26,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginLeft: 20,
     marginTop: 20,
   },
   text: {
-    color: "#1D426D",
+    color: '#1D426D',
     fontSize: 18,
   },
   textAreaContainer: {
-    backgroundColor: "#8ebac6",
+    backgroundColor: '#8ebac6',
     borderRadius: 10,
     padding: 20,
     marginTop: 20,
