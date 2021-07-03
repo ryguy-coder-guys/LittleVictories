@@ -13,7 +13,7 @@ export const JournalContextProvider = ({ children }) => {
     const currentDate = moment().format("MM-D-Y");
     if (user) {
       setJournal(
-        user.entries.find((entry) => entry.date === currentDate)
+        user.entries?.find((entry) => entry.date === currentDate)
           ? user.entries.find((entry) => entry.date === currentDate)
           : journal
       );

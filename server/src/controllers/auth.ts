@@ -8,6 +8,7 @@ import { JournalEntry } from '../database/models/journalEntry';
 import { isPast, isToday, format } from 'date-fns';
 import { UserStat } from '../database/models/stat';
 import { Habit } from '../database/models/habit';
+import { Friend } from '../database/models/friend'
 
 const getHash = async (password: string): Promise<string> =>
   await bcrypt.hash(password, 12);
@@ -35,7 +36,16 @@ export const registerUser: RequestHandler = async (req, res) => {
     username,
     hash: await getHash(password),
   });
-  res.send(newUser);
+  const formattedUser = {
+    id: newUser.id,
+    username: newUser.username,
+    tasks: [],
+    entries: [],
+    habits: [],
+    points: 0,
+   // readable_font: false
+  };
+  res.send(formattedUser);
 };
 
 // create formatted user interface
@@ -105,10 +115,26 @@ export const users: RequestHandler = async (req, res) => {
     const { user_id } = req.params;
     console.log(req.params);
     try {
-      const user = await User.findAll();
-      res.status(200).send(user);
+      const users = await User.findAll();
+      const mappedUsers = await Promise.all(users.map(async (user) => {
+        //console.log(user, 'line 120');
+        const isFriend = await Friend.findOne({
+          where: {
+            //user_id: user_id,
+            friend_id : user.id,
+          }
+        })
+        return {
+          id: user.getDataValue('id'),
+          userName: user.getDataValue('username'),
+          //user,
+          isFriend: !!isFriend
+        }
+      }))
+      res.status(200).send(mappedUsers);
+
     } catch (err) {
-      console.log('error fetching journal Entry', err.message);
+      console.log('error fetching ', err.message);
       res.sendStatus(500);
     }
 };

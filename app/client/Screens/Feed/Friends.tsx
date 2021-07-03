@@ -4,34 +4,113 @@ import { View, Button, Text, FlatList, StyleSheet, TextInput, Alert } from 'reac
 import axios from 'axios';
 import { v4 as getKey } from "uuid";
 import filter from 'lodash.filter';
+import id from 'date-fns/esm/locale/id/index.js';
+
+
+const SingleFriend = ({ item, user, users, setUsers }) => {
+  const [isFriend, setIsFriend] = useState(item.isFriend)
+
+  console.log(item.userName, 'line 13');
+   const addFriend = async (id: string) : Promise<void> => {
+     try {
+      const addSuccessful = await axios.post('http://localhost:3000/api/friends/', {
+         userId: user.id,
+         friendId: id,
+       })
+
+       if(addSuccessful){
+         // setIsFriend(item)
+         const mappedUsers = users.map((currentUser) => {
+            if(currentUser.id === item.id){
+                return {...currentUser, isFriend: true}
+            }
+            return currentUser
+         })
+         setUsers(mappedUsers)
+         setIsFriend(true);
+       }
+     } catch (error) {
+       console.warn(error)
+     }
+   }
+
+   const removeFriend = async (id: string) : Promise<void> => {
+     try {
+      await axios.delete(`http://localhost:3000/api/friends/${user.id}/${id}`)
+      const mappedUsers = users.map((currentUser) => {
+        if(currentUser.id === item.id){
+            return {...currentUser, isFriend: false}
+        }
+        return currentUser
+     })
+     setUsers(mappedUsers)
+     setIsFriend(false);
+     } catch (error) {
+       console.warn(error)
+     }
+   }
+
+
+   return (
+     <View style={styles.textAreaContainer}>
+     <View style={styles.metaInfo}>
+       <Text style={styles.title}>{item.userName}</Text>
+       {!isFriend ?
+         <Button
+           onPress={() => {addFriend(item.id), alert('Friend Added!')}}
+           title="Add Friend"
+           color="#841584"
+           accessibilityLabel="Learn more about this purple button"
+         />
+         : null
+       }
+       {
+         isFriend ?
+       <Button
+         onPress={() => {removeFriend(item.id), alert('Friend Removed')}}
+         title="Remove Friend"
+         color="#841584"
+         accessibilityLabel="Learn more about this purple button"
+       />
+       : null
+       }
+     </View>
+   </View>
+   )
+   }
+
+
 
 const Friends = () : ReactElement => {
   const [users, setUsers] = useState([]);
   const [query, setQuery] = useState('');
+  // const [isFriend, setIsFriend] = useState({})
   const [fullData, setFullData] = useState([]);
   const { user } = useUserContext();
+  // const [isFriend, setIsFriend] = useState({})
 
-
-  const getAllUsers =  async () : Promise<void> => {
-    await axios.get('http://localhost:3000/api/auth/users')
+  const getAllUsers =  () => {
+    axios.get('http://localhost:3000/api/auth/users')
     .then(({data}) => {
-       console.log(data, 'users');
+       //console.log(data, 'users');
+       setFullData(data)
         setUsers(data)
-        setFullData(data)
+       // console.log(fullData, 'line23')
     } )
-    .catch(err => console.warn(err))
+    .catch(err => console.warn(err, 'l'))
   }
     useEffect(() => {
-      getAllUsers()
-      //console.log(fullData, 'llll')
-    }, [])
+      if(user){
+        getAllUsers()
+      }
+    }, [user])
 
-    //The user's name is filtered from the state variable fullData while the state variable users stores the final results after the search to render the //////correct user.//
+    //The user's name is filtered from the state variable fullData while the state variable users stores the final results after the search to render the //////correct user.
     const handleSearch = (text) => {
-      //const formattedQuery = query.toUpperCase();
       const filteredData = filter(fullData, user => {
         //return contains(user, formattedQuery);
-        const itemData = user.username.toUpperCase();
+        console.log(users, 'line 116')
+        const itemData = user.userName.toUpperCase();
         const textData = text.toUpperCase();
         //return user.username.toUpperCase().includes(formattedQuery)
         return itemData.indexOf(textData) > -1
@@ -40,38 +119,28 @@ const Friends = () : ReactElement => {
       setQuery(text);
     };
 
+    const List = ({query}) => {
+      return (
+        <FlatList
+          keyExtractor={() => getKey()}
+          data={users.filter(user => {
+            return user.userName.includes(query)
+          })}
+          renderItem={({item}) => <SingleFriend item={item} user={user} users={users} setUsers={setUsers}/>}
+        />
+      )
+    }
 
     return(
       <View >
       <Text style={styles.header}>Add Friends</Text>
       <TextInput
+         autoCorrect={false}
          style={styles.textInput}
-         onChangeText={(text) => handleSearch(text)}
+         onChangeText={setQuery}
          value={query}
-         placeholder="Search" />
-      <FlatList
-        keyExtractor={() => getKey()}
-        data={users}
-        renderItem={({ item }) => (
-          <View style={styles.textAreaContainer}>
-            <View style={styles.metaInfo}>
-              <Text style={styles.title}>{item.username}</Text>
-              <Button
-                onPress={() => {alert("Friend Added!")}}
-                title="Add Friend"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
-              />
-              <Button
-                onPress={() => {alert("Friend Removed")}}
-                title="Remove Friend"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
-              />
-            </View>
-          </View>
-        )}
-      />
+         placeholder="Search"/>
+      <List query={query} />
     </View>
     )
 }

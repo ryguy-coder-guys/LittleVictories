@@ -98,7 +98,7 @@ const Journal = () : React.ReactElement => {
           numberOfLines={10}
           multiline={true}
           onChangeText={(text) => setJournal({ ...journal, content: text })}
-          value={journal.content}
+          value={journal?.content || ''}
           editable={true}
         />
       </View>
