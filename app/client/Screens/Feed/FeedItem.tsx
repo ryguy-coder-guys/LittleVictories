@@ -30,7 +30,7 @@ const FeedItem = ({
 
   const addLike = async (taskId: number) => {
     const { data: newLike } = await axios.post(
-      'http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/likes/',
+      'http://localhost:3000/api/likes/',
       {
         userId: user.id,
         taskId,
@@ -43,7 +43,7 @@ const FeedItem = ({
 
   const removeLike = async (taskId: number) => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/likes/${user.id}/${taskId}`
+      `http://localhost:3000/api/likes/${user.id}/${taskId}`
     );
     if (removeSuccessful) {
       socket.emit('removeLike', taskId);
@@ -52,7 +52,7 @@ const FeedItem = ({
 
   const addComment = async () => {
     const { data: newComment } = await axios.post(
-      'http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/comments',
+      'http://localhost:3000/api/comments',
       {
         user_id: user.id,
         task_id: id,
@@ -66,7 +66,7 @@ const FeedItem = ({
 
   const removeComment = async (commentId) => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/comments/${commentId}`
+      `http://localhost:3000/api/comments/${commentId}`
     );
     if (removeSuccessful) {
       socket.emit('removeComment', id);

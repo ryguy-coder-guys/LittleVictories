@@ -29,7 +29,7 @@ const fetchTask = async (id: number) => {
 };
 
 io.on('connection', (socket) => {
-  console.log(`connection to socket with id of ${socket.id} successful`);
+  console.info(`connection to socket with id of ${socket.id} successful`);
 
   socket.on('addToFeed', (task) => {
     fetchTask(task.id)

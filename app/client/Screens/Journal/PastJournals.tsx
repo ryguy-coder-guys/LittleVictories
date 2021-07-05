@@ -21,7 +21,7 @@ const Journal1 = () => {
   //         text: 'Clear Entry',
   //         onPress: async () => {
   //           await axios.post(
-  //             'http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/journalEntries/create',
+  //             'http://localhost:3000/api/journalEntries/create',
   //             {
   //               user_id: user.id,
   //               content: '',

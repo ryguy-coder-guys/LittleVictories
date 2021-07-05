@@ -2,25 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useUserContext } from './userContext';
 import axios from 'axios';
 import { useSocketContext } from '../Contexts/socketContext';
-
-interface Like {
-  id: number;
-  user_id: string;
-  task_id: number;
-  updatedAt: Date;
-  createdAt: Date;
-}
-
-interface Comment {}
-
-interface FeedItem {
-  id: number;
-  username: string;
-  description: string;
-  completed_at: Date;
-  likes: Like[];
-  comments: any[];
-}
+import { FeedItem } from '../Interfaces/feed';
 
 interface FeedContextState {
   feed: FeedItem[];
@@ -41,23 +23,13 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
 
   const { socket } = useSocketContext();
 
-  socket.on('connect', () => {
-    console.log('socket connected');
-  });
+  socket.on('addToFeed', (feedItem) => setFeed([...feed, feedItem]));
 
-  socket.on('disconnect', () => {
-    console.log('socket disconnected');
-  });
+  socket.on('removeFromFeed', (id) =>
+    setFeed(feed.filter((feedItem) => feedItem.id !== id))
+  );
 
-  socket.once('addToFeed', (feedItem) => {
-    setFeed([...feed, feedItem]);
-  });
-
-  socket.once('removeFromFeed', (id) => {
-    setFeed(feed.filter((feedItem) => feedItem.id !== id));
-  });
-
-  socket.once('addLike', (task) => {
+  socket.on('addLike', (task) => {
     const mappedFeed = feed.map((feedItem) => {
       if (feedItem.id === task.id) {
         return task;
@@ -67,7 +39,7 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
     setFeed(mappedFeed);
   });
 
-  socket.once('removeLike', (task) => {
+  socket.on('removeLike', (task) => {
     const mappedFeed = feed.map((feedItem) => {
       if (feedItem.id === task.id) {
         return task;
@@ -77,7 +49,7 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
     setFeed(mappedFeed);
   });
 
-  socket.once('addComment', (task) => {
+  socket.on('addComment', (task) => {
     const mappedFeed = feed.map((feedItem) => {
       if (feedItem.id === task.id) {
         return task;
@@ -87,7 +59,7 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
     setFeed(mappedFeed);
   });
 
-  socket.once('removeComment', (task) => {
+  socket.on('removeComment', (task) => {
     const mappedFeed = feed.map((feedItem) => {
       if (feedItem.id === task.id) {
         return task;
@@ -101,7 +73,7 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
 
   const fetchFeed = async () => {
     const { data } = await axios.get(
-      `http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/tasks/${user.id}`
+      `http://localhost:3000/api/tasks/${user.id}`
     );
     return data;
   };
@@ -109,9 +81,7 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
   useEffect(() => {
     if (user) {
       fetchFeed()
-        .then((feed) => {
-          setFeed(feed);
-        })
+        .then((feed) => setFeed(feed))
         .catch((err) => console.warn(err));
     }
   }, [user]);

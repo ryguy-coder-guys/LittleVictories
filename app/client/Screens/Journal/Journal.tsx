@@ -12,14 +12,11 @@ const Journal = () => {
   const { journal, setJournal } = useJournalContext();
   const [date] = useState(moment().format('MMM Do Y'));
   const saveJournal = async () => {
-    await axios.post(
-      'http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/journalEntries/create',
-      {
-        user_id: user.id,
-        content: journal.content,
-        date: moment().format('MM-D-Y'),
-      }
-    );
+    await axios.post('http://localhost:3000/api/journalEntries/create', {
+      user_id: user.id,
+      content: journal.content,
+      date: moment().format('MM-D-Y'),
+    });
 
     alert('Journal successfully saved.');
   };
@@ -36,7 +33,7 @@ const Journal = () => {
           text: 'Clear Entry',
           onPress: async () => {
             await axios.post(
-              'http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/journalEntries/create',
+              'http://localhost:3000/api/journalEntries/create',
               {
                 user_id: user.id,
                 content: '',
@@ -100,7 +97,7 @@ const Journal = () => {
           numberOfLines={10}
           multiline={true}
           onChangeText={(text) => setJournal({ ...journal, content: text })}
-          value={journal.content}
+          value={journal?.content || ''}
           editable={true}
         />
       </View>
