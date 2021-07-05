@@ -12,7 +12,6 @@ const Comment = ({ id, content, user_id, username, removeComment }) => {
     return false;
   };
 
-  console.log(content, user_id, username, id);
   return (
     <View>
       <Text>

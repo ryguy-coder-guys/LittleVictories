@@ -89,7 +89,6 @@ const Login = ({ navigation }) => {
       if (user) {
         // if they match, create a new user
         // then navigate to home
-        console.log('HELLO!', user);
         setUser(user);
         setUsername('');
         setPasswordAttempt('');
