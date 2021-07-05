@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
-import { useFeedContext } from '../../Contexts/feedContext';
 import { useSocketContext } from '../../Contexts/socketContext';
 import {
   Text,
@@ -9,7 +8,7 @@ import {
   View,
   FlatList,
   TextInput,
-  StyleSheet,
+  StyleSheet
 } from 'react-native';
 import Comment from './Comment';
 import { v4 as getKey } from 'uuid';
@@ -20,7 +19,7 @@ const FeedItem = ({
   completed_at,
   id,
   likes,
-  comments,
+  comments
 }) => {
   const { user } = useUserContext();
   const { socket } = useSocketContext();
@@ -33,7 +32,7 @@ const FeedItem = ({
       'http://localhost:3000/api/likes/',
       {
         userId: user.id,
-        taskId,
+        taskId
       }
     );
     if (newLike) {
@@ -56,7 +55,7 @@ const FeedItem = ({
       {
         user_id: user.id,
         task_id: id,
-        content: commentText,
+        content: commentText
       }
     );
     if (newComment) {
@@ -86,17 +85,27 @@ const FeedItem = ({
 
   return (
     <View style={styles.feedItemContainer}>
-      <Text style={{ ...styles.text, fontWeight: 'bold' }}>{username}</Text>
-      <Text style={styles.text}>{description}</Text>
-      <Text style={styles.text}>{completed_at}</Text>
-      <Text style={styles.text}>{likes?.length} likes</Text>
+      <Text
+        style={user.readable_font ? styles.boldTextLarger : styles.boldText}
+      >
+        {username}
+      </Text>
+      <Text style={user.readable_font ? styles.textLarger : styles.text}>
+        {description}
+      </Text>
+      <Text style={user.readable_font ? styles.textLarger : styles.text}>
+        {completed_at}
+      </Text>
+      <Text style={user.readable_font ? styles.textLarger : styles.text}>
+        {likes?.length} likes
+      </Text>
       <View style={styles.btnContainer}>
         <Button
           title={`${canLike() ? 'Add Like' : 'Remove Like'}`}
           onPress={() => (canLike() ? addLike(id) : removeLike(id))}
         />
         <Button
-          title="Comment"
+          title='Comment'
           onPress={() => setShowCommentInput(!showCommentInput)}
         />
       </View>
@@ -112,12 +121,14 @@ const FeedItem = ({
       {showCommentInput && (
         <View>
           <TextInput
-            style={styles.textInput}
+            style={
+              user.readable_font ? styles.textInputLarger : styles.textInput
+            }
             onChangeText={setCommentText}
             value={commentText}
           />
           <Button
-            title="Submit"
+            title='Submit'
             onPress={() => {
               if (commentText.length) {
                 addComment();
@@ -136,22 +147,43 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 15,
     width: 335,
-    borderRadius: 10,
+    borderRadius: 10
   },
   btnContainer: {
-    flexDirection: 'row',
+    flexDirection: 'row'
+  },
+  boldText: {
+    fontSize: 18,
+    color: '#1D426D',
+    fontWeight: 'bold'
+  },
+  boldTextLarger: {
+    fontSize: 20,
+    color: '#1D426D',
+    fontWeight: 'bold'
   },
   text: {
     fontSize: 18,
-    color: '#1D426D',
+    color: '#1D426D'
+  },
+  textLarger: {
+    fontSize: 20,
+    color: '#1D426D'
   },
   textInput: {
     width: '100%',
     padding: 10,
     backgroundColor: '#9ec5cf',
     fontSize: 18,
-    color: '#1D426D',
+    color: '#1D426D'
   },
+  textInputLarger: {
+    width: '100%',
+    padding: 10,
+    backgroundColor: '#9ec5cf',
+    fontSize: 20,
+    color: '#1D426D'
+  }
 });
 
 export default FeedItem;

@@ -1,11 +1,14 @@
-import React, { ReactElement } from "react";
-import { View, StyleSheet, Text, FlatList } from "react-native";
-import { useJournalContext } from "../../Contexts/journalContext";
-import moment from "moment";
-import { v4 as getKey } from "uuid";
+import React, { ReactElement } from 'react';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
+import { useJournalContext } from '../../Contexts/journalContext';
+import moment from 'moment';
+import { v4 as getKey } from 'uuid';
+import { useUserContext } from '../../Contexts/userContext';
+import { textStyles } from '../../Stylesheets/Stylesheet';
 
-const Journal1 = () : ReactElement => {
+const Journal = (): ReactElement => {
   const { journals } = useJournalContext();
+  const { user } = useUserContext();
 
   // const clearJournal = () => {
   //   Alert.alert(
@@ -37,30 +40,44 @@ const Journal1 = () : ReactElement => {
   //   );
   // };
 
-  const list = () : ReactElement => {
+  const list = (): ReactElement => {
     return (
       <View>
-        <FlatList
-          keyExtractor={() => getKey()}
-          data={journals.filter((journal) => {
-            return journal.date < moment().format('MM-D-Y');
-          })}
-          renderItem={({ item: journal }) => {
-            return (
-              <View style={styles.textAreaContainer}>
-                <Text style={styles.date}>{journal.date}</Text>
-                <Text style={styles.text}>{journal.content}</Text>
-              </View>
-            );
-          }}
-        />
+        {journals ? (
+          <FlatList
+            keyExtractor={() => getKey()}
+            data={journals.filter((journal) => {
+              return journal.date < moment().format('MM-D-Y');
+            })}
+            renderItem={({ item: journal }) => {
+              return (
+                <View style={styles.textAreaContainer}>
+                  <Text
+                    style={user.readable_font ? styles.dateLarger : styles.date}
+                  >
+                    {journal.date}
+                  </Text>
+                  <Text
+                    style={
+                      user.readable_font ? textStyles.text_big : textStyles.text
+                    }
+                  >
+                    {journal.content}
+                  </Text>
+                </View>
+              );
+            }}
+          />
+        ) : null}
       </View>
     );
   };
 
   return (
     <View>
-      <Text style={styles.header}>Previous Journals</Text>
+      <Text style={user.readable_font ? styles.headerLarger : styles.header}>
+        Previous Journals
+      </Text>
       {list()}
     </View>
   );
@@ -71,27 +88,34 @@ const styles = StyleSheet.create({
     color: '#1D426D',
     fontSize: 18,
     alignSelf: 'flex-end',
-    marginBottom: 20,
+    marginBottom: 20
+  },
+  dateLarger: {
+    color: '#1D426D',
+    fontSize: 18,
+    alignSelf: 'flex-end',
+    marginBottom: 20
   },
   header: {
     color: '#1D426D',
     fontSize: 26,
     fontWeight: 'bold',
-    marginLeft: 20,
-    marginTop: 20,
+    marginLeft: 40,
+    marginTop: 20
   },
-  text: {
+  headerLarger: {
     color: '#1D426D',
-    fontSize: 18,
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginLeft: 40,
+    marginTop: 20
   },
   textAreaContainer: {
     backgroundColor: '#8ebac6',
     borderRadius: 10,
     padding: 20,
-    marginTop: 20,
-    marginRight: 20,
-    marginLeft: 20,
-  },
+    marginTop: 20
+  }
 });
 
-export default Journal1;
+export default Journal;

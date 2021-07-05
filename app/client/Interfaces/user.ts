@@ -35,6 +35,7 @@ export interface User {
   points: number;
   level: number;
   entries: Entry[];
+  readable_font: boolean;
 }
 
 export type MoodType = 'great' | 'good' | 'ok' | 'bad' | 'terrible';

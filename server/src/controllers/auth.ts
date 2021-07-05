@@ -5,7 +5,7 @@ import { v4 as getId } from 'uuid';
 import bcrypt from 'bcrypt';
 import { Task } from '../database/models/task';
 import { JournalEntry } from '../database/models/journalEntry';
-import { isPast, isToday, format } from 'date-fns';
+import { isPast, format } from 'date-fns';
 import { UserStat } from '../database/models/stat';
 import { Habit } from '../database/models/habit';
 import { Friend } from '../database/models/friend'
@@ -43,8 +43,9 @@ export const registerUser: RequestHandler = async (req, res) => {
     entries: [],
     habits: [],
     points: 0,
-    // readable_font: false
+    readable_font: false
   };
+
   res.send(formattedUser);
 };
 
@@ -73,6 +74,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     username: user.getDataValue('username'),
     points: user.getDataValue('points'),
     level: user.getDataValue('level'),
+    readable_font: user.getDataValue('readable_font')
   };
   const mappedTasks = tasks
     .filter(
@@ -101,8 +103,8 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     ...mappedUser,
     tasks: mappedTasks,
     userStats: userStats,
-    entries,
-    habits,
+    entries: entries ? entries : [],
+    habits: habits ? habits : [],
   };
 
   res.send(formattedUser);

@@ -5,7 +5,10 @@ import moment from 'moment';
 const JournalContext = createContext(null);
 
 export const JournalContextProvider = ({ children }) => {
-  const [journal, setJournal] = useState(null);
+  const [journal, setJournal] = useState({
+    content: '',
+    date: moment().format('MM-D-Y')
+  });
   const [journals, setJournals] = useState([]);
   const { user } = useUserContext();
 

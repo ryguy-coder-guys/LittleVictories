@@ -5,7 +5,7 @@ import {
   TextInput,
   StyleSheet,
   ImageBackground,
-  Image,
+  Image
 } from 'react-native';
 import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
@@ -49,7 +49,7 @@ const Login = ({ navigation }) => {
         'http://localhost:3000/api/auth/login',
         {
           username,
-          password: passwordAttempt,
+          password: passwordAttempt
         }
       );
       if (userObj) {
@@ -82,7 +82,7 @@ const Login = ({ navigation }) => {
         'http://localhost:3000/api/auth/register',
         {
           username,
-          password: passwordAttempt,
+          password: passwordAttempt
         }
       );
       // compare the two passwords
@@ -157,7 +157,7 @@ const Login = ({ navigation }) => {
               style={styles.input}
               onChangeText={setUsername}
               value={username}
-              autoCapitalize="none"
+              autoCapitalize='none'
             />
             <Text style={styles.text}>Password:</Text>
             <TextInput
@@ -165,7 +165,7 @@ const Login = ({ navigation }) => {
               onChangeText={setPasswordAttempt}
               value={passwordAttempt}
               secureTextEntry={true}
-              autoCapitalize="none"
+              autoCapitalize='none'
             />
             <AwesomeButton
               backgroundColor={'#1D426D'}
@@ -232,7 +232,7 @@ const Login = ({ navigation }) => {
               style={styles.input}
               onChangeText={setUsername}
               value={username}
-              autoCapitalize="none"
+              autoCapitalize='none'
             />
             {mismatchPasswords ? (
               <View>
@@ -247,7 +247,7 @@ const Login = ({ navigation }) => {
               onChangeText={setPasswordAttempt}
               value={passwordAttempt}
               secureTextEntry={true}
-              autoCapitalize="none"
+              autoCapitalize='none'
             />
             <Text style={styles.text}>Confirm Password:</Text>
             <TextInput
@@ -255,7 +255,7 @@ const Login = ({ navigation }) => {
               onChangeText={setPasswordAttempt2}
               value={passwordAttempt2}
               secureTextEntry={true}
-              autoCapitalize="none"
+              autoCapitalize='none'
             />
             <AwesomeButton
               backgroundColor={'#1D426D'}
@@ -280,21 +280,21 @@ const Login = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
+    flex: 1
   },
   button: {
     marginLeft: 5,
     marginRight: 5,
-    marginBottom: 20,
+    marginBottom: 20
   },
   error: {
     color: 'red',
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   error2: {
     color: 'red',
     alignSelf: 'center',
-    marginBottom: 15,
+    marginBottom: 15
   },
   input: {
     height: 40,
@@ -303,13 +303,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#FAFAFA',
     opacity: 0.3,
-    marginBottom: 20,
+    marginBottom: 20
   },
   text: {
     color: '#FAFAFA',
     marginBottom: 5,
-    fontSize: 16,
-  },
+    fontSize: 16
+  }
 });
 
 export default Login;

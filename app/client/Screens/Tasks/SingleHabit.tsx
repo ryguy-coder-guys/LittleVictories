@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { useState } from 'react';
-import { Button, CheckBox } from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
 import { format } from 'date-fns';
 
 const SingleHabit = ({ item }) => {
@@ -13,7 +13,7 @@ const SingleHabit = ({ item }) => {
   const markHabitComplete = async () => {
     try {
       const {
-        data: { points, level },
+        data: { points, level }
       } = await axios.patch(
         `http://localhost:3000/api/habits/${item.id}/complete`
       );
@@ -32,7 +32,7 @@ const SingleHabit = ({ item }) => {
   const markHabitIncomplete = async () => {
     try {
       const {
-        data: { points, level },
+        data: { points, level }
       } = await axios.patch(
         `http://localhost:3000/api/habits/${item.id}/incomplete`
       );
@@ -97,13 +97,19 @@ const SingleHabit = ({ item }) => {
           }}
         />
         <View style={{ flexDirection: 'column' }}>
-          <Text style={styles.text}>{item.description}</Text>
-          <Text style={styles.text}>Frequency: {item.frequency}</Text>
+          <Text style={user.readable_font ? styles.textLarger : styles.text}>
+            {item.description}
+          </Text>
+          <Text style={user.readable_font ? styles.textLarger : styles.text}>
+            Frequency: {item.frequency}
+          </Text>
           {item.frequency === 'weekly' ? (
-            <Text style={styles.text}>On {splitDays(item.days_of_week)}</Text>
+            <Text style={user.readable_font ? styles.textLarger : styles.text}>
+              On {splitDays(item.days_of_week)}
+            </Text>
           ) : null}
           {item.frequency === 'monthly' ? (
-            <Text style={styles.text}>
+            <Text style={user.readable_font ? styles.textLarger : styles.text}>
               Due Date: {format(new Date(), 'MMMM')} {item.calendar_date}
             </Text>
           ) : null}
@@ -115,17 +121,17 @@ const SingleHabit = ({ item }) => {
             width: 115,
             backgroundColor: '#8ebac6',
             margin: 0,
-            borderColor: '#8ebac6',
+            borderColor: '#8ebac6'
           }}
           textStyle={{ color: '#1D426D', fontWeight: 'normal' }}
           right
-          title="Delete Habit"
+          title='Delete Habit'
           iconRight
-          iconType="material"
-          uncheckedIcon="clear"
-          uncheckedColor="red"
-          checkedIcon="clear"
-          checkedColor="black"
+          iconType='material'
+          uncheckedIcon='clear'
+          uncheckedColor='red'
+          checkedIcon='clear'
+          checkedColor='black'
           checked={removed}
           onPress={() => {
             removeHabit();
@@ -150,13 +156,18 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingTop: 20,
     alignItems: 'flex-start',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
   },
   text: {
     fontSize: 18,
     color: '#1D426D',
-    maxWidth: 250,
+    maxWidth: 250
   },
+  textLarger: {
+    fontSize: 20,
+    color: '#1D426D',
+    maxWidth: 250
+  }
 });
 
 export default SingleHabit;

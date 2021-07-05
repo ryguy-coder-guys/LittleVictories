@@ -7,9 +7,8 @@ import {
   ImageBackground,
   SafeAreaView,
   ScrollView,
-  Image,
+  Image
 } from 'react-native';
-import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import Loading from '../Root/Loading';
@@ -17,6 +16,55 @@ import { v4 as getKey } from 'uuid';
 import { format } from 'date-fns';
 import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressBar from '../Root/ProgressBar';
+import { Button } from 'react-native-elements';
+import { containerStyles, textStyles } from '../../Stylesheets/Stylesheet';
+import { BarChart, Grid, YAxis, XAxis } from 'react-native-svg-charts';
+
+class SleepHoursChart extends React.PureComponent {
+  render() {
+    const data = [5, 6, 8, 6.5, 8, 7, 9];
+    const days = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'];
+
+    const axesSvg = { fontSize: 16, fill: '#1D426D' };
+    const verticalContentInset = { top: 10, bottom: 10 };
+    const xAxisHeight = 30;
+
+    return (
+      <View>
+        <Text style={textStyles.text}>Hours of Sleep</Text>
+        <View style={{ height: 200, flexDirection: 'row', marginTop: 15 }}>
+          <YAxis
+            data={data}
+            style={{ marginBottom: xAxisHeight }}
+            contentInset={verticalContentInset}
+            svg={axesSvg}
+          />
+          <View style={{ flex: 1, marginLeft: 10 }}>
+            <BarChart
+              style={{ flex: 1 }}
+              data={data}
+              contentInset={verticalContentInset}
+              svg={{ stroke: '#3e6188', fill: '#1D426D' }}
+            >
+              <Grid />
+            </BarChart>
+            <XAxis
+              style={{
+                marginHorizontal: 10,
+                height: xAxisHeight,
+                marginTop: 10
+              }}
+              data={data}
+              formatLabel={(value, index) => days[index]}
+              contentInset={{ left: 10, right: 10 }}
+              svg={axesSvg}
+            />
+          </View>
+        </View>
+      </View>
+    );
+  }
+}
 
 const Home = () => {
   const { user, userStats } = useUserContext();
@@ -38,7 +86,7 @@ const Home = () => {
         exercised: didExercise === 'yes',
         notes: notes,
         mood: mood,
-        date: format(new Date(), 'MM-dd-yyyy'),
+        date: format(new Date(), 'MM-dd-yyyy')
       });
     } catch (err) {
       console.warn('had issues posting stats (client)');
@@ -61,25 +109,36 @@ const Home = () => {
       good: 'emoticon-happy-outline',
       ok: 'emoticon-neutral-outline',
       bad: 'emoticon-sad-outline',
-      terrible: 'emoticon-angry-outline',
+      terrible: 'emoticon-angry-outline'
     };
-    return <FaceIcon name={icons[mood]} size={35} color="#FAFAFA" />;
+    return <FaceIcon name={icons[mood]} size={35} color='#FAFAFA' />;
   };
 
   if (!user) {
     return <Loading />;
   }
   return (
-    <ImageBackground style={styles.backgroundImage} source={bgImage}>
+    <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
       <ProgressBar />
       <SafeAreaView style={{ flex: 1, alignItems: 'center', marginTop: 20 }}>
         <ScrollView>
           <View style={styles.view}>
-            <Text style={styles.heading}>Upcoming Tasks</Text>
+            <Text
+              style={[
+                user.readable_font ? textStyles.h2_big : textStyles.h2,
+                { marginBottom: 10 }
+              ]}
+            >
+              Upcoming Tasks
+            </Text>
             {user.tasks?.slice(0, 5).map((task) => {
               return (
                 <View style={styles.task} key={getKey()}>
-                  <Text style={styles.desc}>
+                  <Text
+                    style={
+                      user.readable_font ? textStyles.text_big : textStyles.text
+                    }
+                  >
                     {task.description} - {task.due_date}
                   </Text>
                 </View>
@@ -87,78 +146,163 @@ const Home = () => {
             })}
           </View>
           <View style={styles.view}>
-            <Text style={styles.heading}>Daily Reflection</Text>
+            <Text
+              style={[
+                user.readable_font ? textStyles.h2_big : textStyles.h2,
+                { marginBottom: 10 }
+              ]}
+            >
+              Daily Reflection
+            </Text>
             {hasSubmitted || userStats ? (
               <View>
-                <Text style={styles.text}>
+                <Text
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
+                >
                   Fill out your Daily Reflection data tomorrow for the most
                   accurate Weekly Stats.
                 </Text>
-                <Text style={styles.subheader}>Today's Data:</Text>
-                <Text style={styles.text}>
+                <Text
+                  style={[
+                    user.readable_font ? textStyles.h3_big : textStyles.h3,
+                    { marginTop: 15 }
+                  ]}
+                >
+                  Today's Data:
+                </Text>
+                <Text
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
+                >
                   Hours of sleep: {userStats?.sleep_hours || sleepHours}
                 </Text>
-                <Text style={styles.text}>
+                <Text
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
+                >
                   Did you eat well?{' '}
                   {userStats?.eaten_well ? 'yes' : 'no' || didEatWell}
                 </Text>
-                <Text style={styles.text}>
+                <Text
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
+                >
                   Exercised?{' '}
                   {userStats?.exercised ? 'yes' : 'no' || didExercise}
                 </Text>
-                <Text style={styles.text}>
+                <Text
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
+                >
                   Notes: {userStats?.notes || notes}
                 </Text>
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={styles.text}>Mood: </Text>
+                  <Text
+                    style={[
+                      user.readable_font
+                        ? textStyles.text_big
+                        : textStyles.text,
+                      { marginTop: 10 }
+                    ]}
+                  >
+                    Mood:{' '}
+                  </Text>
                   {userStats?.mood ? getIcon(userStats?.mood) : getIcon(mood)}
                 </View>
               </View>
             ) : (
-              <View style={{ alignItems: 'center' }}>
-                <Text style={styles.prompt}>
+              <View style={{ alignItems: 'flex-start' }}>
+                <Text
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
+                >
                   How many hours did you sleep last night?
                 </Text>
                 <TextInput
-                  style={styles.input}
+                  style={user.readable_font ? styles.inputLarger : styles.input}
                   onChangeText={setSleepHours}
                   value={sleepHours}
-                  placeholder="Enter 0 - 24"
-                  autoCapitalize="none"
+                  placeholder='Enter 0 - 24'
+                  autoCapitalize='none'
                 />
-                <Text style={styles.prompt}>Did you skip any meals?</Text>
+                <Text
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
+                >
+                  Did you skip any meals?
+                </Text>
                 <TextInput
-                  style={styles.input}
+                  style={user.readable_font ? styles.inputLarger : styles.input}
                   onChangeText={setDidEatWell}
                   value={didEatWell}
-                  placeholder="yes or no"
-                  autoCapitalize="none"
+                  placeholder='yes or no'
+                  autoCapitalize='none'
                 />
-                <Text style={styles.prompt}>Did you get any exercise?</Text>
+                <Text
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
+                >
+                  Did you get any exercise?
+                </Text>
                 <TextInput
-                  style={styles.input}
+                  style={user.readable_font ? styles.inputLarger : styles.input}
                   onChangeText={setDidExercise}
                   value={didExercise}
-                  placeholder="yes or no"
-                  autoCapitalize="none"
+                  placeholder='yes or no'
+                  autoCapitalize='none'
                 />
-                <Text style={styles.prompt}>Daily Notes</Text>
+                <Text
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
+                >
+                  Daily Notes
+                </Text>
                 <View style={{ width: '100%' }}>
                   <TextInput
-                    style={styles.multi_input}
+                    style={
+                      user.readable_font
+                        ? styles.multi_inputLarger
+                        : styles.multi_input
+                    }
                     multiline
                     numberOfLines={4}
                     value={notes}
                     maxLength={250}
                     onChangeText={setNotes}
                     editable={true}
-                    placeholder="Enter notes here."
+                    placeholder='Enter notes here.'
                   />
                 </View>
-                <Text style={styles.prompt}>What's your mood?</Text>
+                <Text
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
+                >
+                  What's your mood?
+                </Text>
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
                   <FaceIcon
-                    name="emoticon-angry-outline"
+                    name='emoticon-angry-outline'
                     onPress={() => handleFace('terrible')}
                     size={35}
                     style={
@@ -168,7 +312,7 @@ const Home = () => {
                     }
                   />
                   <FaceIcon
-                    name="emoticon-sad-outline"
+                    name='emoticon-sad-outline'
                     onPress={() => handleFace('bad')}
                     size={35}
                     style={
@@ -178,7 +322,7 @@ const Home = () => {
                     }
                   />
                   <FaceIcon
-                    name="emoticon-neutral-outline"
+                    name='emoticon-neutral-outline'
                     onPress={() => handleFace('ok')}
                     size={35}
                     style={
@@ -188,7 +332,7 @@ const Home = () => {
                     }
                   />
                   <FaceIcon
-                    name="emoticon-happy-outline"
+                    name='emoticon-happy-outline'
                     onPress={() => handleFace('good')}
                     size={35}
                     style={
@@ -198,7 +342,7 @@ const Home = () => {
                     }
                   />
                   <FaceIcon
-                    name="emoticon-excited-outline"
+                    name='emoticon-excited-outline'
                     onPress={() => handleFace('great')}
                     size={35}
                     style={
@@ -208,28 +352,48 @@ const Home = () => {
                     }
                   />
                 </View>
-                <AwesomeButton
-                  backgroundColor={'#1D426D'}
-                  textColor={'#FAFAFA'}
-                  height={35}
-                  width={100}
-                  raiseLevel={0}
-                  borderRadius={8}
-                  style={styles.button}
-                  onPress={() => {
-                    handleSubmit();
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end'
                   }}
                 >
-                  Submit
-                </AwesomeButton>
+                  <Button
+                    title='Submit'
+                    buttonStyle={styles.button}
+                    titleStyle={
+                      user.readable_font
+                        ? textStyles.buttonText_big
+                        : textStyles.buttonText
+                    }
+                    onPress={() => {
+                      handleSubmit();
+                    }}
+                  />
+                </View>
               </View>
             )}
           </View>
           <View style={styles.view}>
-            <Text style={styles.heading}>Weekly Stats</Text>
+            <Text
+              style={[
+                user.readable_font ? textStyles.h2_big : textStyles.h2,
+                { marginBottom: 10 }
+              ]}
+            >
+              Weekly Stats
+            </Text>
+            <SleepHoursChart />
           </View>
           <View style={styles.view}>
-            <Text style={styles.heading}>Achievements</Text>
+            <Text
+              style={[
+                user.readable_font ? textStyles.h2_big : textStyles.h2,
+                { marginBottom: 10 }
+              ]}
+            >
+              Achievements
+            </Text>
             <View style={styles.badge_container}>
               {user.level >= 1 ? (
                 <View style={styles.badges}>
@@ -238,10 +402,14 @@ const Home = () => {
                     style={{
                       resizeMode: 'contain',
                       width: '100%',
-                      height: '100%',
+                      height: '100%'
                     }}
                   />
-                  <Text style={{ color: '#1D426D', fontSize: 16 }}>
+                  <Text
+                    style={
+                      user.readable_font ? textStyles.text_big : textStyles.text
+                    }
+                  >
                     Level 1
                   </Text>
                 </View>
@@ -253,10 +421,14 @@ const Home = () => {
                     style={{
                       resizeMode: 'contain',
                       width: '100%',
-                      height: '100%',
+                      height: '100%'
                     }}
                   />
-                  <Text style={{ color: '#1D426D', fontSize: 16 }}>
+                  <Text
+                    style={
+                      user.readable_font ? textStyles.text_big : textStyles.text
+                    }
+                  >
                     Level 5
                   </Text>
                 </View>
@@ -268,10 +440,14 @@ const Home = () => {
                     style={{
                       resizeMode: 'contain',
                       width: '100%',
-                      height: '100%',
+                      height: '100%'
                     }}
                   />
-                  <Text style={{ color: '#1D426D', fontSize: 16 }}>
+                  <Text
+                    style={
+                      user.readable_font ? textStyles.text_big : textStyles.text
+                    }
+                  >
                     Level 10
                   </Text>
                 </View>
@@ -284,38 +460,25 @@ const Home = () => {
   );
 };
 const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-  },
   badge_container: {
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   badges: {
     height: 80,
     width: 80,
     padding: 10,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   button: {
     marginTop: 20,
-    alignSelf: 'flex-end',
-  },
-  desc: {
-    color: '#1D426D',
-    fontSize: 18,
-  },
-  heading: {
-    color: '#1D426D',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    backgroundColor: '#1D426D'
   },
   activeIcon: {
-    color: '#FAFAFA',
+    color: '#FAFAFA'
   },
   inactiveIcon: {
-    color: '#9b9a9a',
+    color: '#9b9a9a'
   },
   input: {
     borderRadius: 10,
@@ -325,7 +488,17 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10,
     marginBottom: 10,
-    fontSize: 18,
+    fontSize: 18
+  },
+  inputLarger: {
+    borderRadius: 10,
+    backgroundColor: '#9ec5cf',
+    color: '#1D426D',
+    padding: 10,
+    width: '100%',
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 20
   },
   multi_input: {
     borderRadius: 10,
@@ -336,27 +509,21 @@ const styles = StyleSheet.create({
     maxWidth: '100%',
     marginTop: 10,
     marginBottom: 10,
-    fontSize: 18,
+    fontSize: 18
+  },
+  multi_inputLarger: {
+    borderRadius: 10,
+    backgroundColor: '#9ec5cf',
+    color: '#1D426D',
+    padding: 10,
+    paddingTop: 10,
+    maxWidth: '100%',
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 20
   },
   task: {
-    paddingTop: 10,
-  },
-  prompt: {
-    alignSelf: 'flex-start',
-    color: '#1D426D',
-    marginTop: 10,
-    fontSize: 18,
-  },
-  subheader: {
-    color: '#1D426D',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 15,
-  },
-  text: {
-    color: '#1D426D',
-    fontSize: 18,
-    marginTop: 10,
+    paddingTop: 10
   },
   view: {
     backgroundColor: '#8ebac6',
@@ -364,7 +531,7 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     marginRight: 40,
     marginBottom: 20,
-    padding: 20,
-  },
+    padding: 20
+  }
 });
 export default Home;
