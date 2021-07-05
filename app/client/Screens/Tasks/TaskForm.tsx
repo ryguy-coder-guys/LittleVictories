@@ -25,8 +25,17 @@ const TaskForm = () => {
   const [date, setDate] = useState(new Date());
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
 
+  const customIsPast = (date: Date) => {
+    if (new Date(date).getFullYear() < new Date().getFullYear()) return true;
+    if (new Date(date).getFullYear() > new Date().getFullYear()) return false;
+    if (new Date(date).getMonth() < new Date().getMonth()) return true;
+    if (new Date(date).getMonth() > new Date().getMonth()) return false;
+    if (new Date(date).getDate() < new Date().getDate()) return true;
+    if (new Date(date).getDate() >= new Date().getDate()) return false;
+  };
+
   const handleSubmit = async () => {
-    if (isPast(date)) {
+    if (customIsPast(date)) {
       alert('this date is in the past, please select a future date.');
     } else {
       const { data: task } = await axios.post(
@@ -39,7 +48,7 @@ const TaskForm = () => {
           is_important: isImportant,
         }
       );
-      const sortedTasks = [...user.tasks, task].sort((t1, t2) =>
+      const sortedTasks = [...(user?.tasks || []), task].sort((t1, t2) =>
         isBefore(new Date(t1.due_date), new Date(t2.due_date)) ? -1 : 1
       );
       setUser({

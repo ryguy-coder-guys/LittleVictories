@@ -30,7 +30,7 @@ const ListHeader = ({ showAll, toggleShowAll }) => {
               fontSize: 16,
               color: '#1D426D',
               marginBottom: 5,
-              marginTop: 20
+              marginTop: 20,
             }}
           >
             Due Today{' '}
@@ -48,7 +48,7 @@ const ListHeader = ({ showAll, toggleShowAll }) => {
               color: '#1D426D',
               marginBottom: 5,
               marginTop: 20,
-              marginRight: 40
+              marginRight: 40,
             }}
           >
             {' '}
@@ -140,15 +140,15 @@ const HabitSummary = () => {
 
 const styles = StyleSheet.create({
   listContainer: {
-    height: '90.75%'
+    height: '90.75%',
   },
   subheader: {
     color: '#1D426D',
     fontSize: 20,
     marginLeft: 40,
     fontWeight: 'bold',
-    marginTop: 20
-  }
+    marginTop: 20,
+  },
 });
 
 export default HabitSummary;
