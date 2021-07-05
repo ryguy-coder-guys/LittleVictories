@@ -5,9 +5,10 @@ import { v4 as getId } from 'uuid';
 import bcrypt from 'bcrypt';
 import { Task } from '../database/models/task';
 import { JournalEntry } from '../database/models/journalEntry';
-import { isPast, isToday, format } from 'date-fns';
+import { isPast, format } from 'date-fns';
 import { UserStat } from '../database/models/stat';
 import { Habit } from '../database/models/habit';
+import { Friend } from '../database/models/friend'
 
 const getHash = async (password: string): Promise<string> =>
   await bcrypt.hash(password, 12);
@@ -35,7 +36,6 @@ export const registerUser: RequestHandler = async (req, res) => {
     username,
     hash: await getHash(password),
   });
-  console.log('BOOOOP!', newUser);
   const formattedUser = {
     id: newUser.id,
     username: newUser.username,
@@ -67,7 +67,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
   });
   // console.log(userStats, 'THIS THING IS USERSTATS'); // returns null if no stats
 
-  const habits = await Habit.findAll({where: { user_id: user.id }});
+  const habits = await Habit.findAll({ where: { user_id: user.id } });
 
   const mappedUser = {
     id: user.getDataValue('id'),
@@ -109,3 +109,30 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
 
   res.send(formattedUser);
 };
+
+
+
+export const users: RequestHandler = async (req, res) => {
+  try {
+    const users = await User.findAll();
+    const mappedUsers = await Promise.all(users.map(async (user) => {
+      //console.log(user, 'line 120');
+      const isFriend = await Friend.findOne({
+        where: {
+          friend_id: user.id,
+        }
+      })
+      return {
+        id: user.getDataValue('id'),
+        userName: user.getDataValue('username'),
+        isFriend: !!isFriend
+      }
+    }))
+    res.status(200).send(mappedUsers);
+
+  } catch (err) {
+    console.log('error fetching ', err.message);
+    res.sendStatus(500);
+  }
+};
+

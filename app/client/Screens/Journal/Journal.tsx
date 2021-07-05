@@ -8,11 +8,12 @@ import moment from 'moment';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { Button } from 'react-native-elements';
 
-const Journal = () => {
+const Journal = () : React.ReactElement => {
   const { user } = useUserContext();
   const { journal, setJournal } = useJournalContext();
   const [date] = useState(moment().format('MMM Do Y'));
-  const saveJournal = async () => {
+
+  const saveJournal = async () : Promise<void> => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
       content: journal.content,
@@ -21,7 +22,7 @@ const Journal = () => {
 
     alert('Journal successfully saved.');
   };
-  const clearJournal = () => {
+  const clearJournal = () : void => {
     Alert.alert(
       'Are you sure?',
       'Once deleted, you cannot get this journal entry back.',

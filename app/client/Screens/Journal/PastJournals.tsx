@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { useJournalContext } from '../../Contexts/journalContext';
 import moment from 'moment';
@@ -6,7 +6,7 @@ import { v4 as getKey } from 'uuid';
 import { useUserContext } from '../../Contexts/userContext';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 
-const Journal = () => {
+const Journal = (): ReactElement => {
   const { journals } = useJournalContext();
   const { user } = useUserContext();
 
@@ -40,7 +40,7 @@ const Journal = () => {
   //   );
   // };
 
-  const list = () => {
+  const list = (): ReactElement => {
     return (
       <View>
         {journals ? (
