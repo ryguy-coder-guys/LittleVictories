@@ -18,7 +18,7 @@ const SingleTask = ({ item }) => {
   const [finished, setFinished] = useState(item.is_complete);
   const [taskPublic, setTaskPublic] = useState(item.is_public);
 
-  const unshareTask = async () => {
+  const unshareTask = async (): Promise<void> => {
     try {
       const { data: updateSuccessful } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/private`
@@ -27,13 +27,14 @@ const SingleTask = ({ item }) => {
         return;
       }
       setTaskPublic(false);
+      // setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
       socket.emit('removeFromFeed', item);
     } catch (error) {
       console.warn(error);
     }
   };
 
-  const shareTask = async () => {
+  const shareTask = async (): Promise<void> => {
     try {
       const { data: updateSuccessful } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/public`
@@ -42,6 +43,7 @@ const SingleTask = ({ item }) => {
         return;
       }
       setTaskPublic(true);
+      // setFeed([...feed, item]);
       socket.emit('addToFeed', item);
     } catch (error) {
       console.warn(error);
@@ -76,7 +78,7 @@ const SingleTask = ({ item }) => {
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/incomplete`
       );
-      unshareTask();
+      await unshareTask();
       const mappedTasks = user.tasks.map((task) => {
         if (task.id === item.id) {
           return { ...task, is_complete: false };
@@ -94,10 +96,12 @@ const SingleTask = ({ item }) => {
       const { data: deleteSuccessful } = await axios.delete(
         `http://localhost:3000/api/tasks/${item.id}`
       );
-      const filteredTasks = user.tasks.filter((task) => {
-        return task.id !== item.id;
-      });
-      setUser({ ...user, tasks: filteredTasks });
+      if (deleteSuccessful) {
+        const filteredTasks = user.tasks.filter((task) => {
+          return task.id !== item.id;
+        });
+        setUser({ ...user, tasks: filteredTasks });
+      }
     } catch (error) {
       console.warn(error);
     }

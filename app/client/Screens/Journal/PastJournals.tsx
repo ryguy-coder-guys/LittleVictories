@@ -43,7 +43,7 @@ const Journal1 = () : ReactElement => {
         <FlatList
           keyExtractor={() => getKey()}
           data={journals.filter((journal) => {
-            return journal.date < moment().format("MM-D-Y");
+            return journal.date < moment().format('MM-D-Y');
           })}
           renderItem={({ item: journal }) => {
             return (
@@ -68,24 +68,24 @@ const Journal1 = () : ReactElement => {
 
 const styles = StyleSheet.create({
   date: {
-    color: "#1D426D",
+    color: '#1D426D',
     fontSize: 18,
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
     marginBottom: 20,
   },
   header: {
-    color: "#1D426D",
+    color: '#1D426D',
     fontSize: 26,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginLeft: 20,
     marginTop: 20,
   },
   text: {
-    color: "#1D426D",
+    color: '#1D426D',
     fontSize: 18,
   },
   textAreaContainer: {
-    backgroundColor: "#8ebac6",
+    backgroundColor: '#8ebac6',
     borderRadius: 10,
     padding: 20,
     marginTop: 20,

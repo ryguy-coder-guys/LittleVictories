@@ -13,7 +13,7 @@ const SingleHabit = ({ item }) => {
   const markHabitComplete = async () => {
     try {
       const {
-        data: { points, level }
+        data: { points, level },
       } = await axios.patch(
         `http://localhost:3000/api/habits/${item.id}/complete`
       );
@@ -32,7 +32,7 @@ const SingleHabit = ({ item }) => {
   const markHabitIncomplete = async () => {
     try {
       const {
-        data: { points, level }
+        data: { points, level },
       } = await axios.patch(
         `http://localhost:3000/api/habits/${item.id}/incomplete`
       );
@@ -115,17 +115,17 @@ const SingleHabit = ({ item }) => {
             width: 115,
             backgroundColor: '#8ebac6',
             margin: 0,
-            borderColor: '#8ebac6'
+            borderColor: '#8ebac6',
           }}
           textStyle={{ color: '#1D426D', fontWeight: 'normal' }}
           right
-          title='Delete Habit'
+          title="Delete Habit"
           iconRight
-          iconType='material'
-          uncheckedIcon='clear'
-          uncheckedColor='red'
-          checkedIcon='clear'
-          checkedColor='black'
+          iconType="material"
+          uncheckedIcon="clear"
+          uncheckedColor="red"
+          checkedIcon="clear"
+          checkedColor="black"
           checked={removed}
           onPress={() => {
             removeHabit();
@@ -150,13 +150,13 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingTop: 20,
     alignItems: 'flex-start',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   text: {
     fontSize: 18,
     color: '#1D426D',
-    maxWidth: 250
-  }
+    maxWidth: 250,
+  },
 });
 
 export default SingleHabit;
