@@ -9,6 +9,7 @@ import Home from '../Home/Home';
 import Settings from '../Settings/Settings';
 import Tasks from '../Tasks/Tasks';
 import Feed from '../Feed/Feed';
+import Friends from '../Feed/Friends'
 
 const AppBottomNavigator = createMaterialBottomTabNavigator();
 

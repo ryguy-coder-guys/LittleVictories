@@ -57,6 +57,8 @@ const SingleTask = ({ item }) => {
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/complete`
       );
+      console.log(item, 'line 58');
+      console.log(task, 'line 59')
       const mappedTasks = user.tasks.map((task) => {
         if (task.id === item.id) {
           return { ...task, is_complete: true };

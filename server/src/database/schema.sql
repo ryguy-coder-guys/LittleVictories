@@ -114,6 +114,16 @@ create table UserStats (
   foreign key (user_id) references Users(id)
 );
 
+create table Friends (
+	id int primary key auto_increment,
+	user_id varchar(36) not null,
+  friend_id varchar(36) not null,
+  createdAt datetime not null default now(),
+  updatedAt datetime not null default now(),
+  foreign key (user_id) references Users(id),
+  foreign key (friend_id) references Users(id)
+);
+
 
 /* run from project root
 /* mysql -u root < server/src/database/schema.sql

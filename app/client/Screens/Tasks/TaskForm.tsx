@@ -12,7 +12,7 @@ import { FAB } from 'react-native-paper';
 import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { format, isPast, isBefore } from 'date-fns';
+import { isBefore } from 'date-fns';
 
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
