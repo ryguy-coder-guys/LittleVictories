@@ -35,7 +35,18 @@ export const registerUser: RequestHandler = async (req, res) => {
     username,
     hash: await getHash(password),
   });
-  res.send(newUser);
+  console.log('BOOOOP!', newUser);
+  const formattedUser = {
+    id: newUser.id,
+    username: newUser.username,
+    tasks: [],
+    entries: [],
+    habits: [],
+    points: 0,
+    readable_font: false
+  };
+
+  res.send(formattedUser);
 };
 
 // create formatted user interface
@@ -92,8 +103,8 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     ...mappedUser,
     tasks: mappedTasks,
     userStats: userStats,
-    entries,
-    habits,
+    entries: entries ? entries : [],
+    habits: habits ? habits : [],
   };
 
   res.send(formattedUser);

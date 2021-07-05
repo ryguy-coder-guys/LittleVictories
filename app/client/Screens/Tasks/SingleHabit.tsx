@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { useState } from 'react';
-import { Button, CheckBox } from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
 import { format } from 'date-fns';
 
 const SingleHabit = ({ item }) => {
@@ -97,13 +97,19 @@ const SingleHabit = ({ item }) => {
           }}
         />
         <View style={{ flexDirection: 'column' }}>
-          <Text style={styles.text}>{item.description}</Text>
-          <Text style={styles.text}>Frequency: {item.frequency}</Text>
+          <Text style={user.readable_font ? styles.textLarger : styles.text}>
+            {item.description}
+          </Text>
+          <Text style={user.readable_font ? styles.textLarger : styles.text}>
+            Frequency: {item.frequency}
+          </Text>
           {item.frequency === 'weekly' ? (
-            <Text style={styles.text}>On {splitDays(item.days_of_week)}</Text>
+            <Text style={user.readable_font ? styles.textLarger : styles.text}>
+              On {splitDays(item.days_of_week)}
+            </Text>
           ) : null}
           {item.frequency === 'monthly' ? (
-            <Text style={styles.text}>
+            <Text style={user.readable_font ? styles.textLarger : styles.text}>
               Due Date: {format(new Date(), 'MMMM')} {item.calendar_date}
             </Text>
           ) : null}
@@ -154,6 +160,11 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
+    color: '#1D426D',
+    maxWidth: 250
+  },
+  textLarger: {
+    fontSize: 20,
     color: '#1D426D',
     maxWidth: 250
   }

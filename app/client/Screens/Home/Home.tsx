@@ -17,6 +17,54 @@ import { format } from 'date-fns';
 import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProgressBar from '../Root/ProgressBar';
 import { Button } from 'react-native-elements';
+import { containerStyles, textStyles } from '../../Stylesheets/Stylesheet';
+import { BarChart, Grid, YAxis, XAxis } from 'react-native-svg-charts';
+
+class SleepHoursChart extends React.PureComponent {
+  render() {
+    const data = [5, 6, 8, 6.5, 8, 7, 9];
+    const days = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'];
+
+    const axesSvg = { fontSize: 16, fill: '#1D426D' };
+    const verticalContentInset = { top: 10, bottom: 10 };
+    const xAxisHeight = 30;
+
+    return (
+      <View>
+        <Text style={textStyles.text}>Hours of Sleep</Text>
+        <View style={{ height: 200, flexDirection: 'row', marginTop: 15 }}>
+          <YAxis
+            data={data}
+            style={{ marginBottom: xAxisHeight }}
+            contentInset={verticalContentInset}
+            svg={axesSvg}
+          />
+          <View style={{ flex: 1, marginLeft: 10 }}>
+            <BarChart
+              style={{ flex: 1 }}
+              data={data}
+              contentInset={verticalContentInset}
+              svg={{ stroke: '#3e6188', fill: '#1D426D' }}
+            >
+              <Grid />
+            </BarChart>
+            <XAxis
+              style={{
+                marginHorizontal: 10,
+                height: xAxisHeight,
+                marginTop: 10
+              }}
+              data={data}
+              formatLabel={(value, index) => days[index]}
+              contentInset={{ left: 10, right: 10 }}
+              svg={axesSvg}
+            />
+          </View>
+        </View>
+      </View>
+    );
+  }
+}
 
 const Home = () => {
   const { user, userStats } = useUserContext();
@@ -70,13 +118,16 @@ const Home = () => {
     return <Loading />;
   }
   return (
-    <ImageBackground style={styles.backgroundImage} source={bgImage}>
+    <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
       <ProgressBar />
       <SafeAreaView style={{ flex: 1, alignItems: 'center', marginTop: 20 }}>
         <ScrollView>
           <View style={styles.view}>
             <Text
-              style={user.readable_font ? styles.headingLarger : styles.heading}
+              style={[
+                user.readable_font ? textStyles.h2_big : textStyles.h2,
+                { marginBottom: 10 }
+              ]}
             >
               Upcoming Tasks
             </Text>
@@ -84,7 +135,9 @@ const Home = () => {
               return (
                 <View style={styles.task} key={getKey()}>
                   <Text
-                    style={user.readable_font ? styles.descLarger : styles.desc}
+                    style={
+                      user.readable_font ? textStyles.text_big : textStyles.text
+                    }
                   >
                     {task.description} - {task.due_date}
                   </Text>
@@ -94,52 +147,74 @@ const Home = () => {
           </View>
           <View style={styles.view}>
             <Text
-              style={user.readable_font ? styles.headingLarger : styles.heading}
+              style={[
+                user.readable_font ? textStyles.h2_big : textStyles.h2,
+                { marginBottom: 10 }
+              ]}
             >
               Daily Reflection
             </Text>
             {hasSubmitted || userStats ? (
               <View>
                 <Text
-                  style={user.readable_font ? styles.textLarger : styles.text}
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
                 >
                   Fill out your Daily Reflection data tomorrow for the most
                   accurate Weekly Stats.
                 </Text>
                 <Text
-                  style={
-                    user.readable_font
-                      ? styles.subheaderLarger
-                      : styles.subheader
-                  }
+                  style={[
+                    user.readable_font ? textStyles.h3_big : textStyles.h3,
+                    { marginTop: 15 }
+                  ]}
                 >
                   Today's Data:
                 </Text>
                 <Text
-                  style={user.readable_font ? styles.textLarger : styles.text}
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
                 >
                   Hours of sleep: {userStats?.sleep_hours || sleepHours}
                 </Text>
                 <Text
-                  style={user.readable_font ? styles.textLarger : styles.text}
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
                 >
                   Did you eat well?{' '}
                   {userStats?.eaten_well ? 'yes' : 'no' || didEatWell}
                 </Text>
                 <Text
-                  style={user.readable_font ? styles.textLarger : styles.text}
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
                 >
                   Exercised?{' '}
                   {userStats?.exercised ? 'yes' : 'no' || didExercise}
                 </Text>
                 <Text
-                  style={user.readable_font ? styles.textLarger : styles.text}
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
                 >
                   Notes: {userStats?.notes || notes}
                 </Text>
                 <View style={{ flexDirection: 'row' }}>
                   <Text
-                    style={user.readable_font ? styles.textLarger : styles.text}
+                    style={[
+                      user.readable_font
+                        ? textStyles.text_big
+                        : textStyles.text,
+                      { marginTop: 10 }
+                    ]}
                   >
                     Mood:{' '}
                   </Text>
@@ -147,11 +222,12 @@ const Home = () => {
                 </View>
               </View>
             ) : (
-              <View style={{ alignItems: 'center' }}>
+              <View style={{ alignItems: 'flex-start' }}>
                 <Text
-                  style={
-                    user.readable_font ? styles.promptLarger : styles.prompt
-                  }
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
                 >
                   How many hours did you sleep last night?
                 </Text>
@@ -163,9 +239,10 @@ const Home = () => {
                   autoCapitalize='none'
                 />
                 <Text
-                  style={
-                    user.readable_font ? styles.promptLarger : styles.prompt
-                  }
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
                 >
                   Did you skip any meals?
                 </Text>
@@ -177,9 +254,10 @@ const Home = () => {
                   autoCapitalize='none'
                 />
                 <Text
-                  style={
-                    user.readable_font ? styles.promptLarger : styles.prompt
-                  }
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
                 >
                   Did you get any exercise?
                 </Text>
@@ -191,9 +269,10 @@ const Home = () => {
                   autoCapitalize='none'
                 />
                 <Text
-                  style={
-                    user.readable_font ? styles.promptLarger : styles.prompt
-                  }
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
                 >
                   Daily Notes
                 </Text>
@@ -214,9 +293,10 @@ const Home = () => {
                   />
                 </View>
                 <Text
-                  style={
-                    user.readable_font ? styles.promptLarger : styles.prompt
-                  }
+                  style={[
+                    user.readable_font ? textStyles.text_big : textStyles.text,
+                    { marginTop: 10 }
+                  ]}
                 >
                   What's your mood?
                 </Text>
@@ -283,8 +363,8 @@ const Home = () => {
                     buttonStyle={styles.button}
                     titleStyle={
                       user.readable_font
-                        ? styles.buttonTextLarger
-                        : styles.buttonText
+                        ? textStyles.buttonText_big
+                        : textStyles.buttonText
                     }
                     onPress={() => {
                       handleSubmit();
@@ -296,14 +376,21 @@ const Home = () => {
           </View>
           <View style={styles.view}>
             <Text
-              style={user.readable_font ? styles.headingLarger : styles.heading}
+              style={[
+                user.readable_font ? textStyles.h2_big : textStyles.h2,
+                { marginBottom: 10 }
+              ]}
             >
               Weekly Stats
             </Text>
+            <SleepHoursChart />
           </View>
           <View style={styles.view}>
             <Text
-              style={user.readable_font ? styles.headingLarger : styles.heading}
+              style={[
+                user.readable_font ? textStyles.h2_big : textStyles.h2,
+                { marginBottom: 10 }
+              ]}
             >
               Achievements
             </Text>
@@ -320,9 +407,7 @@ const Home = () => {
                   />
                   <Text
                     style={
-                      user.readable_font
-                        ? styles.badgeTextLarger
-                        : styles.badgeText
+                      user.readable_font ? textStyles.text_big : textStyles.text
                     }
                   >
                     Level 1
@@ -341,9 +426,7 @@ const Home = () => {
                   />
                   <Text
                     style={
-                      user.readable_font
-                        ? styles.badgeTextLarger
-                        : styles.badgeText
+                      user.readable_font ? textStyles.text_big : textStyles.text
                     }
                   >
                     Level 5
@@ -362,9 +445,7 @@ const Home = () => {
                   />
                   <Text
                     style={
-                      user.readable_font
-                        ? styles.badgeTextLarger
-                        : styles.badgeText
+                      user.readable_font ? textStyles.text_big : textStyles.text
                     }
                   >
                     Level 10
@@ -379,9 +460,6 @@ const Home = () => {
   );
 };
 const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1
-  },
   badge_container: {
     flexDirection: 'row'
   },
@@ -392,43 +470,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  badgeText: {
-    color: '#1D426D',
-    fontSize: 16
-  },
-  badgeTextLarger: {
-    color: '#1D426D',
-    fontSize: 18
-  },
   button: {
     marginTop: 20,
     backgroundColor: '#1D426D'
-  },
-  buttonText: {
-    fontSize: 18
-  },
-  buttonTextLarger: {
-    fontSize: 20
-  },
-  desc: {
-    color: '#1D426D',
-    fontSize: 18
-  },
-  descLarger: {
-    color: '#1D426D',
-    fontSize: 20
-  },
-  heading: {
-    color: '#1D426D',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10
-  },
-  headingLarger: {
-    color: '#1D426D',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10
   },
   activeIcon: {
     color: '#FAFAFA'
@@ -480,40 +524,6 @@ const styles = StyleSheet.create({
   },
   task: {
     paddingTop: 10
-  },
-  prompt: {
-    alignSelf: 'flex-start',
-    color: '#1D426D',
-    marginTop: 10,
-    fontSize: 18
-  },
-  promptLarger: {
-    alignSelf: 'flex-start',
-    color: '#1D426D',
-    marginTop: 10,
-    fontSize: 20
-  },
-  subheader: {
-    color: '#1D426D',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 15
-  },
-  subheaderLarger: {
-    color: '#1D426D',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginTop: 15
-  },
-  text: {
-    color: '#1D426D',
-    fontSize: 18,
-    marginTop: 10
-  },
-  textLarger: {
-    color: '#1D426D',
-    fontSize: 20,
-    marginTop: 10
   },
   view: {
     backgroundColor: '#8ebac6',

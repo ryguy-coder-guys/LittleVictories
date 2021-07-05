@@ -1,41 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
   TextInput,
   StyleSheet,
   ImageBackground,
-  Image,
-} from "react-native";
-import AwesomeButton from "react-native-really-awesome-button";
-import { useUserContext } from "../../Contexts/userContext";
-import axios from "axios";
+  Image
+} from 'react-native';
+import AwesomeButton from 'react-native-really-awesome-button';
+import { useUserContext } from '../../Contexts/userContext';
+import axios from 'axios';
 
 const Login = ({ navigation }) => {
   const { setUser, setUserStats } = useUserContext();
 
-  const bgImage = require("../../../assets/blue-gradient.png");
-  const logo = require("../../../assets/logo.png");
+  const bgImage = require('../../../assets/blue-gradient.png');
+  const logo = require('../../../assets/logo.png');
 
-  const [username, setUsername] = useState("");
-  const [passwordAttempt, setPasswordAttempt] = useState("");
-  const [passwordAttempt2, setPasswordAttempt2] = useState("");
+  const [username, setUsername] = useState('');
+  const [passwordAttempt, setPasswordAttempt] = useState('');
+  const [passwordAttempt2, setPasswordAttempt2] = useState('');
   const [loginSelected, toggleLogin] = useState(true);
   const [mismatchPasswords, setMismatchPasswords] = useState(false);
   const [wrongLogin, toggleWrongLogin] = useState(false);
 
   const handleClick = (view) => {
-    if (view === "login") {
+    if (view === 'login') {
       toggleLogin(true);
       toggleWrongLogin(false);
-      setUsername("");
-      setPasswordAttempt("");
+      setUsername('');
+      setPasswordAttempt('');
     } else {
       toggleLogin(false);
       setMismatchPasswords(false);
-      setUsername("");
-      setPasswordAttempt("");
-      setPasswordAttempt2("");
+      setUsername('');
+      setPasswordAttempt('');
+      setPasswordAttempt2('');
     }
   };
 
@@ -46,10 +46,10 @@ const Login = ({ navigation }) => {
     if (loginSelected) {
       // attempt a login for the user
       const { data: userObj } = await axios.post(
-        "http://localhost:3000/api/auth/login",
+        'http://localhost:3000/api/auth/login',
         {
           username,
-          password: passwordAttempt,
+          password: passwordAttempt
         }
       );
       if (userObj) {
@@ -57,11 +57,11 @@ const Login = ({ navigation }) => {
         setTimeout(() => {
           setUser(userObj);
           setUserStats(userObj.userStats);
-          navigation.navigate("index");
+          navigation.navigate('index');
         }, 5000);
-        setUsername("");
-        setPasswordAttempt("");
-        navigation.navigate("loading");
+        setUsername('');
+        setPasswordAttempt('');
+        navigation.navigate('loading');
       } else {
         // if not successful, will need to toggle wrongLogin
         toggleWrongLogin(true);
@@ -79,25 +79,26 @@ const Login = ({ navigation }) => {
         return;
       }
       const { data: user } = await axios.post(
-        "http://localhost:3000/api/auth/register",
+        'http://localhost:3000/api/auth/register',
         {
           username,
-          password: passwordAttempt,
+          password: passwordAttempt
         }
       );
       // compare the two passwords
       if (user) {
         // if they match, create a new user
         // then navigate to home
+        console.log('HELLO!', user);
         setUser(user);
-        setUsername("");
-        setPasswordAttempt("");
-        setPasswordAttempt2("");
-        navigation.navigate("index");
+        setUsername('');
+        setPasswordAttempt('');
+        setPasswordAttempt2('');
+        navigation.navigate('index');
       } else {
         setMismatchPasswords(true);
-        setPasswordAttempt("");
-        setPasswordAttempt2("");
+        setPasswordAttempt('');
+        setPasswordAttempt2('');
       }
     }
   };
@@ -107,38 +108,38 @@ const Login = ({ navigation }) => {
     return (
       <ImageBackground style={styles.backgroundImage} source={bgImage}>
         <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
           <>
             <Image
               source={logo}
-              style={{ resizeMode: "contain", width: "50%", height: "25%" }}
+              style={{ resizeMode: 'contain', width: '50%', height: '25%' }}
             />
-            <View style={{ flexDirection: "row" }}>
+            <View style={{ flexDirection: 'row' }}>
               <AwesomeButton
-                backgroundColor={"#5c83b1"}
-                textColor={"#FAFAFA"}
+                backgroundColor={'#5c83b1'}
+                textColor={'#FAFAFA'}
                 height={35}
                 width={100}
                 raiseLevel={0}
                 borderRadius={8}
                 style={styles.button}
                 onPress={() => {
-                  handleClick("login");
+                  handleClick('login');
                 }}
               >
                 Login
               </AwesomeButton>
               <AwesomeButton
-                backgroundColor={"#1D426D"}
-                textColor={"#FAFAFA"}
+                backgroundColor={'#1D426D'}
+                textColor={'#FAFAFA'}
                 height={35}
                 width={100}
                 raiseLevel={0}
                 borderRadius={8}
                 style={styles.button}
                 onPress={() => {
-                  handleClick("register");
+                  handleClick('register');
                 }}
               >
                 Register
@@ -157,7 +158,7 @@ const Login = ({ navigation }) => {
               style={styles.input}
               onChangeText={setUsername}
               value={username}
-              autoCapitalize="none"
+              autoCapitalize='none'
             />
             <Text style={styles.text}>Password:</Text>
             <TextInput
@@ -165,11 +166,11 @@ const Login = ({ navigation }) => {
               onChangeText={setPasswordAttempt}
               value={passwordAttempt}
               secureTextEntry={true}
-              autoCapitalize="none"
+              autoCapitalize='none'
             />
             <AwesomeButton
-              backgroundColor={"#1D426D"}
-              textColor={"#FAFAFA"}
+              backgroundColor={'#1D426D'}
+              textColor={'#FAFAFA'}
               height={35}
               width={100}
               raiseLevel={0}
@@ -190,38 +191,38 @@ const Login = ({ navigation }) => {
     return (
       <ImageBackground style={styles.backgroundImage} source={bgImage}>
         <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
           <>
             <Image
               source={logo}
-              style={{ resizeMode: "contain", width: "50%", height: "25%" }}
+              style={{ resizeMode: 'contain', width: '50%', height: '25%' }}
             />
-            <View style={{ flexDirection: "row" }}>
+            <View style={{ flexDirection: 'row' }}>
               <AwesomeButton
-                backgroundColor={"#1D426D"}
-                textColor={"#FAFAFA"}
+                backgroundColor={'#1D426D'}
+                textColor={'#FAFAFA'}
                 height={35}
                 width={100}
                 raiseLevel={0}
                 borderRadius={8}
                 style={styles.button}
                 onPress={() => {
-                  handleClick("login");
+                  handleClick('login');
                 }}
               >
                 Login
               </AwesomeButton>
               <AwesomeButton
-                backgroundColor={"#5c83b1"}
-                textColor={"#FAFAFA"}
+                backgroundColor={'#5c83b1'}
+                textColor={'#FAFAFA'}
                 height={35}
                 width={100}
                 raiseLevel={0}
                 borderRadius={8}
                 style={styles.button}
                 onPress={() => {
-                  handleClick("register");
+                  handleClick('register');
                 }}
               >
                 Register
@@ -232,7 +233,7 @@ const Login = ({ navigation }) => {
               style={styles.input}
               onChangeText={setUsername}
               value={username}
-              autoCapitalize="none"
+              autoCapitalize='none'
             />
             {mismatchPasswords ? (
               <View>
@@ -247,7 +248,7 @@ const Login = ({ navigation }) => {
               onChangeText={setPasswordAttempt}
               value={passwordAttempt}
               secureTextEntry={true}
-              autoCapitalize="none"
+              autoCapitalize='none'
             />
             <Text style={styles.text}>Confirm Password:</Text>
             <TextInput
@@ -255,11 +256,11 @@ const Login = ({ navigation }) => {
               onChangeText={setPasswordAttempt2}
               value={passwordAttempt2}
               secureTextEntry={true}
-              autoCapitalize="none"
+              autoCapitalize='none'
             />
             <AwesomeButton
-              backgroundColor={"#1D426D"}
-              textColor={"#FAFAFA"}
+              backgroundColor={'#1D426D'}
+              textColor={'#FAFAFA'}
               height={35}
               width={100}
               raiseLevel={0}
@@ -280,36 +281,36 @@ const Login = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
+    flex: 1
   },
   button: {
     marginLeft: 5,
     marginRight: 5,
-    marginBottom: 20,
+    marginBottom: 20
   },
   error: {
-    color: "red",
-    alignSelf: "center",
+    color: 'red',
+    alignSelf: 'center'
   },
   error2: {
-    color: "red",
-    alignSelf: "center",
-    marginBottom: 15,
+    color: 'red',
+    alignSelf: 'center',
+    marginBottom: 15
   },
   input: {
     height: 40,
-    width: "50%",
+    width: '50%',
     padding: 10,
     borderRadius: 10,
-    backgroundColor: "#FAFAFA",
+    backgroundColor: '#FAFAFA',
     opacity: 0.3,
-    marginBottom: 20,
+    marginBottom: 20
   },
   text: {
-    color: "#FAFAFA",
+    color: '#FAFAFA',
     marginBottom: 5,
-    fontSize: 16,
-  },
+    fontSize: 16
+  }
 });
 
 export default Login;

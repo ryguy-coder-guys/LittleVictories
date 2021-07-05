@@ -185,13 +185,23 @@ export const getFeedItems: RequestHandler<{ id: string }> = async (
         const comments = await Comment.findAll({
           where: { task_id: feedItem.getDataValue('id') },
         });
+        const mappedComments = await Promise.all(comments.map( async comment => {
+          const user = await User.findOne({where: { id: comment.user_id}});
+          return {
+            id: comment.getDataValue('id'), 
+            content: comment.getDataValue('content'),
+            user_id: comment.getDataValue('user_id'),
+            username: user?.username
+            }
+        }));
+
         return {
           id: feedItem.getDataValue('id'),
           username: foundUsername,
           description: feedItem.getDataValue('description'),
           completed_at: feedItem.getDataValue('completed_at'),
           likes,
-          comments,
+          comments: mappedComments,
         };
       })
     );

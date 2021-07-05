@@ -1,19 +1,18 @@
 import axios from 'axios';
 import { View, StyleSheet, Text, Button } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
-import { useFeedContext } from '../../Contexts/feedContext';
 import { useSocketContext } from '../../Contexts/socketContext';
 import React, { useState } from 'react';
 import {
   differenceInDays,
   differenceInWeeks,
   getDay,
-  isThisWeek,
+  isThisWeek
 } from 'date-fns';
+import { textStyles } from '../../Stylesheets/Stylesheet';
 
 const SingleTask = ({ item }) => {
   const { user, setUser } = useUserContext();
-  const { feed, setFeed } = useFeedContext();
   const { socket } = useSocketContext();
   const [finished, setFinished] = useState(item.is_complete);
   const [taskPublic, setTaskPublic] = useState(item.is_public);
@@ -51,7 +50,7 @@ const SingleTask = ({ item }) => {
   const markTaskComplete = async () => {
     try {
       const {
-        data: { task, points, level },
+        data: { task, points, level }
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/complete`
       );
@@ -70,7 +69,7 @@ const SingleTask = ({ item }) => {
   const markTaskIncomplete = async () => {
     try {
       const {
-        data: { points, level },
+        data: { points, level }
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/incomplete`
       );
@@ -109,7 +108,7 @@ const SingleTask = ({ item }) => {
       3: 'Thursday',
       4: 'Friday',
       5: 'Saturday',
-      6: 'Sunday',
+      6: 'Sunday'
     };
     const dueDate = new Date(date);
     if (differenceInDays(dueDate, new Date()) <= 6) {
@@ -126,7 +125,7 @@ const SingleTask = ({ item }) => {
     <View style={styles.task_view}>
       <View style={{ flexDirection: 'row' }}>
         <Text
-          style={styles.text}
+          style={user.readable_font ? textStyles.text_big : textStyles.text}
           onPress={() => {
             finished ? markTaskIncomplete() : markTaskComplete();
             setFinished(!finished);
@@ -134,16 +133,18 @@ const SingleTask = ({ item }) => {
         >
           {finished ? '✓ ' : '☐ '}
         </Text>
-        <Text style={styles.text}>
+        <Text
+          style={user.readable_font ? textStyles.text_big : textStyles.text}
+        >
           {item.description} - {fn(item.due_date)}
         </Text>
       </View>
-      <Button title="Remove" onPress={removeTask} />
+      <Button title='Remove' onPress={removeTask} />
       {finished && !taskPublic ? (
-        <Button title="Add to Feed" onPress={shareTask} />
+        <Button title='Add to Feed' onPress={shareTask} />
       ) : null}
       {finished && taskPublic ? (
-        <Button title="Remove from Feed" onPress={unshareTask} />
+        <Button title='Remove from Feed' onPress={unshareTask} />
       ) : null}
     </View>
   );
@@ -160,12 +161,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#8ebac6',
     borderRadius: 10,
     padding: 10,
-    flexWrap: 'wrap',
-  },
-  text: {
-    fontSize: 18,
-    color: '#1D426D',
-  },
+    flexWrap: 'wrap'
+  }
 });
 
 export default SingleTask;

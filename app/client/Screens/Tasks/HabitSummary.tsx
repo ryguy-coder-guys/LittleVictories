@@ -15,23 +15,45 @@ const HabitsLaterList = ({ item }) => {
 };
 
 const ListHeader = ({ showAll, toggleShowAll }) => {
+  const { user } = useUserContext();
   return (
     <View>
       <HabitForm />
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         {!showAll ? (
-          <Text style={styles.subheader}>Due Today</Text>
+          <Text
+            style={
+              user.readable_font ? styles.subheaderLarger : styles.subheader
+            }
+          >
+            Due Today
+          </Text>
         ) : (
-          <Text style={styles.subheader}>All Habits</Text>
+          <Text
+            style={
+              user.readable_font ? styles.subheaderLarger : styles.subheader
+            }
+          >
+            All Habits
+          </Text>
         )}
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text
-            style={{
-              fontSize: 16,
-              color: '#1D426D',
-              marginBottom: 5,
-              marginTop: 20
-            }}
+            style={
+              user.readable_font
+                ? {
+                    fontSize: 16,
+                    color: '#1D426D',
+                    marginBottom: 5,
+                    marginTop: 20
+                  }
+                : {
+                    fontSize: 16,
+                    color: '#1D426D',
+                    marginBottom: 5,
+                    marginTop: 20
+                  }
+            }
           >
             Due Today{' '}
           </Text>
@@ -43,13 +65,23 @@ const ListHeader = ({ showAll, toggleShowAll }) => {
             style={{ marginTop: 20 }}
           />
           <Text
-            style={{
-              fontSize: 16,
-              color: '#1D426D',
-              marginBottom: 5,
-              marginTop: 20,
-              marginRight: 40
-            }}
+            style={
+              user.readable_font
+                ? {
+                    fontSize: 18,
+                    color: '#1D426D',
+                    marginBottom: 5,
+                    marginTop: 20,
+                    marginRight: 40
+                  }
+                : {
+                    fontSize: 16,
+                    color: '#1D426D',
+                    marginBottom: 5,
+                    marginTop: 20,
+                    marginRight: 40
+                  }
+            }
           >
             {' '}
             View All
@@ -62,46 +94,33 @@ const ListHeader = ({ showAll, toggleShowAll }) => {
 
 const habitsDueToday = () => {
   const { user } = useUserContext();
+  const currentDateOfMonth = format(new Date(), 'd');
   const filteredHabits = user?.habits.filter((habit) => {
     if (habit.frequency === 'daily') {
       return habit;
     } else if (habit.frequency === 'weekly') {
       const currentDayOfWk = getDay(new Date());
       // sunday = 0 -> saturday = 6
-      if (currentDayOfWk === 0) {
-        if (habit.days_of_week.includes('Su')) {
-          return habit;
-        }
-      } else if (currentDayOfWk === 1) {
-        if (habit.days_of_week.includes('M')) {
-          return habit;
-        }
-      } else if (currentDayOfWk === 2) {
-        if (habit.days_of_week.includes('Tu')) {
-          return habit;
-        }
-      } else if (currentDayOfWk === 3) {
-        if (habit.days_of_week.includes('W')) {
-          return habit;
-        }
-      } else if (currentDayOfWk === 4) {
-        if (habit.days_of_week.includes('Th')) {
-          return habit;
-        }
-      } else if (currentDayOfWk === 5) {
-        if (habit.days_of_week.includes('F')) {
-          return habit;
-        }
-      } else if (currentDayOfWk === 6) {
-        if (habit.days_of_week.includes('Sa')) {
-          return habit;
-        }
-      }
-    } else if (habit.frequency === 'monthly') {
-      const currentDateOfMonth = format(new Date(), 'd');
-      if (currentDateOfMonth === habit.calendar_date.toString()) {
+      if (currentDayOfWk === 0 && habit.days_of_week.includes('Su')) {
+        return habit;
+      } else if (currentDayOfWk === 1 && habit.days_of_week.includes('M')) {
+        return habit;
+      } else if (currentDayOfWk === 2 && habit.days_of_week.includes('Tu')) {
+        return habit;
+      } else if (currentDayOfWk === 3 && habit.days_of_week.includes('W')) {
+        return habit;
+      } else if (currentDayOfWk === 4 && habit.days_of_week.includes('Th')) {
+        return habit;
+      } else if (currentDayOfWk === 5 && habit.days_of_week.includes('F')) {
+        return habit;
+      } else if (currentDayOfWk === 6 && habit.days_of_week.includes('Sa')) {
         return habit;
       }
+    } else if (
+      habit.frequency === 'monthly' &&
+      currentDateOfMonth === habit.calendar_date.toString()
+    ) {
+      return habit;
     }
   });
   return filteredHabits || [];
@@ -145,6 +164,13 @@ const styles = StyleSheet.create({
   subheader: {
     color: '#1D426D',
     fontSize: 20,
+    marginLeft: 40,
+    fontWeight: 'bold',
+    marginTop: 20
+  },
+  subheaderLarger: {
+    color: '#1D426D',
+    fontSize: 22,
     marginLeft: 40,
     fontWeight: 'bold',
     marginTop: 20

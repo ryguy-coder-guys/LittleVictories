@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { v4 as getKey } from 'uuid';
-import { isThisWeek, isThisMonth, isPast, getDate, addHours } from 'date-fns';
 
 import { StyleSheet, FlatList, View } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
