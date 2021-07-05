@@ -43,7 +43,7 @@ export const registerUser: RequestHandler = async (req, res) => {
     entries: [],
     habits: [],
     points: 0,
-   // readable_font: false
+    // readable_font: false
   };
   res.send(formattedUser);
 };
@@ -66,7 +66,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
   });
   // console.log(userStats, 'THIS THING IS USERSTATS'); // returns null if no stats
 
-  const habits = await Habit.findAll({where: { user_id: user.id }});
+  const habits = await Habit.findAll({ where: { user_id: user.id } });
 
   const mappedUser = {
     id: user.getDataValue('id'),
@@ -111,31 +111,26 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
 
 
 export const users: RequestHandler = async (req, res) => {
- //const { username } = req.body
-    const { user_id } = req.params;
-    console.log(req.params);
-    try {
-      const users = await User.findAll();
-      const mappedUsers = await Promise.all(users.map(async (user) => {
-        //console.log(user, 'line 120');
-        const isFriend = await Friend.findOne({
-          where: {
-            //user_id: user_id,
-            friend_id : user.id,
-          }
-        })
-        return {
-          id: user.getDataValue('id'),
-          userName: user.getDataValue('username'),
-          //user,
-          isFriend: !!isFriend
+  try {
+    const users = await User.findAll();
+    const mappedUsers = await Promise.all(users.map(async (user) => {
+      //console.log(user, 'line 120');
+      const isFriend = await Friend.findOne({
+        where: {
+          friend_id: user.id,
         }
-      }))
-      res.status(200).send(mappedUsers);
+      })
+      return {
+        id: user.getDataValue('id'),
+        userName: user.getDataValue('username'),
+        isFriend: !!isFriend
+      }
+    }))
+    res.status(200).send(mappedUsers);
 
-    } catch (err) {
-      console.log('error fetching ', err.message);
-      res.sendStatus(500);
-    }
+  } catch (err) {
+    console.log('error fetching ', err.message);
+    res.sendStatus(500);
+  }
 };
 
