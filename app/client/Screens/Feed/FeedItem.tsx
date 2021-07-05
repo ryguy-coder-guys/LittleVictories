@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
-import { useFeedContext } from '../../Contexts/feedContext';
 import { useSocketContext } from '../../Contexts/socketContext';
 import {
   Text,

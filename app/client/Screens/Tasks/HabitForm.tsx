@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Text } from 'react-native';
 import axios, { AxiosResponse } from 'axios';
 import { FAB } from 'react-native-paper';
-import { useUserContext, Habit } from '../../Contexts/userContext';
+import { useUserContext } from '../../Contexts/userContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import { Button, ButtonGroup } from 'react-native-elements';
 import { textStyles } from '../../Stylesheets/Stylesheet';
+import { Habit } from '../../Interfaces/user';
 
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
