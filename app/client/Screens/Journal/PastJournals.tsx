@@ -1,44 +1,39 @@
 import React, { ReactElement } from 'react';
-import { View, StyleSheet, Text, FlatList } from 'react-native';
+import { View, StyleSheet, Text, FlatList, Button, Alert } from 'react-native';
 import { useJournalContext } from '../../Contexts/journalContext';
 import moment from 'moment';
 import { v4 as getKey } from 'uuid';
+import { format } from 'date-fns';
+import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 
 const Journal = (): ReactElement => {
-  const { journals } = useJournalContext();
+  const { journals, journal, setJournal } = useJournalContext();
   const { user } = useUserContext();
 
-  // const clearJournal = () => {
-  //   Alert.alert(
-  //     'Are you sure?',
-  //     'Once deleted, you cannot get this journal entry back.',
-  //     [
-  //       {
-  //         text: 'Cancel',
-  //         onPress: () => console.log('Cancel Pressed'),
-  //         style: 'cancel',
-  //       },
-  //       {
-  //         text: 'Clear Entry',
-  //         onPress: async () => {
-  //           await axios.post(
-  //             'http://localhost:3000/api/journalEntries/create',
-  //             {
-  //               user_id: user.id,
-  //               content: '',
-  //               date: format(new Date(), 'MM-dd-yyyy'),
-  //             }
-  //           );
-  //           // shift
-  //           setText('');
-  //           alert('Journal successfully cleared.');
-  //         },
-  //       },
-  //     ]
-  //   );
-  // };
+  const clearJournal = (date) => {
+    Alert.alert(
+      'Are you sure?',
+      'Once deleted, you cannot get this journal entry back.',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Clear Entry',
+          onPress: async () => {
+            await axios.delete(
+              `http://localhost:3000/api/journalEntries/${user.id}/${date}`,
+            );
+            alert('Journal successfully cleared.');
+          },
+        },
+      ]
+    );
+  };
 
   const list = (): ReactElement => {
     return (
@@ -64,6 +59,12 @@ const Journal = (): ReactElement => {
                   >
                     {journal.content}
                   </Text>
+                  <Button
+          title='Clear Entry'
+          onPress={() => {
+            clearJournal(journal.date);
+          }}
+        />
                 </View>
               );
             }}

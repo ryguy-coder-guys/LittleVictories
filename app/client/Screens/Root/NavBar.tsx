@@ -2,9 +2,7 @@ import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import IconA from 'react-native-vector-icons/Ionicons';
 import IconB from 'react-native-vector-icons/FontAwesome5';
-import Journal from '../Journal/Journal';
-import Journal1 from '../Journal/PastJournals';
-import Main from '../Journal/Main';
+import Journals from '../Journal/Journals';
 import Home from '../Home/Home';
 import Settings from '../Settings/Settings';
 import Tasks from '../Tasks/Tasks';
@@ -44,7 +42,7 @@ const BottomTabs = () => {
       />
       <AppBottomNavigator.Screen
         name="Journal"
-        component={Main}
+        component={Journals}
         options={{
           tabBarIcon: () => <IconA name="journal" size={22} color="#FAFAFA" />,
         }}
