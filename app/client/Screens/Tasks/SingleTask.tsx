@@ -1,19 +1,24 @@
-import axios from 'axios';
+import React, { useState } from 'react';
 import { View, StyleSheet, Text, Button } from 'react-native';
+
 import { useUserContext } from '../../Contexts/userContext';
 import { useSocketContext } from '../../Contexts/socketContext';
-import React, { useState } from 'react';
+import { useFeedContext } from '../../Contexts/feedContext';
+
+import axios from 'axios';
 import {
   differenceInDays,
   differenceInWeeks,
   getDay,
   isThisWeek
 } from 'date-fns';
+
 import { textStyles } from '../../Stylesheets/Stylesheet';
 
 const SingleTask = ({ item }) => {
   const { user, setUser } = useUserContext();
   const { socket } = useSocketContext();
+  const { feed, setFeed } = useFeedContext();
   const [finished, setFinished] = useState(item.is_complete);
   const [taskPublic, setTaskPublic] = useState(item.is_public);
 
@@ -22,12 +27,11 @@ const SingleTask = ({ item }) => {
       const { data: updateSuccessful } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/private`
       );
-      if (!updateSuccessful) {
-        return;
+      if (updateSuccessful) {
+        setTaskPublic(false);
+        setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
+        socket.emit('removeFromFeed', item.id);
       }
-      setTaskPublic(false);
-      // setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
-      socket.emit('removeFromFeed', item);
     } catch (error) {
       console.warn(error);
     }
@@ -38,18 +42,17 @@ const SingleTask = ({ item }) => {
       const { data: updateSuccessful } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/public`
       );
-      if (!updateSuccessful) {
-        return;
+      if (updateSuccessful) {
+        setTaskPublic(true);
+        setFeed([...feed, updateSuccessful]);
+        socket.emit('addToFeed', item);
       }
-      setTaskPublic(true);
-      // setFeed([...feed, item]);
-      socket.emit('addToFeed', item);
     } catch (error) {
       console.warn(error);
     }
   };
 
-  const markTaskComplete = async () => {
+  const markTaskComplete = async (): Promise<void> => {
     try {
       const {
         data: { task, points, level }
@@ -68,27 +71,29 @@ const SingleTask = ({ item }) => {
     }
   };
 
-  const markTaskIncomplete = async () => {
+  const markTaskIncomplete = async (): Promise<void> => {
     try {
       const {
         data: { points, level }
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/incomplete`
       );
-      await unshareTask();
       const mappedTasks = user.tasks.map((task) => {
         if (task.id === item.id) {
-          return { ...task, is_complete: false };
+          return { ...task, is_complete: false, is_public: false };
         }
         return task;
       });
+      // setFinished(false);
       setUser({ ...user, tasks: mappedTasks, points, level });
+      // setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
+      socket.emit('removeFromFeed', item.id);
     } catch (error) {
       console.warn(error);
     }
   };
 
-  const removeTask = async () => {
+  const removeTask = async (): Promise<void> => {
     try {
       const { data: deleteSuccessful } = await axios.delete(
         `http://localhost:3000/api/tasks/${item.id}`
@@ -98,13 +103,15 @@ const SingleTask = ({ item }) => {
           return task.id !== item.id;
         });
         setUser({ ...user, tasks: filteredTasks });
+        setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
+        socket.emit('removeFromFeed', item.id);
       }
     } catch (error) {
       console.warn(error);
     }
   };
 
-  const fn = (date: Date) => {
+  const addTimeStamp = (date: Date) => {
     const days = {
       0: 'Monday',
       1: 'Tuesday',
@@ -140,7 +147,7 @@ const SingleTask = ({ item }) => {
         <Text
           style={user.readable_font ? textStyles.text_big : textStyles.text}
         >
-          {item.description} - {fn(item.due_date)}
+          {item.description} - {addTimeStamp(item.due_date)}
         </Text>
       </View>
       <Button title='Remove' onPress={removeTask} />

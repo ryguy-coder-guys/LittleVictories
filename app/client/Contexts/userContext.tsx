@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, UserStat } from '../Interfaces/user';
 
 interface UserContextState {
@@ -32,6 +32,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   const [userStat, setUserStat] = useState<UserStat>(
     UserDefaultValues.userStat
   );
+
   return (
     <UserContext.Provider value={{ user, setUser, userStat, setUserStat }}>
       {children}

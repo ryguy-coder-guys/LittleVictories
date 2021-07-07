@@ -13,7 +13,7 @@ import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { isBefore } from 'date-fns';
-
+import Tasks from './Tasks';
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
   const [description, setDescription] = useState('');
@@ -23,7 +23,6 @@ const TaskForm = () => {
   //for date selector
   const [date, setDate] = useState(new Date());
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
-
   const isPast = (date: Date) => {
     if (new Date(date).getFullYear() < new Date().getFullYear()) return true;
     if (new Date(date).getFullYear() > new Date().getFullYear()) return false;
@@ -32,7 +31,6 @@ const TaskForm = () => {
     if (new Date(date).getDate() < new Date().getDate()) return true;
     if (new Date(date).getDate() >= new Date().getDate()) return false;
   };
-
   const handleSubmit = async () => {
     if (isPast(date)) {
       alert('this date is in the past, please select a future date.');
@@ -61,12 +59,10 @@ const TaskForm = () => {
       });
     }
   };
-
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
   };
-
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

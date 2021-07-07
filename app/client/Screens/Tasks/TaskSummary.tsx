@@ -10,14 +10,6 @@ const TaskList = ({ item }) => {
   return <SingleTask item={item} />;
 };
 
-const ListHeader = () => {
-  return (
-    <View>
-      <TaskForm />
-    </View>
-  );
-};
-
 const TaskSummary = () => {
   const { user } = useUserContext();
 
@@ -27,7 +19,7 @@ const TaskSummary = () => {
         keyExtractor={() => getKey()}
         data={user ? user.tasks : []}
         renderItem={TaskList}
-        ListHeaderComponent={<ListHeader />}
+        ListHeaderComponent={() => <TaskForm />}
       />
     </View>
   );
