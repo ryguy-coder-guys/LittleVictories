@@ -13,7 +13,7 @@ module.exports = {
       ref: 'origin/main',
       repo: 'git@github.com:ryguy-coder-guys/LittleVictories.git',
       path: '/home/ubuntu/LittleVictories',
-      'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js'
+      'post-deploy': 'pm2 startOrRestart ecosystem.config.js'
     }
   }
 };
