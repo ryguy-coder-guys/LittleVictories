@@ -43,7 +43,8 @@ export const registerUser: RequestHandler = async (req, res) => {
     entries: [],
     habits: [],
     points: 0,
-    readable_font: false
+    readable_font: false,
+    userStats: []
   };
 
   res.send(formattedUser);
@@ -62,10 +63,12 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     order: [['due_date', 'ASC']],
   });
 
-  const userStats = await UserStat.findOne({
+  const userStat = await UserStat.findOne({
     where: { date: format(new Date(), 'MM-dd-yyyy'), user_id: user.id },
   });
-  // console.log(userStats, 'THIS THING IS USERSTATS'); // returns null if no stats
+  const userStats = await UserStat.findAll({
+    where: { user_id: user.id },
+  });
 
   const habits = await Habit.findAll({ where: { user_id: user.id } });
 
@@ -74,7 +77,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     username: user.getDataValue('username'),
     points: user.getDataValue('points'),
     level: user.getDataValue('level'),
-    readable_font: user.getDataValue('readable_font')
+    readable_font: user.getDataValue('readable_font'),
   };
   const mappedTasks = tasks
     .filter(
@@ -102,9 +105,10 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
   const formattedUser = {
     ...mappedUser,
     tasks: mappedTasks,
-    userStats: userStats,
+    userStat: userStat,
     entries: entries ? entries : [],
     habits: habits ? habits : [],
+    userStats: userStats ? userStats : []
   };
 
   res.send(formattedUser);

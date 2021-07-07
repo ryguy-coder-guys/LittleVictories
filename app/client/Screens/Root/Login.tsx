@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -10,9 +10,10 @@ import {
 import AwesomeButton from 'react-native-really-awesome-button';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
+import { containerStyles } from '../../Stylesheets/Stylesheet';
 
 const Login = ({ navigation }) => {
-  const { setUser, setUserStats } = useUserContext();
+  const { setUser, setUserStat } = useUserContext();
 
   const bgImage = require('../../../assets/blue-gradient.png');
   const logo = require('../../../assets/logo.png');
@@ -54,9 +55,10 @@ const Login = ({ navigation }) => {
       );
       if (userObj) {
         // if successful navigate to home
+        console.log('THIS', userObj.userStat);
         setTimeout(() => {
           setUser(userObj);
-          setUserStats(userObj.userStats);
+          setUserStat(userObj.userStat);
           navigation.navigate('index');
         }, 5000);
         setUsername('');
@@ -105,7 +107,7 @@ const Login = ({ navigation }) => {
   // default view or if login btn is clicked
   if (loginSelected) {
     return (
-      <ImageBackground style={styles.backgroundImage} source={bgImage}>
+      <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
@@ -188,7 +190,7 @@ const Login = ({ navigation }) => {
     // default view or if login btn is clicked
   } else {
     return (
-      <ImageBackground style={styles.backgroundImage} source={bgImage}>
+      <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
@@ -279,9 +281,6 @@ const Login = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1
-  },
   button: {
     marginLeft: 5,
     marginRight: 5,

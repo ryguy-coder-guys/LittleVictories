@@ -12,7 +12,7 @@ import { UserDefaultValues } from '../../Contexts/userContext';
 
 const SettingsScreen = ({ navigation }) => {
   const bgImage = require('../../../assets/blue-gradient.png');
-  const { user, setUser, setUserStats } = useUserContext();
+  const { user, setUser, setUserStat } = useUserContext();
   const { getQuote } = useQuoteContext();
   const { setJournal, setJournals } = useJournalContext();
 
@@ -21,6 +21,8 @@ const SettingsScreen = ({ navigation }) => {
     setUser(UserDefaultValues.user);
     setJournal({ content: '', date: moment().format('MM-D-Y') });
     setJournals([]);
+    setUserStat(UserDefaultValues.userStat);
+    navigation.navigate('login');
   };
 
   const changeUserAccessibilityOption = async () => {
@@ -77,8 +79,6 @@ const SettingsScreen = ({ navigation }) => {
           }
           onPress={() => {
             logout();
-            setUserStats(null);
-            navigation.navigate('login');
           }}
         />
       </View>

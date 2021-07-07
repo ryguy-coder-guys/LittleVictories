@@ -50,15 +50,15 @@ const TaskForm = () => {
       const sortedTasks = [...(user?.tasks || []), task].sort((t1, t2) =>
         isBefore(new Date(t1.due_date), new Date(t2.due_date)) ? -1 : 1
       );
-      setUser({
-        ...user,
-        tasks: sortedTasks
-      });
       setShowForm(false);
       setDescription('');
       setDate(new Date());
       setTimeToComplete(0);
       setIsImportant(false);
+      setUser({
+        ...user,
+        tasks: sortedTasks
+      });
     }
   };
 
