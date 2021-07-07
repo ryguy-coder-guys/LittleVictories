@@ -1,3 +1,4 @@
+import { UserInstance } from './../database/models/user';
 import { RegisterUserReqBody, LoginUserReqBody } from './../interfaces/users';
 import { RequestHandler } from 'express';
 import { User } from '../database/models/user';
@@ -9,13 +10,17 @@ import { isPast, format } from 'date-fns';
 import { UserStat } from '../database/models/stat';
 import { Habit } from '../database/models/habit';
 import { Friend } from '../database/models/friend';
+import { User as UserInterface } from '../interfaces/users';
+import { FormattedUser } from '../interfaces/users';
+export { UserInstance } from '../database/models/user';
 
 const getHash = async (password: string): Promise<string> =>
   await bcrypt.hash(password, 12);
 
-// create user interface
-// add return type Promise<false | User>
-const validate = async (username: string, password: string) => {
+const validate = async (
+  username: string,
+  password: string
+): Promise<false | UserInstance> => {
   const user = await User.findOne({ where: { username } });
   if (!user) {
     return false;
@@ -25,16 +30,16 @@ const validate = async (username: string, password: string) => {
 };
 
 // add return type Promise<false | user>
-export const registerUser: RequestHandler = async (req, res) => {
+export const registerUser: RequestHandler = async (req, res): Promise<void> => {
   const { username, password } = req.body as RegisterUserReqBody;
   const user = await User.findOne({ where: { username } });
   if (user) {
-    return res.send(false);
+    res.send(false);
   }
   const newUser = await User.create({
     id: getId(),
     username,
-    hash: await getHash(password),
+    hash: await getHash(password)
   });
   const formattedUser = {
     id: newUser.id,
@@ -43,74 +48,74 @@ export const registerUser: RequestHandler = async (req, res) => {
     entries: [],
     habits: [],
     points: 0,
-    readable_font: false,
+    readable_font: false
   };
-
   res.send(formattedUser);
 };
 
-// create formatted user interface
-// add return type Promise<false | FormattedUser>
-export const loginUser: RequestHandler = async (req, res): Promise<any> => {
+export const loginUser: RequestHandler = async (req, res): Promise<void> => {
   const { username, password } = req.body as LoginUserReqBody;
-  const user = await validate(username, password);
-  if (!user) {
-    return false;
+  const isValid = await validate(username, password);
+  if (!isValid) {
+    res.send(false);
   }
-  const tasks = await Task.findAll({
-    where: { user_id: user.id },
-    order: [['due_date', 'ASC']],
-  });
-
-  const userStats = await UserStat.findOne({
-    where: { date: format(new Date(), 'MM-dd-yyyy'), user_id: user.id },
-  });
-  // console.log(userStats, 'THIS THING IS USERSTATS'); // returns null if no stats
-
-  const habits = await Habit.findAll({ where: { user_id: user.id } });
-
-  const mappedUser = {
-    id: user.getDataValue('id'),
-    username: user.getDataValue('username'),
-    points: user.getDataValue('points'),
-    level: user.getDataValue('level'),
-    readable_font: user.getDataValue('readable_font'),
-  };
-  const mappedTasks = tasks
-    .filter(
-      (task) =>
-        task.getDataValue('is_complete') === 0 ||
-        !isPast(task.getDataValue('due_date'))
-    )
-    .map((task) => {
-      return {
-        id: task.getDataValue('id'),
-        description: task.getDataValue('description'),
-        due_date: task.getDataValue('due_date'),
-        minutes_to_complete: task.getDataValue('minutes_to_complete'),
-        is_important: task.getDataValue('is_important'),
-        is_complete: task.getDataValue('is_complete'),
-        is_public: task.getDataValue('is_public'),
-      };
+  const user = await User.findOne({ where: { username } });
+  if (user) {
+    const tasks = await Task.findAll({
+      where: { user_id: user.id },
+      order: [['due_date', 'ASC']]
     });
 
-  const entries = await JournalEntry.findAll({
-    where: { user_id: user.id },
-    order: [['createdAt', 'DESC']],
-  });
+    const userStats = await UserStat.findOne({
+      where: { date: format(new Date(), 'MM-dd-yyyy'), user_id: user.id }
+    });
+    // console.log(userStats, 'THIS THING IS USERSTATS'); // returns null if no stats
 
-  const formattedUser = {
-    ...mappedUser,
-    tasks: mappedTasks,
-    userStats: userStats,
-    entries: entries ? entries : [],
-    habits: habits ? habits : [],
-  };
+    const habits = await Habit.findAll({ where: { user_id: user.id } });
 
-  res.send(formattedUser);
+    const mappedUser = {
+      id: user.getDataValue('id'),
+      username: user.getDataValue('username'),
+      points: user.getDataValue('points'),
+      level: user.getDataValue('level'),
+      readable_font: user.getDataValue('readable_font')
+    };
+    const mappedTasks = tasks
+      .filter(
+        (task) =>
+          task.getDataValue('is_complete') === 0 ||
+          !isPast(task.getDataValue('due_date'))
+      )
+      .map((task) => {
+        return {
+          id: task.getDataValue('id'),
+          description: task.getDataValue('description'),
+          due_date: task.getDataValue('due_date'),
+          minutes_to_complete: task.getDataValue('minutes_to_complete'),
+          is_important: task.getDataValue('is_important'),
+          is_complete: task.getDataValue('is_complete'),
+          is_public: task.getDataValue('is_public')
+        };
+      });
+
+    const entries = await JournalEntry.findAll({
+      where: { user_id: user.id },
+      order: [['createdAt', 'DESC']]
+    });
+
+    const formattedUser = {
+      ...mappedUser,
+      tasks: mappedTasks,
+      userStats: userStats,
+      entries: entries ? entries : [],
+      habits: habits ? habits : []
+    };
+
+    res.send(formattedUser);
+  }
 };
 
-export const users: RequestHandler = async (req, res) => {
+export const users: RequestHandler = async (req, res): Promise<void> => {
   try {
     const users = await User.findAll();
     const mappedUsers = await Promise.all(
@@ -118,19 +123,19 @@ export const users: RequestHandler = async (req, res) => {
         //console.log(user, 'line 120');
         const isFriend = await Friend.findOne({
           where: {
-            friend_id: user.id,
-          },
+            friend_id: user.id
+          }
         });
         return {
           id: user.getDataValue('id'),
           userName: user.getDataValue('username'),
-          isFriend: !!isFriend,
+          isFriend: !!isFriend
         };
       })
     );
     res.status(200).send(mappedUsers);
   } catch (err) {
-    console.log('error fetching ', err.message);
+    console.log('error fetching ', err);
     res.sendStatus(500);
   }
 };

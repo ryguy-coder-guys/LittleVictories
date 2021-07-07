@@ -4,18 +4,18 @@ import { Task } from '../database/models/task';
 import { RequestHandler } from 'express';
 import { AddTaskReqBody } from '../interfaces/tasks';
 import { User } from '../database/models/user';
-import { List } from '../database/models/list';
 import { Like } from '../database/models/like';
 import { Comment } from '../database/models/comment';
+import { TaskReqParams } from '../interfaces/tasks';
 
 const ptsToLvlUp = 250;
 
-export const getTasks: RequestHandler = async (req, res) => {
+export const getTasks: RequestHandler = async (req, res): Promise<void> => {
   const tasks = await Task.findAll();
   res.send(tasks);
 };
 
-export const addTask: RequestHandler = async (req, res) => {
+export const addTask: RequestHandler = async (req, res): Promise<void> => {
   const {
     user_id,
     description,
@@ -28,7 +28,7 @@ export const addTask: RequestHandler = async (req, res) => {
   try {
     const user = await User.findOne({ where: { id: user_id } });
     if (!user) {
-      return res.send(`no user found with id of ${user_id}`);
+      res.send(`no user found with id of ${user_id}`);
     }
 
     const newTask = await Task.create({
@@ -57,7 +57,10 @@ export const addTask: RequestHandler = async (req, res) => {
   }
 };
 
-export const removeTask: RequestHandler<{ id: string }> = async (req, res) => {
+export const removeTask: RequestHandler<TaskReqParams> = async (
+  req,
+  res
+): Promise<void> => {
   const { id } = req.params;
   await Like.destroy({ where: { task_id: id } });
   await Comment.destroy({ where: { task_id: id } });
@@ -65,10 +68,10 @@ export const removeTask: RequestHandler<{ id: string }> = async (req, res) => {
   res.send(true);
 };
 
-export const markTaskAsComplete: RequestHandler<{ id: string }> = async (
+export const markTaskAsComplete: RequestHandler<TaskReqParams> = async (
   req,
   res
-) => {
+): Promise<void> => {
   try {
     const { id } = req.params;
     await Task.update(
@@ -104,10 +107,10 @@ export const markTaskAsComplete: RequestHandler<{ id: string }> = async (
   }
 };
 
-export const markTaskAsIncomplete: RequestHandler<{ id: string }> = async (
+export const markTaskAsIncomplete: RequestHandler<TaskReqParams> = async (
   req,
   res
-) => {
+): Promise<void> => {
   try {
     const { id } = req.params;
     await Like.destroy({ where: { task_id: id } });
@@ -144,10 +147,10 @@ export const markTaskAsIncomplete: RequestHandler<{ id: string }> = async (
   }
 };
 
-export const markTaskAsPublic: RequestHandler<{ id: string }> = async (
+export const markTaskAsPublic: RequestHandler<TaskReqParams> = async (
   req,
   res
-) => {
+): Promise<void> => {
   try {
     const { id } = req.params;
     await Task.update({ is_public: true }, { where: { id } });
@@ -168,7 +171,7 @@ export const markTaskAsPublic: RequestHandler<{ id: string }> = async (
   }
 };
 
-export const markTaskAsPrivate: RequestHandler<{ id: string }> = async (
+export const markTaskAsPrivate: RequestHandler<TaskReqParams> = async (
   req,
   res
 ) => {
@@ -183,10 +186,7 @@ export const markTaskAsPrivate: RequestHandler<{ id: string }> = async (
   }
 };
 
-export const getFeedItems: RequestHandler<{ id: string }> = async (
-  req,
-  res
-) => {
+export const getFeedItems: RequestHandler<TaskReqParams> = async (req, res) => {
   try {
     const { id } = req.params;
     const friends = await Friend.findAll({ where: { user_id: id } });
