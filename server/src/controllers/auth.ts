@@ -126,7 +126,6 @@ export const users: RequestHandler = async (req, res): Promise<void> => {
     const users = await User.findAll();
     const mappedUsers = await Promise.all(
       users.map(async (user) => {
-        //console.log(user, 'line 120');
         const isFriend = await Friend.findOne({
           where: {
             friend_id: user.id
