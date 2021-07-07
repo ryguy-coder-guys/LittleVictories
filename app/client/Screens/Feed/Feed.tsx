@@ -10,7 +10,7 @@ const Feed = (): ReactElement => {
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const buttons = ['Feed', 'Followers'];
+  const buttons = ['Feed', 'Friends'];
 
   const updateIndex = (selectedIndex) => {
     setSelectedIndex(selectedIndex);

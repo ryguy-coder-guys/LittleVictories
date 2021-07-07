@@ -42,7 +42,7 @@ const Friends = (): ReactElement => {
   return (
     <View style={styles.main}>
       <Text style={user.readable_font ? textStyles.h1_big : textStyles.h1}>
-        Add Followers
+        User Search
       </Text>
       <TextInput
         autoCorrect={false}
