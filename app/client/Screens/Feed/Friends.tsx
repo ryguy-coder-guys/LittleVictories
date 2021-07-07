@@ -33,8 +33,8 @@ const SingleFriend = ({ item, user, users, setUsers }) => {
           }
           return currentUser;
         });
-        setUsers(mappedUsers);
         setIsFriend(true);
+        setUsers(mappedUsers);
       }
     } catch (error) {
       console.warn(error);
@@ -50,8 +50,8 @@ const SingleFriend = ({ item, user, users, setUsers }) => {
         }
         return currentUser;
       });
-      setUsers(mappedUsers);
       setIsFriend(false);
+      setUsers(mappedUsers);
     } catch (error) {
       console.warn(error);
     }
@@ -70,8 +70,7 @@ const SingleFriend = ({ item, user, users, setUsers }) => {
             color='#841584'
             accessibilityLabel='Learn more about this purple button'
           />
-        ) : null}
-        {isFriend ? (
+        ) : (
           <Button
             onPress={() => {
               removeFriend(item.id), alert('Friend Removed');
@@ -80,7 +79,7 @@ const SingleFriend = ({ item, user, users, setUsers }) => {
             color='#841584'
             accessibilityLabel='Learn more about this purple button'
           />
-        ) : null}
+        )}
       </View>
     </View>
   );
@@ -89,14 +88,12 @@ const SingleFriend = ({ item, user, users, setUsers }) => {
 const Friends = (): ReactElement => {
   const [users, setUsers] = useState([]);
   const [query, setQuery] = useState('');
-  const [fullData, setFullData] = useState([]);
   const { user } = useUserContext();
 
   const getAllUsers = () => {
     axios
       .get('http://localhost:3000/api/auth/users')
       .then(({ data }) => {
-        setFullData(data);
         setUsers(data);
       })
       .catch((err) => console.warn(err, 'l'));
@@ -106,17 +103,6 @@ const Friends = (): ReactElement => {
       getAllUsers();
     }
   }, [user]);
-
-  //The user's name is filtered from the state variable fullData while the state variable users stores the final results after the search to render the //////correct user.
-  const handleSearch = (text) => {
-    const filteredData = filter(fullData, (user) => {
-      const itemData = user.userName.toUpperCase();
-      const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-    setUsers(filteredData);
-    setQuery(text);
-  };
 
   const List = ({ query }) => {
     return (

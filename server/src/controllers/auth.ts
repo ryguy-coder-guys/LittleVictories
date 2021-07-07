@@ -8,7 +8,7 @@ import { JournalEntry } from '../database/models/journalEntry';
 import { isPast, format } from 'date-fns';
 import { UserStat } from '../database/models/stat';
 import { Habit } from '../database/models/habit';
-import { Friend } from '../database/models/friend'
+import { Friend } from '../database/models/friend';
 
 const getHash = async (password: string): Promise<string> =>
   await bcrypt.hash(password, 12);
@@ -43,7 +43,7 @@ export const registerUser: RequestHandler = async (req, res) => {
     entries: [],
     habits: [],
     points: 0,
-    readable_font: false
+    readable_font: false,
   };
 
   res.send(formattedUser);
@@ -74,7 +74,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     username: user.getDataValue('username'),
     points: user.getDataValue('points'),
     level: user.getDataValue('level'),
-    readable_font: user.getDataValue('readable_font')
+    readable_font: user.getDataValue('readable_font'),
   };
   const mappedTasks = tasks
     .filter(
@@ -110,29 +110,27 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
   res.send(formattedUser);
 };
 
-
-
 export const users: RequestHandler = async (req, res) => {
   try {
     const users = await User.findAll();
-    const mappedUsers = await Promise.all(users.map(async (user) => {
-      //console.log(user, 'line 120');
-      const isFriend = await Friend.findOne({
-        where: {
-          friend_id: user.id,
-        }
+    const mappedUsers = await Promise.all(
+      users.map(async (user) => {
+        //console.log(user, 'line 120');
+        const isFriend = await Friend.findOne({
+          where: {
+            friend_id: user.id,
+          },
+        });
+        return {
+          id: user.getDataValue('id'),
+          userName: user.getDataValue('username'),
+          isFriend: !!isFriend,
+        };
       })
-      return {
-        id: user.getDataValue('id'),
-        userName: user.getDataValue('username'),
-        isFriend: !!isFriend
-      }
-    }))
+    );
     res.status(200).send(mappedUsers);
-
   } catch (err) {
     console.log('error fetching ', err.message);
     res.sendStatus(500);
   }
 };
-
