@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 
-const Achievements = () => {
+const Achievements = (): ReactElement => {
   const { user } = useUserContext();
   return (
     <View style={styles.view}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ReactElement } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { useUserContext } from '../../Contexts/userContext';
@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import { Button, getIconType } from 'react-native-elements';
 import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const DailyReflection = ({ setHasStats }) => {
+const DailyReflection = ({ setHasStats }): ReactElement => {
   const { user, userStat, setUserStat } = useUserContext();
   const [sleepHours, setSleepHours] = useState('');
   const [didEatWell, setDidEatWell] = useState('');
@@ -44,12 +44,12 @@ const DailyReflection = ({ setHasStats }) => {
     }
   };
 
-  const handleFace = (value) => {
+  const handleFace = (value: string) => {
     setMood(value);
     setActiveIcon(value);
   };
 
-  const getIcon = (mood) => {
+  const getIcon = (mood: string) => {
     const icons = {
       great: 'emoticon-excited-outline',
       good: 'emoticon-happy-outline',

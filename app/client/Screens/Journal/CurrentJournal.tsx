@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { View, TextInput, StyleSheet, Text, Alert } from 'react-native';
-import { format } from 'date-fns';
 import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
 import { useJournalContext } from '../../Contexts/journalContext';
@@ -8,10 +7,10 @@ import moment from 'moment';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { Button } from 'react-native-elements';
 
-const Journal = (): React.ReactElement => {
+const Journal = (): ReactElement => {
   const { user } = useUserContext();
   const { journal, setJournal } = useJournalContext();
-  const [date] = useState(moment().format('MMM Do Y'));
+  const [date] = useState(moment().format('MMMM Do Y'));
 
   const saveJournal = async (): Promise<void> => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
@@ -63,7 +62,9 @@ const Journal = (): React.ReactElement => {
           title='Clear Entry'
           buttonStyle={styles.button}
           titleStyle={
-            user.readable_font ? styles.buttonTextLarger : styles.buttonText
+            user.readable_font
+              ? textStyles.buttonText_big
+              : textStyles.buttonText
           }
           onPress={() => {
             clearJournal();
@@ -88,7 +89,7 @@ const Journal = (): React.ReactElement => {
         title='Save'
         buttonStyle={[styles.button, styles.submit]}
         titleStyle={
-          user.readable_font ? styles.buttonTextLarger : styles.buttonText
+          user.readable_font ? textStyles.buttonText_big : textStyles.buttonText
         }
         onPress={() => {
           saveJournal();
@@ -102,12 +103,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#1D426D',
     borderRadius: 10
-  },
-  buttonText: {
-    fontSize: 18
-  },
-  buttonTextLarger: {
-    fontSize: 20
   },
   date: {
     color: '#1D426D',

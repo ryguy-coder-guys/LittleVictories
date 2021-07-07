@@ -1,23 +1,22 @@
 import React, { ReactElement, useState } from 'react';
-import { ImageBackground, SafeAreaView, StyleSheet, View } from 'react-native';
+import { ImageBackground, SafeAreaView } from 'react-native';
 import ProgressBar from '../Root/ProgressBar';
 import FeedView from './FeedView';
 import { ButtonGroup } from 'react-native-elements';
 import Friends from './Friends';
+import { containerStyles } from '../../Stylesheets/Stylesheet';
 
 const Feed = (): ReactElement => {
-  const bgImage = require('../../../assets/blue-gradient.png');
-
+  const bgImage: any = require('../../../assets/blue-gradient.png');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const buttons: string[] = ['Feed', 'Friends'];
 
-  const buttons = ['Feed', 'Friends'];
-
-  const updateIndex = (selectedIndex) => {
+  const updateIndex = (selectedIndex: number): void => {
     setSelectedIndex(selectedIndex);
   };
 
   return (
-    <ImageBackground style={styles.backgroundImage} source={bgImage}>
+    <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
       <ProgressBar />
       <SafeAreaView>
         <ButtonGroup
@@ -45,26 +44,5 @@ const Feed = (): ReactElement => {
     </ImageBackground>
   );
 };
-
-const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1
-  },
-  scrollview: {
-    textAlign: 'center',
-    alignContent: 'center'
-  },
-  taskbarText: {
-    fontSize: 18,
-    color: '#1D426D'
-  },
-  taskbarView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 40,
-    paddingRight: 40,
-    paddingTop: 20
-  }
-});
 
 export default Feed;

@@ -82,8 +82,14 @@ const MoodChart = (): PieChart => {
     return moodCount;
   };
 
-  const moodCount = getMoods();
-  const svgFills = ['#600080', '#9900cc', '#c61aff', '#d966ff', '#ecb3ff'];
+  const moodCount: any = getMoods();
+  const svgFills: string[] = [
+    '#600080',
+    '#9900cc',
+    '#c61aff',
+    '#d966ff',
+    '#ecb3ff'
+  ];
 
   const data: MoodData[] = Object.keys(moodCount).map((mood, index) => {
     return {
@@ -179,12 +185,12 @@ const SleepHoursChart = (): BarChart => {
 
   const getTrueCount = (condition) => {
     let trueCount: number;
-    const datesInLastWeek = getDatesInLastWeek();
+    const datesInLastWeek: string[] = getDatesInLastWeek();
     if (userStat) {
       trueCount = userStat[condition] ? 1 : 0;
-      for (let i = 5; i > 0; i--) {
-        const targetDate = datesInLastWeek[i];
-        const foundDate = user.userStats.find(
+      for (let i: number = 5; i > 0; i--) {
+        const targetDate: string = datesInLastWeek[i];
+        const foundDate: UserStat = user.userStats.find(
           (stat) => stat.date === targetDate
         );
         if (foundDate && foundDate[condition]) {
@@ -193,9 +199,9 @@ const SleepHoursChart = (): BarChart => {
       }
     } else {
       trueCount = 0;
-      for (let i = 6; i > 0; i--) {
-        const targetDate = datesInLastWeek[i];
-        const foundDate = user.userStats.find(
+      for (let i: number = 6; i > 0; i--) {
+        const targetDate: string = datesInLastWeek[i];
+        const foundDate: UserStat = user.userStats.find(
           (stat) => stat.date === targetDate
         );
         if (foundDate && foundDate[condition]) {
@@ -206,14 +212,14 @@ const SleepHoursChart = (): BarChart => {
     return trueCount;
   };
 
-  const getFalseCount = (condition) => {
+  const getFalseCount = (condition: string) => {
     let falseCount: number;
-    const datesInLastWeek = getDatesInLastWeek();
+    const datesInLastWeek: string[] = getDatesInLastWeek();
     if (userStat) {
       falseCount = userStat[condition] ? 0 : 1;
-      for (let i = 5; i > 0; i--) {
-        const targetDate = datesInLastWeek[i];
-        const foundDate = user.userStats.find(
+      for (let i: number = 5; i > 0; i--) {
+        const targetDate: string = datesInLastWeek[i];
+        const foundDate: UserStat = user.userStats.find(
           (stat) => stat.date === targetDate
         );
         if (foundDate && !foundDate[condition]) {
@@ -222,9 +228,9 @@ const SleepHoursChart = (): BarChart => {
       }
     } else {
       falseCount = 0;
-      for (let i = 6; i > 0; i--) {
-        const targetDate = datesInLastWeek[i];
-        const foundDate = user.userStats.find(
+      for (let i: number = 6; i > 0; i--) {
+        const targetDate: string = datesInLastWeek[i];
+        const foundDate: UserStat = user.userStats.find(
           (stat) => stat.date === targetDate
         );
         if (foundDate && !foundDate[condition]) {
@@ -235,9 +241,22 @@ const SleepHoursChart = (): BarChart => {
     return falseCount;
   };
 
-  const axesSvg = { fontSize: 16, fill: '#1D426D' };
-  const verticalContentInset = { top: 10, bottom: 10 };
-  const xAxisHeight = 30;
+  type AxesSvgType = {
+    fontSize: number;
+    fill: string;
+  };
+
+  type VerticalContentInsetType = {
+    top: number;
+    bottom: number;
+  };
+
+  const axesSvg: AxesSvgType = { fontSize: 16, fill: '#1D426D' };
+  const verticalContentInset: VerticalContentInsetType = {
+    top: 10,
+    bottom: 10
+  };
+  const xAxisHeight: number = 30;
 
   return (
     <View>

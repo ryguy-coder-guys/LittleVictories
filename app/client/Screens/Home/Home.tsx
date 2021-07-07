@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -16,7 +16,7 @@ import Achievements from './Achievements';
 import WeeklyStats from './WeeklyStats';
 import DailyReflection from './DailyReflection';
 
-const Home = () => {
+const Home = (): ReactElement => {
   const { user, userStat } = useUserContext();
   const bgImage = require('../../../assets/blue-gradient.png');
   const [hasStats, setHasStats] = useState(userStat || user.userStats.length);
