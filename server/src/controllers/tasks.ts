@@ -31,11 +31,6 @@ export const addTask: RequestHandler = async (req, res) => {
       return res.send(`no user found with id of ${user_id}`);
     }
 
-    // const list = await List.findOne({ where: { id: list_id } });
-    // if (!list) {
-    //   return res.send(`no list found with id of ${list_id}`);
-    // }
-
     const newTask = await Task.create({
       user_id,
       description,
@@ -196,9 +191,14 @@ export const getFeedItems: RequestHandler<{ id: string }> = async (
 ) => {
   try {
     const { id } = req.params;
+    const friends = await Friend.findAll({ where: { user_id: id } });
+    const mappedFriends = friends.map((friend) =>
+      friend.getDataValue('friend_id')
+    );
     const feed = await Task.findAll({
       where: {
         is_public: true,
+        user_id: { [sequelize.Op.in]: mappedFriends },
       },
       order: [['completed_at', 'DESC']],
       limit: 10,
