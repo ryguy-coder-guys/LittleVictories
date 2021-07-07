@@ -138,14 +138,18 @@ const FeedItem = ({
         {likes?.length} likes
       </Text>
       <View style={styles.btnContainer}>
-        <Button
-          title={`${canLike() ? 'Add Like' : 'Remove Like'}`}
-          onPress={() => (canLike() ? addLike(id) : removeLike(id))}
-        />
-        <Button
-          title="Comment"
-          onPress={() => setShowCommentInput(!showCommentInput)}
-        />
+        {username !== user.username && (
+          <Button
+            title={`${canLike() ? 'Add Like' : 'Remove Like'}`}
+            onPress={() => (canLike() ? addLike(id) : removeLike(id))}
+          />
+        )}
+        {username !== user.username && (
+          <Button
+            title="Comment"
+            onPress={() => setShowCommentInput(!showCommentInput)}
+          />
+        )}
       </View>
       {comments?.length ? (
         <FlatList
@@ -171,6 +175,13 @@ const FeedItem = ({
               if (commentText.length) {
                 addComment();
               }
+            }}
+          />
+          <Button
+            title="Cancel"
+            onPress={() => {
+              setCommentText('');
+              setShowCommentInput(false);
             }}
           />
         </View>

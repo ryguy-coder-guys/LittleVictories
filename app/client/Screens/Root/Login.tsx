@@ -27,6 +27,7 @@ const Login = ({ navigation }) => {
   const [loginSelected, toggleLogin] = useState(true);
   const [mismatchPasswords, setMismatchPasswords] = useState(false);
   const [wrongLogin, toggleWrongLogin] = useState(false);
+  const [userExists, setUserExists] = useState(false);
 
   const handleClick = (view) => {
     if (view === 'login') {
@@ -68,7 +69,6 @@ const Login = ({ navigation }) => {
         socket.emit('loggedIn', userObj.id);
         navigation.navigate('loading');
       } else {
-        // if not successful, will need to toggle wrongLogin
         toggleWrongLogin(true);
       }
     } else if (!loginSelected) {
@@ -80,6 +80,7 @@ const Login = ({ navigation }) => {
       ) {
         if (passwordAttempt !== passwordAttempt2) {
           setMismatchPasswords(true);
+          setUserExists(false);
         }
         return;
       }
@@ -100,7 +101,8 @@ const Login = ({ navigation }) => {
         setPasswordAttempt2('');
         navigation.navigate('index');
       } else {
-        setMismatchPasswords(true);
+        setUserExists(true);
+        setMismatchPasswords(false);
         setPasswordAttempt('');
         setPasswordAttempt2('');
       }
@@ -242,7 +244,14 @@ const Login = ({ navigation }) => {
             {mismatchPasswords ? (
               <View>
                 <Text style={styles.error}>Passwords did not match</Text>
-                <Text style={styles.error}>or username is already taken.</Text>
+                {/* <Text style={styles.error}>or username is already taken.</Text> */}
+                <Text style={styles.error2}>Please try again.</Text>
+              </View>
+            ) : null}
+            {userExists ? (
+              <View>
+                {/* <Text style={styles.error}>Passwords did not match</Text> */}
+                <Text style={styles.error}>Username is already taken.</Text>
                 <Text style={styles.error2}>Please try again.</Text>
               </View>
             ) : null}

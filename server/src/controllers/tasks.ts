@@ -1,3 +1,4 @@
+import { Friend } from './../database/models/friend';
 import sequelize from 'sequelize';
 import { Task } from '../database/models/task';
 import { RequestHandler } from 'express';
@@ -187,11 +188,10 @@ export const getFeedItems: RequestHandler<{ id: string }> = async (
   res
 ) => {
   try {
-    console.log('fetching feed items');
+    const { id } = req.params;
     const feed = await Task.findAll({
       where: {
         is_public: true,
-        // user_id: { [sequelize.Op.not]: req.params.id },
       },
       order: [['completed_at', 'DESC']],
       limit: 10,
@@ -219,7 +219,6 @@ export const getFeedItems: RequestHandler<{ id: string }> = async (
             };
           })
         );
-
         return {
           id: feedItem.getDataValue('id'),
           username: foundUsername,
