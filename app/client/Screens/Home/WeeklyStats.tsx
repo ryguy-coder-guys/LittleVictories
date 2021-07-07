@@ -78,7 +78,7 @@ const MoodChart = (): PieChart => {
         }
       }
     }
-    console.log(moodCount);
+    // console.log(moodCount);
     return moodCount;
   };
 
@@ -179,17 +179,28 @@ const SleepHoursChart = (): BarChart => {
 
   const getTrueCount = (condition) => {
     let trueCount: number;
+    const datesInLastWeek = getDatesInLastWeek();
     if (userStat) {
       trueCount = userStat[condition] ? 1 : 0;
+      for (let i = 5; i > 0; i--) {
+        const targetDate = datesInLastWeek[i];
+        const foundDate = user.userStats.find(
+          (stat) => stat.date === targetDate
+        );
+        if (foundDate && foundDate[condition]) {
+          trueCount++;
+        }
+      }
     } else {
       trueCount = 0;
-    }
-    const datesInLastWeek = getDatesInLastWeek();
-    for (let i = 6; i > 0; i--) {
-      const targetDate = datesInLastWeek[i];
-      const foundDate = user.userStats.find((stat) => stat.date === targetDate);
-      if (foundDate && foundDate[condition]) {
-        trueCount++;
+      for (let i = 6; i > 0; i--) {
+        const targetDate = datesInLastWeek[i];
+        const foundDate = user.userStats.find(
+          (stat) => stat.date === targetDate
+        );
+        if (foundDate && foundDate[condition]) {
+          trueCount++;
+        }
       }
     }
     return trueCount;
@@ -197,17 +208,28 @@ const SleepHoursChart = (): BarChart => {
 
   const getFalseCount = (condition) => {
     let falseCount: number;
+    const datesInLastWeek = getDatesInLastWeek();
     if (userStat) {
       falseCount = userStat[condition] ? 0 : 1;
+      for (let i = 5; i > 0; i--) {
+        const targetDate = datesInLastWeek[i];
+        const foundDate = user.userStats.find(
+          (stat) => stat.date === targetDate
+        );
+        if (foundDate && !foundDate[condition]) {
+          falseCount++;
+        }
+      }
     } else {
       falseCount = 0;
-    }
-    const datesInLastWeek = getDatesInLastWeek();
-    for (let i = 6; i > 0; i--) {
-      const targetDate = datesInLastWeek[i];
-      const foundDate = user.userStats.find((stat) => stat.date === targetDate);
-      if (foundDate && !foundDate[condition]) {
-        falseCount++;
+      for (let i = 6; i > 0; i--) {
+        const targetDate = datesInLastWeek[i];
+        const foundDate = user.userStats.find(
+          (stat) => stat.date === targetDate
+        );
+        if (foundDate && !foundDate[condition]) {
+          falseCount++;
+        }
       }
     }
     return falseCount;

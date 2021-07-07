@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import { Button, getIconType } from 'react-native-elements';
 import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const DailyReflection = () => {
+const DailyReflection = ({ setHasStats }) => {
   const { user, userStat, setUserStat } = useUserContext();
   const [sleepHours, setSleepHours] = useState('');
   const [didEatWell, setDidEatWell] = useState('');
@@ -38,6 +38,7 @@ const DailyReflection = () => {
         date: data.date
       });
       setHasSubmitted(true);
+      setHasStats(true);
     } catch (err) {
       console.warn('had issues posting stats (client)');
     }

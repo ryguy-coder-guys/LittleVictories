@@ -9,6 +9,8 @@ import { isPast, format } from 'date-fns';
 import { UserStat } from '../database/models/stat';
 import { Habit } from '../database/models/habit';
 import { Friend } from '../database/models/friend';
+import { Like } from '../database/models/like';
+import { Comment } from '../database/models/comment';
 
 const getHash = async (password: string): Promise<string> =>
   await bcrypt.hash(password, 12);
@@ -127,7 +129,7 @@ export const users: RequestHandler = async (req, res) => {
         });
         return {
           id: user.getDataValue('id'),
-          userName: user.getDataValue('username'),
+          username: user.getDataValue('username'),
           isFriend: !!isFriend,
         };
       })
@@ -138,3 +140,21 @@ export const users: RequestHandler = async (req, res) => {
     res.sendStatus(500);
   }
 };
+
+export const removeUser: RequestHandler<{id: string}> = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Like.destroy({where: {user_id: id}});
+    await Comment.destroy({where: {user_id: id}});
+    await Friend.destroy({where: {user_id: id}});
+    await UserStat.destroy({where: {user_id: id}});
+    await JournalEntry.destroy({where: {user_id: id}});
+    await Habit.destroy({where: {user_id: id}});
+    await Task.destroy({where: {user_id: id}});
+    await User.destroy({where: {id: id}});
+    res.status(201).send(`User ${id} has been deleted from DB.`);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+}

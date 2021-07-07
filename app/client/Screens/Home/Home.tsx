@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -17,8 +17,9 @@ import WeeklyStats from './WeeklyStats';
 import DailyReflection from './DailyReflection';
 
 const Home = () => {
-  const { user } = useUserContext();
+  const { user, userStat } = useUserContext();
   const bgImage = require('../../../assets/blue-gradient.png');
+  const [hasStats, setHasStats] = useState(userStat || user.userStats.length);
 
   if (!user) {
     return <Loading />;
@@ -51,8 +52,8 @@ const Home = () => {
               );
             })}
           </View>
-          <DailyReflection />
-          <WeeklyStats />
+          <DailyReflection setHasStats={setHasStats} />
+          {hasStats ? <WeeklyStats /> : null}
           <Achievements />
         </ScrollView>
       </SafeAreaView>

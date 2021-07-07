@@ -16,7 +16,7 @@ const Friends = (): ReactElement => {
       .then(({ data }) => {
         setUsers(
           data.filter((users) => {
-            return users.userName !== user.username;
+            return users.username !== user.username;
           })
         );
       })
@@ -31,7 +31,7 @@ const Friends = (): ReactElement => {
 
   // const handleSearch = (text) => {
   //   const filteredData = filter(fullData, (user) => {
-  //     const itemData = user.userName.toUpperCase();
+  //     const itemData = user.username.toUpperCase();
   //     const textData = text.toUpperCase();
   //     return itemData.indexOf(textData) > -1;
   //   });
@@ -42,7 +42,7 @@ const Friends = (): ReactElement => {
   return (
     <View style={styles.main}>
       <Text style={user.readable_font ? textStyles.h1_big : textStyles.h1}>
-        Add Friends
+        Add Followers
       </Text>
       <TextInput
         autoCorrect={false}
@@ -67,15 +67,15 @@ const styles = StyleSheet.create({
     padding: 20
   },
   main: {
-    margin: 20
+    marginLeft: 40,
+    marginRight: 40,
+    marginTop: 20
   },
   textAreaContainer: {
     backgroundColor: '#8ebac6',
     borderRadius: 10,
     padding: 20,
-    marginTop: 20,
-    marginRight: 20,
-    marginLeft: 20
+    marginTop: 20
   },
   textInput: {
     height: 42,

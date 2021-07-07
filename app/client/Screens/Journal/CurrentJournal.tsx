@@ -8,12 +8,12 @@ import moment from 'moment';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { Button } from 'react-native-elements';
 
-const Journal = () : React.ReactElement => {
+const Journal = (): React.ReactElement => {
   const { user } = useUserContext();
   const { journal, setJournal } = useJournalContext();
   const [date] = useState(moment().format('MMM Do Y'));
 
-  const saveJournal = async () : Promise<void> => {
+  const saveJournal = async (): Promise<void> => {
     await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
       content: journal.content,
@@ -22,7 +22,8 @@ const Journal = () : React.ReactElement => {
 
     alert('Journal successfully saved.');
   };
-  const clearJournal = () : void => {
+
+  const clearJournal = (): void => {
     Alert.alert(
       'Are you sure?',
       'Once deleted, you cannot get this journal entry back.',
@@ -34,13 +35,10 @@ const Journal = () : React.ReactElement => {
         {
           text: 'Clear Entry',
           onPress: async () => {
-            await axios.post(
-              'http://localhost:3000/api/journalEntries/create',
-              {
-                user_id: user.id,
-                content: '',
-                date: format(new Date(), 'MM-dd-yyyy')
-              }
+            await axios.delete(
+              `http://localhost:3000/api/journalEntries/${
+                user.id
+              }/${moment().format('MM-D-Y')}`
             );
             setJournal('');
             alert('Journal successfully cleared.');
@@ -49,28 +47,6 @@ const Journal = () : React.ReactElement => {
       ]
     );
   };
-
-  // const forward = () => {
-  //   if (user) {
-  //     if (!index) {
-  //       return;
-  //     }
-  //     setIndex(index - 1);
-  //     setText(user.entries[index].content);
-  //     setDate(user.entries[index].date);
-  //   }
-  // };
-
-  // const back = () => {
-  //   if (user) {
-  //     if (index === user.entries.length - 1) {
-  //       return;
-  //     }
-  //     setIndex(index + 1);
-  //     setText(user.entries[index].content);
-  //     setDate(user.entries[index].date);
-  //   }
-  // };
 
   return (
     <View style={styles.main}>

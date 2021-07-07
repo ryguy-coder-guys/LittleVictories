@@ -1,7 +1,14 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import { StyleSheet, Text, View, ImageBackground, Switch } from 'react-native';
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  View,
+  ImageBackground,
+  Switch
+} from 'react-native';
 import { Button } from 'react-native-elements';
 
 import { useUserContext } from '../../Contexts/userContext';
@@ -48,6 +55,27 @@ const SettingsScreen = ({ navigation }) => {
     }
   };
 
+  const deleteUser = (): void => {
+    Alert.alert(
+      'Are you sure?',
+      'Once deleted, you can no longer access this account and all associated information will be lost forever.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'Delete Account',
+          onPress: async () => {
+            await axios.delete(`http://localhost:3000/api/auth/${user.id}`);
+            alert('User successfully deleted from Little Victories.');
+            logout();
+          }
+        }
+      ]
+    );
+  };
+
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
       <View style={styles.container}>
@@ -73,7 +101,7 @@ const SettingsScreen = ({ navigation }) => {
             user.readable_font ? styles.buttonTextLarger : styles.buttonText
           }
           onPress={() => {
-            navigation.navigate('login');
+            deleteUser();
           }}
         />
         <Button
