@@ -1,5 +1,5 @@
 import ProgressBar from '../Root/ProgressBar';
-import Journal from './Journal';
+import CurrentJournal from './CurrentJournal';
 import PastJournals from './PastJournals';
 import React, { useState } from 'react';
 import { ImageBackground, SafeAreaView, StyleSheet, View } from 'react-native';
@@ -7,7 +7,7 @@ import { ButtonGroup } from 'react-native-elements';
 import { useUserContext } from '../../Contexts/userContext';
 import { containerStyles } from '../../Stylesheets/Stylesheet';
 
-const Main = () => {
+const Journals = () => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const buttons = ['Current', 'Previous'];
@@ -46,7 +46,7 @@ const Main = () => {
           innerBorderStyle={{ color: '#1D426D' }}
         />
         {selectedIndex === 0 ? (
-          <Journal />
+          <CurrentJournal />
         ) : (
           <View>
             <PastJournals />
@@ -57,4 +57,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default Journals;
