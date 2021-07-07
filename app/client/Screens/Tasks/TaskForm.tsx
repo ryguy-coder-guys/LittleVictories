@@ -13,6 +13,7 @@ import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { isBefore } from 'date-fns';
+import Tasks from './Tasks';
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
   const [description, setDescription] = useState('');
@@ -44,18 +45,18 @@ const TaskForm = () => {
           is_important: isImportant,
         }
       );
-      const sortedTasks = [...(user?.tasks || []), task].sort((t1, t2) =>
-        isBefore(new Date(t1.due_date), new Date(t2.due_date)) ? -1 : 1
-      );
-      setUser({
-        ...user,
-        tasks: sortedTasks,
-      });
+      const sortedTasks = user.tasks
+        .concat([task])
+        .sort((t1, t2) =>
+          isBefore(new Date(t1.due_date), new Date(t2.due_date)) ? -1 : 1
+        );
+      console.log(sortedTasks);
       setShowForm(false);
       setDescription('');
       setDate(new Date());
       setTimeToComplete(0);
       setIsImportant(false);
+      setUser(Object.assign({}, user, { tasks: sortedTasks }));
     }
   };
   const onChange = (event, selectedDate) => {

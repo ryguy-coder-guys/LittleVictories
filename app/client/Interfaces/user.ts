@@ -4,7 +4,7 @@ export interface Entry {
   createdAt: Date;
   content: string;
   date: string;
-  updatedAt: Date; 
+  updatedAt: Date;
 }
 
 export interface Task {

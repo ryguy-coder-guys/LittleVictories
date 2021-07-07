@@ -43,11 +43,11 @@ export const addTask: RequestHandler = async (req, res) => {
     });
     res.send({
       id: newTask.getDataValue('id'),
-      username: user.getDataValue('username'),
       description: newTask.getDataValue('description'),
-      completed_at: newTask.getDataValue('completed_at'),
-      likes: [],
-      comments: [],
+      due_date: newTask.getDataValue('due_date'),
+      is_complete: newTask.getDataValue('is_complete'),
+      is_important: newTask.getDataValue('is_important'),
+      minutes_to_complete: newTask.getDataValue('minutes_to_complete'),
     });
   } catch (err) {
     if (err instanceof Error) {
