@@ -21,7 +21,7 @@ export const addTask: RequestHandler = async (req, res) => {
     description,
     due_date,
     minutes_to_complete,
-    is_important,
+    is_important
     // list_id,
   } = req.body as AddTaskReqBody;
   console.log(req.body);
@@ -38,7 +38,7 @@ export const addTask: RequestHandler = async (req, res) => {
       minutes_to_complete,
       is_important,
       is_complete: false,
-      is_public: false,
+      is_public: false
       //list_id,
     });
     res.send({
@@ -47,7 +47,7 @@ export const addTask: RequestHandler = async (req, res) => {
       due_date: newTask.getDataValue('due_date'),
       is_complete: newTask.getDataValue('is_complete'),
       is_important: newTask.getDataValue('is_important'),
-      minutes_to_complete: newTask.getDataValue('minutes_to_complete'),
+      minutes_to_complete: newTask.getDataValue('minutes_to_complete')
     });
   } catch (err) {
     if (err instanceof Error) {
@@ -93,9 +93,7 @@ export const markTaskAsComplete: RequestHandler<{ id: string }> = async (
             ? currentPoints + minutes
             : (currentPoints + minutes) % ptsToLvlUp,
         level:
-          currentPoints + minutes < ptsToLvlUp
-            ? currentLevel
-            : currentLevel + 1,
+          currentPoints + minutes < ptsToLvlUp ? currentLevel : currentLevel + 1
       },
       { where: { id: task.user_id }, returning: true }
     );
@@ -135,7 +133,7 @@ export const markTaskAsIncomplete: RequestHandler<{ id: string }> = async (
           currentPoints - minutes < 0
             ? ptsToLvlUp - (minutes - currentPoints)
             : currentPoints - minutes,
-        level: currentPoints - minutes < 0 ? currentLevel - 1 : currentLevel,
+        level: currentPoints - minutes < 0 ? currentLevel - 1 : currentLevel
       },
       { where: { id: task.user_id } }
     );
@@ -163,7 +161,7 @@ export const markTaskAsPublic: RequestHandler<{ id: string }> = async (
       completed_at: task?.getDataValue('completed_at'),
       id: task?.getDataValue('id'),
       likes: [],
-      comments: [],
+      comments: []
     });
   } catch (error) {
     res.status(500).send(error);
@@ -198,22 +196,22 @@ export const getFeedItems: RequestHandler<{ id: string }> = async (
     const feed = await Task.findAll({
       where: {
         is_public: true,
-        user_id: { [sequelize.Op.in]: mappedFriends },
+        user_id: { [sequelize.Op.in]: mappedFriends }
       },
       order: [['completed_at', 'DESC']],
-      limit: 10,
+      limit: 10
     });
     const mappedFeed = await Promise.all(
       feed.map(async (feedItem) => {
         const foundUser = await User.findOne({
-          where: { id: feedItem.getDataValue('user_id') },
+          where: { id: feedItem.getDataValue('user_id') }
         });
         const foundUsername = foundUser?.getDataValue('username');
         let likes = await Like.findAll({
-          where: { task_id: feedItem.getDataValue('id') },
+          where: { task_id: feedItem.getDataValue('id') }
         });
         const comments = await Comment.findAll({
-          where: { task_id: feedItem.getDataValue('id') },
+          where: { task_id: feedItem.getDataValue('id') }
         });
         const mappedComments = await Promise.all(
           comments.map(async (comment) => {
@@ -222,7 +220,7 @@ export const getFeedItems: RequestHandler<{ id: string }> = async (
               id: comment.getDataValue('id'),
               content: comment.getDataValue('content'),
               user_id: comment.getDataValue('user_id'),
-              username: user?.username,
+              username: user?.username
             };
           })
         );
@@ -232,7 +230,7 @@ export const getFeedItems: RequestHandler<{ id: string }> = async (
           description: feedItem.getDataValue('description'),
           completed_at: feedItem.getDataValue('completed_at'),
           likes,
-          comments: mappedComments,
+          comments: mappedComments
         };
       })
     );

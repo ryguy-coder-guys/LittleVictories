@@ -17,11 +17,11 @@ export const UserDefaultValues: UserContextState = {
     points: 0,
     level: 0,
     entries: [],
-    readable_font: false,
+    readable_font: false
   },
   setUser: (user: User): void => {},
   userStats: null,
-  setUserStats: (userStats: UserStat): void => {},
+  setUserStats: (userStats: UserStat): void => {}
 };
 
 const UserContext = createContext<UserContextState>(UserDefaultValues);

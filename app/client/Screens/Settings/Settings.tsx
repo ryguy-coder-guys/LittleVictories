@@ -65,7 +65,7 @@ const SettingsScreen = ({ navigation }) => {
           value={user.readable_font}
         />
         <Button
-          title="Delete Account"
+          title='Delete Account'
           buttonStyle={styles.button}
           titleStyle={
             user.readable_font ? styles.buttonTextLarger : styles.buttonText
@@ -75,7 +75,7 @@ const SettingsScreen = ({ navigation }) => {
           }}
         />
         <Button
-          title="Log Out"
+          title='Log Out'
           buttonStyle={styles.button}
           titleStyle={
             user.readable_font ? styles.buttonTextLarger : styles.buttonText
@@ -93,53 +93,53 @@ const SettingsScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,
+    flex: 1
   },
   button: {
     marginTop: 20,
     borderRadius: 10,
     backgroundColor: '#1D426D',
-    width: 125,
+    width: 125
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 18
   },
   buttonTextLarger: {
-    fontSize: 20,
+    fontSize: 20
   },
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   header: {
     color: '#1D426D',
     fontSize: 26,
     marginBottom: 40,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   headerLarger: {
     color: '#1D426D',
     fontSize: 28,
     marginBottom: 40,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   input: {
     height: 40,
     width: '50%',
     margin: 12,
-    borderWidth: 1,
+    borderWidth: 1
   },
   value: {
     color: '#1D426D',
     fontSize: 18,
-    marginBottom: 10,
+    marginBottom: 10
   },
   valueLarger: {
     color: '#1D426D',
     fontSize: 20,
-    marginBottom: 10,
-  },
+    marginBottom: 10
+  }
 });
 
 export default SettingsScreen;

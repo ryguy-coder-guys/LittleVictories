@@ -7,7 +7,7 @@ import {
   FlatList,
   StyleSheet,
   TextInput,
-  Alert,
+  Alert
 } from 'react-native';
 import axios from 'axios';
 import { v4 as getKey } from 'uuid';
@@ -23,7 +23,7 @@ const SingleFriend = ({ item, user, users, setUsers }) => {
         'http://localhost:3000/api/friends/',
         {
           userId: user.id,
-          friendId: id,
+          friendId: id
         }
       );
       if (addSuccessful) {
@@ -66,18 +66,18 @@ const SingleFriend = ({ item, user, users, setUsers }) => {
             onPress={() => {
               addFriend(item.id), alert('Friend Added!');
             }}
-            title="Add Friend"
-            color="#841584"
-            accessibilityLabel="Learn more about this purple button"
+            title='Add Friend'
+            color='#841584'
+            accessibilityLabel='Learn more about this purple button'
           />
         ) : (
           <Button
             onPress={() => {
               removeFriend(item.id), alert('Friend Removed');
             }}
-            title="Remove Friend"
-            color="#841584"
-            accessibilityLabel="Learn more about this purple button"
+            title='Remove Friend'
+            color='#841584'
+            accessibilityLabel='Learn more about this purple button'
           />
         )}
       </View>
@@ -131,7 +131,7 @@ const Friends = (): ReactElement => {
         style={styles.textInput}
         onChangeText={setQuery}
         value={query}
-        placeholder="Search"
+        placeholder='Search'
       />
       <List query={query} />
     </View>
@@ -142,30 +142,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f8f8',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   header: {
     color: '#1D426D',
     fontSize: 26,
     fontWeight: 'bold',
     marginLeft: 20,
-    marginTop: 20,
+    marginTop: 20
   },
   listItem: {
     marginTop: 10,
     paddingVertical: 20,
     paddingHorizontal: 20,
     backgroundColor: '#fff',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   metaInfo: {
-    marginLeft: 10,
+    marginLeft: 10
   },
   text: {
     fontSize: 20,
     color: '#101010',
     marginTop: 60,
-    fontWeight: '700',
+    fontWeight: '700'
   },
   textAreaContainer: {
     backgroundColor: '#8ebac6',
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginTop: 20,
     marginRight: 20,
-    marginLeft: 20,
+    marginLeft: 20
   },
   textInput: {
     textAlign: 'center',
@@ -181,13 +181,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#009688',
     borderRadius: 8,
-    backgroundColor: '#FFFF',
+    backgroundColor: '#FFFF'
   },
   title: {
     fontSize: 18,
     width: 200,
-    padding: 10,
-  },
+    padding: 10
+  }
 });
 
 export default Friends;

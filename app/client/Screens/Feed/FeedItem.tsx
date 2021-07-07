@@ -5,7 +5,7 @@ import {
   View,
   FlatList,
   TextInput,
-  StyleSheet,
+  StyleSheet
 } from 'react-native';
 
 import { useUserContext } from '../../Contexts/userContext';
@@ -22,7 +22,7 @@ const FeedItem = ({
   completed_at,
   id,
   likes,
-  comments,
+  comments
 }) => {
   const { user, setUser } = useUserContext();
   const { feed, setFeed } = useFeedContext();
@@ -36,7 +36,7 @@ const FeedItem = ({
       'http://localhost:3000/api/likes/',
       {
         userId: user.id,
-        taskId,
+        taskId
       }
     );
     if (newLike) {
@@ -76,7 +76,7 @@ const FeedItem = ({
       {
         user_id: user.id,
         task_id: id,
-        content: commentText,
+        content: commentText
       }
     );
     if (newComment) {
@@ -146,7 +146,7 @@ const FeedItem = ({
         )}
         {username !== user.username && (
           <Button
-            title="Comment"
+            title='Comment'
             onPress={() => setShowCommentInput(!showCommentInput)}
           />
         )}
@@ -170,7 +170,7 @@ const FeedItem = ({
             value={commentText}
           />
           <Button
-            title="Submit"
+            title='Submit'
             onPress={() => {
               if (commentText.length) {
                 addComment();
@@ -178,7 +178,7 @@ const FeedItem = ({
             }}
           />
           <Button
-            title="Cancel"
+            title='Cancel'
             onPress={() => {
               setCommentText('');
               setShowCommentInput(false);
@@ -196,43 +196,43 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 15,
     width: 335,
-    borderRadius: 10,
+    borderRadius: 10
   },
   btnContainer: {
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   boldText: {
     fontSize: 18,
     color: '#1D426D',
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   boldTextLarger: {
     fontSize: 20,
     color: '#1D426D',
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   text: {
     fontSize: 18,
-    color: '#1D426D',
+    color: '#1D426D'
   },
   textLarger: {
     fontSize: 20,
-    color: '#1D426D',
+    color: '#1D426D'
   },
   textInput: {
     width: '100%',
     padding: 10,
     backgroundColor: '#9ec5cf',
     fontSize: 18,
-    color: '#1D426D',
+    color: '#1D426D'
   },
   textInputLarger: {
     width: '100%',
     padding: 10,
     backgroundColor: '#9ec5cf',
     fontSize: 20,
-    color: '#1D426D',
-  },
+    color: '#1D426D'
+  }
 });
 
 export default FeedItem;

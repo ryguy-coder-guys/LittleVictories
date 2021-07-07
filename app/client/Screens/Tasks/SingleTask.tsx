@@ -10,7 +10,7 @@ import {
   differenceInDays,
   differenceInWeeks,
   getDay,
-  isThisWeek,
+  isThisWeek
 } from 'date-fns';
 
 import { textStyles } from '../../Stylesheets/Stylesheet';
@@ -55,7 +55,7 @@ const SingleTask = ({ item }) => {
   const markTaskComplete = async (): Promise<void> => {
     try {
       const {
-        data: { task, points, level },
+        data: { task, points, level }
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/complete`
       );
@@ -74,7 +74,7 @@ const SingleTask = ({ item }) => {
   const markTaskIncomplete = async (): Promise<void> => {
     try {
       const {
-        data: { points, level },
+        data: { points, level }
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/incomplete`
       );
@@ -119,7 +119,7 @@ const SingleTask = ({ item }) => {
       3: 'Thursday',
       4: 'Friday',
       5: 'Saturday',
-      6: 'Sunday',
+      6: 'Sunday'
     };
     const dueDate = new Date(date);
     if (differenceInDays(dueDate, new Date()) <= 6) {
@@ -150,12 +150,12 @@ const SingleTask = ({ item }) => {
           {item.description} - {addTimeStamp(item.due_date)}
         </Text>
       </View>
-      <Button title="Remove" onPress={removeTask} />
+      <Button title='Remove' onPress={removeTask} />
       {finished && !taskPublic ? (
-        <Button title="Add to Feed" onPress={shareTask} />
+        <Button title='Add to Feed' onPress={shareTask} />
       ) : null}
       {finished && taskPublic ? (
-        <Button title="Remove from Feed" onPress={unshareTask} />
+        <Button title='Remove from Feed' onPress={unshareTask} />
       ) : null}
     </View>
   );
@@ -172,8 +172,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#8ebac6',
     borderRadius: 10,
     padding: 10,
-    flexWrap: 'wrap',
-  },
+    flexWrap: 'wrap'
+  }
 });
 
 export default SingleTask;

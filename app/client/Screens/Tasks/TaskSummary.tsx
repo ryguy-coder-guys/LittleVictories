@@ -27,8 +27,8 @@ const TaskSummary = () => {
 
 const styles = StyleSheet.create({
   listContainer: {
-    height: '86.5%',
-  },
+    height: '86.5%'
+  }
 });
 
 export default TaskSummary;

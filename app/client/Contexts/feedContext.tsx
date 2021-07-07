@@ -13,7 +13,7 @@ interface FeedContextState {
 const FeedDefaultValues: FeedContextState = {
   feed: [],
   setFeed: (feed: FeedItem[]): void => {},
-  socket: null,
+  socket: null
 };
 
 const FeedContext = createContext<FeedContextState>(FeedDefaultValues);
