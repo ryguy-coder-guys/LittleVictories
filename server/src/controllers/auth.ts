@@ -13,6 +13,8 @@ import { Friend } from '../database/models/friend';
 import { User as UserInterface } from '../interfaces/users';
 import { FormattedUser } from '../interfaces/users';
 export { UserInstance } from '../database/models/user';
+import { Like } from '../database/models/like';
+import { Comment } from '../database/models/comment';
 
 const getHash = async (password: string): Promise<string> =>
   await bcrypt.hash(password, 12);
@@ -48,7 +50,8 @@ export const registerUser: RequestHandler = async (req, res): Promise<void> => {
     entries: [],
     habits: [],
     points: 0,
-    readable_font: false
+    readable_font: false,
+    userStats: []
   };
   res.send(formattedUser);
 };
@@ -66,10 +69,12 @@ export const loginUser: RequestHandler = async (req, res): Promise<void> => {
       order: [['due_date', 'ASC']]
     });
 
-    const userStats = await UserStat.findOne({
+    const userStat = await UserStat.findOne({
       where: { date: format(new Date(), 'MM-dd-yyyy'), user_id: user.id }
     });
-    // console.log(userStats, 'THIS THING IS USERSTATS'); // returns null if no stats
+    const userStats = await UserStat.findAll({
+      where: { user_id: user.id }
+    });
 
     const habits = await Habit.findAll({ where: { user_id: user.id } });
 
@@ -106,9 +111,10 @@ export const loginUser: RequestHandler = async (req, res): Promise<void> => {
     const formattedUser = {
       ...mappedUser,
       tasks: mappedTasks,
-      userStats: userStats,
+      userStat: userStat,
       entries: entries ? entries : [],
-      habits: habits ? habits : []
+      habits: habits ? habits : [],
+      userStats: userStats ? userStats : []
     };
 
     res.send(formattedUser);
@@ -128,7 +134,7 @@ export const users: RequestHandler = async (req, res): Promise<void> => {
         });
         return {
           id: user.getDataValue('id'),
-          userName: user.getDataValue('username'),
+          username: user.getDataValue('username'),
           isFriend: !!isFriend
         };
       })
@@ -136,6 +142,24 @@ export const users: RequestHandler = async (req, res): Promise<void> => {
     res.status(200).send(mappedUsers);
   } catch (err) {
     console.log('error fetching ', err);
+    res.sendStatus(500);
+  }
+};
+
+export const removeUser: RequestHandler<{ id: string }> = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Like.destroy({ where: { user_id: id } });
+    await Comment.destroy({ where: { user_id: id } });
+    await Friend.destroy({ where: { user_id: id } });
+    await UserStat.destroy({ where: { user_id: id } });
+    await JournalEntry.destroy({ where: { user_id: id } });
+    await Habit.destroy({ where: { user_id: id } });
+    await Task.destroy({ where: { user_id: id } });
+    await User.destroy({ where: { id: id } });
+    res.status(201).send(`User ${id} has been deleted from DB.`);
+  } catch (err) {
+    console.log(err);
     res.sendStatus(500);
   }
 };

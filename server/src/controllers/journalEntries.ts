@@ -82,7 +82,7 @@ export const deleteJournal: RequestHandler = async (
 ): Promise<void> => {
   const { user_id, date } = req.params;
   try {
-    await JournalEntry.destroy({ where: { user_id: user_id, date: date } });
+    await JournalEntry.destroy({ where: { user_id, date } });
     console.log('entry successfully deleted');
     res.sendStatus(201);
   } catch (err) {

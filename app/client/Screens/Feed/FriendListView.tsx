@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { v4 as getKey } from 'uuid';
 import SingleFriend from './SingleFriend';
@@ -8,7 +8,7 @@ const FriendListView = ({ query, user, users, setUsers }): ReactElement => {
     <FlatList
       keyExtractor={() => getKey()}
       data={users.filter((user) => {
-        return user.userName.toLowerCase().includes(query.toLowerCase());
+        return user.username.toLowerCase().includes(query.toLowerCase());
       })}
       renderItem={({ item }) => (
         <SingleFriend
