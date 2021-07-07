@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text } from 'react-native';
+import { Alert, View, TextInput, StyleSheet, Text } from 'react-native';
 import axios, { AxiosResponse } from 'axios';
 import { FAB } from 'react-native-paper';
 import { useUserContext } from '../../Contexts/userContext';
@@ -26,31 +26,45 @@ const TaskForm = () => {
     return dayStr;
   };
 
-  const handleSubmit = async (): Promise<any> => {
+  const postHabit = async () => {
     const frequencies: string[] = ['daily', 'weekly', 'monthly'];
-    try {
-      const { data: habit }: AxiosResponse<Habit> = await axios.post(
-        'http://localhost:3000/api/habits/',
-        {
-          user_id: user.id,
-          description: description,
-          frequency: frequencies[selectedFrequencyIndex],
-          days_of_week: daysSelected(selectedDayIndices),
-          calendar_date: parseInt(format(date, 'dd'))
-        }
-      );
-      const habitArr: Habit[] = [...user.habits, habit];
-      setUser({
-        ...user,
-        habits: habitArr
-      });
-      setShowForm(false);
-      setDescription('');
-      setDate(new Date());
-      setSelectedFrequencyIndex(0);
-      setSelectedDayIndices([]);
-    } catch (err) {
-      console.warn('error with post habit: ', err);
+    const { data: habit }: AxiosResponse<Habit> = await axios.post(
+      'http://localhost:3000/api/habits/',
+      {
+        user_id: user.id,
+        description: description,
+        frequency: frequencies[selectedFrequencyIndex],
+        days_of_week: daysSelected(selectedDayIndices),
+        calendar_date: parseInt(format(date, 'dd'))
+      }
+    );
+    const habitArr: Habit[] = [...user.habits, habit];
+    setUser({
+      ...user,
+      habits: habitArr
+    });
+    setShowForm(false);
+    setDescription('');
+    setDate(new Date());
+    setSelectedFrequencyIndex(0);
+    setSelectedDayIndices([]);
+  };
+
+  const handleSubmit = async (): Promise<any> => {
+    if (description === '') {
+      Alert.alert('Please enter a description.');
+    } else if (selectedFrequencyIndex === 0) {
+      postHabit();
+    } else if (selectedFrequencyIndex === 1) {
+      if (!selectedDayIndices.length) {
+        Alert.alert(
+          'Please select the weekday(s) you would like the habit to be due.'
+        );
+      } else {
+        postHabit();
+      }
+    } else if (selectedFrequencyIndex === 2) {
+      postHabit();
     }
   };
 
