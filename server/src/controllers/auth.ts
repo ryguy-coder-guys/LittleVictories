@@ -64,16 +64,13 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     where: { user_id: user.id },
     order: [['due_date', 'ASC']],
   });
-
   const userStat = await UserStat.findOne({
     where: { date: format(new Date(), 'MM-dd-yyyy'), user_id: user.id },
   });
   const userStats = await UserStat.findAll({
     where: { user_id: user.id },
   });
-
   const habits = await Habit.findAll({ where: { user_id: user.id } });
-
   const mappedUser = {
     id: user.getDataValue('id'),
     username: user.getDataValue('username'),
@@ -98,12 +95,10 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
         is_public: task.getDataValue('is_public'),
       };
     });
-
   const entries = await JournalEntry.findAll({
     where: { user_id: user.id },
     order: [['createdAt', 'DESC']],
   });
-
   const formattedUser = {
     ...mappedUser,
     tasks: mappedTasks,
@@ -112,7 +107,6 @@ export const loginUser: RequestHandler = async (req, res): Promise<any> => {
     habits: habits ? habits : [],
     userStats: userStats ? userStats : []
   };
-
   res.send(formattedUser);
 };
 
