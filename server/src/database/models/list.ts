@@ -8,14 +8,6 @@ interface ListInstance extends Model {
   updatedAt: Date;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-// interface ListCreationAttributes
-//   extends Optional<ListAttributes, 'id'> {}
-
-// interface ListInstance
-//   extends Model<ListAttributes, ListCreationAttributes>,
-//     ListAttributes {}
-
 export const List = dbConnection.define<ListInstance>(
   'List',
   {

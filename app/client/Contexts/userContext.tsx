@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, UserStat } from '../Interfaces/user';
 
 interface UserContextState {
@@ -17,11 +17,11 @@ export const UserDefaultValues: UserContextState = {
     points: 0,
     level: 0,
     entries: [],
-    readable_font: false
+    readable_font: false,
   },
   setUser: (user: User): void => {},
   userStats: null,
-  setUserStats: (userStats: UserStat): void => {}
+  setUserStats: (userStats: UserStat): void => {},
 };
 
 const UserContext = createContext<UserContextState>(UserDefaultValues);
@@ -31,6 +31,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   const [userStats, setUserStats] = useState<UserStat>(
     UserDefaultValues.userStats
   );
+
   return (
     <UserContext.Provider value={{ user, setUser, userStats, setUserStats }}>
       {children}

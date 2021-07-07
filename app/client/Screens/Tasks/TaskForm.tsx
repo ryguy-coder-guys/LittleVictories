@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   Button,
-  Switch
+  Switch,
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
@@ -13,7 +13,6 @@ import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { isBefore } from 'date-fns';
-
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
   const [description, setDescription] = useState('');
@@ -23,7 +22,6 @@ const TaskForm = () => {
   //for date selector
   const [date, setDate] = useState(new Date());
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
-
   const isPast = (date: Date) => {
     if (new Date(date).getFullYear() < new Date().getFullYear()) return true;
     if (new Date(date).getFullYear() > new Date().getFullYear()) return false;
@@ -32,7 +30,6 @@ const TaskForm = () => {
     if (new Date(date).getDate() < new Date().getDate()) return true;
     if (new Date(date).getDate() >= new Date().getDate()) return false;
   };
-
   const handleSubmit = async () => {
     if (isPast(date)) {
       alert('this date is in the past, please select a future date.');
@@ -44,7 +41,7 @@ const TaskForm = () => {
           description,
           due_date: date,
           minutes_to_complete: timeToComplete,
-          is_important: isImportant
+          is_important: isImportant,
         }
       );
       const sortedTasks = [...(user?.tasks || []), task].sort((t1, t2) =>
@@ -52,7 +49,7 @@ const TaskForm = () => {
       );
       setUser({
         ...user,
-        tasks: sortedTasks
+        tasks: sortedTasks,
       });
       setShowForm(false);
       setDescription('');
@@ -61,12 +58,10 @@ const TaskForm = () => {
       setIsImportant(false);
     }
   };
-
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
   };
-
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -76,7 +71,7 @@ const TaskForm = () => {
         <FAB
           style={styles.fab}
           small
-          icon='plus'
+          icon="plus"
           onPress={() => setShowForm(true)}
         />
       </View>
@@ -86,7 +81,7 @@ const TaskForm = () => {
             <View
               style={{
                 flexDirection: 'row',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
               }}
             >
               <Text
@@ -96,14 +91,14 @@ const TaskForm = () => {
               >
                 Add Task
               </Text>
-              <Button title='Cancel' onPress={() => setShowForm(false)} />
+              <Button title="Cancel" onPress={() => setShowForm(false)} />
             </View>
             <TextInput
               style={user.readable_font ? styles.inputLarger : styles.input}
               onChangeText={setDescription}
               value={description}
-              placeholder='Enter Task Description'
-              autoCapitalize='none'
+              placeholder="Enter Task Description"
+              autoCapitalize="none"
             />
             <View>
               <Text
@@ -112,9 +107,9 @@ const TaskForm = () => {
                 Set Due Date:
               </Text>
               <DateTimePicker
-                testID='dateTimePicker'
+                testID="dateTimePicker"
                 value={date}
-                display='default'
+                display="default"
                 onChange={onChange}
               />
             </View>
@@ -134,9 +129,9 @@ const TaskForm = () => {
               maximumValue={60}
               value={timeToComplete}
               onValueChange={setTimeToComplete}
-              minimumTrackTintColor='#1fb28a'
-              maximumTrackTintColor='#fafafa'
-              thumbTintColor='#b9e4c9'
+              minimumTrackTintColor="#1fb28a"
+              maximumTrackTintColor="#fafafa"
+              thumbTintColor="#b9e4c9"
             />
           </View>
           <View
@@ -151,13 +146,13 @@ const TaskForm = () => {
                       fontSize: 20,
                       color: '#1D426D',
                       paddingRight: 15,
-                      paddingTop: 2
+                      paddingTop: 2,
                     }
                   : {
                       fontSize: 18,
                       color: '#1D426D',
                       paddingRight: 15,
-                      paddingTop: 2
+                      paddingTop: 2,
                     }
               }
             >
@@ -170,7 +165,7 @@ const TaskForm = () => {
               value={isImportant}
             />
           </View>
-          <Button title='Submit' onPress={() => handleSubmit()} />
+          <Button title="Submit" onPress={() => handleSubmit()} />
         </View>
       ) : null}
     </View>
@@ -183,42 +178,42 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 20,
     marginRight: 20,
-    marginLeft: 20
+    marginLeft: 20,
   },
   container: {
     flex: 1,
-    padding: 20
+    padding: 20,
   },
   fab: {
     backgroundColor: '#1D426D',
     height: 40,
-    marginRight: 20
+    marginRight: 20,
   },
   header: {
     color: '#1D426D',
     fontSize: 26,
     fontWeight: 'bold',
-    marginLeft: 20
+    marginLeft: 20,
   },
   headerLarger: {
     color: '#1D426D',
     fontSize: 26,
     fontWeight: 'bold',
-    marginLeft: 20
+    marginLeft: 20,
   },
   important: {
     flexDirection: 'row',
     color: '#1D426D',
     marginTop: 25,
     marginBottom: 10,
-    fontSize: 18
+    fontSize: 18,
   },
   importantLarger: {
     flexDirection: 'row',
     color: '#1D426D',
     marginTop: 25,
     marginBottom: 10,
-    fontSize: 20
+    fontSize: 20,
   },
   input: {
     borderRadius: 10,
@@ -228,7 +223,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '100%',
     marginTop: 10,
-    fontSize: 16
+    fontSize: 16,
   },
   inputLarger: {
     borderRadius: 10,
@@ -238,51 +233,51 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '100%',
     marginTop: 10,
-    fontSize: 18
+    fontSize: 18,
   },
   prompt: {
     alignSelf: 'flex-start',
     color: '#1D426D',
     marginTop: 25,
     marginBottom: 10,
-    fontSize: 18
+    fontSize: 18,
   },
   promptLarger: {
     alignSelf: 'flex-start',
     color: '#1D426D',
     marginTop: 25,
     marginBottom: 10,
-    fontSize: 20
+    fontSize: 20,
   },
   subheader: {
     color: '#1D426D',
     fontSize: 22,
     fontWeight: 'bold',
-    marginTop: 5
+    marginTop: 5,
   },
   subheaderLarger: {
     color: '#1D426D',
     fontSize: 22,
     fontWeight: 'bold',
-    marginTop: 5
+    marginTop: 5,
   },
   submitButton: {
-    marginTop: 20
+    marginTop: 20,
   },
   text: {
     color: '#1D426D',
     marginBottom: 10,
-    fontSize: 16
+    fontSize: 16,
   },
   textLarger: {
     color: '#1D426D',
     marginBottom: 10,
-    fontSize: 18
+    fontSize: 18,
   },
   textArea: {
     height: 200,
     width: 100,
-    justifyContent: 'flex-start'
-  }
+    justifyContent: 'flex-start',
+  },
 });
 export default TaskForm;

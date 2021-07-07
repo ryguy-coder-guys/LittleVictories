@@ -10,14 +10,6 @@ const TaskList = ({ item }) => {
   return <SingleTask item={item} />;
 };
 
-const ListHeader = () => {
-  return (
-    <View>
-      <TaskForm />
-    </View>
-  );
-};
-
 const TaskSummary = () => {
   const { user } = useUserContext();
 
@@ -27,7 +19,7 @@ const TaskSummary = () => {
         keyExtractor={() => getKey()}
         data={user ? user.tasks : []}
         renderItem={TaskList}
-        ListHeaderComponent={<ListHeader />}
+        ListHeaderComponent={() => <TaskForm />}
       />
     </View>
   );
@@ -35,8 +27,8 @@ const TaskSummary = () => {
 
 const styles = StyleSheet.create({
   listContainer: {
-    height: '86.5%'
-  }
+    height: '86.5%',
+  },
 });
 
 export default TaskSummary;

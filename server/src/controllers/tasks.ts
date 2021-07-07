@@ -45,7 +45,14 @@ export const addTask: RequestHandler = async (req, res) => {
       is_public: false,
       //list_id,
     });
-    res.send(newTask);
+    res.send({
+      id: newTask.getDataValue('id'),
+      username: user.getDataValue('username'),
+      description: newTask.getDataValue('description'),
+      completed_at: newTask.getDataValue('completed_at'),
+      likes: [],
+      comments: [],
+    });
   } catch (err) {
     if (err instanceof Error) {
       console.log('entry submission error', err.message);
@@ -87,7 +94,10 @@ export const markTaskAsComplete: RequestHandler<{ id: string }> = async (
           currentPoints + minutes < ptsToLvlUp
             ? currentPoints + minutes
             : (currentPoints + minutes) % ptsToLvlUp,
-        level: currentPoints + minutes < ptsToLvlUp ? currentLevel : currentLevel + 1,
+        level:
+          currentPoints + minutes < ptsToLvlUp
+            ? currentLevel
+            : currentLevel + 1,
       },
       { where: { id: task.user_id }, returning: true }
     );
@@ -140,7 +150,18 @@ export const markTaskAsPublic: RequestHandler<{ id: string }> = async (
   try {
     const { id } = req.params;
     await Task.update({ is_public: true }, { where: { id } });
-    res.send(true);
+    const task = await Task.findOne({ where: { id } });
+    const user = await User.findOne({ where: { id: task?.user_id } });
+    console.log(task);
+
+    res.send({
+      username: user?.getDataValue('username'),
+      description: task?.getDataValue('description'),
+      completed_at: task?.getDataValue('completed_at'),
+      id: task?.getDataValue('id'),
+      likes: [],
+      comments: [],
+    });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -153,6 +174,8 @@ export const markTaskAsPrivate: RequestHandler<{ id: string }> = async (
   try {
     const { id } = req.params;
     await Task.update({ is_public: false }, { where: { id } });
+    await Comment.destroy({ where: { task_id: id } });
+    await Like.destroy({ where: { task_id: id } });
     res.send(true);
   } catch (error) {
     res.status(500).send(error);
@@ -185,15 +208,17 @@ export const getFeedItems: RequestHandler<{ id: string }> = async (
         const comments = await Comment.findAll({
           where: { task_id: feedItem.getDataValue('id') },
         });
-        const mappedComments = await Promise.all(comments.map( async comment => {
-          const user = await User.findOne({where: { id: comment.user_id}});
-          return {
-            id: comment.getDataValue('id'), 
-            content: comment.getDataValue('content'),
-            user_id: comment.getDataValue('user_id'),
-            username: user?.username
-            }
-        }));
+        const mappedComments = await Promise.all(
+          comments.map(async (comment) => {
+            const user = await User.findOne({ where: { id: comment.user_id } });
+            return {
+              id: comment.getDataValue('id'),
+              content: comment.getDataValue('content'),
+              user_id: comment.getDataValue('user_id'),
+              username: user?.username,
+            };
+          })
+        );
 
         return {
           id: feedItem.getDataValue('id'),

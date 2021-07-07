@@ -1,19 +1,24 @@
-import axios from 'axios';
+import React, { useState } from 'react';
 import { View, StyleSheet, Text, Button } from 'react-native';
+
 import { useUserContext } from '../../Contexts/userContext';
 import { useSocketContext } from '../../Contexts/socketContext';
-import React, { useState } from 'react';
+import { useFeedContext } from '../../Contexts/feedContext';
+
+import axios from 'axios';
 import {
   differenceInDays,
   differenceInWeeks,
   getDay,
-  isThisWeek
+  isThisWeek,
 } from 'date-fns';
+
 import { textStyles } from '../../Stylesheets/Stylesheet';
 
 const SingleTask = ({ item }) => {
   const { user, setUser } = useUserContext();
   const { socket } = useSocketContext();
+  const { feed, setFeed } = useFeedContext();
   const [finished, setFinished] = useState(item.is_complete);
   const [taskPublic, setTaskPublic] = useState(item.is_public);
 
@@ -22,14 +27,13 @@ const SingleTask = ({ item }) => {
       const { data: updateSuccessful } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/private`
       );
-      if (!updateSuccessful) {
-        return;
+      if (updateSuccessful) {
+        setTaskPublic(false);
+        setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
+        socket.emit('removeFromFeed', item.id);
       }
-      setTaskPublic(false);
-      // setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
-      socket.emit('removeFromFeed', item);
     } catch (error) {
-      console.warn(error);
+      console.log(error);
     }
   };
 
@@ -38,21 +42,20 @@ const SingleTask = ({ item }) => {
       const { data: updateSuccessful } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/public`
       );
-      if (!updateSuccessful) {
-        return;
+      if (updateSuccessful) {
+        setTaskPublic(true);
+        setFeed([...feed, updateSuccessful]);
+        socket.emit('addToFeed', item);
       }
-      setTaskPublic(true);
-      // setFeed([...feed, item]);
-      socket.emit('addToFeed', item);
     } catch (error) {
       console.warn(error);
     }
   };
 
-  const markTaskComplete = async () => {
+  const markTaskComplete = async (): Promise<void> => {
     try {
       const {
-        data: { task, points, level }
+        data: { task, points, level },
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/complete`
       );
@@ -68,27 +71,28 @@ const SingleTask = ({ item }) => {
     }
   };
 
-  const markTaskIncomplete = async () => {
+  const markTaskIncomplete = async (): Promise<void> => {
     try {
       const {
-        data: { points, level }
+        data: { points, level },
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/incomplete`
       );
-      await unshareTask();
       const mappedTasks = user.tasks.map((task) => {
         if (task.id === item.id) {
-          return { ...task, is_complete: false };
+          return { ...task, is_complete: false, is_public: false };
         }
         return task;
       });
       setUser({ ...user, tasks: mappedTasks, points, level });
+      setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
+      socket.emit('removeFromFeed', item.id);
     } catch (error) {
       console.warn(error);
     }
   };
 
-  const removeTask = async () => {
+  const removeTask = async (): Promise<void> => {
     try {
       const { data: deleteSuccessful } = await axios.delete(
         `http://localhost:3000/api/tasks/${item.id}`
@@ -104,7 +108,7 @@ const SingleTask = ({ item }) => {
     }
   };
 
-  const fn = (date: Date) => {
+  const addTimeStamp = (date: Date) => {
     const days = {
       0: 'Monday',
       1: 'Tuesday',
@@ -112,7 +116,7 @@ const SingleTask = ({ item }) => {
       3: 'Thursday',
       4: 'Friday',
       5: 'Saturday',
-      6: 'Sunday'
+      6: 'Sunday',
     };
     const dueDate = new Date(date);
     if (differenceInDays(dueDate, new Date()) <= 6) {
@@ -140,15 +144,15 @@ const SingleTask = ({ item }) => {
         <Text
           style={user.readable_font ? textStyles.text_big : textStyles.text}
         >
-          {item.description} - {fn(item.due_date)}
+          {item.description} - {addTimeStamp(item.due_date)}
         </Text>
       </View>
-      <Button title='Remove' onPress={removeTask} />
+      <Button title="Remove" onPress={removeTask} />
       {finished && !taskPublic ? (
-        <Button title='Add to Feed' onPress={shareTask} />
+        <Button title="Add to Feed" onPress={shareTask} />
       ) : null}
       {finished && taskPublic ? (
-        <Button title='Remove from Feed' onPress={unshareTask} />
+        <Button title="Remove from Feed" onPress={unshareTask} />
       ) : null}
     </View>
   );
@@ -165,8 +169,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#8ebac6',
     borderRadius: 10,
     padding: 10,
-    flexWrap: 'wrap'
-  }
+    flexWrap: 'wrap',
+  },
 });
 
 export default SingleTask;

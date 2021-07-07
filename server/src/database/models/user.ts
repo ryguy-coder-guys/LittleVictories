@@ -49,8 +49,8 @@ export const User = dbConnection.define<UserInstance>(
     readable_font: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false
-    }
+      defaultValue: false,
+    },
   },
   {
     timestamps: true,

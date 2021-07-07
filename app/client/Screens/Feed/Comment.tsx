@@ -18,7 +18,7 @@ const Comment = ({ id, content, user_id, username, removeComment }) => {
         {content} -- {username}
       </Text>
       {canRemove() && (
-        <Button onPress={() => removeComment(id)} title='Remove Comment' />
+        <Button onPress={() => removeComment(id)} title="Remove Comment" />
       )}
     </View>
   );
