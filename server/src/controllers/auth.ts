@@ -37,23 +37,24 @@ export const registerUser: RequestHandler = async (req, res): Promise<void> => {
   const user = await User.findOne({ where: { username } });
   if (user) {
     res.send(false);
+  } else {
+    const newUser = await User.create({
+      id: getId(),
+      username,
+      hash: await getHash(password)
+    });
+    const formattedUser = {
+      id: newUser.id,
+      username: newUser.username,
+      tasks: [],
+      entries: [],
+      habits: [],
+      points: 0,
+      readable_font: false,
+      userStats: []
+    };
+    res.send(formattedUser);
   }
-  const newUser = await User.create({
-    id: getId(),
-    username,
-    hash: await getHash(password)
-  });
-  const formattedUser = {
-    id: newUser.id,
-    username: newUser.username,
-    tasks: [],
-    entries: [],
-    habits: [],
-    points: 0,
-    readable_font: false,
-    userStats: []
-  };
-  res.send(formattedUser);
 };
 
 export const loginUser: RequestHandler = async (req, res): Promise<void> => {
@@ -61,63 +62,64 @@ export const loginUser: RequestHandler = async (req, res): Promise<void> => {
   const isValid = await validate(username, password);
   if (!isValid) {
     res.send(false);
-  }
-  const user = await User.findOne({ where: { username } });
-  if (user) {
-    const tasks = await Task.findAll({
-      where: { user_id: user.id },
-      order: [['due_date', 'ASC']]
-    });
-
-    const userStat = await UserStat.findOne({
-      where: { date: format(new Date(), 'MM-dd-yyyy'), user_id: user.id }
-    });
-    const userStats = await UserStat.findAll({
-      where: { user_id: user.id }
-    });
-
-    const habits = await Habit.findAll({ where: { user_id: user.id } });
-
-    const mappedUser = {
-      id: user.getDataValue('id'),
-      username: user.getDataValue('username'),
-      points: user.getDataValue('points'),
-      level: user.getDataValue('level'),
-      readable_font: user.getDataValue('readable_font')
-    };
-    const mappedTasks = tasks
-      .filter(
-        (task) =>
-          task.getDataValue('is_complete') === 0 ||
-          !isPast(task.getDataValue('due_date'))
-      )
-      .map((task) => {
-        return {
-          id: task.getDataValue('id'),
-          description: task.getDataValue('description'),
-          due_date: task.getDataValue('due_date'),
-          minutes_to_complete: task.getDataValue('minutes_to_complete'),
-          is_important: task.getDataValue('is_important'),
-          is_complete: task.getDataValue('is_complete'),
-          is_public: task.getDataValue('is_public')
-        };
+  } else {
+    const user = await User.findOne({ where: { username } });
+    if (user) {
+      const tasks = await Task.findAll({
+        where: { user_id: user.id },
+        order: [['due_date', 'ASC']]
       });
 
-    const entries = await JournalEntry.findAll({
-      where: { user_id: user.id },
-      order: [['createdAt', 'DESC']]
-    });
+      const userStat = await UserStat.findOne({
+        where: { date: format(new Date(), 'MM-dd-yyyy'), user_id: user.id }
+      });
+      const userStats = await UserStat.findAll({
+        where: { user_id: user.id }
+      });
 
-    const formattedUser = {
-      ...mappedUser,
-      tasks: mappedTasks,
-      userStat: userStat,
-      entries: entries ? entries : [],
-      habits: habits ? habits : [],
-      userStats: userStats ? userStats : []
-    };
+      const habits = await Habit.findAll({ where: { user_id: user.id } });
 
-    res.send(formattedUser);
+      const mappedUser = {
+        id: user.getDataValue('id'),
+        username: user.getDataValue('username'),
+        points: user.getDataValue('points'),
+        level: user.getDataValue('level'),
+        readable_font: user.getDataValue('readable_font')
+      };
+      const mappedTasks = tasks
+        .filter(
+          (task) =>
+            task.getDataValue('is_complete') === 0 ||
+            !isPast(task.getDataValue('due_date'))
+        )
+        .map((task) => {
+          return {
+            id: task.getDataValue('id'),
+            description: task.getDataValue('description'),
+            due_date: task.getDataValue('due_date'),
+            minutes_to_complete: task.getDataValue('minutes_to_complete'),
+            is_important: task.getDataValue('is_important'),
+            is_complete: task.getDataValue('is_complete'),
+            is_public: task.getDataValue('is_public')
+          };
+        });
+
+      const entries = await JournalEntry.findAll({
+        where: { user_id: user.id },
+        order: [['createdAt', 'DESC']]
+      });
+
+      const formattedUser = {
+        ...mappedUser,
+        tasks: mappedTasks,
+        userStat: userStat,
+        entries: entries ? entries : [],
+        habits: habits ? habits : [],
+        userStats: userStats ? userStats : []
+      };
+
+      res.send(formattedUser);
+    }
   }
 };
 

@@ -15,25 +15,28 @@ export const addFriend: RequestHandler = async (req, res): Promise<void> => {
     });
     if (!user) {
       res.send('user does not exist');
-    }
-    const friend = await User.findOne({
-      where: {
-        id: friendId
-      }
-    });
-    if (!friend) {
-      res.send('friend does not exist');
-    }
-    if (user && friend) {
-      const friendShip = await Friend.create({
-        user_id: user.id,
-        friend_id: friend.id
+    } else {
+      const friend = await User.findOne({
+        where: {
+          id: friendId
+        }
       });
+      if (!friend) {
+        res.send('friend does not exist');
+      } else {
+        if (user && friend) {
+          const friendShip = await Friend.create({
+            user_id: user.id,
+            friend_id: friend.id
+          });
 
-      if (!friendShip) {
-        res.send('friendShip insertion did not work');
+          if (!friendShip) {
+            res.send('friendShip insertion did not work');
+          } else {
+            res.send(true);
+          }
+        }
       }
-      res.send(true);
     }
   } catch (error) {
     console.log(error);
@@ -53,24 +56,25 @@ export const removeFriend: RequestHandler<RemoveFriendReqParams> = async (
     });
     if (!user) {
       res.send('user does not exist');
-    }
-
-    const friend = await User.findOne({
-      where: {
-        id: friendId
-      }
-    });
-    if (!friend) {
-      res.send('friend does not exist');
-    }
-    if (user && friend) {
-      await Friend.destroy({
+    } else {
+      const friend = await User.findOne({
         where: {
-          user_id: user.id,
-          friend_id: friend.id
+          id: friendId
         }
       });
-      res.send(true);
+      if (!friend) {
+        res.send('friend does not exist');
+      } else {
+        if (user && friend) {
+          await Friend.destroy({
+            where: {
+              user_id: user.id,
+              friend_id: friend.id
+            }
+          });
+          res.send(true);
+        }
+      }
     }
   } catch (error) {
     console.log(error);
