@@ -21,7 +21,9 @@ const Friends = (): ReactElement => {
     axios
       .get('http://localhost:3000/api/auth/users')
       .then(({ data }) => {
-        setUsers(data);
+        setUsers(data.filter((users) => {
+          return users.userName !== user.username
+        }));
       })
       .catch((err) => console.warn(err, 'l'));
   };
