@@ -50,7 +50,6 @@ const TaskForm = () => {
         .sort((t1, t2) =>
           isBefore(new Date(t1.due_date), new Date(t2.due_date)) ? -1 : 1
         );
-      console.log(sortedTasks);
       setShowForm(false);
       setDescription('');
       setDate(new Date());

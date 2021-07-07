@@ -33,7 +33,7 @@ const SingleTask = ({ item }) => {
         socket.emit('removeFromFeed', item.id);
       }
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
