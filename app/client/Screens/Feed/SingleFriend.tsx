@@ -27,8 +27,8 @@ const SingleFriend = ({ item, user, users, setUsers }) : ReactElement => {
           }
           return currentUser;
         });
-        setUsers(mappedUsers);
         setIsFriend(true);
+        setUsers(mappedUsers);
       }
     } catch (error) {
       console.warn(error);
@@ -44,8 +44,8 @@ const SingleFriend = ({ item, user, users, setUsers }) : ReactElement => {
         }
         return currentUser;
       });
-      setUsers(mappedUsers);
       setIsFriend(false);
+      setUsers(mappedUsers);
     } catch (error) {
       console.warn(error);
     }
@@ -65,8 +65,8 @@ const SingleFriend = ({ item, user, users, setUsers }) : ReactElement => {
             color='#841584'
             accessibilityLabel='Learn more about this purple button'
           />
-        ) : null}
-        {isFriend ? (
+        ) :
+         (
           <Button
             onPress={() => {
               removeFriend(item.id), alert('Friend Removed');
@@ -75,7 +75,7 @@ const SingleFriend = ({ item, user, users, setUsers }) : ReactElement => {
             color='#841584'
             accessibilityLabel='Learn more about this purple button'
           />
-        ) : null}
+        ) }
       </View>
     </View>
      //: null

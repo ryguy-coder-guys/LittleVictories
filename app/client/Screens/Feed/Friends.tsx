@@ -33,15 +33,15 @@ const Friends = (): ReactElement => {
     }
   }, [user]);
 
-  const handleSearch = (text) => {
-    const filteredData = filter(fullData, (user) => {
-      const itemData = user.userName.toUpperCase();
-      const textData = text.toUpperCase();
-      return itemData.indexOf(textData) > -1;
-    });
-    setUsers(filteredData);
-    setQuery(text);
-  };
+  // const handleSearch = (text) => {
+  //   const filteredData = filter(fullData, (user) => {
+  //     const itemData = user.userName.toUpperCase();
+  //     const textData = text.toUpperCase();
+  //     return itemData.indexOf(textData) > -1;
+  //   });
+  //   setUsers(filteredData);
+  //   setQuery(text);
+  // };
 
 
   return (
