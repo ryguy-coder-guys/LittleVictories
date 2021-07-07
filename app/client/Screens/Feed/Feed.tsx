@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, {ReactElement, useState} from 'react';
 import { ImageBackground, SafeAreaView, StyleSheet, View } from 'react-native';
 import ProgressBar from '../Root/ProgressBar';
 import FeedView from './FeedView';
 import { ButtonGroup } from 'react-native-elements';
 import Friends from './Friends';
 
-const Feed = () => {
+
+const Feed = () : ReactElement => {
   const bgImage = require('../../../assets/blue-gradient.png');
 
   const [selectedIndex, setSelectedIndex] = useState(0);

@@ -69,4 +69,17 @@ export const addJournalEntry: RequestHandler = async (req, res) => {
   }
 };
 
+
+export const deleteJournal: RequestHandler = async (req, res) =>  {
+  const { user_id, date } = req.params;
+  try {
+    await JournalEntry.destroy({ where: { user_id: user_id, date: date } });
+    console.log('entry successfully deleted');
+    res.sendStatus(201);
+  } catch (err) {
+    console.log('error deleting entry', err.message);
+    res.sendStatus(500);
+  }
+
+}
 // remove all journal entries

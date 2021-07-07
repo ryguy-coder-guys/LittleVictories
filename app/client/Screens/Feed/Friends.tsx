@@ -1,83 +1,9 @@
 import React, { useState, useEffect, ReactElement } from 'react';
 import { useUserContext } from '../../Contexts/userContext';
-import {
-  View,
-  Button,
-  Text,
-  FlatList,
-  StyleSheet,
-  TextInput
-} from 'react-native';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import axios from 'axios';
-import { v4 as getKey } from 'uuid';
 import { textStyles } from '../../Stylesheets/Stylesheet';
-
-const SingleFriend = ({ item, user, users, setUsers }) => {
-  const [isFriend, setIsFriend] = useState(item.isFriend);
-
-  const addFriend = async (id: string): Promise<void> => {
-    try {
-      const addSuccessful = await axios.post(
-        'http://localhost:3000/api/friends/',
-        {
-          userId: user.id,
-          friendId: id
-        }
-      );
-      if (addSuccessful) {
-        const mappedUsers = users.map((currentUser) => {
-          if (currentUser.id === item.id) {
-            return { ...currentUser, isFriend: true };
-          }
-          return currentUser;
-        });
-        setIsFriend(true);
-        setUsers(mappedUsers);
-      }
-    } catch (error) {
-      console.warn(error);
-    }
-  };
-
-  const removeFriend = async (id: string): Promise<void> => {
-    try {
-      await axios.delete(`http://localhost:3000/api/friends/${user.id}/${id}`);
-      const mappedUsers = users.map((currentUser) => {
-        if (currentUser.id === item.id) {
-          return { ...currentUser, isFriend: false };
-        }
-        return currentUser;
-      });
-      setIsFriend(false);
-      setUsers(mappedUsers);
-    } catch (error) {
-      console.warn(error);
-    }
-  };
-
-  return (
-    <View style={styles.textAreaContainer}>
-      <Text style={user.readable_font ? textStyles.text_big : textStyles.text}>
-        {item.userName}
-      </Text>
-      {!isFriend ? (
-        <Button
-          onPress={() => {
-            addFriend(item.id), alert('Friend Added!');
-          }}
-          title='Add Friend'
-        />
-      ) : (
-        <Button
-          onPress={() => {
-            removeFriend(item.id), alert('Friend Removed');
-          }}
-          title='Remove Friend'
-        />
-      )}
-    </View>
-  );
-};
+import FriendListView from './FriendListView';
 
 const Friends = (): ReactElement => {
   const [users, setUsers] = useState([]);
@@ -88,7 +14,11 @@ const Friends = (): ReactElement => {
     axios
       .get('http://localhost:3000/api/auth/users')
       .then(({ data }) => {
-        setUsers(data);
+        setUsers(
+          data.filter((users) => {
+            return users.userName !== user.username;
+          })
+        );
       })
       .catch((err) => console.warn(err, 'l'));
   };
@@ -99,24 +29,15 @@ const Friends = (): ReactElement => {
     }
   }, [user]);
 
-  const List = ({ query }) => {
-    return (
-      <FlatList
-        keyExtractor={() => getKey()}
-        data={users.filter((user) => {
-          return user.userName.includes(query);
-        })}
-        renderItem={({ item }) => (
-          <SingleFriend
-            item={item}
-            user={user}
-            users={users}
-            setUsers={setUsers}
-          />
-        )}
-      />
-    );
-  };
+  // const handleSearch = (text) => {
+  //   const filteredData = filter(fullData, (user) => {
+  //     const itemData = user.userName.toUpperCase();
+  //     const textData = text.toUpperCase();
+  //     return itemData.indexOf(textData) > -1;
+  //   });
+  //   setUsers(filteredData);
+  //   setQuery(text);
+  // };
 
   return (
     <View style={styles.main}>
@@ -130,7 +51,12 @@ const Friends = (): ReactElement => {
         value={query}
         placeholder='Search'
       />
-      <List query={query} />
+      <FriendListView
+        query={query}
+        user={user}
+        users={users}
+        setUsers={setUsers}
+      />
     </View>
   );
 };
