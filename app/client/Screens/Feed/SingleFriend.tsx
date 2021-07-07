@@ -8,7 +8,7 @@ import {
 import axios from 'axios';
 
 
-const SingleFriend = ({ item, user, users, setUsers }) => {
+const SingleFriend = ({ item, user, users, setUsers }) : ReactElement => {
   const [isFriend, setIsFriend] = useState(item.isFriend);
 
   const addFriend = async (id: string): Promise<void> => {

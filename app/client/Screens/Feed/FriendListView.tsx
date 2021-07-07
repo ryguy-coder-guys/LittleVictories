@@ -7,7 +7,8 @@ import { v4 as getKey } from 'uuid';
 import SingleFriend from './SingleFriend';
 
 
-const FriendListView = ({ query, user, users, setUsers }) => {
+const FriendListView = ({ query, user, users, setUsers }) : ReactElement => {
+  //console.log(users, 'line 11');
   return (
     <FlatList
       keyExtractor={() => getKey()}

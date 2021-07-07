@@ -9,10 +9,10 @@ import { useUserContext } from '../../Contexts/userContext';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 
 const Journal = (): ReactElement => {
-  const { journals, journal, setJournal } = useJournalContext();
+  const { journals, journal, setJournals, setJournal } = useJournalContext();
   const { user } = useUserContext();
 
-  const clearJournal = (date) => {
+  const clearJournal = (date : String) => {
     Alert.alert(
       'Are you sure?',
       'Once deleted, you cannot get this journal entry back.',
@@ -24,10 +24,12 @@ const Journal = (): ReactElement => {
         },
         {
           text: 'Clear Entry',
-          onPress: async () => {
-            await axios.delete(
-              `http://localhost:3000/api/journalEntries/${user.id}/${date}`,
-            );
+          onPress: async () : Promise<void> => {
+            await axios.delete(`http://localhost:3000/api/journalEntries/${user.id}/${date}`);
+            const mappedJournals = journals.filter((entry) => {
+               return entry.date !== date
+            });
+            setJournals(mappedJournals);
             alert('Journal successfully cleared.');
           },
         },
@@ -36,6 +38,7 @@ const Journal = (): ReactElement => {
   };
 
   const list = (): ReactElement => {
+    //console.log(journals, 'line 40')
     return (
       <View>
         {journals ? (
@@ -69,7 +72,7 @@ const Journal = (): ReactElement => {
               );
             }}
           />
-        ) : null}
+         ) : null}
       </View>
     );
   };
