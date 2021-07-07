@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { View, StyleSheet, Text, FlatList, Button, Alert } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import { textStyles } from '../../Stylesheets/Stylesheet';
-import List from './PastJournalList';
+import List from './PastJournalsList';
 
 const Journal = (): ReactElement => {
   const { user } = useUserContext();
