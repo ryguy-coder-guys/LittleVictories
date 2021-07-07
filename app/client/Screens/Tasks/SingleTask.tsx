@@ -84,8 +84,9 @@ const SingleTask = ({ item }) => {
         }
         return task;
       });
+      setFinished(false);
       setUser({ ...user, tasks: mappedTasks, points, level });
-      setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
+      // setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
       socket.emit('removeFromFeed', item.id);
     } catch (error) {
       console.warn(error);
@@ -102,6 +103,8 @@ const SingleTask = ({ item }) => {
           return task.id !== item.id;
         });
         setUser({ ...user, tasks: filteredTasks });
+        setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
+        socket.emit('removeFromFeed', item.id);
       }
     } catch (error) {
       console.warn(error);

@@ -64,6 +64,8 @@ export const addTask: RequestHandler = async (req, res) => {
 
 export const removeTask: RequestHandler<{ id: string }> = async (req, res) => {
   const { id } = req.params;
+  await Like.destroy({ where: { task_id: id } });
+  await Comment.destroy({ where: { task_id: id } });
   await Task.destroy({ where: { id } });
   res.send(true);
 };
@@ -115,7 +117,12 @@ export const markTaskAsIncomplete: RequestHandler<{ id: string }> = async (
 ) => {
   try {
     const { id } = req.params;
-    await Task.update({ is_complete: false }, { where: { id } });
+    await Like.destroy({ where: { task_id: id } });
+    await Comment.destroy({ where: { task_id: id } });
+    await Task.update(
+      { is_complete: false, is_public: false },
+      { where: { id } }
+    );
     const task = await Task.findOne({ where: { id } });
     if (!task) {
       throw new Error(`task with ${id} isn't in db`);
