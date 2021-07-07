@@ -19,7 +19,7 @@ const Login = ({ navigation }) => {
   const { setUser, setUserStat } = useUserContext();
   const { socket } = useSocketContext();
 
-  const bgImage = require('../../../assets/blue-gradient.png');
+  const bgImage = require('../../../assets/images/blue-gradient.png');
   const logo = require('../../../assets/logo.png');
 
   const [username, setUsername] = useState('');

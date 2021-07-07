@@ -18,7 +18,7 @@ import DailyReflection from './DailyReflection';
 
 const Home = (): ReactElement => {
   const { user, userStat } = useUserContext();
-  const bgImage = require('../../../assets/blue-gradient.png');
+  const bgImage = require('../../../assets/images/blue-gradient.png');
   const [hasStats, setHasStats] = useState(userStat || user.userStats.length);
 
   if (!user) {

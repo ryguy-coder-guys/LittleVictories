@@ -19,7 +19,7 @@ const Achievements = (): ReactElement => {
         {user.level >= 1 ? (
           <View style={styles.badges}>
             <Image
-              source={require('../../../assets/badge.png')}
+              source={require('../../../assets/images/badge01.png')}
               style={{
                 resizeMode: 'contain',
                 width: '100%',
@@ -36,7 +36,7 @@ const Achievements = (): ReactElement => {
         {user.level >= 5 ? (
           <View style={styles.badges}>
             <Image
-              source={require('../../../assets/badge.png')}
+              source={require('../../../assets/images/badge02.png')}
               style={{
                 resizeMode: 'contain',
                 width: '100%',
@@ -53,7 +53,7 @@ const Achievements = (): ReactElement => {
         {user.level >= 10 ? (
           <View style={styles.badges}>
             <Image
-              source={require('../../../assets/badge.png')}
+              source={require('../../../assets/images/badge03.png')}
               style={{
                 resizeMode: 'contain',
                 width: '100%',

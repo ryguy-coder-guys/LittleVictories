@@ -7,7 +7,7 @@ import Friends from './Friends';
 import { containerStyles } from '../../Stylesheets/Stylesheet';
 
 const Feed = (): ReactElement => {
-  const bgImage: any = require('../../../assets/blue-gradient.png');
+  const bgImage: any = require('../../../assets/images/blue-gradient.png');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const buttons: string[] = ['Feed', 'Friends'];
 
