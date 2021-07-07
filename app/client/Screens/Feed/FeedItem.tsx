@@ -1,7 +1,4 @@
 import React from 'react';
-import axios from 'axios';
-import { useUserContext } from '../../Contexts/userContext';
-import { useSocketContext } from '../../Contexts/socketContext';
 import {
   Text,
   Button,
@@ -10,7 +7,13 @@ import {
   TextInput,
   StyleSheet
 } from 'react-native';
+
+import { useUserContext } from '../../Contexts/userContext';
+import { useSocketContext } from '../../Contexts/socketContext';
+import { useFeedContext } from '../../Contexts/feedContext';
 import Comment from './Comment';
+
+import axios from 'axios';
 import { v4 as getKey } from 'uuid';
 
 const FeedItem = ({
@@ -21,13 +24,14 @@ const FeedItem = ({
   likes,
   comments
 }) => {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
+  const { feed, setFeed } = useFeedContext();
   const { socket } = useSocketContext();
 
   const [showCommentInput, setShowCommentInput] = React.useState(false);
   const [commentText, setCommentText] = React.useState('');
 
-  const addLike = async (taskId: number) => {
+  const addLike = async (taskId: number): Promise<void> => {
     const { data: newLike } = await axios.post(
       'http://localhost:3000/api/likes/',
       {
@@ -36,20 +40,37 @@ const FeedItem = ({
       }
     );
     if (newLike) {
+      const mappedFeed = feed.map((feedItem) => {
+        if (feedItem.id === id) {
+          return { ...feedItem, likes: [...feedItem.likes, newLike] };
+        }
+        return feedItem;
+      });
+      setFeed(mappedFeed);
       socket.emit('addLike', newLike);
     }
   };
 
-  const removeLike = async (taskId: number) => {
+  const removeLike = async (taskId: number): Promise<void> => {
     const { data: removeSuccessful } = await axios.delete(
       `http://localhost:3000/api/likes/${user.id}/${taskId}`
     );
     if (removeSuccessful) {
+      const mappedFeed = feed.map((feedItem) => {
+        if (feedItem.id === id) {
+          const filteredLikes = feedItem.likes.filter((like) => {
+            return !(like.task_id === taskId && like.user_id === user.id);
+          });
+          return { ...feedItem, likes: filteredLikes };
+        }
+        return feedItem;
+      });
+      setFeed(mappedFeed);
       socket.emit('removeLike', taskId);
     }
   };
 
-  const addComment = async () => {
+  const addComment = async (): Promise<void> => {
     const { data: newComment } = await axios.post(
       'http://localhost:3000/api/comments',
       {
@@ -59,15 +80,32 @@ const FeedItem = ({
       }
     );
     if (newComment) {
+      const mappedFeed = feed.map((feedItem) => {
+        if (feedItem.id === id) {
+          return { ...feedItem, comments: [...feedItem.comments, newComment] };
+        }
+        return feedItem;
+      });
+      setFeed(mappedFeed);
       socket.emit('addComment', newComment);
     }
   };
 
-  const removeComment = async (commentId) => {
+  const removeComment = async (commentId: number): Promise<void> => {
     const { data: removeSuccessful } = await axios.delete(
       `http://localhost:3000/api/comments/${commentId}`
     );
     if (removeSuccessful) {
+      const mappedFeed = feed.map((feedItem) => {
+        if (feedItem.id === id) {
+          const filteredComments = feedItem.comments.filter((comment) => {
+            return comment.id !== commentId;
+          });
+          return { ...feedItem, comments: filteredComments };
+        }
+        return feedItem;
+      });
+      setFeed(mappedFeed);
       socket.emit('removeComment', id);
     }
   };
@@ -100,14 +138,18 @@ const FeedItem = ({
         {likes?.length} likes
       </Text>
       <View style={styles.btnContainer}>
-        <Button
-          title={`${canLike() ? 'Add Like' : 'Remove Like'}`}
-          onPress={() => (canLike() ? addLike(id) : removeLike(id))}
-        />
-        <Button
-          title='Comment'
-          onPress={() => setShowCommentInput(!showCommentInput)}
-        />
+        {username !== user.username && (
+          <Button
+            title={`${canLike() ? 'Add Like' : 'Remove Like'}`}
+            onPress={() => (canLike() ? addLike(id) : removeLike(id))}
+          />
+        )}
+        {username !== user.username && (
+          <Button
+            title='Comment'
+            onPress={() => setShowCommentInput(!showCommentInput)}
+          />
+        )}
       </View>
       {comments?.length ? (
         <FlatList
@@ -133,6 +175,13 @@ const FeedItem = ({
               if (commentText.length) {
                 addComment();
               }
+            }}
+          />
+          <Button
+            title='Cancel'
+            onPress={() => {
+              setCommentText('');
+              setShowCommentInput(false);
             }}
           />
         </View>

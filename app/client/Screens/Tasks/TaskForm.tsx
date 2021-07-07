@@ -13,7 +13,7 @@ import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { isBefore } from 'date-fns';
-
+import Tasks from './Tasks';
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
   const [description, setDescription] = useState('');
@@ -23,7 +23,6 @@ const TaskForm = () => {
   //for date selector
   const [date, setDate] = useState(new Date());
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
-
   const isPast = (date: Date) => {
     if (new Date(date).getFullYear() < new Date().getFullYear()) return true;
     if (new Date(date).getFullYear() > new Date().getFullYear()) return false;
@@ -32,7 +31,6 @@ const TaskForm = () => {
     if (new Date(date).getDate() < new Date().getDate()) return true;
     if (new Date(date).getDate() >= new Date().getDate()) return false;
   };
-
   const handleSubmit = async () => {
     if (isPast(date)) {
       alert('this date is in the past, please select a future date.');
@@ -47,26 +45,23 @@ const TaskForm = () => {
           is_important: isImportant
         }
       );
-      const sortedTasks = [...(user?.tasks || []), task].sort((t1, t2) =>
-        isBefore(new Date(t1.due_date), new Date(t2.due_date)) ? -1 : 1
-      );
-      setUser({
-        ...user,
-        tasks: sortedTasks
-      });
+      const sortedTasks = user.tasks
+        .concat([task])
+        .sort((t1, t2) =>
+          isBefore(new Date(t1.due_date), new Date(t2.due_date)) ? -1 : 1
+        );
       setShowForm(false);
       setDescription('');
       setDate(new Date());
       setTimeToComplete(0);
       setIsImportant(false);
+      setUser(Object.assign({}, user, { tasks: sortedTasks }));
     }
   };
-
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
   };
-
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

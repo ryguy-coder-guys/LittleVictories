@@ -6,8 +6,8 @@ const SocketContext = createContext(null);
 export const SocketContextProvider = ({ children }) => {
   const socket = io('http://localhost:3000');
 
-  socket.on('connect', () => console.log('socket connected'));
-  socket.on('disconnect', () => console.log('socket disconnected'));
+  // socket.on('connect', () => console.log('socket connected'));
+  // socket.on('disconnect', () => console.log('socket disconnected'));
 
   return (
     <SocketContext.Provider value={{ socket }}>

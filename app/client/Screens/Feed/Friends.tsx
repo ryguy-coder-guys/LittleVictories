@@ -2,12 +2,9 @@ import React, { useState, useEffect, ReactElement } from 'react';
 import { useUserContext } from '../../Contexts/userContext';
 import {
   View,
-  Button,
   Text,
-  FlatList,
   StyleSheet,
   TextInput,
-  Alert
 } from 'react-native';
 import axios from 'axios';
 import { v4 as getKey } from 'uuid';
@@ -18,14 +15,12 @@ import FriendListView from './FriendListView'
 const Friends = (): ReactElement => {
   const [users, setUsers] = useState([]);
   const [query, setQuery] = useState('');
-  const [fullData, setFullData] = useState([]);
   const { user } = useUserContext();
 
   const getAllUsers = () => {
     axios
       .get('http://localhost:3000/api/auth/users')
       .then(({ data }) => {
-        setFullData(data);
         setUsers(data);
       })
       .catch((err) => console.warn(err, 'l'));

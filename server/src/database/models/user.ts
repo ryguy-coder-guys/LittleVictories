@@ -18,33 +18,33 @@ export const User = dbConnection.define<UserInstance>(
     id: {
       type: DataTypes.STRING,
       allowNull: false,
-      primaryKey: true,
+      primaryKey: true
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     hash: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     createdAt: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: false
     },
     updatedAt: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: false
     },
     points: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 0,
+      defaultValue: 0
     },
     level: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
+      defaultValue: 1
     },
     readable_font: {
       type: DataTypes.BOOLEAN,
@@ -53,6 +53,6 @@ export const User = dbConnection.define<UserInstance>(
     }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );

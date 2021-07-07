@@ -13,63 +13,34 @@ interface FeedContextState {
 const FeedDefaultValues: FeedContextState = {
   feed: [],
   setFeed: (feed: FeedItem[]): void => {},
-  socket: null,
+  socket: null
 };
 
 const FeedContext = createContext<FeedContextState>(FeedDefaultValues);
 
 export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
   const [feed, setFeed] = useState<FeedItem[]>(FeedDefaultValues.feed);
-
   const { socket } = useSocketContext();
+  const { user } = useUserContext();
+
+  const updateFeed = (task) => {
+    const mappedFeed = feed.map((feedItem) => {
+      if (feedItem.id === task.id) {
+        return task;
+      }
+      return feedItem;
+    });
+    setFeed(mappedFeed);
+  };
 
   socket.on('addToFeed', (feedItem) => setFeed([...feed, feedItem]));
-
-  socket.on('removeFromFeed', (id) =>
-    setFeed(feed.filter((feedItem) => feedItem.id !== id))
+  socket.on('removeFromFeed', (taskId) =>
+    setFeed(feed.filter((feedItem) => feedItem.id !== taskId))
   );
-
-  socket.on('addLike', (task) => {
-    const mappedFeed = feed.map((feedItem) => {
-      if (feedItem.id === task.id) {
-        return task;
-      }
-      return feedItem;
-    });
-    setFeed(mappedFeed);
-  });
-
-  socket.on('removeLike', (task) => {
-    const mappedFeed = feed.map((feedItem) => {
-      if (feedItem.id === task.id) {
-        return task;
-      }
-      return feedItem;
-    });
-    setFeed(mappedFeed);
-  });
-
-  socket.on('addComment', (task) => {
-    const mappedFeed = feed.map((feedItem) => {
-      if (feedItem.id === task.id) {
-        return task;
-      }
-      return feedItem;
-    });
-    setFeed(mappedFeed);
-  });
-
-  socket.on('removeComment', (task) => {
-    const mappedFeed = feed.map((feedItem) => {
-      if (feedItem.id === task.id) {
-        return task;
-      }
-      return feedItem;
-    });
-    setFeed(mappedFeed);
-  });
-
-  const { user } = useUserContext();
+  socket.on('addLike', (task) => updateFeed(task));
+  socket.on('removeLike', (task) => updateFeed(task));
+  socket.on('addComment', (task) => updateFeed(task));
+  socket.on('removeComment', (task) => updateFeed(task));
 
   const fetchFeed = async () => {
     const { data } = await axios.get(

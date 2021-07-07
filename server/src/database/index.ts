@@ -2,6 +2,7 @@ import sequelize from 'sequelize';
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 import path from 'path';
+import redis from 'redis';
 
 const DB_NAME = 'little_victories';
 const DB_USER = 'root';
@@ -19,3 +20,6 @@ dbConnection
     console.log('little victories database connection unsuccessful');
     console.log(err);
   });
+
+export const client = redis.createClient();
+client.on('connect', () => console.log('connection to redis db successful'));

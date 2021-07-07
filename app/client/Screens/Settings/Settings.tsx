@@ -2,22 +2,27 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { StyleSheet, Text, View, ImageBackground, Switch } from 'react-native';
-import axios from 'axios';
+import { Button } from 'react-native-elements';
+
 import { useUserContext } from '../../Contexts/userContext';
 import { useQuoteContext } from '../../Contexts/quoteContext';
 import { useJournalContext } from '../../Contexts/journalContext';
-import moment from 'moment';
-import { Button } from 'react-native-elements';
 import { UserDefaultValues } from '../../Contexts/userContext';
+import { useSocketContext } from '../../Contexts/socketContext';
+
+import moment from 'moment';
+import axios from 'axios';
 
 const SettingsScreen = ({ navigation }) => {
   const bgImage = require('../../../assets/blue-gradient.png');
   const { user, setUser, setUserStats } = useUserContext();
   const { getQuote } = useQuoteContext();
   const { setJournal, setJournals } = useJournalContext();
+  const { socket } = useSocketContext();
 
   const logout = (): void => {
     getQuote();
+    socket.emit('loggedOut', user.id);
     setUser(UserDefaultValues.user);
     setJournal({ content: '', date: moment().format('MM-D-Y') });
     setJournals([]);
