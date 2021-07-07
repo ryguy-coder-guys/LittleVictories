@@ -1,88 +1,18 @@
 import React, { ReactElement } from 'react';
 import { View, StyleSheet, Text, FlatList, Button, Alert } from 'react-native';
-import { useJournalContext } from '../../Contexts/journalContext';
-import moment from 'moment';
-import { v4 as getKey } from 'uuid';
-import { format } from 'date-fns';
-import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
 import { textStyles } from '../../Stylesheets/Stylesheet';
+import List from './PastJournalList';
 
 const Journal = (): ReactElement => {
-  const { journals, journal, setJournals, setJournal } = useJournalContext();
   const { user } = useUserContext();
-
-  const clearJournal = (date : String) => {
-    Alert.alert(
-      'Are you sure?',
-      'Once deleted, you cannot get this journal entry back.',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'Clear Entry',
-          onPress: async () : Promise<void> => {
-            await axios.delete(`http://localhost:3000/api/journalEntries/${user.id}/${date}`);
-            const mappedJournals = journals.filter((entry) => {
-               return entry.date !== date
-            });
-            setJournals(mappedJournals);
-            alert('Journal successfully cleared.');
-          },
-        },
-      ]
-    );
-  };
-
-  const list = (): ReactElement => {
-    //console.log(journals, 'line 40')
-    return (
-      <View>
-        {journals ? (
-          <FlatList
-            keyExtractor={() => getKey()}
-            data={journals.filter((journal) => {
-              return journal.date < moment().format('MM-D-Y');
-            })}
-            renderItem={({ item: journal }) => {
-              return (
-                <View style={styles.textAreaContainer}>
-                  <Text
-                    style={user.readable_font ? styles.dateLarger : styles.date}
-                  >
-                    {journal.date}
-                  </Text>
-                  <Text
-                    style={
-                      user.readable_font ? textStyles.text_big : textStyles.text
-                    }
-                  >
-                    {journal.content}
-                  </Text>
-                  <Button
-          title='Clear Entry'
-          onPress={() => {
-            clearJournal(journal.date);
-          }}
-        />
-                </View>
-              );
-            }}
-          />
-         ) : null}
-      </View>
-    );
-  };
 
   return (
     <View>
       <Text style={user.readable_font ? styles.headerLarger : styles.header}>
         Previous Journals
       </Text>
-      {list()}
+      <List/>
     </View>
   );
 };
