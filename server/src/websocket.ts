@@ -60,7 +60,7 @@ const getUserId = (socketId: string): Promise<string | null> => {
 
 const fetchFriends = async (userId: string): Promise<string[]> => {
   const friends = await Friend.findAll({ where: { friend_id: userId } });
-  const mappedFriends = friends.map((friend) => friend.user_id.toString());
+  const mappedFriends = friends.map((friend) => friend.getDataValue('user_id'));
   return mappedFriends;
 };
 
@@ -71,7 +71,6 @@ const updateFeed = async (
 ): Promise<void> => {
   const foundTask = await fetchTask(taskId);
   const userId = await getUserId(socketId);
-
   if (userId) {
     const friends = await fetchFriends(userId);
     const sockets = io.sockets.sockets;

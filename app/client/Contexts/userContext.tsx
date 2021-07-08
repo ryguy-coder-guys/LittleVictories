@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, UserStat } from '../Interfaces/user';
+import { useSocketContext } from '../Contexts/socketContext';
 
 interface UserContextState {
   user: User;
@@ -32,6 +33,19 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   const [userStat, setUserStat] = useState<UserStat>(
     UserDefaultValues.userStat
   );
+  const { socket } = useSocketContext();
+
+  socket.on('disconnect', () => {
+    if (user.id.length) {
+      socket.emit('loggedOut', user.id);
+    }
+  });
+
+  socket.on('reconnect', () => {
+    if (user.id.length) {
+      socket.emit('loggedIn', user.id);
+    }
+  });
 
   return (
     <UserContext.Provider value={{ user, setUser, userStat, setUserStat }}>
