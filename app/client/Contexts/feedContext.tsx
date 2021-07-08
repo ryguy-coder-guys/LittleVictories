@@ -44,13 +44,13 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
 
   const fetchFeed = async () => {
     const { data } = await axios.get(
-      `http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/tasks/${user.id}`
+      `http://localhost:3000/api/tasks/${user.id}`
     );
     return data;
   };
 
   useEffect(() => {
-    if (user) {
+    if (user.id.length) {
       fetchFeed()
         .then((feed) => setFeed(feed))
         .catch((err) => console.warn(err));
