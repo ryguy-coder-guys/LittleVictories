@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, View, TextInput, StyleSheet, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Text } from 'react-native';
 import axios, { AxiosResponse } from 'axios';
 import { FAB } from 'react-native-paper';
 import { useUserContext } from '../../Contexts/userContext';
@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import { Button, ButtonGroup } from 'react-native-elements';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { Habit } from '../../Interfaces/user';
+import { showMessage } from 'react-native-flash-message';
 
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
@@ -52,14 +53,29 @@ const TaskForm = () => {
 
   const handleSubmit = async (): Promise<any> => {
     if (description === '') {
-      Alert.alert('Please enter a description.');
+      showMessage({
+        message: 'Form Error',
+        titleStyle: { fontSize: 18, color: '#FAFAFA' },
+        description: 'Please enter a description.',
+        textStyle: { fontSize: 20, color: '#FAFAFA' },
+        icon: { icon: 'warning', position: 'left' },
+        type: 'default',
+        backgroundColor: '#fc9c94'
+      });
     } else if (selectedFrequencyIndex === 0) {
       postHabit();
     } else if (selectedFrequencyIndex === 1) {
       if (!selectedDayIndices.length) {
-        Alert.alert(
-          'Please select the weekday(s) you would like the habit to be due.'
-        );
+        showMessage({
+          message: 'Form Error',
+          titleStyle: { fontSize: 18, color: '#FAFAFA' },
+          description:
+            'Please select the weekday(s) you would like the habit to be due.',
+          textStyle: { fontSize: 20, color: '#FAFAFA' },
+          icon: { icon: 'warning', position: 'left' },
+          type: 'default',
+          backgroundColor: '#fc9c94'
+        });
       } else {
         postHabit();
       }
