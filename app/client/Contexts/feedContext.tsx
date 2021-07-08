@@ -44,7 +44,7 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
 
   const fetchFeed = async () => {
     const { data } = await axios.get(
-      `http://localhost:3000/api/tasks/${user.id}`
+      `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/tasks/${user.id}`
     );
     return data;
   };

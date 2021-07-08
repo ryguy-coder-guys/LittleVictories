@@ -7,38 +7,30 @@ import {
   ImageBackground,
   Image
 } from 'react-native';
-import AwesomeButton from 'react-native-really-awesome-button';
-
+import { Button } from 'react-native-elements';
+import { showMessage } from 'react-native-flash-message';
 import { useUserContext } from '../../Contexts/userContext';
 import { useSocketContext } from '../../Contexts/socketContext';
-
 import axios from 'axios';
 import { containerStyles } from '../../Stylesheets/Stylesheet';
 
 const Login = ({ navigation }) => {
   const { setUser, setUserStat } = useUserContext();
   const { socket } = useSocketContext();
-
   const bgImage = require('../../../assets/images/blue-gradient.png');
   const logo = require('../../../assets/logo.png');
-
   const [username, setUsername] = useState('');
   const [passwordAttempt, setPasswordAttempt] = useState('');
   const [passwordAttempt2, setPasswordAttempt2] = useState('');
   const [loginSelected, toggleLogin] = useState(true);
-  const [mismatchPasswords, setMismatchPasswords] = useState(false);
-  const [wrongLogin, toggleWrongLogin] = useState(false);
-  const [userExists, setUserExists] = useState(false);
 
   const handleClick = (view) => {
     if (view === 'login') {
       toggleLogin(true);
-      toggleWrongLogin(false);
       setUsername('');
       setPasswordAttempt('');
     } else {
       toggleLogin(false);
-      setMismatchPasswords(false);
       setUsername('');
       setPasswordAttempt('');
       setPasswordAttempt2('');
@@ -52,7 +44,7 @@ const Login = ({ navigation }) => {
     if (loginSelected) {
       // attempt a login for the user
       const { data: userObj } = await axios.post(
-        'http://localhost:3000/api/auth/login',
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/login',
         {
           username,
           password: passwordAttempt
@@ -70,7 +62,15 @@ const Login = ({ navigation }) => {
         socket.emit('loggedIn', userObj.id);
         navigation.navigate('loading');
       } else {
-        toggleWrongLogin(true);
+        showMessage({
+          message: 'Form Error',
+          titleStyle: { fontSize: 18, color: '#FAFAFA' },
+          description: 'Username/Password did not match an existing user.',
+          textStyle: { fontSize: 20, color: '#FAFAFA' },
+          icon: { icon: 'warning', position: 'left' },
+          type: 'default',
+          backgroundColor: '#fc9c94'
+        });
       }
     } else if (!loginSelected) {
       if (
@@ -80,13 +80,20 @@ const Login = ({ navigation }) => {
         passwordAttempt !== passwordAttempt2
       ) {
         if (passwordAttempt !== passwordAttempt2) {
-          setMismatchPasswords(true);
-          setUserExists(false);
+          showMessage({
+            message: 'Form Error',
+            titleStyle: { fontSize: 18, color: '#FAFAFA' },
+            description: 'Passwords did not match, please try again.',
+            textStyle: { fontSize: 20, color: '#FAFAFA' },
+            icon: { icon: 'warning', position: 'left' },
+            type: 'default',
+            backgroundColor: '#fc9c94'
+          });
         }
         return;
       }
       const { data: user } = await axios.post(
-        'http://localhost:3000/api/auth/register',
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/register',
         {
           username,
           password: passwordAttempt
@@ -102,18 +109,26 @@ const Login = ({ navigation }) => {
         setPasswordAttempt2('');
         navigation.navigate('index');
       } else {
-        setUserExists(true);
-        setMismatchPasswords(false);
+        showMessage({
+          message: 'Form Error',
+          titleStyle: { fontSize: 18, color: '#FAFAFA' },
+          description: 'Username is already taken, please try again.',
+          textStyle: { fontSize: 20, color: '#FAFAFA' },
+          icon: { icon: 'warning', position: 'left' },
+          type: 'default',
+          backgroundColor: '#fc9c94'
+        });
         setPasswordAttempt('');
         setPasswordAttempt2('');
+        setUsername('');
       }
     }
   };
 
   // default view or if login btn is clicked
-  if (loginSelected) {
-    return (
-      <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
+  return (
+    <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
+      {loginSelected ? (
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
@@ -123,43 +138,23 @@ const Login = ({ navigation }) => {
               style={{ resizeMode: 'contain', width: '50%', height: '25%' }}
             />
             <View style={{ flexDirection: 'row' }}>
-              <AwesomeButton
-                backgroundColor={'#5c83b1'}
-                textColor={'#FAFAFA'}
-                height={35}
-                width={100}
-                raiseLevel={0}
-                borderRadius={8}
-                style={styles.button}
+              <Button
+                title='Login'
+                buttonStyle={styles.button}
+                titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
                 onPress={() => {
                   handleClick('login');
                 }}
-              >
-                Login
-              </AwesomeButton>
-              <AwesomeButton
-                backgroundColor={'#1D426D'}
-                textColor={'#FAFAFA'}
-                height={35}
-                width={100}
-                raiseLevel={0}
-                borderRadius={8}
-                style={styles.button}
+              />
+              <Button
+                title='Register'
+                buttonStyle={[styles.button, { backgroundColor: '#1D426D' }]}
+                titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
                 onPress={() => {
                   handleClick('register');
                 }}
-              >
-                Register
-              </AwesomeButton>
+              />
             </View>
-            {wrongLogin ? (
-              <View>
-                <Text style={styles.error}>
-                  Username/Password did not match an existing user.
-                </Text>
-                <Text style={styles.error2}>Please try again.</Text>
-              </View>
-            ) : null}
             <Text style={styles.text}>Username:</Text>
             <TextInput
               style={styles.input}
@@ -175,28 +170,18 @@ const Login = ({ navigation }) => {
               secureTextEntry={true}
               autoCapitalize='none'
             />
-            <AwesomeButton
-              backgroundColor={'#1D426D'}
-              textColor={'#FAFAFA'}
-              height={35}
-              width={100}
-              raiseLevel={0}
-              borderRadius={8}
-              style={styles.button}
+            <Button
+              title='Submit'
+              buttonStyle={[styles.button, { backgroundColor: '#1D426D' }]}
+              titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
               onPress={() => {
                 handleLogin();
               }}
-            >
-              Submit
-            </AwesomeButton>
+            />
           </>
         </View>
-      </ImageBackground>
-    );
-    // default view or if login btn is clicked
-  } else {
-    return (
-      <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
+      ) : (
+        // View if register button is clicked
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
@@ -206,34 +191,22 @@ const Login = ({ navigation }) => {
               style={{ resizeMode: 'contain', width: '50%', height: '25%' }}
             />
             <View style={{ flexDirection: 'row' }}>
-              <AwesomeButton
-                backgroundColor={'#1D426D'}
-                textColor={'#FAFAFA'}
-                height={35}
-                width={100}
-                raiseLevel={0}
-                borderRadius={8}
-                style={styles.button}
+              <Button
+                title='Login'
+                buttonStyle={[styles.button, { backgroundColor: '#1D426D' }]}
+                titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
                 onPress={() => {
                   handleClick('login');
                 }}
-              >
-                Login
-              </AwesomeButton>
-              <AwesomeButton
-                backgroundColor={'#5c83b1'}
-                textColor={'#FAFAFA'}
-                height={35}
-                width={100}
-                raiseLevel={0}
-                borderRadius={8}
-                style={styles.button}
+              />
+              <Button
+                title='Register'
+                buttonStyle={[styles.button, { backgroundColor: '#5c83b1' }]}
+                titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
                 onPress={() => {
                   handleClick('register');
                 }}
-              >
-                Register
-              </AwesomeButton>
+              />
             </View>
             <Text style={styles.text}>Username:</Text>
             <TextInput
@@ -242,20 +215,6 @@ const Login = ({ navigation }) => {
               value={username}
               autoCapitalize='none'
             />
-            {mismatchPasswords ? (
-              <View>
-                <Text style={styles.error}>Passwords did not match</Text>
-                {/* <Text style={styles.error}>or username is already taken.</Text> */}
-                <Text style={styles.error2}>Please try again.</Text>
-              </View>
-            ) : null}
-            {userExists ? (
-              <View>
-                {/* <Text style={styles.error}>Passwords did not match</Text> */}
-                <Text style={styles.error}>Username is already taken.</Text>
-                <Text style={styles.error2}>Please try again.</Text>
-              </View>
-            ) : null}
             <Text style={styles.text}>Password:</Text>
             <TextInput
               style={styles.input}
@@ -272,32 +231,30 @@ const Login = ({ navigation }) => {
               secureTextEntry={true}
               autoCapitalize='none'
             />
-            <AwesomeButton
-              backgroundColor={'#1D426D'}
-              textColor={'#FAFAFA'}
-              height={35}
-              width={100}
-              raiseLevel={0}
-              borderRadius={8}
-              style={styles.button}
+            <Button
+              title='Submit'
+              buttonStyle={[styles.button, { backgroundColor: '#1D426D' }]}
+              titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
               onPress={() => {
                 handleLogin();
               }}
-            >
-              Submit
-            </AwesomeButton>
+            />
           </>
         </View>
-      </ImageBackground>
-    );
-  }
+      )}
+    </ImageBackground>
+  );
 };
 
 const styles = StyleSheet.create({
   button: {
     marginLeft: 5,
     marginRight: 5,
-    marginBottom: 20
+    marginBottom: 20,
+    backgroundColor: '#5c83b1',
+    borderRadius: 8,
+    height: 40,
+    width: 100
   },
   error: {
     color: 'red',
@@ -320,7 +277,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#FAFAFA',
     marginBottom: 5,
-    fontSize: 16
+    fontSize: 18
   }
 });
 

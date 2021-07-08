@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "app",
-    "slug": "app",
+    "name": "Little Victories",
+    "slug": "little-victories",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
@@ -13,8 +13,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
-
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "bundleIdentifier": "com.operationspark.littlevictories",
       "buildNumber": "1.0.0",
@@ -30,6 +31,7 @@
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
-    }
+    },
+    "description": ""
   }
 }

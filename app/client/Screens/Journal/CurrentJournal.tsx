@@ -13,7 +13,7 @@ const Journal = (): ReactElement => {
   const [date] = useState(moment().format('MMMM Do Y'));
 
   const saveJournal = async (): Promise<void> => {
-    await axios.post('http://localhost:3000/api/journalEntries/create', {
+    await axios.post('http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/journalEntries/create', {
       user_id: user.id,
       content: journal.content,
       date: moment().format('MM-D-Y')
@@ -35,7 +35,7 @@ const Journal = (): ReactElement => {
           text: 'Clear Entry',
           onPress: async () => {
             await axios.delete(
-              `http://localhost:3000/api/journalEntries/${
+              `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/journalEntries/${
                 user.id
               }/${moment().format('MM-D-Y')}`
             );

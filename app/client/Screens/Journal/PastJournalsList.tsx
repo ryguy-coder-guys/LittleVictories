@@ -24,7 +24,7 @@ const List = (): ReactElement => {
           text: 'Clear Entry',
           onPress: async (): Promise<void> => {
             await axios.delete(
-              `http://localhost:3000/api/journalEntries/${user.id}/${date}`
+              `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/journalEntries/${user.id}/${date}`
             );
             const mappedJournals = journals.filter((entry) => {
               return entry.date !== date;
