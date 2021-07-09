@@ -16,7 +16,7 @@ import {
 import { textStyles } from '../../Stylesheets/Stylesheet';
 
 const SingleTask = ({ item }) => {
-  const { user, setUser, setLevel } = useUserContext();
+  const { user, setUser, setLevel, setNumCompletedTasks } = useUserContext();
   const { socket } = useSocketContext();
   const { feed, setFeed } = useFeedContext();
   const [finished, setFinished] = useState(item.is_complete);
@@ -56,7 +56,7 @@ const SingleTask = ({ item }) => {
     try {
       const currentLevel = user.level;
       const {
-        data: { task, points, level }
+        data: { task, points, level, numCompletedTasks }
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/complete`
       );
@@ -69,6 +69,7 @@ const SingleTask = ({ item }) => {
       if (currentLevel !== level) {
         setLevel(level);
       }
+      setNumCompletedTasks(numCompletedTasks);
       setUser({ ...user, tasks: mappedTasks, points, level });
     } catch (error) {
       console.warn(error);
@@ -79,7 +80,7 @@ const SingleTask = ({ item }) => {
     try {
       const currentLevel = user.level;
       const {
-        data: { points, level }
+        data: { points, level, numCompletedTasks }
       } = await axios.patch(
         `http://localhost:3000/api/tasks/${item.id}/incomplete`
       );
@@ -93,6 +94,7 @@ const SingleTask = ({ item }) => {
       if (currentLevel !== level) {
         setLevel(level);
       }
+      setNumCompletedTasks(numCompletedTasks);
       setUser({ ...user, tasks: mappedTasks, points, level });
       // setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
       socket.emit('removeFromFeed', item.id);

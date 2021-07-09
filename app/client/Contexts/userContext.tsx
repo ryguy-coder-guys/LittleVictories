@@ -15,6 +15,8 @@ interface UserContextState {
   setUserStat: (userStat: UserStat) => void;
   setLevel: (level: number) => void;
   setNumHabits: (numHabits: number) => void;
+  setNumCompletedTasks: (numCompletedTasks: number) => void;
+  setNumFollowees: (numFollowees: number) => void;
 }
 
 export const UserDefaultValues: UserContextState = {
@@ -33,7 +35,9 @@ export const UserDefaultValues: UserContextState = {
   userStat: null,
   setUserStat: (userStat: UserStat): void => {},
   setLevel: (level: number): void => {},
-  setNumHabits: (numHabits: number): void => {}
+  setNumHabits: (numHabits: number): void => {},
+  setNumCompletedTasks: (numCompletedTasks: number): void => {},
+  setNumFollowees: (numFollowees: number): void => {}
 };
 
 const UserContext = createContext<UserContextState>(UserDefaultValues);
@@ -60,6 +64,8 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
 
   const [level, setLevel] = useState(0);
   const [numHabits, setNumHabits] = useState(0);
+  const [numCompletedTasks, setNumCompletedTasks] = useState(0);
+  const [numFollowees, setNumFollowees] = useState(0);
 
   useEffect(() => {
     if (level === 1) {
@@ -77,6 +83,18 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
     }
   }, [numHabits]);
 
+  useEffect(() => {
+    if (numCompletedTasks === 5) {
+      alert('five tasks');
+    }
+  }, [numCompletedTasks]);
+
+  useEffect(() => {
+    if (numFollowees === 3) {
+      alert('following three users');
+    }
+  }, [numFollowees]);
+
   return (
     <UserContext.Provider
       value={{
@@ -85,7 +103,9 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
         userStat,
         setUserStat,
         setLevel,
-        setNumHabits
+        setNumHabits,
+        setNumCompletedTasks,
+        setNumFollowees
       }}
     >
       {children}
