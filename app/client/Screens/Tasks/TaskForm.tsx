@@ -19,7 +19,7 @@ const TaskForm = () => {
   const [description, setDescription] = useState('');
   const [timeToComplete, setTimeToComplete] = useState(0);
   const [isImportant, setIsImportant] = useState(false);
-  const { user, setUser, setNumTasks } = useUserContext();
+  const { user, setUser } = useUserContext();
   //for date selector
   const [date, setDate] = useState(new Date());
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
