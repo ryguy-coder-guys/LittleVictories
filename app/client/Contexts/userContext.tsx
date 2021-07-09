@@ -1,9 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Image, TouchableOpacity } from 'react-native';
 import { User, UserStat } from '../Interfaces/user';
 import { useSocketContext } from '../Contexts/socketContext';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 
 interface UserContextState {
   user: User;
+  numHabits: number;
+  numCompletedTasks: number;
+  numFollowees: number;
   setUser: (user: User) => void;
   userStat: UserStat | null;
   setUserStat: (userStat: UserStat) => void;
@@ -27,6 +32,9 @@ export const UserDefaultValues: UserContextState = {
   },
   setUser: (user: User): void => {},
   userStat: null,
+  numHabits: 0,
+  numCompletedTasks: 0,
+  numFollowees: 0,
   setUserStat: (userStat: UserStat): void => {},
   setLevel: (level: number): void => {},
   setNumHabits: (numHabits: number): void => {},
@@ -61,31 +69,179 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   const [numCompletedTasks, setNumCompletedTasks] = useState(0);
   const [numFollowees, setNumFollowees] = useState(0);
 
+  const displayMessage = (props = {}) => {
+    const message: any = {
+      type: 'default',
+      autoHide: false,
+      backgroundColor: '#1D426D',
+      icon: 'succeess',
+      position: 'bottom',
+      message: 'Congratulations!',
+      titleStyle: {
+        fontSize: 20,
+        color: '#FAFAFA',
+        paddingTop: 30,
+        textAlign: 'center'
+      },
+      style: {
+        width: '100%',
+        borderRadius: 0,
+        paddingRight: 40
+      },
+      ...props
+    };
+
+    showMessage(message);
+  };
+
   useEffect(() => {
     if (level === 1) {
-      alert('level one');
+      displayMessage({
+        description: 'Level 1 Reached',
+        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
+        renderCustomContent: () => (
+          <TouchableOpacity>
+            <Image
+              source={require('../../assets/images/ribbon_red.png')}
+              style={{
+                width: 200,
+                height: 200,
+                resizeMode: 'contain',
+                alignSelf: 'center',
+                marginTop: 20
+              }}
+            />
+          </TouchableOpacity>
+        )
+      });
     } else if (level === 5) {
-      alert('level five');
+      displayMessage({
+        description: 'Level 5 Reached',
+        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
+        renderCustomContent: () => (
+          <TouchableOpacity>
+            <Image
+              source={require('../../assets/images/ribbon_green.png')}
+              style={{
+                width: 200,
+                height: 200,
+                resizeMode: 'contain',
+                alignSelf: 'center',
+                marginTop: 20
+              }}
+            />
+          </TouchableOpacity>
+        )
+      });
     } else if (level === 10) {
-      alert('level ten');
+      displayMessage({
+        description: 'Level 10 Reached',
+        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
+        renderCustomContent: () => (
+          <TouchableOpacity>
+            <Image
+              source={require('../../assets/images/ribbon_yellow.png')}
+              style={{
+                width: 200,
+                height: 200,
+                resizeMode: 'contain',
+                alignSelf: 'center',
+                marginTop: 20
+              }}
+            />
+          </TouchableOpacity>
+        )
+      });
     }
   }, [level]);
 
   useEffect(() => {
     if (numHabits === 5) {
-      alert('five habits');
+      displayMessage({
+        description: '5 Habits Added',
+        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
+        renderCustomContent: () => (
+          <TouchableOpacity>
+            <Image
+              source={require('../../assets/images/trophy_pink.png')}
+              style={{
+                width: 200,
+                height: 200,
+                resizeMode: 'contain',
+                alignSelf: 'center',
+                marginTop: 20
+              }}
+            />
+          </TouchableOpacity>
+        )
+      });
     }
   }, [numHabits]);
 
   useEffect(() => {
     if (numCompletedTasks === 5) {
-      alert('five tasks');
+      displayMessage({
+        description: '5 Completed Tasks',
+        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
+        renderCustomContent: () => (
+          <TouchableOpacity>
+            <Image
+              source={require('../../assets/images/trophy_blue.png')}
+              style={{
+                width: 200,
+                height: 200,
+                resizeMode: 'contain',
+                alignSelf: 'center',
+                marginTop: 20,
+                marginBottom: 10
+              }}
+            />
+          </TouchableOpacity>
+        )
+      });
     }
   }, [numCompletedTasks]);
 
   useEffect(() => {
     if (numFollowees === 3) {
-      alert('following three users');
+      displayMessage({
+        description: 'Added 3 Friends',
+        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
+        renderCustomContent: () => (
+          <TouchableOpacity>
+            <Image
+              source={require('../../assets/images/star_red.png')}
+              style={{
+                width: 200,
+                height: 200,
+                resizeMode: 'contain',
+                alignSelf: 'center',
+                marginTop: 20
+              }}
+            />
+          </TouchableOpacity>
+        )
+      });
+    }
+    if (numFollowees === 5) {
+      displayMessage({
+        description: 'Added 5 Friends',
+        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
+        renderCustomContent: () => (
+          <TouchableOpacity>
+            <Image
+              source={require('../../assets/images/star_green.png')}
+              style={{
+                width: 200,
+                height: 200,
+                resizeMode: 'contain',
+                alignSelf: 'center',
+                marginTop: 20
+              }}
+            />
+          </TouchableOpacity>
+        )
+      });
     }
   }, [numFollowees]);
 
@@ -95,6 +251,9 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
         user,
         setUser,
         userStat,
+        numHabits,
+        numCompletedTasks,
+        numFollowees,
         setUserStat,
         setLevel,
         setNumHabits,
