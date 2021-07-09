@@ -20,11 +20,7 @@ const Achievements = (): ReactElement => {
           <View style={styles.badges}>
             <Image
               source={require('../../../assets/images/ribbon_red.png')}
-              style={{
-                resizeMode: 'contain',
-                width: '100%',
-                height: '100%'
-              }}
+              style={styles.image}
             />
             <Text
               style={user.readable_font ? textStyles.text_big : textStyles.text}
@@ -37,11 +33,7 @@ const Achievements = (): ReactElement => {
           <View style={styles.badges}>
             <Image
               source={require('../../../assets/images/ribbon_green.png')}
-              style={{
-                resizeMode: 'contain',
-                width: '100%',
-                height: '100%'
-              }}
+              style={styles.image}
             />
             <Text
               style={user.readable_font ? textStyles.text_big : textStyles.text}
@@ -54,11 +46,7 @@ const Achievements = (): ReactElement => {
           <View style={styles.badges}>
             <Image
               source={require('../../../assets/images/ribbon_yellow.png')}
-              style={{
-                resizeMode: 'contain',
-                width: '100%',
-                height: '100%'
-              }}
+              style={styles.image}
             />
             <Text
               style={user.readable_font ? textStyles.text_big : textStyles.text}
@@ -71,11 +59,7 @@ const Achievements = (): ReactElement => {
           <View style={styles.badges}>
             <Image
               source={require('../../../assets/images/trophy_pink.png')}
-              style={{
-                resizeMode: 'contain',
-                width: '100%',
-                height: '100%'
-              }}
+              style={styles.image}
             />
             <Text
               style={user.readable_font ? textStyles.text_big : textStyles.text}
@@ -88,11 +72,7 @@ const Achievements = (): ReactElement => {
           <View style={styles.badges}>
             <Image
               source={require('../../../assets/images/trophy_blue.png')}
-              style={{
-                resizeMode: 'contain',
-                width: '100%',
-                height: '100%'
-              }}
+              style={styles.image}
             />
             <Text
               style={user.readable_font ? textStyles.text_big : textStyles.text}
@@ -105,11 +85,7 @@ const Achievements = (): ReactElement => {
           <View style={styles.badges}>
             <Image
               source={require('../../../assets/images/star_red.png')}
-              style={{
-                resizeMode: 'contain',
-                width: '100%',
-                height: '100%'
-              }}
+              style={styles.image}
             />
             <Text
               style={user.readable_font ? textStyles.text_big : textStyles.text}
@@ -122,11 +98,7 @@ const Achievements = (): ReactElement => {
           <View style={styles.badges}>
             <Image
               source={require('../../../assets/images/star_green.png')}
-              style={{
-                resizeMode: 'contain',
-                width: '100%',
-                height: '100%'
-              }}
+              style={styles.image}
             />
             <Text
               style={user.readable_font ? textStyles.text_big : textStyles.text}
@@ -152,6 +124,11 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  image: {
+    resizeMode: 'contain',
+    width: '100%',
+    height: '100%'
   },
   view: {
     backgroundColor: '#8ebac6',
