@@ -19,7 +19,7 @@ const TaskForm = () => {
   const [description, setDescription] = useState('');
   const [timeToComplete, setTimeToComplete] = useState(0);
   const [isImportant, setIsImportant] = useState(false);
-  const { user, setUser } = useUserContext();
+  const { user, setUser, setNumTasks } = useUserContext();
   //for date selector
   const [date, setDate] = useState(new Date());
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
@@ -36,7 +36,7 @@ const TaskForm = () => {
       alert('this date is in the past, please select a future date.');
     } else {
       const { data: task } = await axios.post(
-        'http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/tasks/',
+        'http://localhost:3000/api/tasks/',
         {
           user_id: user.id,
           description,

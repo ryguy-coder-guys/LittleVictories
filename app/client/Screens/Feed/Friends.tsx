@@ -12,9 +12,7 @@ const Friends = (): ReactElement => {
 
   const getAllUsers = () => {
     axios
-      .get(
-        'http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/auth/users'
-      )
+      .get(`http://localhost:3000/api/auth/users/${user.id}`)
       .then(({ data }) => {
         setUsers(
           data.filter((users) => {
@@ -26,7 +24,7 @@ const Friends = (): ReactElement => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user.id.length) {
       getAllUsers();
     }
   }, [user]);

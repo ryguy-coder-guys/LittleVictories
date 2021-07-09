@@ -12,7 +12,7 @@ import { Habit } from '../../Interfaces/user';
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
   const [description, setDescription] = useState('');
-  const { user, setUser } = useUserContext();
+  const { user, setUser, setNumHabits } = useUserContext();
   const [date, setDate] = useState(new Date());
   const [selectedFrequencyIndex, setSelectedFrequencyIndex] = useState(0);
   const [selectedDayIndices, setSelectedDayIndices] = useState([]);
@@ -30,7 +30,7 @@ const TaskForm = () => {
     const frequencies: string[] = ['daily', 'weekly', 'monthly'];
     try {
       const { data: habit }: AxiosResponse<Habit> = await axios.post(
-        'http://ec2-13-59-184-112.us-east-2.compute.amazonaws.com/api/habits/',
+        'http://localhost:3000/api/habits/',
         {
           user_id: user.id,
           description: description,
@@ -49,6 +49,7 @@ const TaskForm = () => {
       setDate(new Date());
       setSelectedFrequencyIndex(0);
       setSelectedDayIndices([]);
+      setNumHabits(user.habits.length + 1);
     } catch (err) {
       console.warn('error with post habit: ', err);
     }
