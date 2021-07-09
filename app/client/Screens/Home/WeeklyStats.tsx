@@ -10,7 +10,7 @@ import {
 } from 'react-native-svg-charts';
 import { useUserContext } from '../../Contexts/userContext';
 import { format, getDay, isLeapYear } from 'date-fns';
-import { Circle, G, Image } from 'react-native-svg';
+import { G, Image } from 'react-native-svg';
 import { UserStat } from '../../Interfaces/user';
 
 const getDatesInLastWeek = (): string[] => {
@@ -112,12 +112,11 @@ const MoodChart = (): PieChart => {
       const { labelCentroid, data } = slice;
       return (
         <G key={index} x={labelCentroid[0]} y={labelCentroid[1]}>
-          <Circle r={15} fill={'white'} />
           <Image
-            x={-17}
-            y={-17}
-            width={35}
-            height={35}
+            x={-16}
+            y={-18}
+            width={33}
+            height={33}
             preserveAspectRatio='xMidYMid slice'
             href={Images[data.mood]}
           />

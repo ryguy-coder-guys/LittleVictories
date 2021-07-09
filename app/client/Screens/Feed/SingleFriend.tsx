@@ -1,6 +1,7 @@
 import React, { useState, ReactElement } from 'react';
 import { View, Button, Text, StyleSheet } from 'react-native';
 import { textStyles } from '../../Stylesheets/Stylesheet';
+import { showMessage } from 'react-native-flash-message';
 
 import { useSocketContext } from '../../Contexts/socketContext';
 import { useFeedContext } from '../../Contexts/feedContext';
@@ -76,14 +77,36 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
       {!isFriend ? (
         <Button
           onPress={() => {
-            addFriend(item.id), alert('Friend Added!');
+            addFriend(item.id),
+              showMessage({
+                message: `Now following ${item.username}.`,
+                titleStyle: {
+                  fontSize: 20,
+                  color: '#FAFAFA',
+                  alignSelf: 'center'
+                },
+                icon: { icon: 'success', position: 'left' },
+                type: 'default',
+                backgroundColor: '#1D426D'
+              });
           }}
           title='Follow'
         />
       ) : (
         <Button
           onPress={() => {
-            removeFriend(item.id), alert('Friend Removed');
+            removeFriend(item.id),
+              showMessage({
+                message: `You are no longer following ${item.username}.`,
+                titleStyle: {
+                  fontSize: 20,
+                  color: '#FAFAFA',
+                  alignSelf: 'center'
+                },
+                icon: { icon: 'success', position: 'left' },
+                type: 'default',
+                backgroundColor: '#1D426D'
+              });
           }}
           title='Unfollow'
         />

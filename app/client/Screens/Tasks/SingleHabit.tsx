@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { View, StyleSheet, Text } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { useState } from 'react';
-import { CheckBox } from 'react-native-elements';
 import { format } from 'date-fns';
 
 const SingleHabit = ({ item }) => {
@@ -90,14 +89,32 @@ const SingleHabit = ({ item }) => {
   return (
     <View style={styles.habit_view}>
       <View style={{ flexDirection: 'row' }}>
-        <CheckBox
-          checked={finished}
-          onPress={() => {
-            setFinished(!finished);
-            finished ? markHabitIncomplete() : markHabitComplete();
-          }}
-        />
-        <View style={{ flexDirection: 'column' }}>
+        {!finished ? (
+          <TouchableOpacity
+            onPress={() => {
+              setFinished(!finished);
+              finished ? markHabitIncomplete() : markHabitComplete();
+            }}
+          >
+            <Image
+              source={require('../../../assets/images/checkbox-blank-outline.png')}
+              style={styles.checkbox}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              setFinished(!finished);
+              finished ? markHabitIncomplete() : markHabitComplete();
+            }}
+          >
+            <Image
+              source={require('../../../assets/images/checkbox-marked.png')}
+              style={styles.checkbox}
+            />
+          </TouchableOpacity>
+        )}
+        <View style={{ flexDirection: 'column', marginLeft: 10 }}>
           <Text style={user.readable_font ? styles.textLarger : styles.text}>
             {item.description}
           </Text>
@@ -117,34 +134,33 @@ const SingleHabit = ({ item }) => {
         </View>
       </View>
       <View style={{ width: '100%', alignItems: 'flex-end' }}>
-        <CheckBox
-          containerStyle={{
-            width: 115,
-            backgroundColor: '#8ebac6',
-            margin: 0,
-            borderColor: '#8ebac6'
-          }}
-          textStyle={{ color: '#1D426D', fontWeight: 'normal' }}
-          right
-          title='Delete Habit'
-          iconRight
-          iconType='material'
-          uncheckedIcon='clear'
-          uncheckedColor='red'
-          checkedIcon='clear'
-          checkedColor='black'
-          checked={removed}
+        <TouchableOpacity
           onPress={() => {
             removeHabit();
             setRemoved(true);
           }}
-        />
+        >
+          <Image
+            source={require('../../../assets/images/minus-circle-outline.png')}
+            style={{
+              resizeMode: 'contain',
+              width: 25,
+              height: 25
+            }}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  checkbox: {
+    resizeMode: 'contain',
+    width: 25,
+    height: 25,
+    marginLeft: 20
+  },
   habit_view: {
     flexDirection: 'row',
     justifyContent: 'space-between',

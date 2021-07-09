@@ -6,6 +6,7 @@ import { QuoteContextProvider } from './client/Contexts/quoteContext';
 import { JournalContextProvider } from './client/Contexts/journalContext';
 import { FeedContextProvider } from './client/Contexts/feedContext';
 import { SocketContextProvider } from './client/Contexts/socketContext';
+import FlashMessage from 'react-native-flash-message';
 
 export default function App() {
   return (
@@ -15,6 +16,8 @@ export default function App() {
           <FeedContextProvider>
             <JournalContextProvider>
               <RootNavigator />
+              {/* GLOBAL FLASH MESSAGE COMPONENT INSTANCE */}
+              <FlashMessage position='top' />
             </JournalContextProvider>
           </FeedContextProvider>
         </UserContextProvider>
@@ -28,6 +31,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'
+  }
 });

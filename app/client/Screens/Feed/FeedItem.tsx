@@ -1,20 +1,21 @@
 import React from 'react';
 import {
-  Text,
   Button,
-  View,
   FlatList,
+  Image,
+  StyleSheet,
+  Text,
   TextInput,
-  StyleSheet
+  TouchableOpacity,
+  View
 } from 'react-native';
-
 import { useUserContext } from '../../Contexts/userContext';
 import { useSocketContext } from '../../Contexts/socketContext';
 import { useFeedContext } from '../../Contexts/feedContext';
 import Comment from './Comment';
-
 import axios from 'axios';
 import { v4 as getKey } from 'uuid';
+import { textStyles } from '../../Stylesheets/Stylesheet';
 
 const FeedItem = ({
   username,
@@ -24,7 +25,7 @@ const FeedItem = ({
   likes,
   comments
 }) => {
-  const { user, setUser } = useUserContext();
+  const { user } = useUserContext();
   const { feed, setFeed } = useFeedContext();
   const { socket } = useSocketContext();
 
@@ -121,35 +122,77 @@ const FeedItem = ({
     }
   };
 
+  const formatDate = (date) => {
+    if (date) {
+      const dateArr = date.split('-');
+      const months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sept',
+        'Oct',
+        'Nov',
+        'Dec'
+      ];
+      let output = `${months[parseInt(dateArr[1]) - 1]} ${parseInt(
+        dateArr[2]
+      )}, ${dateArr[0]}`;
+      return output;
+    }
+  };
+
   return (
     <View style={styles.feedItemContainer}>
       <Text
-        style={user.readable_font ? styles.boldTextLarger : styles.boldText}
+        style={
+          user.readable_font
+            ? [textStyles.text_big, { fontWeight: 'bold' }]
+            : [textStyles.text, { fontWeight: 'bold' }]
+        }
       >
         {username}
       </Text>
-      <Text style={user.readable_font ? styles.textLarger : styles.text}>
+      <Text style={user.readable_font ? textStyles.text_big : textStyles.text}>
         {description}
       </Text>
-      <Text style={user.readable_font ? styles.textLarger : styles.text}>
-        {completed_at}
+      <Text style={user.readable_font ? textStyles.text_big : textStyles.text}>
+        Completed on: {formatDate(completed_at)}
       </Text>
-      <Text style={user.readable_font ? styles.textLarger : styles.text}>
-        {likes?.length} like{likes?.length === 1 ? '' : 's'}
-      </Text>
-      <View style={styles.btnContainer}>
-        {username !== user.username && (
-          <Button
-            title={`${canLike() ? 'Add Like' : 'Remove Like'}`}
-            onPress={() => (canLike() ? addLike(id) : removeLike(id))}
-          />
-        )}
-        {username !== user.username && (
-          <Button
-            title='Comment'
-            onPress={() => setShowCommentInput(!showCommentInput)}
-          />
-        )}
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+        <TouchableOpacity
+          onPress={() => (canLike() ? addLike(id) : removeLike(id))}
+        >
+          {!canLike() || (username === user.username && likes?.length) ? (
+            <Image
+              source={require('../../../assets/images/heart.png')}
+              style={{
+                resizeMode: 'contain',
+                width: 25,
+                height: 25
+              }}
+            />
+          ) : (
+            <Image
+              source={require('../../../assets/images/heart-outline.png')}
+              style={{
+                resizeMode: 'contain',
+                width: 25,
+                height: 25
+              }}
+            />
+          )}
+        </TouchableOpacity>
+        <Text
+          style={user.readable_font ? textStyles.text_big : textStyles.text}
+        >
+          {' '}
+          {likes?.length}
+        </Text>
       </View>
       {comments?.length ? (
         <FlatList
@@ -160,11 +203,21 @@ const FeedItem = ({
           keyExtractor={() => getKey()}
         />
       ) : null}
+      <View style={styles.btnContainer}>
+        {username !== user.username && (
+          <Button
+            title='Add Comment'
+            onPress={() => setShowCommentInput(!showCommentInput)}
+          />
+        )}
+      </View>
       {showCommentInput && (
         <View>
           <TextInput
             style={
-              user.readable_font ? styles.textInputLarger : styles.textInput
+              user.readable_font
+                ? [styles.textInput, { fontSize: 20 }]
+                : styles.textInput
             }
             onChangeText={setCommentText}
             value={commentText}
@@ -199,38 +252,14 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   btnContainer: {
-    flexDirection: 'row'
-  },
-  boldText: {
-    fontSize: 18,
-    color: '#1D426D',
-    fontWeight: 'bold'
-  },
-  boldTextLarger: {
-    fontSize: 20,
-    color: '#1D426D',
-    fontWeight: 'bold'
-  },
-  text: {
-    fontSize: 18,
-    color: '#1D426D'
-  },
-  textLarger: {
-    fontSize: 20,
-    color: '#1D426D'
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   textInput: {
     width: '100%',
     padding: 10,
     backgroundColor: '#9ec5cf',
     fontSize: 18,
-    color: '#1D426D'
-  },
-  textInputLarger: {
-    width: '100%',
-    padding: 10,
-    backgroundColor: '#9ec5cf',
-    fontSize: 20,
     color: '#1D426D'
   }
 });

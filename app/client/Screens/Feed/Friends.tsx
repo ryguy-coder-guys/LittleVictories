@@ -40,41 +40,36 @@ const Friends = (): ReactElement => {
   // };
 
   return (
-    <View style={styles.main}>
-      <Text style={user.readable_font ? textStyles.h1_big : textStyles.h1}>
-        User Search
-      </Text>
-      <TextInput
-        autoCorrect={false}
-        style={styles.textInput}
-        onChangeText={setQuery}
-        value={query}
-        placeholder='Search'
-      />
-      <FriendListView
-        query={query}
-        user={user}
-        users={users}
-        setUsers={setUsers}
-      />
+    <View style={styles.list}>
+      <View style={styles.main}>
+        <Text style={user.readable_font ? textStyles.h1_big : textStyles.h1}>
+          User Search
+        </Text>
+        <TextInput
+          autoCorrect={false}
+          style={styles.textInput}
+          onChangeText={setQuery}
+          value={query}
+          placeholder='Search'
+        />
+        <FriendListView
+          query={query}
+          user={user}
+          users={users}
+          setUsers={setUsers}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  listItem: {
-    marginTop: 10,
-    padding: 20
+  list: {
+    height: '80%'
   },
   main: {
     marginLeft: 40,
     marginRight: 40,
-    marginTop: 20
-  },
-  textAreaContainer: {
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    padding: 20,
     marginTop: 20
   },
   textInput: {
