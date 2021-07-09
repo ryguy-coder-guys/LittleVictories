@@ -60,14 +60,17 @@ const getUserId = (socketId: string): Promise<string | null> => {
 };
 
 const fetchFriends = async (userId: string): Promise<string[]> => {
-  return new Promise((resolve, reject) => {
-    client.lrange(userId, 0, -1, (error, response) => {
-      if (error) {
-        reject(error);
-      }
-      resolve(response);
-    });
-  });
+  const friends = await Friend.findAll({ where: { friend_id: userId } });
+  const mappedFriends = friends.map((friend) => friend.getDataValue('user_id'));
+  return mappedFriends;
+  // return new Promise((resolve, reject) => {
+  //   client.lrange(userId, 0, -1, (error, response) => {
+  //     if (error) {
+  //       reject(error);
+  //     }
+  //     resolve(response);
+  //   });
+  // });
 };
 
 const updateFeed = async (
@@ -126,21 +129,21 @@ io.on('connection', (socket) => {
 
   socket.on('loggedIn', async (userId: string) => {
     client.set(socket.id.toString(), userId.toString());
-    const friendships = await Friend.findAll({
-      where: { user_id: userId },
-      attributes: ['friend_id']
-    });
-    const mappedFriendships = friendships.map((friendship) =>
-      friendship.getDataValue('friend_id')
-    );
-    for (const currentFriendship of mappedFriendships) {
-      client.rpush(userId, currentFriendship.toString());
-    }
+    // const friendships = await Friend.findAll({
+    //   where: { friend_id: userId },
+    //   attributes: ['user_id']
+    // });
+    // const mappedFriendships = friendships.map((friendship) =>
+    //   friendship.getDataValue('user_id')
+    // );
+    // for (const currentFriendship of mappedFriendships) {
+    //   client.rpush(userId.toString(), currentFriendship.toString());
+    // }
   });
 
   socket.on('loggedOut', (userId) => {
     client.del(socket.id);
-    client.del(userId);
+    // client.del(userId);
   });
 
   socket.on('addFriend', (friendshipObj: FriendshipObject) => {

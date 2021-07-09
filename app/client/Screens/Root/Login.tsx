@@ -96,11 +96,27 @@ const Login = ({ navigation }) => {
       if (user) {
         // if they match, create a new user
         // then navigate to home
-        setUser(user);
-        setUsername('');
-        setPasswordAttempt('');
-        setPasswordAttempt2('');
-        navigation.navigate('index');
+        const { data: userObj } = await axios.post(
+          'http://localhost:3000/api/auth/login',
+          {
+            username,
+            password: passwordAttempt
+          }
+        );
+        if (userObj) {
+          // if successful navigate to home
+          setTimeout(() => {
+            setUser(userObj);
+            setUserStat(userObj.userStat);
+            navigation.navigate('index');
+          }, 5000);
+          setUsername('');
+          setPasswordAttempt('');
+          socket.emit('loggedIn', userObj.id);
+          navigation.navigate('loading');
+        } else {
+          toggleWrongLogin(true);
+        }
       } else {
         setUserExists(true);
         setMismatchPasswords(false);

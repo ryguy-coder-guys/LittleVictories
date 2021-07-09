@@ -2,9 +2,13 @@ import React, { useState, ReactElement } from 'react';
 import { View, Button, Text, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { textStyles } from '../../Stylesheets/Stylesheet';
+import { useSocketContext } from '../../Contexts/socketContext';
+import { useFeedContext } from '../../Contexts/feedContext';
 
 const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
   const [isFriend, setIsFriend] = useState(item.isFriend);
+  const { socket } = useSocketContext();
+  const { feed, setFeed, refreshFeed } = useFeedContext();
 
   const addFriend = async (id: string): Promise<void> => {
     try {
@@ -16,6 +20,7 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
         }
       );
       if (addSuccessful) {
+        refreshFeed();
         const mappedUsers = users.map((currentUser) => {
           if (currentUser.id === item.id) {
             return { ...currentUser, isFriend: true };
@@ -24,6 +29,7 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
         });
         setIsFriend(true);
         setUsers(mappedUsers);
+        // socket.emit('addFriend', { userId: user.id, friendId: id });
       }
     } catch (error) {
       console.warn(error);
@@ -39,8 +45,13 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
         }
         return currentUser;
       });
+      const filteredFeed = feed.filter(
+        (feedItem) => feedItem.username !== item.username
+      );
       setIsFriend(false);
       setUsers(mappedUsers);
+      setFeed(filteredFeed);
+      // socket.emit('removeFriend', { userId: user.id, friendId: id });
     } catch (error) {
       console.warn(error);
     }
