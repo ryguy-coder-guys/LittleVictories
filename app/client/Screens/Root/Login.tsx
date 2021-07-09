@@ -112,6 +112,7 @@ const Login = ({ navigation }) => {
           }, 5000);
           setUsername('');
           setPasswordAttempt('');
+          setPasswordAttempt2('');
           socket.emit('loggedIn', userObj.id);
           navigation.navigate('loading');
         } else {

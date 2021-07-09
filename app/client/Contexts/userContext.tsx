@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useRef
-} from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, UserStat } from '../Interfaces/user';
 import { useSocketContext } from '../Contexts/socketContext';
 
