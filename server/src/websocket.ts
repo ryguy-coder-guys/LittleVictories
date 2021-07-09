@@ -9,6 +9,7 @@ import { User } from './database/models/user';
 import { Friend } from './database/models/friend';
 
 import { FormattedTask } from './interfaces/tasks';
+import { FriendshipObject } from './interfaces/friends';
 
 import { client } from './database';
 
@@ -59,9 +60,17 @@ const getUserId = (socketId: string): Promise<string | null> => {
 };
 
 const fetchFriends = async (userId: string): Promise<string[]> => {
-  const friends = await Friend.findAll({ where: { friend_id: userId } });
-  const mappedFriends = friends.map((friend) => friend.getDataValue('user_id'));
-  return mappedFriends;
+  // const friends = await Friend.findAll({ where: { friend_id: userId } });
+  // const mappedFriends = friends.map((friend) => friend.getDataValue('user_id'));
+  // return mappedFriends;
+  return new Promise((resolve, reject) => {
+    client.lrange(userId, 0, -1, (error, response) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(response);
+    });
+  });
 };
 
 const updateFeed = async (
@@ -118,10 +127,43 @@ io.on('connection', (socket) => {
     updateFeed(taskId, socket.id, 'removeComment');
   });
 
-  socket.on('loggedIn', (userId) => {
+  socket.on('loggedIn', async (userId) => {
     client.set(socket.id, userId);
+    const friendships = await Friend.findAll({
+      where: { user_id: userId },
+      attributes: ['friend_id']
+    });
+    const mappedFriendships = friendships.map((friendship) =>
+      friendship.getDataValue('friend_id')
+    );
+    for (const currentFriendship of mappedFriendships) {
+      client.rpush(userId, currentFriendship);
+    }
   });
-  socket.on('loggedOut', (userId) => client.del(userId));
+
+  socket.on('loggedOut', (userId) => {
+    client.del(socket.id);
+    client.del(userId);
+  });
+
+  socket.on('addFriend', (friendshipObj: FriendshipObject) => {
+    const { userId, friendId } = friendshipObj;
+    client.rpush(userId, friendId);
+  });
+
+  socket.on('removeFriend', (friendshipObj: FriendshipObject) => {
+    const { userId, friendId } = friendshipObj;
+    client.lrange(userId, 0, -1, (err, friendships) => {
+      const filtered = friendships.filter((friendship: string) => {
+        friendship !== friendId;
+      });
+      client.del(userId, () => {
+        for (const currentFriendship of filtered) {
+          client.rpush(userId, currentFriendship);
+        }
+      });
+    });
+  });
 });
 
 export default httpServer;

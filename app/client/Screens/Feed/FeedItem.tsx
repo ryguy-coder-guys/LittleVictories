@@ -135,7 +135,7 @@ const FeedItem = ({
         {completed_at}
       </Text>
       <Text style={user.readable_font ? styles.textLarger : styles.text}>
-        {likes?.length} likes
+        {likes?.length} like{likes?.length === 1 ? '' : 's'}
       </Text>
       <View style={styles.btnContainer}>
         {username !== user.username && (
