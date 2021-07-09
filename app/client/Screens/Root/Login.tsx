@@ -108,6 +108,7 @@ const Login = ({ navigation }) => {
         setPasswordAttempt('');
         setPasswordAttempt2('');
         navigation.navigate('index');
+        toggleLogin(true);
       } else {
         showMessage({
           message: 'Form Error',
@@ -255,15 +256,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 40,
     width: 100
-  },
-  error: {
-    color: 'red',
-    alignSelf: 'center'
-  },
-  error2: {
-    color: 'red',
-    alignSelf: 'center',
-    marginBottom: 15
   },
   input: {
     height: 40,

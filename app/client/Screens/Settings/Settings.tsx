@@ -5,10 +5,12 @@ import { useUserContext } from '../../Contexts/userContext';
 import { useQuoteContext } from '../../Contexts/quoteContext';
 import { useJournalContext } from '../../Contexts/journalContext';
 import { UserDefaultValues } from '../../Contexts/userContext';
+import { useFeedContext } from '../../Contexts/feedContext';
 import { useSocketContext } from '../../Contexts/socketContext';
 import moment from 'moment';
 import axios from 'axios';
 import { showMessage, hideMessage } from 'react-native-flash-message';
+import { FeedDefaultValues } from '../../Contexts/feedContext';
 
 const Settings = ({ navigation }): ReactElement => {
   const bgImage = require('../../../assets/images/blue-gradient.png');
@@ -16,6 +18,7 @@ const Settings = ({ navigation }): ReactElement => {
   const { getQuote } = useQuoteContext();
   const { setJournal, setJournals } = useJournalContext();
   const { socket } = useSocketContext();
+  const { setFeed } = useFeedContext();
 
   const displayMessage = (props = {}) => {
     const message: any = {
@@ -35,6 +38,7 @@ const Settings = ({ navigation }): ReactElement => {
   const logout = (): void => {
     getQuote();
     socket.emit('loggedOut', user.id);
+    setFeed(FeedDefaultValues.feed);
     setUser(UserDefaultValues.user);
     setJournal({ content: '', date: moment().format('MM-D-Y') });
     setJournals([]);
