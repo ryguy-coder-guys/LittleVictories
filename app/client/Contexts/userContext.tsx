@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { User, UserStat } from '../Interfaces/user';
 import { useSocketContext } from '../Contexts/socketContext';
-import { showMessage, hideMessage } from 'react-native-flash-message';
+import { showMessage } from 'react-native-flash-message';
 
 interface UserContextState {
   user: User;
@@ -103,13 +103,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
           <TouchableOpacity>
             <Image
               source={require('../../assets/images/ribbon_red.png')}
-              style={{
-                width: 200,
-                height: 200,
-                resizeMode: 'contain',
-                alignSelf: 'center',
-                marginTop: 20
-              }}
+              style={styles.image}
             />
           </TouchableOpacity>
         )
@@ -122,13 +116,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
           <TouchableOpacity>
             <Image
               source={require('../../assets/images/ribbon_green.png')}
-              style={{
-                width: 200,
-                height: 200,
-                resizeMode: 'contain',
-                alignSelf: 'center',
-                marginTop: 20
-              }}
+              style={styles.image}
             />
           </TouchableOpacity>
         )
@@ -141,13 +129,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
           <TouchableOpacity>
             <Image
               source={require('../../assets/images/ribbon_yellow.png')}
-              style={{
-                width: 200,
-                height: 200,
-                resizeMode: 'contain',
-                alignSelf: 'center',
-                marginTop: 20
-              }}
+              style={styles.image}
             />
           </TouchableOpacity>
         )
@@ -164,13 +146,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
           <TouchableOpacity>
             <Image
               source={require('../../assets/images/trophy_pink.png')}
-              style={{
-                width: 200,
-                height: 200,
-                resizeMode: 'contain',
-                alignSelf: 'center',
-                marginTop: 20
-              }}
+              style={styles.image}
             />
           </TouchableOpacity>
         )
@@ -187,14 +163,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
           <TouchableOpacity>
             <Image
               source={require('../../assets/images/trophy_blue.png')}
-              style={{
-                width: 200,
-                height: 200,
-                resizeMode: 'contain',
-                alignSelf: 'center',
-                marginTop: 20,
-                marginBottom: 10
-              }}
+              style={styles.image}
             />
           </TouchableOpacity>
         )
@@ -211,13 +180,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
           <TouchableOpacity>
             <Image
               source={require('../../assets/images/star_red.png')}
-              style={{
-                width: 200,
-                height: 200,
-                resizeMode: 'contain',
-                alignSelf: 'center',
-                marginTop: 20
-              }}
+              style={styles.image}
             />
           </TouchableOpacity>
         )
@@ -231,13 +194,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
           <TouchableOpacity>
             <Image
               source={require('../../assets/images/star_green.png')}
-              style={{
-                width: 200,
-                height: 200,
-                resizeMode: 'contain',
-                alignSelf: 'center',
-                marginTop: 20
-              }}
+              style={styles.image}
             />
           </TouchableOpacity>
         )
@@ -265,5 +222,16 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
     </UserContext.Provider>
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    marginTop: 20,
+    marginBottom: 10
+  }
+});
 
 export const useUserContext = () => useContext(UserContext);
