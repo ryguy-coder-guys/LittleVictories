@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import { Button, ButtonGroup } from 'react-native-elements';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { Habit } from '../../Interfaces/user';
+import { showMessage } from 'react-native-flash-message';
 
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
@@ -26,32 +27,61 @@ const TaskForm = () => {
     return dayStr;
   };
 
-  const handleSubmit = async (): Promise<any> => {
+  const postHabit = async () => {
     const frequencies: string[] = ['daily', 'weekly', 'monthly'];
-    try {
-      const { data: habit }: AxiosResponse<Habit> = await axios.post(
-        'http://localhost:3000/api/habits/',
-        {
-          user_id: user.id,
-          description: description,
-          frequency: frequencies[selectedFrequencyIndex],
-          days_of_week: daysSelected(selectedDayIndices),
-          calendar_date: parseInt(format(date, 'dd'))
-        }
-      );
-      const habitArr: Habit[] = [...user.habits, habit];
-      setUser({
-        ...user,
-        habits: habitArr
+    const { data: habit }: AxiosResponse<Habit> = await axios.post(
+      'http://localhost:3000/api/habits/',
+      {
+        user_id: user.id,
+        description: description,
+        frequency: frequencies[selectedFrequencyIndex],
+        days_of_week: daysSelected(selectedDayIndices),
+        calendar_date: parseInt(format(date, 'dd'))
+      }
+    );
+    const habitArr: Habit[] = [...user.habits, habit];
+    setUser({
+      ...user,
+      habits: habitArr
+    });
+    setShowForm(false);
+    setDescription('');
+    setDate(new Date());
+    setSelectedFrequencyIndex(0);
+    setSelectedDayIndices([]);
+    setNumHabits(user.habits.length + 1);
+  };
+
+  const handleSubmit = async (): Promise<any> => {
+    if (description === '') {
+      showMessage({
+        message: 'Form Error',
+        titleStyle: { fontSize: 18, color: '#FAFAFA' },
+        description: 'Please enter a description.',
+        textStyle: { fontSize: 20, color: '#FAFAFA' },
+        icon: { icon: 'warning', position: 'left' },
+        type: 'default',
+        backgroundColor: '#fc9c94'
       });
-      setShowForm(false);
-      setDescription('');
-      setDate(new Date());
-      setSelectedFrequencyIndex(0);
-      setSelectedDayIndices([]);
-      setNumHabits(user.habits.length + 1);
-    } catch (err) {
-      console.warn('error with post habit: ', err);
+    } else if (selectedFrequencyIndex === 0) {
+      postHabit();
+    } else if (selectedFrequencyIndex === 1) {
+      if (!selectedDayIndices.length) {
+        showMessage({
+          message: 'Form Error',
+          titleStyle: { fontSize: 18, color: '#FAFAFA' },
+          description:
+            'Please select the weekday(s) you would like the habit to be due.',
+          textStyle: { fontSize: 20, color: '#FAFAFA' },
+          icon: { icon: 'warning', position: 'left' },
+          type: 'default',
+          backgroundColor: '#fc9c94'
+        });
+      } else {
+        postHabit();
+      }
+    } else if (selectedFrequencyIndex === 2) {
+      postHabit();
     }
   };
 

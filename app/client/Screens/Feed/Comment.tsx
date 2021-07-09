@@ -1,6 +1,6 @@
 import React from 'react';
 import { useUserContext } from '../../Contexts/userContext';
-import { View, Button, Text } from 'react-native';
+import { Button, Image, Text, TouchableOpacity, View } from 'react-native';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 
 const Comment = ({ id, content, user_id, username, removeComment }) => {
@@ -14,13 +14,32 @@ const Comment = ({ id, content, user_id, username, removeComment }) => {
   };
 
   return (
-    <View>
-      <Text style={user.readable_font ? textStyles.text_big : textStyles.text}>
-        {content} -- {username}
-      </Text>
+    <View style={{ flexDirection: 'row' }}>
       {canRemove() && (
-        <Button onPress={() => removeComment(id)} title='Remove Comment' />
+        <TouchableOpacity onPress={() => removeComment(id)}>
+          <Image
+            source={require('../../../assets/images/minus-circle-outline.png')}
+            style={{
+              resizeMode: 'contain',
+              width: 25,
+              height: 25
+            }}
+          />
+        </TouchableOpacity>
       )}
+      <Text
+        style={
+          user.readable_font
+            ? [textStyles.text_big, { fontWeight: 'bold' }]
+            : [textStyles.text, { fontWeight: 'bold' }]
+        }
+      >
+        {' '}
+        {username} -{' '}
+      </Text>
+      <Text style={user.readable_font ? textStyles.text_big : textStyles.text}>
+        {content}
+      </Text>
     </View>
   );
 };

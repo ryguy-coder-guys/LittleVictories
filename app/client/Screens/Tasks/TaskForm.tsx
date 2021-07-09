@@ -13,16 +13,19 @@ import { useUserContext } from '../../Contexts/userContext';
 import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { isBefore } from 'date-fns';
-import Tasks from './Tasks';
+import { showMessage } from 'react-native-flash-message';
+
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
   const [description, setDescription] = useState('');
-  const [timeToComplete, setTimeToComplete] = useState(0);
+  const [timeToComplete, setTimeToComplete] = useState(5);
   const [isImportant, setIsImportant] = useState(false);
   const { user, setUser } = useUserContext();
   //for date selector
   const [date, setDate] = useState(new Date());
+
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
+
   const isPast = (date: Date) => {
     if (new Date(date).getFullYear() < new Date().getFullYear()) return true;
     if (new Date(date).getFullYear() > new Date().getFullYear()) return false;
@@ -31,9 +34,29 @@ const TaskForm = () => {
     if (new Date(date).getDate() < new Date().getDate()) return true;
     if (new Date(date).getDate() >= new Date().getDate()) return false;
   };
+
   const handleSubmit = async () => {
-    if (isPast(date)) {
-      alert('this date is in the past, please select a future date.');
+    if (description === '') {
+      showMessage({
+        message: 'Form Error',
+        titleStyle: { fontSize: 18, color: '#FAFAFA' },
+        description: 'Please enter a description.',
+        textStyle: { fontSize: 20, color: '#FAFAFA' },
+        icon: { icon: 'warning', position: 'left' },
+        type: 'default',
+        backgroundColor: '#fc9c94'
+      });
+    } else if (isPast(date)) {
+      showMessage({
+        message: 'Form Error',
+        titleStyle: { fontSize: 18, color: '#FAFAFA' },
+        description:
+          'This date is in the past, please select today or a future date.',
+        textStyle: { fontSize: 20, color: '#FAFAFA' },
+        icon: { icon: 'warning', position: 'left' },
+        type: 'default',
+        backgroundColor: '#fc9c94'
+      });
     } else {
       const { data: task } = await axios.post(
         'http://localhost:3000/api/tasks/',
@@ -59,10 +82,12 @@ const TaskForm = () => {
       });
     }
   };
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
   };
+
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -92,7 +117,16 @@ const TaskForm = () => {
               >
                 Add Task
               </Text>
-              <Button title='Cancel' onPress={() => setShowForm(false)} />
+              <Button
+                title='Cancel'
+                onPress={() => {
+                  setShowForm(false);
+                  setDescription('');
+                  setDate(new Date());
+                  setTimeToComplete(5);
+                  setIsImportant(false);
+                }}
+              />
             </View>
             <TextInput
               style={user.readable_font ? styles.inputLarger : styles.input}
@@ -172,6 +206,7 @@ const TaskForm = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   addTaskComponent: {
     backgroundColor: '#8ebac6',

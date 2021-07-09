@@ -11,7 +11,7 @@ interface FeedContextState {
   refreshFeed: () => void;
 }
 
-const FeedDefaultValues: FeedContextState = {
+export const FeedDefaultValues: FeedContextState = {
   feed: [],
   setFeed: (feed: FeedItem[]): void => {},
   refreshFeed: (): void => {}

@@ -1,20 +1,16 @@
 import React, { ReactElement } from 'react';
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  Switch
-} from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Switch } from 'react-native';
 import { Button } from 'react-native-elements';
 import { useUserContext } from '../../Contexts/userContext';
 import { useQuoteContext } from '../../Contexts/quoteContext';
 import { useJournalContext } from '../../Contexts/journalContext';
 import { UserDefaultValues } from '../../Contexts/userContext';
+import { useFeedContext } from '../../Contexts/feedContext';
 import { useSocketContext } from '../../Contexts/socketContext';
 import moment from 'moment';
 import axios from 'axios';
+import { showMessage, hideMessage } from 'react-native-flash-message';
+import { FeedDefaultValues } from '../../Contexts/feedContext';
 
 const Settings = ({ navigation }): ReactElement => {
   const bgImage = require('../../../assets/images/blue-gradient.png');
@@ -22,10 +18,27 @@ const Settings = ({ navigation }): ReactElement => {
   const { getQuote } = useQuoteContext();
   const { setJournal, setJournals } = useJournalContext();
   const { socket } = useSocketContext();
+  const { setFeed } = useFeedContext();
+
+  const displayMessage = (props = {}) => {
+    const message: any = {
+      type: 'default',
+      autoHide: false,
+      backgroundColor: '#1D426D',
+      icon: 'warning',
+      position: 'bottom',
+      message:
+        'Are you sure?\n\nOnce deleted, you can no longer access this account and all associated information will be lost forever.',
+      ...props
+    };
+
+    showMessage(message);
+  };
 
   const logout = (): void => {
     getQuote();
     socket.emit('loggedOut', user.id);
+    setFeed(FeedDefaultValues.feed);
     setUser(UserDefaultValues.user);
     setJournal({ content: '', date: moment().format('MM-D-Y') });
     setJournals([]);
@@ -52,24 +65,56 @@ const Settings = ({ navigation }): ReactElement => {
   };
 
   const deleteUser = (): void => {
-    Alert.alert(
-      'Are you sure?',
-      'Once deleted, you can no longer access this account and all associated information will be lost forever.',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel'
-        },
-        {
-          text: 'Delete Account',
-          onPress: async () => {
-            await axios.delete(`http://localhost:3000/api/auth/${user.id}`);
-            alert('User successfully deleted from Little Victories.');
-            logout();
-          }
-        }
-      ]
-    );
+    displayMessage({
+      titleStyle: {
+        fontSize: 20,
+        color: '#FAFAFA',
+        paddingTop: 30,
+        textAlign: 'center'
+      },
+      style: {
+        width: '100%',
+        borderRadius: 0,
+        paddingRight: 40
+      },
+      renderCustomContent: () => (
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+          <Button
+            title='Cancel'
+            style={[styles.button, { width: 100, marginTop: 25 }]}
+            buttonStyle={{ backgroundColor: '#FAFAFA' }}
+            titleStyle={{ color: '#1D426D' }}
+            onPress={() => {
+              hideMessage();
+            }}
+          />
+          <Button
+            title='Delete Account'
+            style={[
+              styles.button,
+              { marginLeft: 15, width: 170, marginTop: 25 }
+            ]}
+            buttonStyle={{ backgroundColor: '#FAFAFA' }}
+            titleStyle={{ color: '#1D426D' }}
+            onPress={async () => {
+              await axios.delete(`http://localhost:3000/api/auth/${user.id}`);
+              showMessage({
+                message: 'User successfully deleted from Little Victories.',
+                titleStyle: {
+                  fontSize: 20,
+                  color: '#FAFAFA',
+                  alignSelf: 'center'
+                },
+                icon: { icon: 'success', position: 'left' },
+                type: 'default',
+                backgroundColor: '#1D426D'
+              });
+              logout();
+            }}
+          />
+        </View>
+      )
+    });
   };
 
   return (

@@ -4,8 +4,9 @@ import { textStyles } from '../../Stylesheets/Stylesheet';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { Button, getIconType } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { showMessage } from 'react-native-flash-message';
 
 const DailyReflection = ({ setHasStats }): ReactElement => {
   const { user, userStat, setUserStat } = useUserContext();
@@ -17,7 +18,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
   const [notes, setNotes] = useState('');
   const [activeIcon, setActiveIcon] = useState(null);
 
-  const handleSubmit = async () => {
+  const submit = async () => {
     try {
       const { data } = await axios.post('http://localhost:3000/api/stats', {
         user_id: user.id,
@@ -40,7 +41,53 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
       setHasSubmitted(true);
       setHasStats(true);
     } catch (err) {
-      console.warn('had issues posting stats (client)');
+      console.warn('had issues posting stats');
+    }
+  };
+
+  const handleSubmit = () => {
+    if (parseInt(sleepHours) < 0 || parseInt(sleepHours) > 24) {
+      showMessage({
+        message: 'Form Error',
+        titleStyle: { fontSize: 18, color: '#FAFAFA' },
+        description: 'Please enter a valid amount of hours slept (0-24).',
+        textStyle: { fontSize: 20, color: '#FAFAFA' },
+        icon: { icon: 'warning', position: 'left' },
+        type: 'default',
+        backgroundColor: '#fc9c94'
+      });
+    } else if (
+      didEatWell !== 'yes' &&
+      didEatWell !== '' &&
+      didEatWell !== 'no'
+    ) {
+      showMessage({
+        message: 'Form Error',
+        titleStyle: { fontSize: 18, color: '#FAFAFA' },
+        description:
+          "Please enter a response valid response for 'Did you eat well?' (yes or no).",
+        textStyle: { fontSize: 20, color: '#FAFAFA' },
+        icon: { icon: 'warning', position: 'left' },
+        type: 'default',
+        backgroundColor: '#fc9c94'
+      });
+    } else if (
+      didExercise !== 'yes' &&
+      didExercise !== '' &&
+      didExercise !== 'no'
+    ) {
+      showMessage({
+        message: 'Form Error',
+        titleStyle: { fontSize: 18, color: '#FAFAFA' },
+        description:
+          "Please enter a response valid response for 'Did you get any exercise?' (yes or no).",
+        textStyle: { fontSize: 20, color: '#FAFAFA' },
+        icon: { icon: 'warning', position: 'left' },
+        type: 'default',
+        backgroundColor: '#fc9c94'
+      });
+    } else {
+      submit();
     }
   };
 

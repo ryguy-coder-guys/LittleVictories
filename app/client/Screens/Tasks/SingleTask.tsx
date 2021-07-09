@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Button } from 'react-native';
+import {
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
 import { useUserContext } from '../../Contexts/userContext';
 import { useSocketContext } from '../../Contexts/socketContext';
@@ -144,23 +151,63 @@ const SingleTask = ({ item }) => {
 
   return (
     <View style={styles.task_view}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          marginBottom: 10
+        }}
+      >
+        {item.is_important ? (
+          <Image
+            source={require('../../../assets/images/star-circle-outline.png')}
+            style={{
+              resizeMode: 'contain',
+              width: 25,
+              height: 25
+            }}
+          />
+        ) : null}
+        <TouchableOpacity onPress={() => removeTask}>
+          <Image
+            source={require('../../../assets/images/minus-circle-outline.png')}
+            style={styles.checkbox}
+          />
+        </TouchableOpacity>
+      </View>
       <View style={{ flexDirection: 'row' }}>
+        {!finished ? (
+          <TouchableOpacity
+            onPress={() => {
+              setFinished(!finished);
+              finished ? markTaskIncomplete() : markTaskComplete();
+            }}
+          >
+            <Image
+              source={require('../../../assets/images/checkbox-blank-outline.png')}
+              style={styles.checkbox}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              setFinished(!finished);
+              finished ? markTaskIncomplete() : markTaskComplete();
+            }}
+          >
+            <Image
+              source={require('../../../assets/images/checkbox-marked.png')}
+              style={styles.checkbox}
+            />
+          </TouchableOpacity>
+        )}
         <Text
           style={user.readable_font ? textStyles.text_big : textStyles.text}
-          onPress={() => {
-            finished ? markTaskIncomplete() : markTaskComplete();
-            setFinished(!finished);
-          }}
         >
-          {finished ? '✓ ' : '☐ '}
-        </Text>
-        <Text
-          style={user.readable_font ? textStyles.text_big : textStyles.text}
-        >
+          {'  '}
           {item.description} - {addTimeStamp(item.due_date)}
         </Text>
       </View>
-      <Button title='Remove' onPress={removeTask} />
       {finished && !taskPublic ? (
         <Button title='Add to Feed' onPress={shareTask} />
       ) : null}
@@ -172,16 +219,18 @@ const SingleTask = ({ item }) => {
 };
 
 const styles = StyleSheet.create({
+  checkbox: {
+    resizeMode: 'contain',
+    width: 25,
+    height: 25
+  },
   task_view: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginLeft: 40,
     marginRight: 40,
     marginTop: 10,
     backgroundColor: '#8ebac6',
     borderRadius: 10,
-    padding: 10,
+    padding: 15,
     flexWrap: 'wrap'
   }
 });
