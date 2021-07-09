@@ -56,35 +56,44 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
     }
   });
 
+  // TODO: when you log out, reset state values to zero
   const [level, setLevel] = useState(0);
+  const [levelBadges, setLevelBadges] = useState({});
   const [numHabits, setNumHabits] = useState(0);
+  const [numHabitsBadges, setNumHabitsBadges] = useState({});
   const [numCompletedTasks, setNumCompletedTasks] = useState(0);
+  const [numCompletedTasksBadges, setNumCompletedTasksBadges] = useState({});
   const [numFollowees, setNumFollowees] = useState(0);
+  const [numFolloweesBadges, setNumFolloweesBadges] = useState({});
 
   useEffect(() => {
-    if (level === 1) {
+    if (level === 1 && !levelBadges[1]) {
+      setLevelBadges({ ...levelBadges, 1: true });
       alert('level one');
-    } else if (level === 5) {
+    } else if (level === 5 && !levelBadges[5]) {
       alert('level five');
-    } else if (level === 10) {
+    } else if (level === 10 && !levelBadges[10]) {
       alert('level ten');
     }
   }, [level]);
 
   useEffect(() => {
-    if (numHabits === 5) {
+    if (numHabits === 5 && !numHabitsBadges[5]) {
+      setNumHabitsBadges({ ...numHabitsBadges, 5: true });
       alert('five habits');
     }
   }, [numHabits]);
 
   useEffect(() => {
-    if (numCompletedTasks === 5) {
+    if (numCompletedTasks === 5 && !numCompletedTasksBadges[5]) {
+      setNumCompletedTasksBadges({ ...numCompletedTasksBadges, 5: true });
       alert('five tasks');
     }
   }, [numCompletedTasks]);
 
   useEffect(() => {
-    if (numFollowees === 3) {
+    if (numFollowees === 3 && !numFolloweesBadges[3]) {
+      setNumFolloweesBadges({ ...numCompletedTasksBadges, 3: true });
       alert('following three users');
     }
   }, [numFollowees]);

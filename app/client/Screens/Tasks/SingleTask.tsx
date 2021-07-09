@@ -21,6 +21,7 @@ import {
 } from 'date-fns';
 
 import { textStyles } from '../../Stylesheets/Stylesheet';
+import { resolve } from 'url';
 
 const SingleTask = ({ item }) => {
   const { user, setUser, setLevel, setNumCompletedTasks } = useUserContext();
@@ -73,10 +74,16 @@ const SingleTask = ({ item }) => {
         }
         return task;
       });
-      if (currentLevel !== level) {
-        setLevel(level);
-      }
-      setNumCompletedTasks(numCompletedTasks);
+      new Promise((resolve) => {
+        if (currentLevel !== level) {
+          setLevel(level);
+          setTimeout(() => resolve(true), 2000);
+        } else {
+          resolve(true);
+        }
+      }).then(() => {
+        setNumCompletedTasks(numCompletedTasks);
+      });
       setUser({ ...user, tasks: mappedTasks, points, level });
     } catch (error) {
       console.warn(error);
@@ -168,7 +175,7 @@ const SingleTask = ({ item }) => {
             }}
           />
         ) : null}
-        <TouchableOpacity onPress={() => removeTask}>
+        <TouchableOpacity onPress={() => removeTask()}>
           <Image
             source={require('../../../assets/images/minus-circle-outline.png')}
             style={styles.checkbox}
