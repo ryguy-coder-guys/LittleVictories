@@ -12,7 +12,7 @@ import { Habit } from '../../Interfaces/user';
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
   const [description, setDescription] = useState('');
-  const { user, setUser } = useUserContext();
+  const { user, setUser, setNumHabits } = useUserContext();
   const [date, setDate] = useState(new Date());
   const [selectedFrequencyIndex, setSelectedFrequencyIndex] = useState(0);
   const [selectedDayIndices, setSelectedDayIndices] = useState([]);
@@ -49,6 +49,7 @@ const TaskForm = () => {
       setDate(new Date());
       setSelectedFrequencyIndex(0);
       setSelectedDayIndices([]);
+      setNumHabits(user.habits.length + 1);
     } catch (err) {
       console.warn('error with post habit: ', err);
     }

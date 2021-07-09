@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef
+} from 'react';
 import { User, UserStat } from '../Interfaces/user';
 import { useSocketContext } from '../Contexts/socketContext';
 
@@ -7,6 +13,8 @@ interface UserContextState {
   setUser: (user: User) => void;
   userStat: UserStat | null;
   setUserStat: (userStat: UserStat) => void;
+  setLevel: (level: number) => void;
+  setNumHabits: (numHabits: number) => void;
 }
 
 export const UserDefaultValues: UserContextState = {
@@ -23,7 +31,9 @@ export const UserDefaultValues: UserContextState = {
   },
   setUser: (user: User): void => {},
   userStat: null,
-  setUserStat: (userStat: UserStat): void => {}
+  setUserStat: (userStat: UserStat): void => {},
+  setLevel: (level: number): void => {},
+  setNumHabits: (numHabits: number): void => {}
 };
 
 const UserContext = createContext<UserContextState>(UserDefaultValues);
@@ -33,6 +43,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   const [userStat, setUserStat] = useState<UserStat>(
     UserDefaultValues.userStat
   );
+
   const { socket } = useSocketContext();
 
   socket.on('disconnect', () => {
@@ -47,8 +58,36 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
     }
   });
 
+  const [level, setLevel] = useState(0);
+  const [numHabits, setNumHabits] = useState(0);
+
+  useEffect(() => {
+    if (level === 1) {
+      alert('level one');
+    } else if (level === 5) {
+      alert('level five');
+    } else if (level === 10) {
+      alert('level ten');
+    }
+  }, [level]);
+
+  useEffect(() => {
+    if (numHabits === 5) {
+      alert('five habits');
+    }
+  }, [numHabits]);
+
   return (
-    <UserContext.Provider value={{ user, setUser, userStat, setUserStat }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        userStat,
+        setUserStat,
+        setLevel,
+        setNumHabits
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

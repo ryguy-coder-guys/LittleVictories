@@ -16,7 +16,7 @@ import {
 import { textStyles } from '../../Stylesheets/Stylesheet';
 
 const SingleTask = ({ item }) => {
-  const { user, setUser } = useUserContext();
+  const { user, setUser, setLevel } = useUserContext();
   const { socket } = useSocketContext();
   const { feed, setFeed } = useFeedContext();
   const [finished, setFinished] = useState(item.is_complete);
@@ -54,6 +54,7 @@ const SingleTask = ({ item }) => {
 
   const markTaskComplete = async (): Promise<void> => {
     try {
+      const currentLevel = user.level;
       const {
         data: { task, points, level }
       } = await axios.patch(
@@ -65,6 +66,9 @@ const SingleTask = ({ item }) => {
         }
         return task;
       });
+      if (currentLevel !== level) {
+        setLevel(level);
+      }
       setUser({ ...user, tasks: mappedTasks, points, level });
     } catch (error) {
       console.warn(error);
@@ -73,6 +77,7 @@ const SingleTask = ({ item }) => {
 
   const markTaskIncomplete = async (): Promise<void> => {
     try {
+      const currentLevel = user.level;
       const {
         data: { points, level }
       } = await axios.patch(
@@ -85,6 +90,9 @@ const SingleTask = ({ item }) => {
         return task;
       });
       // setFinished(false);
+      if (currentLevel !== level) {
+        setLevel(level);
+      }
       setUser({ ...user, tasks: mappedTasks, points, level });
       // setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
       socket.emit('removeFromFeed', item.id);
