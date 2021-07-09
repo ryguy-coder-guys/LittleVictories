@@ -2,6 +2,7 @@ import React, { useState, ReactElement } from 'react';
 import { View, Button, Text, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { textStyles } from '../../Stylesheets/Stylesheet';
+import { showMessage } from 'react-native-flash-message';
 
 const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
   const [isFriend, setIsFriend] = useState(item.isFriend);
@@ -9,7 +10,7 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
   const addFriend = async (id: string): Promise<void> => {
     try {
       const addSuccessful = await axios.post(
-        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/friends/',
+        'http://localhost:3000/api/friends/',
         {
           userId: user.id,
           friendId: id
@@ -32,7 +33,7 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
 
   const removeFriend = async (id: string): Promise<void> => {
     try {
-      await axios.delete(`http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/friends/${user.id}/${id}`);
+      await axios.delete(`http://localhost:3000/api/friends/${user.id}/${id}`);
       const mappedUsers = users.map((currentUser) => {
         if (currentUser.id === item.id) {
           return { ...currentUser, isFriend: false };
@@ -54,14 +55,36 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
       {!isFriend ? (
         <Button
           onPress={() => {
-            addFriend(item.id), alert('Friend Added!');
+            addFriend(item.id),
+              showMessage({
+                message: `Now following ${item.username}.`,
+                titleStyle: {
+                  fontSize: 20,
+                  color: '#FAFAFA',
+                  alignSelf: 'center'
+                },
+                icon: { icon: 'success', position: 'left' },
+                type: 'default',
+                backgroundColor: '#1D426D'
+              });
           }}
           title='Follow'
         />
       ) : (
         <Button
           onPress={() => {
-            removeFriend(item.id), alert('Friend Removed');
+            removeFriend(item.id),
+              showMessage({
+                message: `You are no longer following ${item.username}.`,
+                titleStyle: {
+                  fontSize: 20,
+                  color: '#FAFAFA',
+                  alignSelf: 'center'
+                },
+                icon: { icon: 'success', position: 'left' },
+                type: 'default',
+                backgroundColor: '#1D426D'
+              });
           }}
           title='Unfollow'
         />

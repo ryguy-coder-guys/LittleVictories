@@ -1,50 +1,100 @@
 import React, { ReactElement, useState } from 'react';
-import { View, TextInput, StyleSheet, Text, Alert } from 'react-native';
+import { View, TextInput, StyleSheet, Text } from 'react-native';
 import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
 import { useJournalContext } from '../../Contexts/journalContext';
 import moment from 'moment';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { Button } from 'react-native-elements';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 
 const Journal = (): ReactElement => {
   const { user } = useUserContext();
   const { journal, setJournal } = useJournalContext();
   const [date] = useState(moment().format('MMMM Do Y'));
 
+  const displayMessage = (props = {}) => {
+    const message: any = {
+      type: 'default',
+      autoHide: false,
+      backgroundColor: '#1D426D',
+      icon: 'warning',
+      position: 'bottom',
+      message:
+        'Are you sure?\n\nOnce deleted, you cannot get this journal entry back.',
+      ...props
+    };
+
+    showMessage(message);
+  };
+
   const saveJournal = async (): Promise<void> => {
-    await axios.post('http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/journalEntries/create', {
+    await axios.post('http://localhost:3000/api/journalEntries/create', {
       user_id: user.id,
       content: journal.content,
       date: moment().format('MM-D-Y')
     });
-
-    alert('Journal successfully saved.');
+    showMessage({
+      message: 'Journal entry successfully saved.',
+      titleStyle: { fontSize: 20, color: '#FAFAFA', alignSelf: 'center' },
+      icon: { icon: 'success', position: 'left' },
+      type: 'default',
+      backgroundColor: '#1D426D'
+    });
   };
 
   const clearJournal = (): void => {
-    Alert.alert(
-      'Are you sure?',
-      'Once deleted, you cannot get this journal entry back.',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel'
-        },
-        {
-          text: 'Clear Entry',
-          onPress: async () => {
-            await axios.delete(
-              `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/journalEntries/${
-                user.id
-              }/${moment().format('MM-D-Y')}`
-            );
-            setJournal('');
-            alert('Journal successfully cleared.');
-          }
-        }
-      ]
-    );
+    displayMessage({
+      titleStyle: {
+        fontSize: 20,
+        color: '#FAFAFA',
+        paddingTop: 30,
+        textAlign: 'center'
+      },
+      style: {
+        width: '100%',
+        borderRadius: 0,
+        paddingRight: 40
+      },
+      renderCustomContent: () => (
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+          <Button
+            title='Cancel'
+            style={[styles.button, { width: 100, marginTop: 10 }]}
+            buttonStyle={{ backgroundColor: '#FAFAFA' }}
+            titleStyle={{ color: '#1D426D' }}
+            onPress={() => {
+              hideMessage();
+            }}
+          />
+          <Button
+            title='Clear Entry'
+            style={[styles.button, { width: 130, marginTop: 10 }]}
+            buttonStyle={{ backgroundColor: '#FAFAFA' }}
+            titleStyle={{ color: '#1D426D' }}
+            onPress={async () => {
+              await axios.delete(
+                `http://localhost:3000/api/journalEntries/${
+                  user.id
+                }/${moment().format('MM-D-Y')}`
+              );
+              setJournal('');
+              showMessage({
+                message: 'Entry successfully deleted.',
+                titleStyle: {
+                  fontSize: 20,
+                  color: '#FAFAFA',
+                  alignSelf: 'center'
+                },
+                icon: { icon: 'success', position: 'left' },
+                type: 'default',
+                backgroundColor: '#1D426D'
+              });
+            }}
+          />
+        </View>
+      )
+    });
   };
 
   return (

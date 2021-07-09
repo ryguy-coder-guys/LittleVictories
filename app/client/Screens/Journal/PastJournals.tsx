@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
-import { View, StyleSheet, Text, FlatList, Button, Alert } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
-import { textStyles } from '../../Stylesheets/Stylesheet';
 import List from './PastJournalsList';
 
 const Journal = (): ReactElement => {
@@ -12,7 +11,7 @@ const Journal = (): ReactElement => {
       <Text style={user.readable_font ? styles.headerLarger : styles.header}>
         Previous Journals
       </Text>
-      <List/>
+      <List />
     </View>
   );
 };

@@ -30,7 +30,7 @@ const TaskForm = () => {
   const postHabit = async () => {
     const frequencies: string[] = ['daily', 'weekly', 'monthly'];
     const { data: habit }: AxiosResponse<Habit> = await axios.post(
-      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/habits/',
+      'http://localhost:3000/api/habits/',
       {
         user_id: user.id,
         description: description,
