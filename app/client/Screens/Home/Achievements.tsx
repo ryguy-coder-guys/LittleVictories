@@ -4,7 +4,7 @@ import { useUserContext } from '../../Contexts/userContext';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 
 const Achievements = (): ReactElement => {
-  const { user } = useUserContext();
+  const { user, numHabits, numCompletedTasks, numFollowees } = useUserContext();
   return (
     <View style={styles.view}>
       <Text
@@ -19,12 +19,8 @@ const Achievements = (): ReactElement => {
         {user.level >= 1 ? (
           <View style={styles.badges}>
             <Image
-              source={require('../../../assets/images/badge01.png')}
-              style={{
-                resizeMode: 'contain',
-                width: '100%',
-                height: '100%'
-              }}
+              source={require('../../../assets/images/ribbon_red.png')}
+              style={styles.image}
             />
             <Text
               style={user.readable_font ? textStyles.text_big : textStyles.text}
@@ -36,12 +32,8 @@ const Achievements = (): ReactElement => {
         {user.level >= 5 ? (
           <View style={styles.badges}>
             <Image
-              source={require('../../../assets/images/badge02.png')}
-              style={{
-                resizeMode: 'contain',
-                width: '100%',
-                height: '100%'
-              }}
+              source={require('../../../assets/images/ribbon_green.png')}
+              style={styles.image}
             />
             <Text
               style={user.readable_font ? textStyles.text_big : textStyles.text}
@@ -53,17 +45,65 @@ const Achievements = (): ReactElement => {
         {user.level >= 10 ? (
           <View style={styles.badges}>
             <Image
-              source={require('../../../assets/images/badge03.png')}
-              style={{
-                resizeMode: 'contain',
-                width: '100%',
-                height: '100%'
-              }}
+              source={require('../../../assets/images/ribbon_yellow.png')}
+              style={styles.image}
             />
             <Text
               style={user.readable_font ? textStyles.text_big : textStyles.text}
             >
               Level 10
+            </Text>
+          </View>
+        ) : null}
+        {numHabits >= 5 ? (
+          <View style={styles.badges}>
+            <Image
+              source={require('../../../assets/images/trophy_pink.png')}
+              style={styles.image}
+            />
+            <Text
+              style={user.readable_font ? textStyles.text_big : textStyles.text}
+            >
+              5 Habits
+            </Text>
+          </View>
+        ) : null}
+        {numCompletedTasks >= 5 ? (
+          <View style={styles.badges}>
+            <Image
+              source={require('../../../assets/images/trophy_blue.png')}
+              style={styles.image}
+            />
+            <Text
+              style={user.readable_font ? textStyles.text_big : textStyles.text}
+            >
+              5 Tasks
+            </Text>
+          </View>
+        ) : null}
+        {numFollowees >= 3 ? (
+          <View style={styles.badges}>
+            <Image
+              source={require('../../../assets/images/star_red.png')}
+              style={styles.image}
+            />
+            <Text
+              style={user.readable_font ? textStyles.text_big : textStyles.text}
+            >
+              3 Friends
+            </Text>
+          </View>
+        ) : null}
+        {numFollowees >= 5 ? (
+          <View style={styles.badges}>
+            <Image
+              source={require('../../../assets/images/star_green.png')}
+              style={styles.image}
+            />
+            <Text
+              style={user.readable_font ? textStyles.text_big : textStyles.text}
+            >
+              5 Friends
             </Text>
           </View>
         ) : null}
@@ -74,14 +114,21 @@ const Achievements = (): ReactElement => {
 
 const styles = StyleSheet.create({
   badge_container: {
-    flexDirection: 'row'
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
   },
   badges: {
-    height: 80,
-    width: 80,
-    padding: 10,
+    height: 115,
+    width: 115,
+    padding: 20,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  image: {
+    resizeMode: 'contain',
+    width: '100%',
+    height: '100%'
   },
   view: {
     backgroundColor: '#8ebac6',
