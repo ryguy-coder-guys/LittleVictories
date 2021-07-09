@@ -8,7 +8,8 @@
     "eject": "expo eject",
     "lint": "eslint --fix --ext .tsx --ext .ts",
     "start-dev": "ts-node-dev server/src/index.ts",
-    "start-prod": "ts-node server/src/index.ts"
+    "start-prod": "ts-node server/src/index.ts",
+    "deploy": "pm2 deploy ecosystem.config.js production"
   },
   "dependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.14.5",

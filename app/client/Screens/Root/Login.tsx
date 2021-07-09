@@ -72,6 +72,7 @@ const Login = ({ navigation }) => {
           backgroundColor: '#fc9c94'
         });
       }
+      // if on register page
     } else if (!loginSelected) {
       if (
         !username.length ||
@@ -99,16 +100,31 @@ const Login = ({ navigation }) => {
           password: passwordAttempt
         }
       );
+      // if you've successfully registered
       // compare the two passwords
       if (user) {
-        // if they match, create a new user
-        // then navigate to home
-        setUser(user);
-        setUsername('');
-        setPasswordAttempt('');
-        setPasswordAttempt2('');
-        navigation.navigate('index');
-        toggleLogin(true);
+        // once a new user is created, send to login route
+        const { data: userObj } = await axios.post(
+          'http://localhost:3000/api/auth/login',
+          {
+            username,
+            password: passwordAttempt
+          }
+        );
+        if (userObj) {
+          // if successful navigate to home
+          setTimeout(() => {
+            setUser(userObj);
+            setUserStat(userObj.userStat);
+            navigation.navigate('index');
+          }, 5000);
+          setUsername('');
+          setPasswordAttempt('');
+          setPasswordAttempt2('');
+          socket.emit('loggedIn', userObj.id);
+          navigation.navigate('loading');
+          toggleLogin(true);
+        }
       } else {
         showMessage({
           message: 'Form Error',

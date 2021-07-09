@@ -14,7 +14,7 @@ export const JournalContextProvider = ({ children }) => {
 
   useEffect(() => {
     const currentDate = moment().format('MM-D-Y');
-    if (user) {
+    if (user.id.length) {
       setJournal(
         user.entries?.find((entry) => entry.date === currentDate)
           ? user.entries.find((entry) => entry.date === currentDate)

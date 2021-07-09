@@ -21,6 +21,7 @@ const TaskForm = () => {
   const [timeToComplete, setTimeToComplete] = useState(5);
   const [isImportant, setIsImportant] = useState(false);
   const { user, setUser } = useUserContext();
+  //for date selector
   const [date, setDate] = useState(new Date());
 
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);

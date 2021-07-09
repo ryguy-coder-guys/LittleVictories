@@ -5,12 +5,13 @@ import path from 'path';
 import redis from 'redis';
 
 const DB_NAME = 'little_victories';
+// const DB_USER = 'jon';
 const DB_USER = 'root';
 // const DB_PASSWORD = process.env.DATABASE_PASSWORD;
 const DB_PASSWORD = '';
 
 export const dbConnection = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
-  dialect: 'mysql',
+  dialect: 'mysql'
 });
 
 dbConnection

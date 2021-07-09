@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 
 const SingleHabit = ({ item }) => {
-  const { user, setUser } = useUserContext();
+  const { user, setUser, setNumHabits } = useUserContext();
   const [finished, setFinished] = useState(item.is_complete);
   const [removed, setRemoved] = useState(false);
 
@@ -54,6 +54,7 @@ const SingleHabit = ({ item }) => {
         return habit.id !== item.id;
       });
       setUser({ ...user, habits: filteredHabits });
+      setNumHabits(user.habits.length - 1);
     } catch (error) {
       console.warn('client side remove habit error', error);
     }

@@ -3,17 +3,18 @@ import { useUserContext } from './userContext';
 import axios from 'axios';
 import { useSocketContext } from '../Contexts/socketContext';
 import { FeedItem } from '../Interfaces/feed';
+import { any } from 'sequelize/types/lib/operators';
 
 interface FeedContextState {
   feed: FeedItem[];
   setFeed: (feed: FeedItem[]) => void;
-  socket: any;
+  refreshFeed: () => void;
 }
 
 export const FeedDefaultValues: FeedContextState = {
   feed: [],
   setFeed: (feed: FeedItem[]): void => {},
-  socket: null
+  refreshFeed: (): void => {}
 };
 
 const FeedContext = createContext<FeedContextState>(FeedDefaultValues);
@@ -49,8 +50,14 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
     return data;
   };
 
+  const refreshFeed = () => {
+    fetchFeed()
+      .then((feed) => setFeed(feed))
+      .catch((err) => console.warn(err));
+  };
+
   useEffect(() => {
-    if (user) {
+    if (user.id.length) {
       fetchFeed()
         .then((feed) => setFeed(feed))
         .catch((err) => console.warn(err));
@@ -58,7 +65,7 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
   }, [user]);
 
   return (
-    <FeedContext.Provider value={{ feed, setFeed, socket }}>
+    <FeedContext.Provider value={{ feed, setFeed, refreshFeed }}>
       {children}
     </FeedContext.Provider>
   );
