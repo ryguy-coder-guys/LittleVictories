@@ -168,7 +168,7 @@ const SingleTask = ({ item }) => {
             }}
           />
         ) : null}
-        <TouchableOpacity onPress={() => removeTask}>
+        <TouchableOpacity onPress={() => removeTask()}>
           <Image
             source={require('../../../assets/images/minus-circle-outline.png')}
             style={styles.checkbox}
