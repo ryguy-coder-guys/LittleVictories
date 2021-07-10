@@ -101,7 +101,7 @@ const List = (): ReactElement => {
                 </Text>
                 <Text
                   style={
-                    user.readable_font ? textStyles.text_big : textStyles.text
+                    user.readable_font ? textStyles.txt_big : textStyles.txt
                   }
                 >
                   {journal.content}

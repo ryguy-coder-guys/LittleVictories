@@ -112,9 +112,7 @@ const Journal = (): ReactElement => {
           title='Clear Entry'
           buttonStyle={styles.button}
           titleStyle={
-            user.readable_font
-              ? textStyles.buttonText_big
-              : textStyles.buttonText
+            user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
           }
           onPress={() => {
             clearJournal();
@@ -139,7 +137,7 @@ const Journal = (): ReactElement => {
         title='Save'
         buttonStyle={[styles.button, styles.submit]}
         titleStyle={
-          user.readable_font ? textStyles.buttonText_big : textStyles.buttonText
+          user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
         }
         onPress={() => {
           saveJournal();

@@ -4,7 +4,7 @@ import { textStyles } from '../../Stylesheets/Stylesheet';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { Button } from 'react-native-elements';
+import { Button, Divider } from 'react-native-elements';
 import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { showMessage } from 'react-native-flash-message';
 
@@ -121,13 +121,22 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
         <View>
           <Text
             style={[
-              user.readable_font ? textStyles.text_big : textStyles.text,
+              user.readable_font ? textStyles.txt_big : textStyles.txt,
               { marginTop: 10 }
             ]}
           >
             Fill out your Daily Reflection data tomorrow for the most accurate
             Weekly Stats.
           </Text>
+          <Divider
+            orientation='horizontal'
+            width={0.5}
+            color={'#FAFAFA'}
+            style={{
+              width: '100%',
+              marginTop: 15
+            }}
+          />
           <Text
             style={[
               user.readable_font ? textStyles.h3_big : textStyles.h3,
@@ -138,7 +147,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
           </Text>
           <Text
             style={[
-              user.readable_font ? textStyles.text_big : textStyles.text,
+              user.readable_font ? textStyles.txt_big : textStyles.txt,
               { marginTop: 10 }
             ]}
           >
@@ -146,7 +155,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
           </Text>
           <Text
             style={[
-              user.readable_font ? textStyles.text_big : textStyles.text,
+              user.readable_font ? textStyles.txt_big : textStyles.txt,
               { marginTop: 10 }
             ]}
           >
@@ -159,7 +168,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
           </Text>
           <Text
             style={[
-              user.readable_font ? textStyles.text_big : textStyles.text,
+              user.readable_font ? textStyles.txt_big : textStyles.txt,
               { marginTop: 10 }
             ]}
           >
@@ -172,7 +181,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
           </Text>
           <Text
             style={[
-              user.readable_font ? textStyles.text_big : textStyles.text,
+              user.readable_font ? textStyles.txt_big : textStyles.txt,
               { marginTop: 10 }
             ]}
           >
@@ -181,7 +190,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
           <View style={{ flexDirection: 'row' }}>
             <Text
               style={[
-                user.readable_font ? textStyles.text_big : textStyles.text,
+                user.readable_font ? textStyles.txt_big : textStyles.txt,
                 { marginTop: 10 }
               ]}
             >
@@ -194,7 +203,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
         <View style={{ alignItems: 'flex-start' }}>
           <Text
             style={[
-              user.readable_font ? textStyles.text_big : textStyles.text,
+              user.readable_font ? textStyles.txt_big : textStyles.txt,
               { marginTop: 10 }
             ]}
           >
@@ -209,7 +218,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
           />
           <Text
             style={[
-              user.readable_font ? textStyles.text_big : textStyles.text,
+              user.readable_font ? textStyles.txt_big : textStyles.txt,
               { marginTop: 10 }
             ]}
           >
@@ -224,7 +233,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
           />
           <Text
             style={[
-              user.readable_font ? textStyles.text_big : textStyles.text,
+              user.readable_font ? textStyles.txt_big : textStyles.txt,
               { marginTop: 10 }
             ]}
           >
@@ -239,7 +248,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
           />
           <Text
             style={[
-              user.readable_font ? textStyles.text_big : textStyles.text,
+              user.readable_font ? textStyles.txt_big : textStyles.txt,
               { marginTop: 10 }
             ]}
           >
@@ -263,7 +272,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
           </View>
           <Text
             style={[
-              user.readable_font ? textStyles.text_big : textStyles.text,
+              user.readable_font ? textStyles.txt_big : textStyles.txt,
               { marginTop: 10 }
             ]}
           >
@@ -323,9 +332,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
               title='Submit'
               buttonStyle={styles.button}
               titleStyle={
-                user.readable_font
-                  ? textStyles.buttonText_big
-                  : textStyles.buttonText
+                user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
               }
               onPress={() => {
                 handleSubmit();
@@ -344,7 +351,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 20,
-    backgroundColor: '#1D426D'
+    backgroundColor: '#5c83b1'
   },
   inactiveIcon: {
     color: '#9b9a9a'

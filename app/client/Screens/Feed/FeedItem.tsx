@@ -151,45 +151,47 @@ const FeedItem = ({
       <Text
         style={
           user.readable_font
-            ? [textStyles.text_big, { fontWeight: 'bold' }]
-            : [textStyles.text, { fontWeight: 'bold' }]
+            ? [textStyles.txt_big, { fontWeight: 'bold' }]
+            : [textStyles.txt, { fontWeight: 'bold' }]
         }
       >
         {username}
       </Text>
-      <Text style={user.readable_font ? textStyles.text_big : textStyles.text}>
+      <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
         {description}
       </Text>
-      <Text style={user.readable_font ? textStyles.text_big : textStyles.text}>
+      <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
         Completed on: {formatDate(completed_at)}
       </Text>
       <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-        <TouchableOpacity
-          onPress={() => (canLike() ? addLike(id) : removeLike(id))}
-        >
-          {!canLike() || (username === user.username && likes?.length) ? (
+        {username === user.username ? (
+          <Image
+            source={require('../../../assets/images/heart.png')}
+            style={{
+              resizeMode: 'contain',
+              width: 25,
+              height: 25
+            }}
+          />
+        ) : (
+          <TouchableOpacity
+            onPress={() => (canLike() ? addLike(id) : removeLike(id))}
+          >
             <Image
-              source={require('../../../assets/images/heart.png')}
+              source={
+                canLike()
+                  ? require('../../../assets/images/heart-outline.png')
+                  : require('../../../assets/images/heart.png')
+              }
               style={{
                 resizeMode: 'contain',
                 width: 25,
                 height: 25
               }}
             />
-          ) : (
-            <Image
-              source={require('../../../assets/images/heart-outline.png')}
-              style={{
-                resizeMode: 'contain',
-                width: 25,
-                height: 25
-              }}
-            />
-          )}
-        </TouchableOpacity>
-        <Text
-          style={user.readable_font ? textStyles.text_big : textStyles.text}
-        >
+          </TouchableOpacity>
+        )}
+        <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
           {' '}
           {likes?.length}
         </Text>

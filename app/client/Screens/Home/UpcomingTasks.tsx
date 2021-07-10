@@ -43,7 +43,7 @@ const UpcomingTasks = () => {
         return (
           <View style={styles.task} key={getKey()}>
             <Text
-              style={user.readable_font ? textStyles.text_big : textStyles.text}
+              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
             >
               {task.description} - due {formatDueDate(task.due_date)}{' '}
             </Text>

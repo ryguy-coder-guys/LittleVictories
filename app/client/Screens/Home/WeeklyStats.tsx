@@ -83,11 +83,11 @@ const MoodChart = (): PieChart => {
 
   const moodCount: any = getMoods();
   const svgFills: string[] = [
-    '#600080',
-    '#9900cc',
-    '#c61aff',
-    '#d966ff',
-    '#ecb3ff'
+    '#1D426D',
+    '#0980AF',
+    '#008D8E',
+    '#FF725C',
+    '#FA9E91'
   ];
 
   const data: MoodData[] = Object.keys(moodCount).map((mood, index) => {
@@ -258,7 +258,7 @@ const SleepHoursChart = (): BarChart => {
 
   return (
     <View>
-      <Text style={[textStyles.text, { fontWeight: 'bold' }]}>
+      <Text style={[textStyles.txt, { fontWeight: 'bold' }]}>
         Hours of Sleep
       </Text>
       <View style={{ height: 200, flexDirection: 'row', marginTop: 15 }}>
@@ -291,22 +291,20 @@ const SleepHoursChart = (): BarChart => {
         </View>
       </View>
       <View style={{ marginBottom: 15, marginTop: 15, flexDirection: 'row' }}>
-        <Text style={[textStyles.text, { fontWeight: 'bold' }]}>Ate Well?</Text>
-        <Text style={textStyles.text}>
+        <Text style={[textStyles.txt, { fontWeight: 'bold' }]}>Ate Well?</Text>
+        <Text style={textStyles.txt}>
           {' '}
           Yes: {getTrueCount('eaten_well')}, No: {getFalseCount('eaten_well')}
         </Text>
       </View>
       <View style={{ marginBottom: 15, flexDirection: 'row' }}>
-        <Text style={[textStyles.text, { fontWeight: 'bold' }]}>
-          Exercised?
-        </Text>
-        <Text style={textStyles.text}>
+        <Text style={[textStyles.txt, { fontWeight: 'bold' }]}>Exercised?</Text>
+        <Text style={textStyles.txt}>
           {' '}
           Yes: {getTrueCount('exercised')}, No: {getFalseCount('exercised')}
         </Text>
       </View>
-      <Text style={[textStyles.text, { fontWeight: 'bold' }]}>Moods</Text>
+      <Text style={[textStyles.txt, { fontWeight: 'bold' }]}>Moods</Text>
       <MoodChart />
     </View>
   );

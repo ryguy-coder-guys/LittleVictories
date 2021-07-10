@@ -172,14 +172,14 @@ const Login = ({ navigation }) => {
                 }}
               />
             </View>
-            <Text style={styles.text}>Username:</Text>
+            <Text style={styles.text}>Username</Text>
             <TextInput
               style={styles.input}
               onChangeText={setUsername}
               value={username}
               autoCapitalize='none'
             />
-            <Text style={styles.text}>Password:</Text>
+            <Text style={styles.text}>Password</Text>
             <TextInput
               style={styles.input}
               onChangeText={setPasswordAttempt}
@@ -225,14 +225,14 @@ const Login = ({ navigation }) => {
                 }}
               />
             </View>
-            <Text style={styles.text}>Username:</Text>
+            <Text style={styles.text}>Username</Text>
             <TextInput
               style={styles.input}
               onChangeText={setUsername}
               value={username}
               autoCapitalize='none'
             />
-            <Text style={styles.text}>Password:</Text>
+            <Text style={styles.text}>Password</Text>
             <TextInput
               style={styles.input}
               onChangeText={setPasswordAttempt}
@@ -240,7 +240,7 @@ const Login = ({ navigation }) => {
               secureTextEntry={true}
               autoCapitalize='none'
             />
-            <Text style={styles.text}>Confirm Password:</Text>
+            <Text style={styles.text}>Confirm Password</Text>
             <TextInput
               style={styles.input}
               onChangeText={setPasswordAttempt2}

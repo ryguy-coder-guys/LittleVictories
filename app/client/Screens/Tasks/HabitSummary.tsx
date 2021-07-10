@@ -131,7 +131,7 @@ const HabitSummary = () => {
   const [showAll, toggleShowAll] = useState(false);
 
   return (
-    <View style={styles.listContainer}>
+    <View style={styles.listContainerAll}>
       {!showAll ? (
         <FlatList
           keyExtractor={() => getKey()}
@@ -142,7 +142,7 @@ const HabitSummary = () => {
           }
         />
       ) : (
-        <View style={styles.listContainer}>
+        <View style={styles.listContainerToday}>
           <FlatList
             keyExtractor={() => getKey()}
             data={user ? user.habits : []}
@@ -158,8 +158,11 @@ const HabitSummary = () => {
 };
 
 const styles = StyleSheet.create({
-  listContainer: {
-    height: '90.75%'
+  listContainerToday: {
+    height: '100%'
+  },
+  listContainerAll: {
+    height: '85.85%'
   },
   subheader: {
     color: '#1D426D',

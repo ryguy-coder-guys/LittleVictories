@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   listContainer: {
-    height: '82%'
+    height: '81.85%'
   }
 });
 

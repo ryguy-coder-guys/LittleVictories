@@ -1,5 +1,11 @@
 import React, { ReactElement, useState } from 'react';
-import { ImageBackground, SafeAreaView, ScrollView } from 'react-native';
+import {
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View
+} from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import Loading from '../Root/Loading';
 import ProgressBar from '../Root/ProgressBar';
@@ -22,14 +28,22 @@ const Home = (): ReactElement => {
       <ProgressBar />
       <SafeAreaView style={{ flex: 1, alignItems: 'center', marginTop: 20 }}>
         <ScrollView>
-          <UpcomingTasks />
-          <DailyReflection setHasStats={setHasStats} />
-          {hasStats ? <WeeklyStats /> : null}
-          <Achievements />
+          <View style={styles.view}>
+            <UpcomingTasks />
+            <DailyReflection setHasStats={setHasStats} />
+            {hasStats ? <WeeklyStats /> : null}
+            <Achievements />
+          </View>
         </ScrollView>
       </SafeAreaView>
     </ImageBackground>
   );
 };
+
+const styles = StyleSheet.create({
+  view: {
+    width: '100%'
+  }
+});
 
 export default Home;

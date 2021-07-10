@@ -128,7 +128,7 @@ const SingleTask = ({ item }) => {
     }
   };
 
-  const addTimeStamp = (date: Date) => {
+  const addTimeStamp = (date: string) => {
     const days = {
       0: 'Monday',
       1: 'Tuesday',
@@ -139,14 +139,18 @@ const SingleTask = ({ item }) => {
       6: 'Sunday'
     };
     const dueDate = new Date(date);
-    if (differenceInDays(dueDate, new Date()) <= 6) {
+    const dayDifference = +date.slice(-2) - +new Date().toString().slice(8, 10);
+    if (dayDifference === 0) {
+      return 'due today';
+    } else if (dayDifference <= 6) {
       return `due ${days[getDay(dueDate)]}${
         !isThisWeek(dueDate)
-          ? ' ' + dueDate.getMonth() + '/' + dueDate.getDate()
+          ? ' ' + (dueDate.getMonth() + 1) + '/' + (dueDate.getDate() + 1)
           : ''
       }`;
+    } else {
+      return `due in ${differenceInWeeks(dueDate, new Date()) + 1} weeks`;
     }
-    return `due in ${differenceInWeeks(dueDate, new Date()) + 1} weeks`;
   };
 
   return (
@@ -201,9 +205,7 @@ const SingleTask = ({ item }) => {
             />
           </TouchableOpacity>
         )}
-        <Text
-          style={user.readable_font ? textStyles.text_big : textStyles.text}
-        >
+        <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
           {'  '}
           {item.description} - {addTimeStamp(item.due_date)}
         </Text>
@@ -217,7 +219,7 @@ const SingleTask = ({ item }) => {
             marginTop: 15
           }}
         >
-          <Text style={textStyles.text}>Public? </Text>
+          <Text style={textStyles.txt}>Public? </Text>
           <Switch
             trackColor={{ false: '#767577', true: '#81b0ff' }}
             thumbColor={'#FAFAFA'}

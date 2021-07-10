@@ -71,7 +71,7 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
 
   return (
     <View style={styles.textAreaContainer}>
-      <Text style={user.readable_font ? textStyles.text_big : textStyles.text}>
+      <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
         {item.username}
       </Text>
       {!isFriend ? (

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { useState } from 'react';
-import { format } from 'date-fns';
+import { format, getDaysInMonth } from 'date-fns';
 
 const SingleHabit = ({ item }) => {
   const { user, setUser, setNumHabits } = useUserContext();
@@ -86,6 +86,19 @@ const SingleHabit = ({ item }) => {
     return daysSpacedStr.slice(0, -2);
   };
 
+  const checkDate = (date) => {
+    if (date >= 1 && date <= 28) {
+      return date;
+    } else {
+      const daysThisMonth = getDaysInMonth(new Date());
+      if (daysThisMonth < date) {
+        return daysThisMonth;
+      } else {
+        return date;
+      }
+    }
+  };
+
   return (
     <View style={styles.habit_view}>
       <View style={{ flexDirection: 'row' }}>
@@ -128,7 +141,8 @@ const SingleHabit = ({ item }) => {
           ) : null}
           {item.frequency === 'monthly' ? (
             <Text style={user.readable_font ? styles.textLarger : styles.text}>
-              Due Date: {format(new Date(), 'MMMM')} {item.calendar_date}
+              Due Date: {format(new Date(), 'MMMM')}{' '}
+              {checkDate(item.calendar_date)}
             </Text>
           ) : null}
         </View>
