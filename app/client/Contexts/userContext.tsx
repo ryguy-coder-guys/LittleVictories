@@ -64,7 +64,6 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
     }
   });
 
-  // TODO: when you log out, reset state values to zero
   const [level, setLevel] = useState(0);
   const [levelBadges, setLevelBadges] = useState({});
   const [numHabits, setNumHabits] = useState(0);

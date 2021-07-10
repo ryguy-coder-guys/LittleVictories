@@ -21,7 +21,6 @@ import {
 } from 'date-fns';
 
 import { textStyles } from '../../Stylesheets/Stylesheet';
-import { resolve } from 'url';
 
 const SingleTask = ({ item }) => {
   const { user, setUser, setLevel, setNumCompletedTasks } = useUserContext();
@@ -77,7 +76,7 @@ const SingleTask = ({ item }) => {
       new Promise((resolve) => {
         if (currentLevel !== level) {
           setLevel(level);
-          setTimeout(() => resolve(true), 2000);
+          setTimeout(() => resolve(true), 5000);
         } else {
           resolve(true);
         }
