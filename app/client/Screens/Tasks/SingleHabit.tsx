@@ -5,12 +5,13 @@ import React, { useState } from 'react';
 import { format, getDaysInMonth } from 'date-fns';
 
 const SingleHabit = ({ item }) => {
-  const { user, setUser, setNumHabits } = useUserContext();
+  const { user, setUser, setNumHabits, setLevel } = useUserContext();
   const [finished, setFinished] = useState(item.is_complete);
   const [removed, setRemoved] = useState(false);
 
   const markHabitComplete = async () => {
     try {
+      const currentLevel = user.level;
       const {
         data: { points, level }
       } = await axios.patch(
@@ -22,6 +23,9 @@ const SingleHabit = ({ item }) => {
         }
         return habit;
       });
+      if (currentLevel !== level) {
+        setLevel(level);
+      }
       setUser({ ...user, habits: mappedHabits, points, level });
     } catch (err) {
       console.warn('client-side complete habit error: ', err);

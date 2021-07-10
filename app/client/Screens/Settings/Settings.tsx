@@ -14,7 +14,15 @@ import { FeedDefaultValues } from '../../Contexts/feedContext';
 
 const Settings = ({ navigation }): ReactElement => {
   const bgImage = require('../../../assets/images/blue-gradient.png');
-  const { user, setUser, setUserStat } = useUserContext();
+  const {
+    user,
+    setUser,
+    setUserStat,
+    setLevel,
+    setNumHabits,
+    setNumCompletedTasks,
+    setNumFollowees
+  } = useUserContext();
   const { getQuote } = useQuoteContext();
   const { setJournal, setJournals } = useJournalContext();
   const { socket } = useSocketContext();
@@ -43,6 +51,10 @@ const Settings = ({ navigation }): ReactElement => {
     setJournal({ content: '', date: moment().format('MM-D-Y') });
     setJournals([]);
     setUserStat(UserDefaultValues.userStat);
+    setLevel(0);
+    setNumFollowees(0);
+    setNumHabits(0);
+    setNumCompletedTasks(0);
     navigation.navigate('login');
   };
 
