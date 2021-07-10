@@ -222,21 +222,25 @@ const FeedItem = ({
             onChangeText={setCommentText}
             value={commentText}
           />
-          <Button
-            title='Submit'
-            onPress={() => {
-              if (commentText.length) {
-                addComment();
-              }
-            }}
-          />
-          <Button
-            title='Cancel'
-            onPress={() => {
-              setCommentText('');
-              setShowCommentInput(false);
-            }}
-          />
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+          >
+            <Button
+              title='Cancel'
+              onPress={() => {
+                setCommentText('');
+                setShowCommentInput(false);
+              }}
+            />
+            <Button
+              title='Submit'
+              onPress={() => {
+                if (commentText.length) {
+                  addComment();
+                }
+              }}
+            />
+          </View>
         </View>
       )}
     </View>
@@ -260,7 +264,8 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#9ec5cf',
     fontSize: 18,
-    color: '#1D426D'
+    color: '#1D426D',
+    borderRadius: 8
   }
 });
 

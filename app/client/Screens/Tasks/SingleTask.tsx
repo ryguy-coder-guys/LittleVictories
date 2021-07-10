@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
-  Button,
   Image,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Switch
 } from 'react-native';
 
 import { useUserContext } from '../../Contexts/userContext';
@@ -208,11 +208,25 @@ const SingleTask = ({ item }) => {
           {item.description} - {addTimeStamp(item.due_date)}
         </Text>
       </View>
-      {finished && !taskPublic ? (
-        <Button title='Add to Feed' onPress={shareTask} />
-      ) : null}
-      {finished && taskPublic ? (
-        <Button title='Remove from Feed' onPress={unshareTask} />
+      {finished ? (
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            marginTop: 15
+          }}
+        >
+          <Text style={textStyles.text}>Public? </Text>
+          <Switch
+            trackColor={{ false: '#767577', true: '#81b0ff' }}
+            thumbColor={'#FAFAFA'}
+            onValueChange={() => {
+              taskPublic ? unshareTask() : shareTask();
+            }}
+            value={taskPublic}
+          />
+        </View>
       ) : null}
     </View>
   );

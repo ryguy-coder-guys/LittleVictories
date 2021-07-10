@@ -119,8 +119,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly'
   },
   badges: {
-    height: 115,
-    width: 115,
+    height: 125,
+    width: 125,
     padding: 20,
     justifyContent: 'center',
     alignItems: 'center'
