@@ -74,7 +74,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
       type: 'default',
       autoHide: false,
       backgroundColor: '#1D426D',
-      icon: 'succeess',
+      icon: { icon: 'danger', position: 'right' },
       position: 'bottom',
       message: 'Congratulations!',
       titleStyle: {
@@ -86,7 +86,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
       style: {
         width: '100%',
         borderRadius: 0,
-        paddingRight: 40
+        paddingLeft: 40
       },
       ...props
     };
