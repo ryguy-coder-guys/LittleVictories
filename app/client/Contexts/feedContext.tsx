@@ -34,7 +34,9 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
     setFeed(mappedFeed);
   };
 
-  socket.on('addToFeed', (feedItem) => setFeed([...feed, feedItem]));
+  socket.on('addToFeed', (feedItem) =>
+    setFeed([feedItem, ...feed].slice(0, 10))
+  );
   socket.on('removeFromFeed', (taskId) =>
     setFeed(feed.filter((feedItem) => feedItem.id !== taskId))
   );

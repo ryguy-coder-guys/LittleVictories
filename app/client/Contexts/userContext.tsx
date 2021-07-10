@@ -65,9 +65,13 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   });
 
   const [level, setLevel] = useState(0);
+  const [levelBadges, setLevelBadges] = useState({});
   const [numHabits, setNumHabits] = useState(0);
+  const [numHabitsBadges, setNumHabitsBadges] = useState({});
   const [numCompletedTasks, setNumCompletedTasks] = useState(0);
+  const [numCompletedTasksBadges, setNumCompletedTasksBadges] = useState({});
   const [numFollowees, setNumFollowees] = useState(0);
+  const [numFolloweesBadges, setNumFolloweesBadges] = useState({});
 
   const displayMessage = (props = {}) => {
     const message: any = {
@@ -95,7 +99,8 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   };
 
   useEffect(() => {
-    if (level === 1) {
+    if (level === 1 && !levelBadges[1]) {
+      setLevelBadges({ ...levelBadges, 1: true });
       displayMessage({
         description: 'Level 1 Reached',
         textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
@@ -108,7 +113,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
           </TouchableOpacity>
         )
       });
-    } else if (level === 5) {
+    } else if (level === 5 && !levelBadges[5]) {
       displayMessage({
         description: 'Level 5 Reached',
         textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
@@ -121,7 +126,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
           </TouchableOpacity>
         )
       });
-    } else if (level === 10) {
+    } else if (level === 10 && !levelBadges[10]) {
       displayMessage({
         description: 'Level 10 Reached',
         textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
@@ -138,7 +143,8 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   }, [level]);
 
   useEffect(() => {
-    if (numHabits === 5) {
+    if (numHabits === 5 && !numHabitsBadges[5]) {
+      setNumHabitsBadges({ ...numHabitsBadges, 5: true });
       displayMessage({
         description: '5 Habits Added',
         textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
@@ -155,7 +161,8 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   }, [numHabits]);
 
   useEffect(() => {
-    if (numCompletedTasks === 5) {
+    if (numCompletedTasks === 5 && !numCompletedTasksBadges[5]) {
+      setNumCompletedTasksBadges({ ...numCompletedTasksBadges, 5: true });
       displayMessage({
         description: '5 Completed Tasks',
         textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
@@ -172,7 +179,8 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   }, [numCompletedTasks]);
 
   useEffect(() => {
-    if (numFollowees === 3) {
+    if (numFollowees === 3 && !numFolloweesBadges[3]) {
+      setNumFolloweesBadges({ ...numCompletedTasksBadges, 3: true });
       displayMessage({
         description: 'Added 3 Friends',
         textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
@@ -186,7 +194,8 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
         )
       });
     }
-    if (numFollowees === 5) {
+    if (numFollowees === 5 && !numFolloweesBadges[5]) {
+      setNumFolloweesBadges({ ...numCompletedTasksBadges, 5: true });
       displayMessage({
         description: 'Added 5 Friends',
         textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },

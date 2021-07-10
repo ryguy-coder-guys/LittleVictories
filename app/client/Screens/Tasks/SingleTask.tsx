@@ -51,7 +51,7 @@ const SingleTask = ({ item }) => {
       );
       if (updateSuccessful) {
         setTaskPublic(true);
-        setFeed([...feed, updateSuccessful]);
+        setFeed([updateSuccessful, ...feed]);
         socket.emit('addToFeed', item);
       }
     } catch (error) {
@@ -73,10 +73,16 @@ const SingleTask = ({ item }) => {
         }
         return task;
       });
-      if (currentLevel !== level) {
-        setLevel(level);
-      }
-      setNumCompletedTasks(numCompletedTasks);
+      new Promise((resolve) => {
+        if (currentLevel !== level) {
+          setLevel(level);
+          setTimeout(() => resolve(true), 5000);
+        } else {
+          resolve(true);
+        }
+      }).then(() => {
+        setNumCompletedTasks(numCompletedTasks);
+      });
       setUser({ ...user, tasks: mappedTasks, points, level });
     } catch (error) {
       console.warn(error);
