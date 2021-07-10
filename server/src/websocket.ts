@@ -164,23 +164,6 @@ io.on('connection', (socket) => {
       });
     });
   });
-
-  socket.on('addAchievement', async (achievementObj) => {
-    const userId = await getUserId(socket.id);
-    if (userId) {
-      const friends = await fetchFriends(userId);
-      const sockets = io.sockets.sockets;
-      for (const currentSocket of sockets) {
-        const currentUserId = await getUserId(currentSocket[0]);
-        if (currentUserId && friends.includes(currentUserId)) {
-          io.to(currentSocket[0]).emit(
-            'addAchievement',
-            `user ${userId} achieved something`
-          );
-        }
-      }
-    }
-  });
 });
 
 export default httpServer;

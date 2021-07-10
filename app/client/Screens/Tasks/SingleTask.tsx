@@ -51,7 +51,7 @@ const SingleTask = ({ item }) => {
       );
       if (updateSuccessful) {
         setTaskPublic(true);
-        setFeed([...feed, updateSuccessful]);
+        setFeed([updateSuccessful, ...feed]);
         socket.emit('addToFeed', item);
       }
     } catch (error) {
