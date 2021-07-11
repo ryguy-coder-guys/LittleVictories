@@ -61,7 +61,7 @@ const TaskForm = () => {
       });
     } else {
       const { data: task } = await axios.post(
-        'http://localhost:3000/api/tasks/',
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/tasks/',
         {
           user_id: user.id,
           description,

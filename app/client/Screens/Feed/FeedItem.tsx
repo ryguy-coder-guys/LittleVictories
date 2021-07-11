@@ -34,7 +34,7 @@ const FeedItem = ({
 
   const addLike = async (taskId: number): Promise<void> => {
     const { data: newLike } = await axios.post(
-      'http://localhost:3000/api/likes/',
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/likes/',
       {
         userId: user.id,
         taskId
@@ -54,7 +54,7 @@ const FeedItem = ({
 
   const removeLike = async (taskId: number): Promise<void> => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://localhost:3000/api/likes/${user.id}/${taskId}`
+      `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/likes/${user.id}/${taskId}`
     );
     if (removeSuccessful) {
       const mappedFeed = feed.map((feedItem) => {
@@ -73,7 +73,7 @@ const FeedItem = ({
 
   const addComment = async (): Promise<void> => {
     const { data: newComment } = await axios.post(
-      'http://localhost:3000/api/comments',
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/comments',
       {
         user_id: user.id,
         task_id: id,
@@ -94,7 +94,7 @@ const FeedItem = ({
 
   const removeComment = async (commentId: number): Promise<void> => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://localhost:3000/api/comments/${commentId}`
+      `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/comments/${commentId}`
     );
     if (removeSuccessful) {
       const mappedFeed = feed.map((feedItem) => {
@@ -139,7 +139,7 @@ const FeedItem = ({
         'Nov',
         'Dec'
       ];
-      let output = `${months[parseInt(dateArr[1]) - 1]} ${parseInt(
+      const output = `${months[parseInt(dateArr[1]) - 1]} ${parseInt(
         dateArr[2]
       )}, ${dateArr[0]}`;
       return output;
@@ -166,7 +166,7 @@ const FeedItem = ({
       <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
         {username === user.username ? (
           <Image
-            source={require('../../../assets/images/heart.png')}
+            source={require('../../../assets/images/heart1.png')}
             style={{
               resizeMode: 'contain',
               width: 25,
@@ -180,8 +180,8 @@ const FeedItem = ({
             <Image
               source={
                 canLike()
-                  ? require('../../../assets/images/heart-outline.png')
-                  : require('../../../assets/images/heart.png')
+                  ? require('../../../assets/images/heart-outline1.png')
+                  : require('../../../assets/images/heart1.png')
               }
               style={{
                 resizeMode: 'contain',

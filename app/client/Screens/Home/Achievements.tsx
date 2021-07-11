@@ -19,7 +19,7 @@ const Achievements = (): ReactElement => {
         {user.level >= 1 ? (
           <View style={styles.badges}>
             <Image
-              source={require('../../../assets/images/ribbon_red.png')}
+              source={require('../../../assets/images/ribbon_red1.png')}
               style={styles.image}
             />
             <Text

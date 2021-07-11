@@ -16,10 +16,10 @@ import { UserStat } from '../../Interfaces/user';
 const getDatesInLastWeek = (): string[] => {
   let date: string = format(new Date(), 'MM-dd-yyyy');
   const datesInLastWeek: string[] = [date];
-  let count: number = 6;
+  let count = 6;
   while (count > 0) {
-    let pastMonthCount: number = 0;
-    let dateArr: string[] = date.split('-');
+    let pastMonthCount = 0;
+    const dateArr: string[] = date.split('-');
     if (parseInt(dateArr[1]) > 1) {
       dateArr[1] = `${parseInt(dateArr[1]) - 1}`;
       if (dateArr[1].length < 2) {
@@ -60,7 +60,7 @@ const MoodChart = (): PieChart => {
   const { user, userStat } = useUserContext();
 
   const getMoods = (): any => {
-    let moodCount = {};
+    const moodCount = {};
     // if user has just submitted a DR today, this pulls that mood
     if (userStat?.mood) {
       moodCount[userStat.mood] = 1;
@@ -101,11 +101,11 @@ const MoodChart = (): PieChart => {
 
   const Labels: any = ({ slices }) => {
     const Images = {
-      terrible: require('../../../assets/images/emoticon-angry-outline.png'),
-      great: require('../../../assets/images/emoticon-excited-outline.png'),
-      good: require('../../../assets/images/emoticon-happy-outline.png'),
-      ok: require('../../../assets/images/emoticon-neutral-outline.png'),
-      bad: require('../../../assets/images/emoticon-sad-outline.png')
+      terrible: require('../../../assets/images/emoticon-angry-outline1.png'),
+      great: require('../../../assets/images/emoticon-excited-outline1.png'),
+      good: require('../../../assets/images/emoticon-happy-outline1.png'),
+      ok: require('../../../assets/images/emoticon-neutral-outline1.png'),
+      bad: require('../../../assets/images/emoticon-sad-outline1.png')
     };
 
     return slices.map((slice, index) => {
@@ -150,7 +150,7 @@ const SleepHoursChart = (): BarChart => {
     }
     // if needed, loop back to beginning and add rest of days
     if (currentDayIndex > 0) {
-      for (let i: number = 0; i <= currentDayIndex; i++) {
+      for (let i = 0; i <= currentDayIndex; i++) {
         days.push(weekDays[i]);
       }
     }
@@ -166,7 +166,7 @@ const SleepHoursChart = (): BarChart => {
     } else {
       lastWeekStats = [0];
     }
-    for (let i: number = 5; i >= 0; i--) {
+    for (let i = 5; i >= 0; i--) {
       const targetDate: string = datesInLastWeek[i];
       const foundDate: UserStat = user.userStats.find(
         (stat) => stat.date === targetDate
@@ -186,7 +186,7 @@ const SleepHoursChart = (): BarChart => {
     const datesInLastWeek: string[] = getDatesInLastWeek();
     if (userStat) {
       trueCount = userStat[condition] ? 1 : 0;
-      for (let i: number = 5; i > 0; i--) {
+      for (let i = 5; i > 0; i--) {
         const targetDate: string = datesInLastWeek[i];
         const foundDate: UserStat = user.userStats.find(
           (stat) => stat.date === targetDate
@@ -197,7 +197,7 @@ const SleepHoursChart = (): BarChart => {
       }
     } else {
       trueCount = 0;
-      for (let i: number = 6; i > 0; i--) {
+      for (let i = 6; i > 0; i--) {
         const targetDate: string = datesInLastWeek[i];
         const foundDate: UserStat = user.userStats.find(
           (stat) => stat.date === targetDate
@@ -215,7 +215,7 @@ const SleepHoursChart = (): BarChart => {
     const datesInLastWeek: string[] = getDatesInLastWeek();
     if (userStat) {
       falseCount = userStat[condition] ? 0 : 1;
-      for (let i: number = 5; i > 0; i--) {
+      for (let i = 5; i > 0; i--) {
         const targetDate: string = datesInLastWeek[i];
         const foundDate: UserStat = user.userStats.find(
           (stat) => stat.date === targetDate
@@ -226,7 +226,7 @@ const SleepHoursChart = (): BarChart => {
       }
     } else {
       falseCount = 0;
-      for (let i: number = 6; i > 0; i--) {
+      for (let i = 6; i > 0; i--) {
         const targetDate: string = datesInLastWeek[i];
         const foundDate: UserStat = user.userStats.find(
           (stat) => stat.date === targetDate
@@ -254,7 +254,7 @@ const SleepHoursChart = (): BarChart => {
     top: 10,
     bottom: 10
   };
-  const xAxisHeight: number = 30;
+  const xAxisHeight = 30;
 
   return (
     <View>

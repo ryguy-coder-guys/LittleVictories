@@ -9,7 +9,8 @@
     "forceConsistentCasingInFileNames": true,
     "types": [],
     "skipLibCheck": true,
-    "allowJs": true
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true
   },
   "extends": "expo/tsconfig.base",
   "include": ["./**/*"],

@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { Button, Divider } from 'react-native-elements';
 import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { showMessage } from 'react-native-flash-message';
+import { UserStat } from '../../Interfaces/user';
 
 const DailyReflection = ({ setHasStats }): ReactElement => {
   const { user, userStat, setUserStat } = useUserContext();
@@ -20,15 +21,18 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
 
   const submit = async () => {
     try {
-      const { data } = await axios.post('http://localhost:3000/api/stats', {
-        user_id: user.id,
-        sleep_hours: parseInt(sleepHours),
-        eaten_well: didEatWell === 'yes',
-        exercised: didExercise === 'yes',
-        notes: notes,
-        mood: mood,
-        date: format(new Date(), 'MM-dd-yyyy')
-      });
+      const { data } = await axios.post(
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/stats',
+        {
+          user_id: user.id,
+          sleep_hours: parseInt(sleepHours),
+          eaten_well: didEatWell === 'yes',
+          exercised: didExercise === 'yes',
+          notes: notes,
+          mood: mood,
+          date: format(new Date(), 'MM-dd-yyyy')
+        }
+      );
       setUserStat({
         id: data.id,
         sleep_hours: data.sleep_hours,

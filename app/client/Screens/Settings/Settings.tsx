@@ -21,7 +21,11 @@ const Settings = ({ navigation }): ReactElement => {
     setLevel,
     setNumHabits,
     setNumCompletedTasks,
-    setNumFollowees
+    setNumFollowees,
+    setLevelBadges,
+    setNumCompletedTasksBadges,
+    setNumFolloweesBadges,
+    setNumHabitsBadges
   } = useUserContext();
   const { getQuote } = useQuoteContext();
   const { setJournal, setJournals } = useJournalContext();
@@ -55,6 +59,10 @@ const Settings = ({ navigation }): ReactElement => {
     setNumFollowees(0);
     setNumHabits(0);
     setNumCompletedTasks(0);
+    setLevelBadges({});
+    setNumCompletedTasksBadges({});
+    setNumFolloweesBadges({});
+    setNumHabitsBadges({});
     navigation.navigate('login');
   };
 
@@ -62,14 +70,16 @@ const Settings = ({ navigation }): ReactElement => {
     if (user.readable_font) {
       try {
         await axios.patch(
-          `http://localhost:3000/api/font/${user.id}/toggleOff`
+          `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/font/${user.id}/toggleOff`
         );
       } catch (err) {
         console.warn('toggle readableFont off client side error');
       }
     } else {
       try {
-        await axios.patch(`http://localhost:3000/api/font/${user.id}/toggleOn`);
+        await axios.patch(
+          `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/font/${user.id}/toggleOn`
+        );
       } catch (err) {
         console.warn('toggle readableFont on client side error');
       }
@@ -109,7 +119,9 @@ const Settings = ({ navigation }): ReactElement => {
             buttonStyle={{ backgroundColor: '#FAFAFA' }}
             titleStyle={{ color: '#1D426D' }}
             onPress={async () => {
-              await axios.delete(`http://localhost:3000/api/auth/${user.id}`);
+              await axios.delete(
+                `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/${user.id}`
+              );
               showMessage({
                 message: 'User successfully deleted from Little Victories.',
                 titleStyle: {

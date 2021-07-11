@@ -12,7 +12,9 @@ const Friends = (): ReactElement => {
 
   const getAllUsers = () => {
     axios
-      .get(`http://localhost:3000/api/auth/users/${user.id}`)
+      .get(
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/users/${user.id}`
+      )
       .then(({ data }) => {
         setUsers(
           data.filter((users) => {

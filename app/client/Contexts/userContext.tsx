@@ -16,6 +16,10 @@ interface UserContextState {
   setNumHabits: (numHabits: number) => void;
   setNumCompletedTasks: (numCompletedTasks: number) => void;
   setNumFollowees: (numFollowees: number) => void;
+  setLevelBadges: (obj: object) => void;
+  setNumHabitsBadges: (obj: object) => void;
+  setNumCompletedTasksBadges: (obj: object) => void;
+  setNumFolloweesBadges: (obj: object) => void;
 }
 
 export const UserDefaultValues: UserContextState = {
@@ -39,7 +43,11 @@ export const UserDefaultValues: UserContextState = {
   setLevel: (level: number): void => {},
   setNumHabits: (numHabits: number): void => {},
   setNumCompletedTasks: (numCompletedTasks: number): void => {},
-  setNumFollowees: (numFollowees: number): void => {}
+  setNumFollowees: (numFollowees: number): void => {},
+  setLevelBadges: (obj: object): void => {},
+  setNumHabitsBadges: (obj: object): void => {},
+  setNumCompletedTasksBadges: (obj: object): void => {},
+  setNumFolloweesBadges: (obj: object): void => {}
 };
 
 const UserContext = createContext<UserContextState>(UserDefaultValues);
@@ -107,7 +115,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
         renderCustomContent: () => (
           <TouchableOpacity>
             <Image
-              source={require('../../assets/images/ribbon_red.png')}
+              source={require('../../assets/images/ribbon_red1.png')}
               style={styles.image}
             />
           </TouchableOpacity>
@@ -224,7 +232,11 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
         setLevel,
         setNumHabits,
         setNumCompletedTasks,
-        setNumFollowees
+        setNumFollowees,
+        setLevelBadges,
+        setNumHabitsBadges,
+        setNumCompletedTasksBadges,
+        setNumFolloweesBadges
       }}
     >
       {children}
