@@ -29,11 +29,14 @@ const Journal = (): ReactElement => {
   };
 
   const saveJournal = async (): Promise<void> => {
-    await axios.post('http://localhost:3000/api/journalEntries/create', {
-      user_id: user.id,
-      content: journal.content,
-      date: moment().format('MM-D-Y')
-    });
+    await axios.post(
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/journalEntries/create',
+      {
+        user_id: user.id,
+        content: journal.content,
+        date: moment().format('MM-D-Y')
+      }
+    );
     showMessage({
       message: 'Journal entry successfully saved.',
       titleStyle: { fontSize: 20, color: '#FAFAFA', alignSelf: 'center' },
@@ -74,7 +77,7 @@ const Journal = (): ReactElement => {
             titleStyle={{ color: '#1D426D' }}
             onPress={async () => {
               await axios.delete(
-                `http://localhost:3000/api/journalEntries/${
+                `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/journalEntries/${
                   user.id
                 }/${moment().format('MM-D-Y')}`
               );
@@ -112,9 +115,7 @@ const Journal = (): ReactElement => {
           title='Clear Entry'
           buttonStyle={styles.button}
           titleStyle={
-            user.readable_font
-              ? textStyles.buttonText_big
-              : textStyles.buttonText
+            user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
           }
           onPress={() => {
             clearJournal();
@@ -139,7 +140,7 @@ const Journal = (): ReactElement => {
         title='Save'
         buttonStyle={[styles.button, styles.submit]}
         titleStyle={
-          user.readable_font ? textStyles.buttonText_big : textStyles.buttonText
+          user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
         }
         onPress={() => {
           saveJournal();

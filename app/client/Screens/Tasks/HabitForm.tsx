@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import axios, { AxiosResponse } from 'axios';
 import { FAB } from 'react-native-paper';
 import { useUserContext } from '../../Contexts/userContext';
@@ -30,7 +37,7 @@ const TaskForm = () => {
   const postHabit = async () => {
     const frequencies: string[] = ['daily', 'weekly', 'monthly'];
     const { data: habit }: AxiosResponse<Habit> = await axios.post(
-      'http://localhost:3000/api/habits/',
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/habits/',
       {
         user_id: user.id,
         description: description,
@@ -134,11 +141,12 @@ const TaskForm = () => {
               >
                 Add Habit
               </Text>
-              <Button
-                title='Cancel'
-                buttonStyle={{ width: 80, borderRadius: 10 }}
-                onPress={() => setShowForm(false)}
-              />
+              <TouchableOpacity onPress={() => setShowForm(false)}>
+                <Image
+                  source={require('../../../assets/images/minus-circle-outline.png')}
+                  style={styles.image}
+                />
+              </TouchableOpacity>
             </View>
             <TextInput
               style={user.readable_font ? styles.inputLarger : styles.input}
@@ -170,9 +178,12 @@ const TaskForm = () => {
             }}
             buttonStyle={{ backgroundColor: '#1D426D', borderColor: '#5c83b1' }}
             textStyle={
+              user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
+            }
+            disabledTextStyle={
               user.readable_font
-                ? { fontSize: 18, color: '#ada6a6' }
-                : { fontSize: 16, color: '#ada6a6' }
+                ? { fontSize: 20, color: '#a3a0a0' }
+                : { fontSize: 18, color: '#a3a0a0' }
             }
             innerBorderStyle={{ color: '#1D426D' }}
           />
@@ -189,7 +200,7 @@ const TaskForm = () => {
                 buttons={dayArr}
                 containerStyle={{
                   height: 40,
-                  borderRadius: 5,
+                  borderRadius: 4,
                   borderColor: '#5c83b1'
                 }}
                 selectedButtonStyle={{
@@ -202,8 +213,13 @@ const TaskForm = () => {
                 }}
                 textStyle={
                   user.readable_font
-                    ? { fontSize: 18, color: '#ada6a6' }
-                    : { fontSize: 16, color: '#ada6a6' }
+                    ? { fontSize: 18, color: '#FAFAFA' }
+                    : { fontSize: 16, color: '#FAFAFA' }
+                }
+                disabledTextStyle={
+                  user.readable_font
+                    ? { fontSize: 18, color: '#a3a0a0' }
+                    : { fontSize: 16, color: '#a3a0a0' }
                 }
                 innerBorderStyle={{ color: '#1D426D' }}
                 selectMultiple={true}
@@ -230,8 +246,14 @@ const TaskForm = () => {
               width: 80,
               alignSelf: 'flex-end',
               marginTop: 15,
-              borderRadius: 10
+              borderRadius: 8,
+              backgroundColor: '#5c83b1'
             }}
+            titleStyle={
+              user.readable_font
+                ? { fontSize: 20, color: '#FAFAFA' }
+                : { fontSize: 18, color: '#FAFAFA' }
+            }
             title='Submit'
             onPress={() => handleSubmit()}
           />
@@ -257,6 +279,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#1D426D',
     height: 40,
     marginRight: 20
+  },
+  image: {
+    resizeMode: 'contain',
+    width: 25,
+    height: 25
   },
   input: {
     borderRadius: 10,

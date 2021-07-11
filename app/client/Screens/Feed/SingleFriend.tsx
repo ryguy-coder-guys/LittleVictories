@@ -19,10 +19,13 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
     try {
       const {
         data: { addSuccessful, numFollowees }
-      } = await axios.post('http://localhost:3000/api/friends/', {
-        userId: user.id,
-        friendId: id
-      });
+      } = await axios.post(
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/friends/',
+        {
+          userId: user.id,
+          friendId: id
+        }
+      );
       if (addSuccessful) {
         refreshFeed();
         const mappedUsers = users.map((currentUser) => {
@@ -46,7 +49,7 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
       const {
         data: { deleteSuccessful, numFollowees }
       } = await axios.delete(
-        `http://localhost:3000/api/friends/${user.id}/${id}`
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/friends/${user.id}/${id}`
       );
       if (deleteSuccessful) {
         const mappedUsers = users.map((currentUser) => {
@@ -71,7 +74,7 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
 
   return (
     <View style={styles.textAreaContainer}>
-      <Text style={user.readable_font ? textStyles.text_big : textStyles.text}>
+      <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
         {item.username}
       </Text>
       {!isFriend ? (

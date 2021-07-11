@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { useState } from 'react';
-import { format } from 'date-fns';
+import { format, getDaysInMonth } from 'date-fns';
 
 const SingleHabit = ({ item }) => {
   const { user, setUser, setNumHabits, setLevel } = useUserContext();
@@ -15,7 +15,7 @@ const SingleHabit = ({ item }) => {
       const {
         data: { points, level }
       } = await axios.patch(
-        `http://localhost:3000/api/habits/${item.id}/complete`
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/habits/${item.id}/complete`
       );
       const mappedHabits = user.habits.map((habit) => {
         if (habit.id === item.id) {
@@ -37,7 +37,7 @@ const SingleHabit = ({ item }) => {
       const {
         data: { points, level }
       } = await axios.patch(
-        `http://localhost:3000/api/habits/${item.id}/incomplete`
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/habits/${item.id}/incomplete`
       );
       const mappedHabits = user.habits.map((habit) => {
         if (habit.id === item.id) {
@@ -53,7 +53,9 @@ const SingleHabit = ({ item }) => {
 
   const removeHabit = async () => {
     try {
-      await axios.delete(`http://localhost:3000/api/habits/${item.id}`);
+      await axios.delete(
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/habits/${item.id}`
+      );
       const filteredHabits = user.habits.filter((habit) => {
         return habit.id !== item.id;
       });
@@ -88,6 +90,19 @@ const SingleHabit = ({ item }) => {
       daysSpacedStr += 'Sun, ';
     }
     return daysSpacedStr.slice(0, -2);
+  };
+
+  const checkDate = (date) => {
+    if (date >= 1 && date <= 28) {
+      return date;
+    } else {
+      const daysThisMonth = getDaysInMonth(new Date());
+      if (daysThisMonth < date) {
+        return daysThisMonth;
+      } else {
+        return date;
+      }
+    }
   };
 
   return (
@@ -132,7 +147,8 @@ const SingleHabit = ({ item }) => {
           ) : null}
           {item.frequency === 'monthly' ? (
             <Text style={user.readable_font ? styles.textLarger : styles.text}>
-              Due Date: {format(new Date(), 'MMMM')} {item.calendar_date}
+              Due Date: {format(new Date(), 'MMMM')}{' '}
+              {checkDate(item.calendar_date)}
             </Text>
           ) : null}
         </View>

@@ -19,11 +19,11 @@ const Achievements = (): ReactElement => {
         {user.level >= 1 ? (
           <View style={styles.badges}>
             <Image
-              source={require('../../../assets/images/ribbon_red.png')}
+              source={require('../../../assets/images/ribbon_red1.png')}
               style={styles.image}
             />
             <Text
-              style={user.readable_font ? textStyles.text_big : textStyles.text}
+              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
             >
               Level 1
             </Text>
@@ -36,7 +36,7 @@ const Achievements = (): ReactElement => {
               style={styles.image}
             />
             <Text
-              style={user.readable_font ? textStyles.text_big : textStyles.text}
+              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
             >
               Level 5
             </Text>
@@ -49,7 +49,7 @@ const Achievements = (): ReactElement => {
               style={styles.image}
             />
             <Text
-              style={user.readable_font ? textStyles.text_big : textStyles.text}
+              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
             >
               Level 10
             </Text>
@@ -62,7 +62,7 @@ const Achievements = (): ReactElement => {
               style={styles.image}
             />
             <Text
-              style={user.readable_font ? textStyles.text_big : textStyles.text}
+              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
             >
               5 Habits
             </Text>
@@ -75,7 +75,7 @@ const Achievements = (): ReactElement => {
               style={styles.image}
             />
             <Text
-              style={user.readable_font ? textStyles.text_big : textStyles.text}
+              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
             >
               5 Tasks
             </Text>
@@ -88,7 +88,7 @@ const Achievements = (): ReactElement => {
               style={styles.image}
             />
             <Text
-              style={user.readable_font ? textStyles.text_big : textStyles.text}
+              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
             >
               3 Friends
             </Text>
@@ -101,7 +101,7 @@ const Achievements = (): ReactElement => {
               style={styles.image}
             />
             <Text
-              style={user.readable_font ? textStyles.text_big : textStyles.text}
+              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
             >
               5 Friends
             </Text>
@@ -119,8 +119,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly'
   },
   badges: {
-    height: 115,
-    width: 115,
+    height: 125,
+    width: 125,
     padding: 20,
     justifyContent: 'center',
     alignItems: 'center'

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import {
-  View,
-  TextInput,
+  Image,
   StyleSheet,
+  Switch,
   Text,
-  Button,
-  Switch
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import axios from 'axios';
 import { FAB } from 'react-native-paper';
@@ -14,6 +15,7 @@ import Slider from '@react-native-community/slider';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { isBefore } from 'date-fns';
 import { showMessage } from 'react-native-flash-message';
+import { Button } from 'react-native-elements';
 
 const TaskForm = () => {
   const [showForm, setShowForm] = useState(false);
@@ -59,7 +61,7 @@ const TaskForm = () => {
       });
     } else {
       const { data: task } = await axios.post(
-        'http://localhost:3000/api/tasks/',
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/tasks/',
         {
           user_id: user.id,
           description,
@@ -117,8 +119,7 @@ const TaskForm = () => {
               >
                 Add Task
               </Text>
-              <Button
-                title='Cancel'
+              <TouchableOpacity
                 onPress={() => {
                   setShowForm(false);
                   setDescription('');
@@ -126,7 +127,12 @@ const TaskForm = () => {
                   setTimeToComplete(5);
                   setIsImportant(false);
                 }}
-              />
+              >
+                <Image
+                  source={require('../../../assets/images/minus-circle-outline.png')}
+                  style={styles.image}
+                />
+              </TouchableOpacity>
             </View>
             <TextInput
               style={user.readable_font ? styles.inputLarger : styles.input}
@@ -200,7 +206,17 @@ const TaskForm = () => {
               value={isImportant}
             />
           </View>
-          <Button title='Submit' onPress={() => handleSubmit()} />
+          <Button
+            buttonStyle={{
+              width: 80,
+              alignSelf: 'flex-end',
+              marginTop: 15,
+              borderRadius: 10,
+              backgroundColor: '#5c83b1'
+            }}
+            title='Submit'
+            onPress={() => handleSubmit()}
+          />
         </View>
       ) : null}
     </View>
@@ -236,6 +252,11 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     marginLeft: 20
+  },
+  image: {
+    resizeMode: 'contain',
+    width: 25,
+    height: 25
   },
   important: {
     flexDirection: 'row',

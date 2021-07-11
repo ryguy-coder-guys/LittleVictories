@@ -30,14 +30,14 @@ const Comment = ({ id, content, user_id, username, removeComment }) => {
       <Text
         style={
           user.readable_font
-            ? [textStyles.text_big, { fontWeight: 'bold' }]
-            : [textStyles.text, { fontWeight: 'bold' }]
+            ? [textStyles.txt_big, { fontWeight: 'bold' }]
+            : [textStyles.txt, { fontWeight: 'bold' }]
         }
       >
         {' '}
         {username} -{' '}
       </Text>
-      <Text style={user.readable_font ? textStyles.text_big : textStyles.text}>
+      <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
         {content}
       </Text>
     </View>

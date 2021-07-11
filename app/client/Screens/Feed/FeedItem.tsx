@@ -34,7 +34,7 @@ const FeedItem = ({
 
   const addLike = async (taskId: number): Promise<void> => {
     const { data: newLike } = await axios.post(
-      'http://localhost:3000/api/likes/',
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/likes/',
       {
         userId: user.id,
         taskId
@@ -54,7 +54,7 @@ const FeedItem = ({
 
   const removeLike = async (taskId: number): Promise<void> => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://localhost:3000/api/likes/${user.id}/${taskId}`
+      `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/likes/${user.id}/${taskId}`
     );
     if (removeSuccessful) {
       const mappedFeed = feed.map((feedItem) => {
@@ -73,7 +73,7 @@ const FeedItem = ({
 
   const addComment = async (): Promise<void> => {
     const { data: newComment } = await axios.post(
-      'http://localhost:3000/api/comments',
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/comments',
       {
         user_id: user.id,
         task_id: id,
@@ -94,7 +94,7 @@ const FeedItem = ({
 
   const removeComment = async (commentId: number): Promise<void> => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://localhost:3000/api/comments/${commentId}`
+      `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/comments/${commentId}`
     );
     if (removeSuccessful) {
       const mappedFeed = feed.map((feedItem) => {
@@ -139,7 +139,7 @@ const FeedItem = ({
         'Nov',
         'Dec'
       ];
-      let output = `${months[parseInt(dateArr[1]) - 1]} ${parseInt(
+      const output = `${months[parseInt(dateArr[1]) - 1]} ${parseInt(
         dateArr[2]
       )}, ${dateArr[0]}`;
       return output;
@@ -151,45 +151,47 @@ const FeedItem = ({
       <Text
         style={
           user.readable_font
-            ? [textStyles.text_big, { fontWeight: 'bold' }]
-            : [textStyles.text, { fontWeight: 'bold' }]
+            ? [textStyles.txt_big, { fontWeight: 'bold' }]
+            : [textStyles.txt, { fontWeight: 'bold' }]
         }
       >
         {username}
       </Text>
-      <Text style={user.readable_font ? textStyles.text_big : textStyles.text}>
+      <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
         {description}
       </Text>
-      <Text style={user.readable_font ? textStyles.text_big : textStyles.text}>
+      <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
         Completed on: {formatDate(completed_at)}
       </Text>
       <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-        <TouchableOpacity
-          onPress={() => (canLike() ? addLike(id) : removeLike(id))}
-        >
-          {!canLike() || (username === user.username && likes?.length) ? (
+        {username === user.username ? (
+          <Image
+            source={require('../../../assets/images/heart1.png')}
+            style={{
+              resizeMode: 'contain',
+              width: 25,
+              height: 25
+            }}
+          />
+        ) : (
+          <TouchableOpacity
+            onPress={() => (canLike() ? addLike(id) : removeLike(id))}
+          >
             <Image
-              source={require('../../../assets/images/heart.png')}
+              source={
+                canLike()
+                  ? require('../../../assets/images/heart-outline1.png')
+                  : require('../../../assets/images/heart1.png')
+              }
               style={{
                 resizeMode: 'contain',
                 width: 25,
                 height: 25
               }}
             />
-          ) : (
-            <Image
-              source={require('../../../assets/images/heart-outline.png')}
-              style={{
-                resizeMode: 'contain',
-                width: 25,
-                height: 25
-              }}
-            />
-          )}
-        </TouchableOpacity>
-        <Text
-          style={user.readable_font ? textStyles.text_big : textStyles.text}
-        >
+          </TouchableOpacity>
+        )}
+        <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
           {' '}
           {likes?.length}
         </Text>
@@ -222,21 +224,25 @@ const FeedItem = ({
             onChangeText={setCommentText}
             value={commentText}
           />
-          <Button
-            title='Submit'
-            onPress={() => {
-              if (commentText.length) {
-                addComment();
-              }
-            }}
-          />
-          <Button
-            title='Cancel'
-            onPress={() => {
-              setCommentText('');
-              setShowCommentInput(false);
-            }}
-          />
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+          >
+            <Button
+              title='Cancel'
+              onPress={() => {
+                setCommentText('');
+                setShowCommentInput(false);
+              }}
+            />
+            <Button
+              title='Submit'
+              onPress={() => {
+                if (commentText.length) {
+                  addComment();
+                }
+              }}
+            />
+          </View>
         </View>
       )}
     </View>
@@ -260,7 +266,8 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#9ec5cf',
     fontSize: 18,
-    color: '#1D426D'
+    color: '#1D426D',
+    borderRadius: 8
   }
 });
 

@@ -59,7 +59,7 @@ const List = (): ReactElement => {
             titleStyle={{ color: '#1D426D' }}
             onPress={async () => {
               await axios.delete(
-                `http://localhost:3000/api/journalEntries/${user.id}/${date}`
+                `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/journalEntries/${user.id}/${date}`
               );
               const mappedJournals = journals.filter((entry) => {
                 return entry.date !== date;
@@ -101,7 +101,7 @@ const List = (): ReactElement => {
                 </Text>
                 <Text
                   style={
-                    user.readable_font ? textStyles.text_big : textStyles.text
+                    user.readable_font ? textStyles.txt_big : textStyles.txt
                   }
                 >
                   {journal.content}

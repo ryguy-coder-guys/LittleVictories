@@ -7,13 +7,21 @@ export const containerStyles = StyleSheet.create({
 });
 
 export const textStyles = StyleSheet.create({
-  buttonText: {
+  btnTxt: {
     fontSize: 18,
     color: '#FAFAFA'
   },
-  buttonText_big: {
+  btnTxt_big: {
     fontSize: 20,
     color: '#FAFAFA'
+  },
+  disabledBtnTxt: {
+    fontSize: 18,
+    color: '#a3a0a0'
+  },
+  disabledBtnTxt_big: {
+    fontSize: 20,
+    color: '#a3a0a0'
   },
   h1: {
     fontSize: 26,
@@ -45,11 +53,11 @@ export const textStyles = StyleSheet.create({
     color: '#1D426D',
     fontWeight: 'bold'
   },
-  text: {
+  txt: {
     fontSize: 18,
     color: '#1D426D'
   },
-  text_big: {
+  txt_big: {
     fontSize: 20,
     color: '#1D426D'
   }

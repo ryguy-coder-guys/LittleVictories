@@ -44,7 +44,7 @@ const Login = ({ navigation }) => {
     if (loginSelected) {
       // attempt a login for the user
       const { data: userObj } = await axios.post(
-        'http://localhost:3000/api/auth/login',
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/login',
         {
           username,
           password: passwordAttempt
@@ -94,7 +94,7 @@ const Login = ({ navigation }) => {
         return;
       }
       const { data: user } = await axios.post(
-        'http://localhost:3000/api/auth/register',
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/register',
         {
           username,
           password: passwordAttempt
@@ -105,7 +105,7 @@ const Login = ({ navigation }) => {
       if (user) {
         // once a new user is created, send to login route
         const { data: userObj } = await axios.post(
-          'http://localhost:3000/api/auth/login',
+          'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/login',
           {
             username,
             password: passwordAttempt
@@ -172,14 +172,14 @@ const Login = ({ navigation }) => {
                 }}
               />
             </View>
-            <Text style={styles.text}>Username:</Text>
+            <Text style={styles.text}>Username</Text>
             <TextInput
               style={styles.input}
               onChangeText={setUsername}
               value={username}
               autoCapitalize='none'
             />
-            <Text style={styles.text}>Password:</Text>
+            <Text style={styles.text}>Password</Text>
             <TextInput
               style={styles.input}
               onChangeText={setPasswordAttempt}
@@ -225,14 +225,14 @@ const Login = ({ navigation }) => {
                 }}
               />
             </View>
-            <Text style={styles.text}>Username:</Text>
+            <Text style={styles.text}>Username</Text>
             <TextInput
               style={styles.input}
               onChangeText={setUsername}
               value={username}
               autoCapitalize='none'
             />
-            <Text style={styles.text}>Password:</Text>
+            <Text style={styles.text}>Password</Text>
             <TextInput
               style={styles.input}
               onChangeText={setPasswordAttempt}
@@ -240,7 +240,7 @@ const Login = ({ navigation }) => {
               secureTextEntry={true}
               autoCapitalize='none'
             />
-            <Text style={styles.text}>Confirm Password:</Text>
+            <Text style={styles.text}>Confirm Password</Text>
             <TextInput
               style={styles.input}
               onChangeText={setPasswordAttempt2}
