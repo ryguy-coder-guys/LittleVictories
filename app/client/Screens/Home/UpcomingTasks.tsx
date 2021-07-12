@@ -24,7 +24,9 @@ const UpcomingTasks = () => {
         'Nov',
         'Dec'
       ];
-      let date = `${months[parseInt(dateArr[1]) - 1]} ${parseInt(dateArr[2])}`;
+      const date = `${months[parseInt(dateArr[1]) - 1]} ${parseInt(
+        dateArr[2]
+      )}`;
       return date;
     }
   };
@@ -39,27 +41,30 @@ const UpcomingTasks = () => {
       >
         Upcoming Tasks
       </Text>
-      {user.tasks?.slice(0, 5).map((task) => {
-        return (
-          <View style={styles.task} key={getKey()}>
-            <Text
-              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
-            >
-              {task.description} - due {formatDueDate(task.due_date)}{' '}
-            </Text>
-            {task.is_important ? (
-              <Image
-                source={require('../../../assets/images/star-circle-outline.png')}
-                style={{
-                  resizeMode: 'contain',
-                  width: 25,
-                  height: 25
-                }}
-              />
-            ) : null}
-          </View>
-        );
-      })}
+      {user.tasks
+        ?.filter((task) => !task.is_complete)
+        .slice(0, 5)
+        .map((task) => {
+          return (
+            <View style={styles.task} key={getKey()}>
+              <Text
+                style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+              >
+                {task.description} - due {formatDueDate(task.due_date)}{' '}
+              </Text>
+              {task.is_important ? (
+                <Image
+                  source={require('../../../assets/images/star-circle-outline.png')}
+                  style={{
+                    resizeMode: 'contain',
+                    width: 25,
+                    height: 25
+                  }}
+                />
+              ) : null}
+            </View>
+          );
+        })}
     </View>
   );
 };

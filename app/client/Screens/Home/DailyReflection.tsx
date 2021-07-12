@@ -12,9 +12,7 @@ import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { Button, Divider } from 'react-native-elements';
-// import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { showMessage } from 'react-native-flash-message';
-import { UserStat } from '../../Interfaces/user';
 
 const DailyReflection = ({ setHasStats }): ReactElement => {
   const { user, userStat, setUserStat } = useUserContext();

@@ -158,14 +158,14 @@ const SleepHoursChart = (): BarChart => {
   };
   const days = getDays();
 
-  const getData = (): number[] => {
-    const datesInLastWeek: string[] = getDatesInLastWeek();
-    let lastWeekStats: number[] | null;
+  const getData = () => {
+    let lastWeekStats: number[];
     if (userStat) {
       lastWeekStats = [userStat.sleep_hours];
     } else {
       lastWeekStats = [0];
     }
+    const datesInLastWeek: string[] = getDatesInLastWeek();
     for (let i = 5; i >= 0; i--) {
       const targetDate: string = datesInLastWeek[i];
       const foundDate: UserStat = user.userStats.find(
@@ -179,7 +179,7 @@ const SleepHoursChart = (): BarChart => {
     }
     return lastWeekStats;
   };
-  const data: number[] = getData();
+  const data = getData();
 
   const getTrueCount = (condition) => {
     let trueCount: number;
