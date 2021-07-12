@@ -39,27 +39,30 @@ const UpcomingTasks = () => {
       >
         Upcoming Tasks
       </Text>
-      {user.tasks?.slice(0, 5).map((task) => {
-        return (
-          <View style={styles.task} key={getKey()}>
-            <Text
-              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
-            >
-              {task.description} - due {formatDueDate(task.due_date)}{' '}
-            </Text>
-            {task.is_important ? (
-              <Image
-                source={require('../../../assets/images/star-circle-outline.png')}
-                style={{
-                  resizeMode: 'contain',
-                  width: 25,
-                  height: 25
-                }}
-              />
-            ) : null}
-          </View>
-        );
-      })}
+      {user.tasks
+        ?.filter((task) => !task.is_complete)
+        .slice(0, 5)
+        .map((task) => {
+          return (
+            <View style={styles.task} key={getKey()}>
+              <Text
+                style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+              >
+                {task.description} - due {formatDueDate(task.due_date)}{' '}
+              </Text>
+              {task.is_important ? (
+                <Image
+                  source={require('../../../assets/images/star-circle-outline.png')}
+                  style={{
+                    resizeMode: 'contain',
+                    width: 25,
+                    height: 25
+                  }}
+                />
+              ) : null}
+            </View>
+          );
+        })}
     </View>
   );
 };
