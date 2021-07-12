@@ -166,7 +166,7 @@ const FeedItem = ({
       <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
         {username === user.username ? (
           <Image
-            source={require('../../../assets/images/heart1.png')}
+            source={require('../../../assets/images/heart.png')}
             style={{
               resizeMode: 'contain',
               width: 25,
@@ -180,8 +180,8 @@ const FeedItem = ({
             <Image
               source={
                 canLike()
-                  ? require('../../../assets/images/heart-outline1.png')
-                  : require('../../../assets/images/heart1.png')
+                  ? require('../../../assets/images/heart-outline.png')
+                  : require('../../../assets/images/heart.png')
               }
               style={{
                 resizeMode: 'contain',

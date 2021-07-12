@@ -1,13 +1,18 @@
 import React, { useState, ReactElement } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import {
+  Image,
+  TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  TextInput
+} from 'react-native';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { Button, Divider } from 'react-native-elements';
-import FaceIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { showMessage } from 'react-native-flash-message';
-import { UserStat } from '../../Interfaces/user';
 
 const DailyReflection = ({ setHasStats }): ReactElement => {
   const { user, userStat, setUserStat } = useUserContext();
@@ -100,17 +105,6 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
     setActiveIcon(value);
   };
 
-  const getIcon = (mood: string) => {
-    const icons = {
-      great: 'emoticon-excited-outline',
-      good: 'emoticon-happy-outline',
-      ok: 'emoticon-neutral-outline',
-      bad: 'emoticon-sad-outline',
-      terrible: 'emoticon-angry-outline'
-    };
-    return <FaceIcon name={icons[mood]} size={35} color='#FAFAFA' />;
-  };
-
   return (
     <View style={styles.view}>
       <Text
@@ -200,7 +194,9 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
             >
               Mood:{' '}
             </Text>
-            {userStat?.mood ? getIcon(userStat?.mood) : getIcon(mood)}
+            {userStat?.mood
+              ? getIcon('active', userStat?.mood)
+              : getIcon('active', mood)}
           </View>
         </View>
       ) : (
@@ -283,48 +279,71 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
             What's your mood?
           </Text>
           <View style={{ flexDirection: 'row', marginTop: 10 }}>
-            <FaceIcon
-              name='emoticon-angry-outline'
-              onPress={() => handleFace('terrible')}
-              size={35}
-              style={
-                activeIcon === 'terrible'
-                  ? styles.activeIcon
-                  : styles.inactiveIcon
-              }
-            />
-            <FaceIcon
-              name='emoticon-sad-outline'
-              onPress={() => handleFace('bad')}
-              size={35}
-              style={
-                activeIcon === 'bad' ? styles.activeIcon : styles.inactiveIcon
-              }
-            />
-            <FaceIcon
-              name='emoticon-neutral-outline'
-              onPress={() => handleFace('ok')}
-              size={35}
-              style={
-                activeIcon === 'ok' ? styles.activeIcon : styles.inactiveIcon
-              }
-            />
-            <FaceIcon
-              name='emoticon-happy-outline'
-              onPress={() => handleFace('good')}
-              size={35}
-              style={
-                activeIcon === 'good' ? styles.activeIcon : styles.inactiveIcon
-              }
-            />
-            <FaceIcon
-              name='emoticon-excited-outline'
-              onPress={() => handleFace('great')}
-              size={35}
-              style={
-                activeIcon === 'great' ? styles.activeIcon : styles.inactiveIcon
-              }
-            />
+            <TouchableOpacity onPress={() => handleFace('terrible')}>
+              {activeIcon === 'terrible' ? (
+                <Image
+                  source={require('../../../assets/images/emoticon-angry-outline.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              ) : (
+                <Image
+                  source={require('../../../assets/images/emoticon-angry-inactive.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleFace('bad')}>
+              {activeIcon === 'bad' ? (
+                <Image
+                  source={require('../../../assets/images/emoticon-sad-outline.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              ) : (
+                <Image
+                  source={require('../../../assets/images/emoticon-sad-inactive.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleFace('ok')}>
+              {activeIcon === 'ok' ? (
+                <Image
+                  source={require('../../../assets/images/emoticon-neutral-outline.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              ) : (
+                <Image
+                  source={require('../../../assets/images/emoticon-neutral-inactive.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleFace('good')}>
+              {activeIcon === 'good' ? (
+                <Image
+                  source={require('../../../assets/images/emoticon-happy-outline.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              ) : (
+                <Image
+                  source={require('../../../assets/images/emoticon-happy-inactive.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleFace('great')}>
+              {activeIcon === 'great' ? (
+                <Image
+                  source={require('../../../assets/images/emoticon-excited-outline.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              ) : (
+                <Image
+                  source={require('../../../assets/images/emoticon-excited-inactive.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              )}
+            </TouchableOpacity>
           </View>
           <View
             style={{

@@ -89,7 +89,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<void> => {
         .filter(
           (task) =>
             task.getDataValue('is_complete') === 0 ||
-            !isPast(task.getDataValue('due_date'))
+            !isPast(new Date(task.getDataValue('due_date')))
         )
         .map((task) => {
           return {
