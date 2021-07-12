@@ -101,11 +101,11 @@ const MoodChart = (): PieChart => {
 
   const Labels: any = ({ slices }) => {
     const Images = {
-      terrible: require('../../../assets/images/emoticon-angry-outline1.png'),
-      great: require('../../../assets/images/emoticon-excited-outline1.png'),
-      good: require('../../../assets/images/emoticon-happy-outline1.png'),
-      ok: require('../../../assets/images/emoticon-neutral-outline1.png'),
-      bad: require('../../../assets/images/emoticon-sad-outline1.png')
+      terrible: require('../../../assets/images/emoticon-angry-outline.png'),
+      great: require('../../../assets/images/emoticon-excited-outline.png'),
+      good: require('../../../assets/images/emoticon-happy-outline.png'),
+      ok: require('../../../assets/images/emoticon-neutral-outline.png'),
+      bad: require('../../../assets/images/emoticon-sad-outline.png')
     };
 
     return slices.map((slice, index) => {
