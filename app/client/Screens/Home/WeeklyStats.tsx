@@ -101,11 +101,11 @@ const MoodChart = (): PieChart => {
 
   const Labels: any = ({ slices }) => {
     const Images = {
-      terrible: require('../../../assets/images/emoticon-angry-outline1.png'),
-      great: require('../../../assets/images/emoticon-excited-outline1.png'),
-      good: require('../../../assets/images/emoticon-happy-outline1.png'),
-      ok: require('../../../assets/images/emoticon-neutral-outline1.png'),
-      bad: require('../../../assets/images/emoticon-sad-outline1.png')
+      terrible: require('../../../assets/images/emoticon-angry-outline.png'),
+      great: require('../../../assets/images/emoticon-excited-outline.png'),
+      good: require('../../../assets/images/emoticon-happy-outline.png'),
+      ok: require('../../../assets/images/emoticon-neutral-outline.png'),
+      bad: require('../../../assets/images/emoticon-sad-outline.png')
     };
 
     return slices.map((slice, index) => {
@@ -158,14 +158,14 @@ const SleepHoursChart = (): BarChart => {
   };
   const days = getDays();
 
-  const getData = (): number[] => {
-    const datesInLastWeek: string[] = getDatesInLastWeek();
-    let lastWeekStats: number[] | null;
+  const getData = () => {
+    let lastWeekStats: number[];
     if (userStat) {
       lastWeekStats = [userStat.sleep_hours];
     } else {
       lastWeekStats = [0];
     }
+    const datesInLastWeek: string[] = getDatesInLastWeek();
     for (let i = 5; i >= 0; i--) {
       const targetDate: string = datesInLastWeek[i];
       const foundDate: UserStat = user.userStats.find(
@@ -179,7 +179,7 @@ const SleepHoursChart = (): BarChart => {
     }
     return lastWeekStats;
   };
-  const data: number[] = getData();
+  const data = getData();
 
   const getTrueCount = (condition) => {
     let trueCount: number;

@@ -24,7 +24,9 @@ const UpcomingTasks = () => {
         'Nov',
         'Dec'
       ];
-      let date = `${months[parseInt(dateArr[1]) - 1]} ${parseInt(dateArr[2])}`;
+      const date = `${months[parseInt(dateArr[1]) - 1]} ${parseInt(
+        dateArr[2]
+      )}`;
       return date;
     }
   };

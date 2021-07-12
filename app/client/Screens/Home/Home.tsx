@@ -26,7 +26,7 @@ const Home = (): ReactElement => {
   return (
     <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
       <ProgressBar />
-      <SafeAreaView style={{ flex: 1, alignItems: 'center', marginTop: 20 }}>
+      <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
         <ScrollView>
           <View style={styles.view}>
             <UpcomingTasks />
@@ -42,7 +42,8 @@ const Home = (): ReactElement => {
 
 const styles = StyleSheet.create({
   view: {
-    width: '100%'
+    width: '100%',
+    paddingTop: 20
   }
 });
 

@@ -211,10 +211,14 @@ const SingleTask = ({ item }) => {
             />
           </TouchableOpacity>
         )}
-        <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
-          {'  '}
-          {item.description} - {addTimeStamp(item.due_date)}
-        </Text>
+        <View style={{ width: '90%', padding: 10 }}>
+          <Text
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+          >
+            {'  '}
+            {item.description} - {addTimeStamp(item.due_date)}
+          </Text>
+        </View>
       </View>
       {finished ? (
         <View
@@ -252,8 +256,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: '#8ebac6',
     borderRadius: 10,
-    padding: 15,
-    flexWrap: 'wrap'
+    padding: 15
   }
 });
 

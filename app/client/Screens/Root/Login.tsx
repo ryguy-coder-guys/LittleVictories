@@ -115,6 +115,7 @@ const Login = ({ navigation }) => {
           // if successful navigate to home
           setTimeout(() => {
             setUser(userObj);
+            console.log(userObj.userStat);
             setUserStat(userObj.userStat);
             navigation.navigate('index');
           }, 5000);
