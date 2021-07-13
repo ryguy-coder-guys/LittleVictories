@@ -1,3 +1,4 @@
+import { Achievement } from './../database/models/achievement';
 import { UserInstance } from './../database/models/user';
 import { RegisterUserReqBody, LoginUserReqBody } from './../interfaces/users';
 import { RequestHandler } from 'express';
@@ -108,13 +109,19 @@ export const loginUser: RequestHandler = async (req, res): Promise<void> => {
         order: [['createdAt', 'DESC']]
       });
 
+      const achievements = await Achievement.findAll({
+        where: { user_id: user.id },
+        order: [['createdAt', 'ASC']]
+      });
+
       const formattedUser = {
         ...mappedUser,
         tasks: mappedTasks,
         userStat: userStat,
         entries: entries ? entries : [],
         habits: habits ? habits : [],
-        userStats: userStats ? userStats : []
+        userStats: userStats ? userStats : [],
+        achievements
       };
 
       res.send(formattedUser);

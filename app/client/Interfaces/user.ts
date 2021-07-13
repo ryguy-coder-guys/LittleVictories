@@ -27,6 +27,15 @@ export interface Habit {
   updatedAt: Date;
 }
 
+export type AchievementType =
+  | 'levelOne'
+  | 'levelFive'
+  | 'levelTen'
+  | 'fiveHabits'
+  | 'fiveTasks'
+  | 'threeFollowees'
+  | 'fiveFollowees';
+
 export interface User {
   id: string;
   username: string;
@@ -37,6 +46,7 @@ export interface User {
   entries: Entry[];
   readable_font: boolean;
   userStats: UserStat[];
+  achievements: AchievementType[];
 }
 
 export type MoodType = 'great' | 'good' | 'ok' | 'bad' | 'terrible';

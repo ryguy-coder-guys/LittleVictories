@@ -32,7 +32,8 @@ export const UserDefaultValues: UserContextState = {
     level: 0,
     entries: [],
     readable_font: false,
-    userStats: []
+    userStats: [],
+    achievements: []
   },
   setUser: (user: User): void => {},
   userStat: null,
