@@ -107,6 +107,22 @@ create table Friends (
   foreign key (friend_id) references Users(id)
 );
 
+create table Achievements (
+  id int primary key auto_increment,
+  user_id varchar(36) not null,
+  achievement_type enum(
+    'levelOne',
+    'levelFive',
+    'levelTen',
+    'fiveHabits',
+    'fiveTasks',
+    'threeFollowees',
+    'fiveFollowees'
+  ) not null,
+  createdAt datetime not null default now(),
+  updatedAt datetime not null default now(),
+  foreign key (user_id) references Users(id)
+);
 
 /* run from project root
 /* mysql -u root < server/src/database/schema.sql
