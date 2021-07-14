@@ -3,40 +3,27 @@ import { useUserContext } from './userContext';
 import axios from 'axios';
 import { useSocketContext } from '../Contexts/socketContext';
 import { FeedItem } from '../Interfaces/feed';
-import { any } from 'sequelize/types/lib/operators';
 
 interface FeedContextState {
   feed: FeedItem[];
   setFeed: (feed: FeedItem[]) => void;
   refreshFeed: () => void;
-  setIsEditing: (isEditing: boolean) => void;
-  setQueue: (queue: any[]) => void;
 }
 
 export const FeedDefaultValues: FeedContextState = {
   feed: [],
   setFeed: (feed: FeedItem[]): void => {},
-  refreshFeed: (): void => {},
-  setIsEditing: (isEditing: boolean): void => {},
-  setQueue: (queue: any[]): void => {}
+  refreshFeed: (): void => {}
 };
 
 const FeedContext = createContext<FeedContextState>(FeedDefaultValues);
 
 export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
-  const [feed, setFeed] = useState<FeedItem[]>(FeedDefaultValues.feed);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [queue, setQueue] = useState([]);
+  console.log('feed context provider re-rendering');
 
+  const [feed, setFeed] = useState<FeedItem[]>(FeedDefaultValues.feed);
   const { socket } = useSocketContext();
   const { user } = useUserContext();
-
-  useEffect(() => {
-    if (!isEditing && queue.length) {
-      // setFeed([...queue, ...feed]);
-      console.log('update feed');
-    }
-  }, [isEditing]);
 
   const updateFeed = (task) => {
     const mappedFeed = feed.map((feedItem) => {
@@ -48,11 +35,10 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
     setFeed(mappedFeed);
   };
 
-  socket.on(
-    'addToFeed',
-    (feedItem) => setFeed([feedItem, ...feed].slice(0, 10))
-    // setQueue(feedItem)
-  );
+  socket.on('addToFeed', (feedItem) => {
+    setFeed([feedItem, ...feed].slice(0, 10));
+  });
+
   socket.on('removeFromFeed', (taskId) =>
     setFeed(feed.filter((feedItem) => feedItem.id !== taskId))
   );
@@ -83,9 +69,7 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
   }, [user]);
 
   return (
-    <FeedContext.Provider
-      value={{ feed, setFeed, refreshFeed, setIsEditing, setQueue }}
-    >
+    <FeedContext.Provider value={{ feed, setFeed, refreshFeed }}>
       {children}
     </FeedContext.Provider>
   );

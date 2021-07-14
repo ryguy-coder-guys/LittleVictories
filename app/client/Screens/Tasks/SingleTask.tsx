@@ -25,7 +25,7 @@ import { textStyles } from '../../Stylesheets/Stylesheet';
 const SingleTask = ({ item }) => {
   const { user, setUser, setLevel, setNumCompletedTasks } = useUserContext();
   const { socket } = useSocketContext();
-  const { feed, setFeed, setQueue } = useFeedContext();
+  const { feed, setFeed } = useFeedContext();
   const [finished, setFinished] = useState(item.is_complete);
   const [taskPublic, setTaskPublic] = useState(item.is_public);
 
@@ -52,7 +52,6 @@ const SingleTask = ({ item }) => {
       if (updateSuccessful) {
         setTaskPublic(true);
         setFeed([updateSuccessful, ...feed]);
-        // setQueue((queue) => [updateSuccessful, ...queue]);
         socket.emit('addToFeed', item);
       }
     } catch (error) {

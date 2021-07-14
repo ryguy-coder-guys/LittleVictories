@@ -23,11 +23,11 @@ const Friends = (): ReactElement => {
       .catch((err) => console.warn(err, 'l'));
   };
 
-  useEffect(() => {
-    if (user.id.length) {
-      getAllUsers();
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user.id.length) {
+  //     getAllUsers();
+  //   }
+  // }, [user]);
 
   // const handleSearch = (text) => {
   //   const filteredData = filter(fullData, (user) => {

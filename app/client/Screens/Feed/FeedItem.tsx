@@ -25,8 +25,8 @@ const FeedItem = ({
   likes,
   comments
 }) => {
-  const { user } = useUserContext();
-  const { feed, setFeed, setIsEditing } = useFeedContext();
+  const { user` } = useUserContext();
+  const { feed, setFeed } = useFeedContext();
   const { socket } = useSocketContext();
 
   const [showCommentInput, setShowCommentInput] = React.useState(false);
@@ -211,7 +211,6 @@ const FeedItem = ({
             title='Add Comment'
             onPress={() => {
               setShowCommentInput(!showCommentInput);
-              setIsEditing(true);
             }}
           />
         )}
@@ -235,7 +234,6 @@ const FeedItem = ({
               onPress={() => {
                 setCommentText('');
                 setShowCommentInput(false);
-                setIsEditing(false);
               }}
             />
             <Button
@@ -243,7 +241,6 @@ const FeedItem = ({
               onPress={() => {
                 if (commentText.length) {
                   addComment();
-                  setIsEditing(false);
                 }
               }}
             />
