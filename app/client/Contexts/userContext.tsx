@@ -3,6 +3,8 @@ import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { User, UserStat } from '../Interfaces/user';
 import { useSocketContext } from '../Contexts/socketContext';
 import { showMessage } from 'react-native-flash-message';
+import axios from 'axios';
+import { badges } from '../Screens/Home/Achievements';
 
 interface UserContextState {
   user: User;
@@ -16,10 +18,6 @@ interface UserContextState {
   setNumHabits: (numHabits: number) => void;
   setNumCompletedTasks: (numCompletedTasks: number) => void;
   setNumFollowees: (numFollowees: number) => void;
-  setLevelBadges: (obj: object) => void;
-  setNumHabitsBadges: (obj: object) => void;
-  setNumCompletedTasksBadges: (obj: object) => void;
-  setNumFolloweesBadges: (obj: object) => void;
 }
 
 export const UserDefaultValues: UserContextState = {
@@ -33,7 +31,9 @@ export const UserDefaultValues: UserContextState = {
     entries: [],
     readable_font: false,
     userStats: [],
-    achievements: []
+    achievements: [],
+    numCompletedTasks: 0,
+    numFollowees: 0
   },
   setUser: (user: User): void => {},
   userStat: null,
@@ -44,11 +44,7 @@ export const UserDefaultValues: UserContextState = {
   setLevel: (level: number): void => {},
   setNumHabits: (numHabits: number): void => {},
   setNumCompletedTasks: (numCompletedTasks: number): void => {},
-  setNumFollowees: (numFollowees: number): void => {},
-  setLevelBadges: (obj: object): void => {},
-  setNumHabitsBadges: (obj: object): void => {},
-  setNumCompletedTasksBadges: (obj: object): void => {},
-  setNumFolloweesBadges: (obj: object): void => {}
+  setNumFollowees: (numFollowees: number): void => {}
 };
 
 const UserContext = createContext<UserContextState>(UserDefaultValues);
@@ -74,13 +70,18 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   });
 
   const [level, setLevel] = useState(0);
-  const [levelBadges, setLevelBadges] = useState({});
   const [numHabits, setNumHabits] = useState(0);
-  const [numHabitsBadges, setNumHabitsBadges] = useState({});
   const [numCompletedTasks, setNumCompletedTasks] = useState(0);
-  const [numCompletedTasksBadges, setNumCompletedTasksBadges] = useState({});
   const [numFollowees, setNumFollowees] = useState(0);
-  const [numFolloweesBadges, setNumFolloweesBadges] = useState({});
+
+  useEffect(() => {
+    if (user.id.length) {
+      setLevel(user.level);
+      setNumHabits(user.habits.length);
+      setNumCompletedTasks(user.numCompletedTasks);
+      setNumFollowees(user.numFollowees);
+    }
+  }, [user]);
 
   const displayMessage = (props = {}) => {
     const message: any = {
@@ -107,118 +108,67 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
     showMessage(message);
   };
 
+  const addAchievement = async (
+    achievement_type: string,
+    msg: string
+  ): Promise<void> => {
+    const { data: newAchievement } = await axios.post(
+      'http://localhost:3000/api/achievements',
+      {
+        user_id: user.id,
+        achievement_type
+      }
+    );
+    setUser({ ...user, achievements: [...user.achievements, newAchievement] });
+    showModal(achievement_type, msg);
+  };
+
+  const showModal = (achievement_type: string, text: string) => {
+    displayMessage({
+      description: text,
+      textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
+      renderCustomContent: () => (
+        <TouchableOpacity>
+          <Image
+            source={badges[achievement_type].source}
+            style={styles.image}
+          />
+        </TouchableOpacity>
+      )
+    });
+  };
+
+  const hasAchievement = (achievement_type: string): boolean => {
+    return !!user.achievements.find(
+      (achievement) => achievement.achievement_type === achievement_type
+    );
+  };
+
   useEffect(() => {
-    if (level === 1 && !levelBadges[1]) {
-      setLevelBadges({ ...levelBadges, 1: true });
-      displayMessage({
-        description: 'Level 1 Reached',
-        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
-        renderCustomContent: () => (
-          <TouchableOpacity>
-            <Image
-              source={require('../../assets/images/ribbon_red1.png')}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        )
-      });
-    } else if (level === 5 && !levelBadges[5]) {
-      displayMessage({
-        description: 'Level 5 Reached',
-        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
-        renderCustomContent: () => (
-          <TouchableOpacity>
-            <Image
-              source={require('../../assets/images/ribbon_green.png')}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        )
-      });
-    } else if (level === 10 && !levelBadges[10]) {
-      displayMessage({
-        description: 'Level 10 Reached',
-        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
-        renderCustomContent: () => (
-          <TouchableOpacity>
-            <Image
-              source={require('../../assets/images/ribbon_yellow.png')}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        )
-      });
-    }
+    if (level === 1 && !hasAchievement('levelOne'))
+      addAchievement('levelOne', 'Level 1 Reached');
+    else if (level === 5 && !hasAchievement('levelFive'))
+      addAchievement('levelFive', 'Level 5 Reached');
+    else if (level === 10 && !hasAchievement('levelTen'))
+      addAchievement('levelTen', 'Level 10 Reached');
   }, [level]);
 
   useEffect(() => {
-    if (numHabits === 5 && !numHabitsBadges[5]) {
-      setNumHabitsBadges({ ...numHabitsBadges, 5: true });
-      displayMessage({
-        description: '5 Habits Added',
-        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
-        renderCustomContent: () => (
-          <TouchableOpacity>
-            <Image
-              source={require('../../assets/images/trophy_pink.png')}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        )
-      });
-    }
-  }, [numHabits]);
-
-  useEffect(() => {
-    if (numCompletedTasks === 5 && !numCompletedTasksBadges[5]) {
-      setNumCompletedTasksBadges({ ...numCompletedTasksBadges, 5: true });
-      displayMessage({
-        description: '5 Completed Tasks',
-        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
-        renderCustomContent: () => (
-          <TouchableOpacity>
-            <Image
-              source={require('../../assets/images/trophy_blue.png')}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        )
-      });
-    }
+    if (numCompletedTasks === 5 && !hasAchievement('fiveTasks'))
+      addAchievement('fiveTasks', '5 Completed Tasks');
   }, [numCompletedTasks]);
 
   useEffect(() => {
-    if (numFollowees === 3 && !numFolloweesBadges[3]) {
-      setNumFolloweesBadges({ ...numCompletedTasksBadges, 3: true });
-      displayMessage({
-        description: 'Added 3 Friends',
-        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
-        renderCustomContent: () => (
-          <TouchableOpacity>
-            <Image
-              source={require('../../assets/images/star_red.png')}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        )
-      });
-    }
-    if (numFollowees === 5 && !numFolloweesBadges[5]) {
-      setNumFolloweesBadges({ ...numCompletedTasksBadges, 5: true });
-      displayMessage({
-        description: 'Added 5 Friends',
-        textStyle: { textAlign: 'center', marginTop: 10, fontSize: 18 },
-        renderCustomContent: () => (
-          <TouchableOpacity>
-            <Image
-              source={require('../../assets/images/star_green.png')}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        )
-      });
-    }
-  }, [numFollowees]);
+    if (numHabits === 5 && !hasAchievement('fiveHabits'))
+      addAchievement('fiveHabits', '5 Habits Added');
+  }, [numHabits]);
+
+  useEffect(() => {
+    if (numFollowees === 3 && !hasAchievement('threeFollowees'))
+      addAchievement('threeFollowees', 'Added 3 Friends');
+    else if (numFollowees === 5 && !hasAchievement('fiveFollowees'))
+      addAchievement('fiveFollowees', 'Added 5 Friends');
+  });
 
   return (
     <UserContext.Provider
@@ -233,11 +183,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
         setLevel,
         setNumHabits,
         setNumCompletedTasks,
-        setNumFollowees,
-        setLevelBadges,
-        setNumHabitsBadges,
-        setNumCompletedTasksBadges,
-        setNumFolloweesBadges
+        setNumFollowees
       }}
     >
       {children}

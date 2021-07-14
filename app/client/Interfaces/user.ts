@@ -47,6 +47,8 @@ export interface User {
   readable_font: boolean;
   userStats: UserStat[];
   achievements: AchievementType[];
+  numCompletedTasks: number;
+  numFollowees: number;
 }
 
 export type MoodType = 'great' | 'good' | 'ok' | 'bad' | 'terrible';

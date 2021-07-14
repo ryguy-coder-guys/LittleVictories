@@ -26,7 +26,7 @@ const FeedItem = ({
   comments
 }) => {
   const { user } = useUserContext();
-  const { feed, setFeed } = useFeedContext();
+  const { feed, setFeed, setIsEditing } = useFeedContext();
   const { socket } = useSocketContext();
 
   const [showCommentInput, setShowCommentInput] = React.useState(false);
@@ -209,7 +209,10 @@ const FeedItem = ({
         {username !== user.username && (
           <Button
             title='Add Comment'
-            onPress={() => setShowCommentInput(!showCommentInput)}
+            onPress={() => {
+              setShowCommentInput(!showCommentInput);
+              setIsEditing(true);
+            }}
           />
         )}
       </View>
@@ -232,6 +235,7 @@ const FeedItem = ({
               onPress={() => {
                 setCommentText('');
                 setShowCommentInput(false);
+                setIsEditing(false);
               }}
             />
             <Button
@@ -239,6 +243,7 @@ const FeedItem = ({
               onPress={() => {
                 if (commentText.length) {
                   addComment();
+                  setIsEditing(false);
                 }
               }}
             />

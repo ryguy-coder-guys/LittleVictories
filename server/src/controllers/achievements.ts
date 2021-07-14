@@ -31,7 +31,13 @@ export const addAchievement: RequestHandler = async (
     if (!newAchievement) {
       throw new Error("couldn't add achievement to db");
     }
-    res.status(201).send(newAchievement);
+    res.status(201).send({
+      id: newAchievement.getDataValue('id'),
+      user_id: newAchievement.getDataValue('user_id'),
+      achievement_type: newAchievement.getDataValue('achievement_type'),
+      createdAt: newAchievement.getDataValue('createdAt'),
+      updatedAt: newAchievement.getDataValue('updatedAt')
+    });
   } catch (error) {
     console.log(error);
     res.sendStatus(500);

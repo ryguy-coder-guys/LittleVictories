@@ -114,6 +114,13 @@ export const loginUser: RequestHandler = async (req, res): Promise<void> => {
         order: [['createdAt', 'ASC']]
       });
 
+      const completedTasks = await Task.findAll({
+        where: { user_id: user.id, is_complete: true }
+      });
+
+      const followees = await Friend.findAll({ where: { user_id: user.id } });
+      const numFollowees = followees.length;
+
       const formattedUser = {
         ...mappedUser,
         tasks: mappedTasks,
@@ -121,7 +128,9 @@ export const loginUser: RequestHandler = async (req, res): Promise<void> => {
         entries: entries ? entries : [],
         habits: habits ? habits : [],
         userStats: userStats ? userStats : [],
-        achievements
+        achievements,
+        numCompletedTasks: completedTasks.length,
+        numFollowees
       };
 
       res.send(formattedUser);

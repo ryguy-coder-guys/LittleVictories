@@ -21,11 +21,11 @@ const Settings = ({ navigation }): ReactElement => {
     setLevel,
     setNumHabits,
     setNumCompletedTasks,
-    setNumFollowees,
-    setLevelBadges,
-    setNumCompletedTasksBadges,
-    setNumFolloweesBadges,
-    setNumHabitsBadges
+    setNumFollowees
+    // setLevelBadges,
+    // setNumCompletedTasksBadges,
+    // setNumFolloweesBadges,
+    // setNumHabitsBadges
   } = useUserContext();
   const { getQuote } = useQuoteContext();
   const { setJournal, setJournals } = useJournalContext();
@@ -59,10 +59,10 @@ const Settings = ({ navigation }): ReactElement => {
     setNumFollowees(0);
     setNumHabits(0);
     setNumCompletedTasks(0);
-    setLevelBadges({});
-    setNumCompletedTasksBadges({});
-    setNumFolloweesBadges({});
-    setNumHabitsBadges({});
+    // setLevelBadges({});
+    // setNumCompletedTasksBadges({});
+    // setNumFolloweesBadges({});
+    // setNumHabitsBadges({});
     navigation.navigate('login');
   };
 
