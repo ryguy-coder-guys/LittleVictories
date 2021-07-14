@@ -8,7 +8,7 @@ import { Like } from '../database/models/like';
 import { Comment } from '../database/models/comment';
 import { TaskReqParams } from '../interfaces/tasks';
 
-const ptsToLvlUp = 250;
+const ptsToLvlUp = 100;
 
 export const getTasks: RequestHandler = async (req, res): Promise<void> => {
   const tasks = await Task.findAll();

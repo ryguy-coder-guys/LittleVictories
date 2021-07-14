@@ -24,7 +24,7 @@ const ProgressBar = () => {
       <Progress.Bar
         animated={true}
         indeterminateAnimationDuration={500}
-        progress={points / 250}
+        progress={points / 100}
         width={210}
         height={17}
         borderRadius={5}
@@ -32,7 +32,7 @@ const ProgressBar = () => {
       />
       <Text style={user.readable_font ? styles.pointsLarger : styles.points}>
         {' '}
-        {user.points}/250
+        {user.points}/100
       </Text>
     </View>
   );
