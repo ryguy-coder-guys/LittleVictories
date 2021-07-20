@@ -73,9 +73,14 @@ const SingleTask = ({ item }) => {
         return task;
       });
       setUser({ ...user, tasks: mappedTasks, points, level });
-      setNumCompletedTasks(numCompletedTasks);
       setLevel(level);
-      setNumCompletedTasks(numCompletedTasks);
+      if (level === 1 || level === 5 || level === 10) {
+        setTimeout(() => {
+          setNumCompletedTasks(numCompletedTasks);
+        }, 3000);
+      } else {
+        setNumCompletedTasks(numCompletedTasks);
+      }
     } catch (error) {
       console.warn(error);
     }

@@ -25,7 +25,7 @@ const FeedItem = ({
   likes,
   comments
 }) => {
-  const { user` } = useUserContext();
+  const { user } = useUserContext();
   const { feed, setFeed } = useFeedContext();
   const { socket } = useSocketContext();
 

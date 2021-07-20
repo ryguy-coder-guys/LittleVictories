@@ -11,7 +11,6 @@ const SingleHabit = ({ item }) => {
 
   const markHabitComplete = async () => {
     try {
-      const currentLevel = user.level;
       const {
         data: { points, level }
       } = await axios.patch(
@@ -23,9 +22,7 @@ const SingleHabit = ({ item }) => {
         }
         return habit;
       });
-      if (currentLevel !== level) {
-        setLevel(level);
-      }
+      setLevel(level);
       setUser({ ...user, habits: mappedHabits, points, level });
     } catch (err) {
       console.warn('client-side complete habit error: ', err);
