@@ -8,7 +8,7 @@ import FriendListView from './FriendListView';
 const Friends = (): ReactElement => {
   const [users, setUsers] = useState([]);
   const [query, setQuery] = useState('');
-  const { user } = useUserContext();
+  const { user, isLoggedIn } = useUserContext();
 
   const getAllUsers = () => {
     axios
@@ -23,11 +23,11 @@ const Friends = (): ReactElement => {
       .catch((err) => console.warn(err, 'l'));
   };
 
-  // useEffect(() => {
-  //   if (user.id.length) {
-  //     getAllUsers();
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (isLoggedIn) {
+      getAllUsers();
+    }
+  }, [isLoggedIn]);
 
   // const handleSearch = (text) => {
   //   const filteredData = filter(fullData, (user) => {

@@ -18,6 +18,8 @@ interface UserContextState {
   setNumHabits: (numHabits: number) => void;
   setNumCompletedTasks: (numCompletedTasks: number) => void;
   setNumFollowees: (numFollowees: number) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
 
 export const UserDefaultValues: UserContextState = {
@@ -44,12 +46,18 @@ export const UserDefaultValues: UserContextState = {
   setLevel: (level: number): void => {},
   setNumHabits: (numHabits: number): void => {},
   setNumCompletedTasks: (numCompletedTasks: number): void => {},
-  setNumFollowees: (numFollowees: number): void => {}
+  setNumFollowees: (numFollowees: number): void => {},
+  isLoggedIn: false,
+  setIsLoggedIn: (isLoggedIn: boolean): void => {}
 };
 
 const UserContext = createContext<UserContextState>(UserDefaultValues);
 
 export const UserContextProvider: React.FunctionComponent = ({ children }) => {
+  console.log('user context re-rendering');
+
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
   const [user, setUser] = useState<User>(UserDefaultValues.user);
   const [userStat, setUserStat] = useState<UserStat>(
     UserDefaultValues.userStat
@@ -75,13 +83,13 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   const [numFollowees, setNumFollowees] = useState(0);
 
   useEffect(() => {
-    if (user.id.length) {
+    if (isLoggedIn) {
       setLevel(user.level);
       setNumHabits(user.habits.length);
       setNumCompletedTasks(user.numCompletedTasks);
       setNumFollowees(user.numFollowees);
     }
-  }, [user]);
+  }, [isLoggedIn]);
 
   const displayMessage = (props = {}) => {
     const message: any = {
@@ -183,7 +191,9 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
         setLevel,
         setNumHabits,
         setNumCompletedTasks,
-        setNumFollowees
+        setNumFollowees,
+        isLoggedIn,
+        setIsLoggedIn
       }}
     >
       {children}

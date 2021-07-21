@@ -26,11 +26,22 @@ const FeedItem = ({
   comments
 }) => {
   const { user } = useUserContext();
-  const { feed, setFeed } = useFeedContext();
+  const {
+    feed,
+    setFeed,
+    commentingId,
+    setCommentingId,
+    commentingText: currentCommentText,
+    setCommentingText
+  } = useFeedContext();
   const { socket } = useSocketContext();
 
-  const [showCommentInput, setShowCommentInput] = React.useState(false);
-  const [commentText, setCommentText] = React.useState('');
+  const [showCommentInput, setShowCommentInput] = React.useState(
+    username === user.id ? false : commentingId === id
+  );
+  const [commentText, setCommentText] = React.useState(
+    username === user.id ? '' : commentingId === id ? currentCommentText : ''
+  );
 
   const addLike = async (taskId: number): Promise<void> => {
     const { data: newLike } = await axios.post(
@@ -88,6 +99,8 @@ const FeedItem = ({
         return feedItem;
       });
       setFeed(mappedFeed);
+      setCommentingId(0);
+      setCommentingText('');
       socket.emit('addComment', newComment);
     }
   };
@@ -210,7 +223,15 @@ const FeedItem = ({
           <Button
             title='Add Comment'
             onPress={() => {
-              setShowCommentInput(!showCommentInput);
+              if (showCommentInput) {
+                setCommentingId(0);
+                setCommentingText('');
+                setShowCommentInput(false);
+              } else {
+                setCommentingId(id);
+                setCommentingText('');
+                setShowCommentInput(true);
+              }
             }}
           />
         )}
@@ -223,8 +244,12 @@ const FeedItem = ({
                 ? [styles.textInput, { fontSize: 20 }]
                 : styles.textInput
             }
-            onChangeText={setCommentText}
+            onChangeText={(text) => {
+              setCommentText(text);
+              setCommentingText(text);
+            }}
             value={commentText}
+            autoFocus={commentingId === id}
           />
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
@@ -233,6 +258,8 @@ const FeedItem = ({
               title='Cancel'
               onPress={() => {
                 setCommentText('');
+                setCommentingId(0);
+                setCommentingText('');
                 setShowCommentInput(false);
               }}
             />

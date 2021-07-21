@@ -86,6 +86,8 @@ const updateFeed = async (
     for (const currentSocket of sockets) {
       const currentUserId = await getUserId(currentSocket[0]);
       if (currentUserId && friends.includes(currentUserId)) {
+        console.log('sending message');
+        console.log(currentSocket[0]);
         io.to(currentSocket[0]).emit(event, foundTask);
       }
     }
@@ -94,20 +96,30 @@ const updateFeed = async (
 
 io.on('connection', (socket) => {
   socket.on('addToFeed', (task) => {
-    updateFeed(task.id, socket.id, 'addToFeed');
+    try {
+      updateFeed(task.id, socket.id, 'addToFeed');
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   socket.on('removeFromFeed', async (taskId) => {
-    const userId = await getUserId(socket.id);
-    if (userId) {
-      const friends = await fetchFriends(userId);
-      const sockets = io.sockets.sockets;
-      for (const currentSocket of sockets) {
-        const currentUserId = await getUserId(currentSocket[0]);
-        if (currentUserId && friends.includes(currentUserId)) {
-          io.to(currentSocket[0]).emit('removeFromFeed', taskId);
+    try {
+      const userId = await getUserId(socket.id);
+      if (userId) {
+        const friends = await fetchFriends(userId);
+        const sockets = io.sockets.sockets;
+        for (const currentSocket of sockets) {
+          const currentUserId = await getUserId(currentSocket[0]);
+          if (currentUserId && friends.includes(currentUserId)) {
+            console.log('sending message');
+            console.log(currentSocket[0]);
+            io.to(currentSocket[0]).emit('removeFromFeed', taskId);
+          }
         }
       }
+    } catch (error) {
+      console.log(error);
     }
   });
 

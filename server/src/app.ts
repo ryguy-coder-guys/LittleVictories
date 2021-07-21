@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { ErrorRequestHandler } from 'express';
 import taskRouter from './routers/tasks';
 import listRouter from './routers/lists';
 import authRouter from './routers/auth';
@@ -29,5 +29,10 @@ app.use('/api/comments', commentRouter);
 app.use('/api/font', fontRouter);
 app.use('/api/friends', friendRouter);
 app.use('/api/achievements', achievementRouter);
+
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.send(err);
+});
 
 export default app;
