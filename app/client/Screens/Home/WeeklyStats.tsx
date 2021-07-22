@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import {
@@ -13,11 +13,16 @@ import { format, getDay, isLeapYear } from 'date-fns';
 import { G, Image } from 'react-native-svg';
 import { UserStat } from '../../Interfaces/user';
 
+import angryFace from '../../../assets/images/emoticon-angry-outline.png';
+import excitedFace from '../../../assets/images/emoticon-excited-outline.png';
+import happyFace from '../../../assets/images/emoticon-happy-outline.png';
+import neutralFace from '../../../assets/images/emoticon-neutral-outline.png';
+import sadFace from '../../../assets/images/emoticon-sad-outline.png';
+
 const getDatesInLastWeek = (): string[] => {
   let date: string = format(new Date(), 'MM-dd-yyyy');
   const datesInLastWeek: string[] = [date];
-  let count = 6;
-  while (count > 0) {
+  for (let i = 6; i > 0; i--) {
     let pastMonthCount = 0;
     const dateArr: string[] = date.split('-');
     if (parseInt(dateArr[1]) > 1) {
@@ -26,11 +31,11 @@ const getDatesInLastWeek = (): string[] => {
         dateArr[1] = `0${dateArr[1]}`;
       }
     } else {
-      let monthLengths: number[];
+      const monthLengths: number[] = [
+        31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+      ];
       if (isLeapYear(new Date())) {
-        monthLengths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-      } else {
-        monthLengths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        monthLengths[1] = 29;
       }
       const lastMonth: number = parseInt(dateArr[0]) - 1;
       const daysLastMonth: number = monthLengths[lastMonth];
@@ -44,23 +49,34 @@ const getDatesInLastWeek = (): string[] => {
     }
     date = dateArr.join('-');
     datesInLastWeek.unshift(date);
-    count--;
   }
   return datesInLastWeek;
 };
 
+interface Svg {
+  fill: string;
+}
+
 interface MoodData {
   key: number;
   amount: number;
-  mood: any;
-  svg: any;
+  mood: string;
+  svg: Svg;
 }
 
-const MoodChart = (): PieChart => {
+interface MoodCount {
+  terrible?: number;
+  bad?: number;
+  ok?: number;
+  good?: number;
+  great?: number;
+}
+
+const MoodChart = (): ReactElement => {
   const { user, userStat } = useUserContext();
 
-  const getMoods = (): any => {
-    const moodCount = {};
+  const getMoods = (): MoodCount => {
+    const moodCount: MoodCount = {};
     // if user has just submitted a DR today, this pulls that mood
     if (userStat?.mood) {
       moodCount[userStat.mood] = 1;
@@ -81,7 +97,7 @@ const MoodChart = (): PieChart => {
     return moodCount;
   };
 
-  const moodCount: any = getMoods();
+  const moodCount: MoodCount = getMoods();
   const svgFills: string[] = [
     '#1D426D',
     '#0980AF',
@@ -90,25 +106,32 @@ const MoodChart = (): PieChart => {
     '#FA9E91'
   ];
 
-  const data: MoodData[] = Object.keys(moodCount).map((mood, index) => {
-    return {
-      key: index + 1,
-      amount: moodCount[mood],
-      mood,
-      svg: { fill: svgFills[index] }
-    };
-  });
+  const data: MoodData[] = Object.keys(moodCount).map<MoodData>(
+    (mood, index) => {
+      return {
+        key: index + 1,
+        amount: moodCount[mood] as number,
+        mood,
+        svg: { fill: svgFills[index] }
+      };
+    }
+  );
 
-  const Labels: any = ({ slices }) => {
+  const Labels = ({ slices }) => {
     const Images = {
-      terrible: require('../../../assets/images/emoticon-angry-outline.png'),
-      great: require('../../../assets/images/emoticon-excited-outline.png'),
-      good: require('../../../assets/images/emoticon-happy-outline.png'),
-      ok: require('../../../assets/images/emoticon-neutral-outline.png'),
-      bad: require('../../../assets/images/emoticon-sad-outline.png')
+      terrible: angryFace,
+      great: excitedFace,
+      good: happyFace,
+      ok: neutralFace,
+      bad: sadFace
     };
 
-    return slices.map((slice, index) => {
+    interface Slice {
+      labelCentroid: number[];
+      data: MoodData[];
+    }
+
+    return slices.map((slice: Slice, index: number) => {
       const { labelCentroid, data } = slice;
       return (
         <G key={index} x={labelCentroid[0]} y={labelCentroid[1]}>
@@ -138,7 +161,7 @@ const MoodChart = (): PieChart => {
   );
 };
 
-const SleepHoursChart = (): BarChart => {
+const SleepHoursChart = (): ReactElement => {
   const { user, userStat } = useUserContext();
   const weekDays = ['Su', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
   const getDays = (): string[] => {
@@ -181,7 +204,7 @@ const SleepHoursChart = (): BarChart => {
   };
   const data = getData();
 
-  const getTrueCount = (condition) => {
+  const getTrueCount = (condition: string) => {
     let trueCount: number;
     const datesInLastWeek: string[] = getDatesInLastWeek();
     if (userStat) {
@@ -310,7 +333,7 @@ const SleepHoursChart = (): BarChart => {
   );
 };
 
-const WeeklyStats = () => {
+const WeeklyStats = (): ReactElement => {
   const { user } = useUserContext();
   return (
     <View style={styles.view}>
