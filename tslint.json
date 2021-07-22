@@ -29,6 +29,7 @@
     "jsx-alignment": true,
     "jsx-no-bind": true,
     "jsx-no-lambda": true,
-    "max-classes-per-file": [false]
+    "max-classes-per-file": [false],
+    "no-unsafe-assignment": false
   }
 }

@@ -18,7 +18,9 @@ import UpcomingTasks from './UpcomingTasks';
 const Home = (): ReactElement => {
   const { user, userStat } = useUserContext();
   const bgImage = require('../../../assets/images/blue-gradient.png');
-  const [hasStats, setHasStats] = useState(userStat || user.userStats.length);
+  const [hasStats, setHasStats] = useState<boolean | number>(
+    userStat || user.userStats.length
+  );
 
   if (!user) {
     return <Loading />;

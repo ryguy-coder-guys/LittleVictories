@@ -3,7 +3,7 @@ import { RequestHandler } from 'express';
 import { AddHabitReqBody } from '../interfaces/habits';
 import { User } from '../database/models/user';
 
-const ptsToLvlUp = 250;
+const ptsToLvlUp = 100;
 
 export const addHabit: RequestHandler = async (req, res) => {
   const {
@@ -35,7 +35,7 @@ export const removeHabit: RequestHandler<{ id: string }> = async (req, res) => {
     await Habit.destroy({ where: { id } });
     res.send(true);
   } catch (err) {
-    console.log('error removing habit: ', err)
+    console.log('error removing habit: ', err);
   }
 };
 

@@ -8,7 +8,7 @@ import { Like } from '../database/models/like';
 import { Comment } from '../database/models/comment';
 import { TaskReqParams } from '../interfaces/tasks';
 
-const ptsToLvlUp = 250;
+const ptsToLvlUp = 100;
 
 export const getTasks: RequestHandler = async (req, res): Promise<void> => {
   const tasks = await Task.findAll();
@@ -229,7 +229,7 @@ export const getFeedItems: RequestHandler<TaskReqParams> = async (req, res) => {
           where: { id: feedItem.getDataValue('user_id') }
         });
         const foundUsername = foundUser?.getDataValue('username');
-        let likes = await Like.findAll({
+        const likes = await Like.findAll({
           where: { task_id: feedItem.getDataValue('id') }
         });
         const comments = await Comment.findAll({

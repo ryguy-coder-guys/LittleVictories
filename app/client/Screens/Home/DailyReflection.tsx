@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { useState, ReactElement } from 'react';
 import {
   Image,
@@ -13,6 +14,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { Button, Divider } from 'react-native-elements';
 import { showMessage } from 'react-native-flash-message';
+import { UserStat } from '../../Interfaces/user';
 
 const DailyReflection = ({ setHasStats }): ReactElement => {
   const { user, userStat, setUserStat } = useUserContext();
@@ -22,12 +24,15 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [mood, setMood] = useState('');
   const [notes, setNotes] = useState('');
-  const [activeIcon, setActiveIcon] = useState(null);
+  const [activeIcon, setActiveIcon] = useState<string | null>(null);
 
-  const submit = async () => {
+  const submit = async (): Promise<void> => {
     try {
-      const { data } = await axios.post(
-        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/stats',
+      interface ServerResponse {
+        data: UserStat;
+      }
+      const response: ServerResponse = await axios.post(
+        'http://localhost:3000/api/stats',
         {
           user_id: user.id,
           sleep_hours: parseInt(sleepHours),
@@ -38,6 +43,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
           date: format(new Date(), 'MM-dd-yyyy')
         }
       );
+      const { data } = response;
       setUserStat({
         id: data.id,
         sleep_hours: data.sleep_hours,
@@ -141,7 +147,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
               { marginTop: 15 }
             ]}
           >
-            Today's Data:
+            Today&apos;s Data:
           </Text>
           <Text
             style={[
@@ -194,9 +200,41 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
             >
               Mood:{' '}
             </Text>
-            {userStat?.mood
-              ? getIcon('active', userStat?.mood)
-              : getIcon('active', mood)}
+            <TouchableOpacity>
+              {userStat?.mood === 'great' ? (
+                <Image
+                  source={require('../../../assets/images/emoticon-excited-outline.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              ) : null}
+              {userStat?.mood === 'good' ? (
+                <Image
+                  source={require('../../../assets/images/emoticon-happy-outline.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              ) : null}
+              {userStat?.mood === 'ok' ? (
+                <Image
+                  source={require('../../../assets/images/emoticon-neutral-outline.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              ) : null}
+              {userStat?.mood === 'bad' ? (
+                <Image
+                  source={require('../../../assets/images/emoticon-sad-outline.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              ) : null}
+              {userStat?.mood === 'terrible' ? (
+                <Image
+                  source={require('../../../assets/images/emoticon-angry-outline.png')}
+                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
+                />
+              ) : null}
+            </TouchableOpacity>
+            {/* // {userStat?.mood
+            //   ? getIcon('active', userStat?.mood)
+            //   : getIcon('active', mood)} */}
           </View>
         </View>
       ) : (
@@ -276,7 +314,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
               { marginTop: 10 }
             ]}
           >
-            What's your mood?
+            What&apos;s your mood?
           </Text>
           <View style={{ flexDirection: 'row', marginTop: 10 }}>
             <TouchableOpacity onPress={() => handleFace('terrible')}>
