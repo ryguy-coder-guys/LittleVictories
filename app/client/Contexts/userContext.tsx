@@ -4,7 +4,7 @@ import { User, UserStat } from '../Interfaces/user';
 import { useSocketContext } from '../Contexts/socketContext';
 import { showMessage } from 'react-native-flash-message';
 import axios from 'axios';
-import { badges } from '../Screens/Home/Achievements';
+import { badges } from '../badges';
 
 interface UserContextState {
   user: User;
@@ -54,8 +54,6 @@ export const UserDefaultValues: UserContextState = {
 const UserContext = createContext<UserContextState>(UserDefaultValues);
 
 export const UserContextProvider: React.FunctionComponent = ({ children }) => {
-  console.log('user context re-rendering');
-
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const [user, setUser] = useState<User>(UserDefaultValues.user);
@@ -64,6 +62,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
   );
 
   const { socket } = useSocketContext();
+  socket.removeAllListeners();
 
   socket.on('disconnect', () => {
     if (user.id.length) {
@@ -127,6 +126,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
         achievement_type
       }
     );
+    socket.emit('achievementAdded', newAchievement);
     setUser({ ...user, achievements: [...user.achievements, newAchievement] });
     showModal(achievement_type, msg);
   };

@@ -7,6 +7,9 @@ import { User } from '../database/models/user';
 import { Like } from '../database/models/like';
 import { Comment } from '../database/models/comment';
 import { TaskReqParams } from '../interfaces/tasks';
+import { AchievementLike } from './../database/models/achievementLike';
+import { AchievementComment } from './../database/models/achievementComment';
+import { Achievement } from './../database/models/achievement';
 
 const ptsToLvlUp = 100;
 
@@ -128,7 +131,7 @@ export const markTaskAsIncomplete: RequestHandler<TaskReqParams> = async (
     await Like.destroy({ where: { task_id: id } });
     await Comment.destroy({ where: { task_id: id } });
     await Task.update(
-      { is_complete: false, is_public: false },
+      { is_complete: false, is_public: false, completed_at: null },
       { where: { id } }
     );
     const task = await Task.findOne({ where: { id } });
@@ -256,7 +259,61 @@ export const getFeedItems: RequestHandler<TaskReqParams> = async (req, res) => {
         };
       })
     );
-    res.send(mappedFeed);
+    const achievements = await Achievement.findAll({
+      where: {
+        user_id: { [sequelize.Op.in]: mappedFriends }
+      },
+      order: [['createdAt', 'DESC']],
+      limit: 10
+    });
+    const mappedAchievements = await Promise.all(
+      achievements.map(async (achievement) => {
+        const foundUser = await User.findOne({
+          where: { id: achievement.getDataValue('user_id') }
+        });
+        if (foundUser) {
+          const foundUsername = foundUser.getDataValue('username');
+          const achievementLikes = await AchievementLike.findAll({
+            where: { achievement_id: achievement.getDataValue('id') }
+          });
+          const achievementComments = await AchievementComment.findAll({
+            where: { achievement_id: achievement.getDataValue('id') }
+          });
+          const mappedAchievementComments = await Promise.all(
+            achievementComments.map(async (achievementComment) => {
+              const user = await User.findOne({
+                where: { id: achievementComment.user_id }
+              });
+              if (user) {
+                return {
+                  id: achievementComment.getDataValue('id'),
+                  content: achievementComment.getDataValue('content'),
+                  user_id: achievementComment.getDataValue('user_id'),
+                  username: user.username
+                };
+              }
+            })
+          );
+          return {
+            id: achievement.getDataValue('id'),
+            username: foundUsername,
+            description: achievement.getDataValue('achievement_type'),
+            completed_at: achievement.getDataValue('createdAt'),
+            likes: achievementLikes,
+            comments: mappedAchievementComments,
+            isAchievement: true
+          };
+        }
+      })
+    );
+    const combined = [...mappedFeed, ...mappedAchievements]
+      .sort((e1, e2) => {
+        if (e1 && e2) {
+          return e2.completed_at - e1.completed_at;
+        }
+      })
+      .slice(0, 10);
+    res.send(combined);
   } catch (error) {
     res.status(500).send(error);
   }

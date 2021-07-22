@@ -33,8 +33,6 @@ export const FeedDefaultValues: FeedContextState = {
 const FeedContext = createContext<FeedContextState>(FeedDefaultValues);
 
 export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
-  console.log('feed context rerendering');
-
   const [commentingId, setCommentingId] = useState(0);
   const [commentingText, setCommentingText] = useState('');
 
@@ -68,6 +66,42 @@ export const FeedContextProvider: React.FunctionComponent = ({ children }) => {
   socket.on('removeLike', (task) => updateFeed(task));
   socket.on('addComment', (task) => updateFeed(task));
   socket.on('removeComment', (task) => updateFeed(task));
+
+  socket.on(
+    'achievementAdded',
+    ({ username, createdAt, id, achievement_type }) => {
+      setFeed(
+        [
+          {
+            username,
+            description: achievement_type,
+            completed_at: createdAt,
+            id,
+            likes: [],
+            comments: [],
+            isAchievement: true
+          },
+          ...feed
+        ].slice(0, 10)
+      );
+    }
+  );
+
+  socket.on('addAchievementComment', (achievementObj) => {
+    updateFeed(achievementObj);
+  });
+
+  socket.on('removeAchievementComment', (achievementObj) => {
+    updateFeed(achievementObj);
+  });
+
+  socket.on('addAchievementLike', (achievementObj) => {
+    updateFeed(achievementObj);
+  });
+
+  socket.on('removeAchievementLike', (achievementObj) => {
+    updateFeed(achievementObj);
+  });
 
   const fetchFeed = async () => {
     const { data } = await axios.get(
