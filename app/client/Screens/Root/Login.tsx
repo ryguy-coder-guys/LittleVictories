@@ -15,7 +15,7 @@ import axios from 'axios';
 import { containerStyles } from '../../Stylesheets/Stylesheet';
 
 const Login = ({ navigation }) => {
-  const { setUser, setUserStat } = useUserContext();
+  const { setUser, setUserStat, setIsLoggedIn } = useUserContext();
   const { socket } = useSocketContext();
   const bgImage = require('../../../assets/images/blue-gradient.png');
   const logo = require('../../../assets/logo.png');
@@ -44,7 +44,7 @@ const Login = ({ navigation }) => {
     if (loginSelected) {
       // attempt a login for the user
       const { data: userObj } = await axios.post(
-        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/login',
+        'http://localhost:3000/api/auth/login',
         {
           username,
           password: passwordAttempt
@@ -54,6 +54,7 @@ const Login = ({ navigation }) => {
         // if successful navigate to home
         setTimeout(() => {
           setUser(userObj);
+          setIsLoggedIn(true);
           setUserStat(userObj.userStat);
           navigation.navigate('index');
         }, 5000);
@@ -94,7 +95,7 @@ const Login = ({ navigation }) => {
         return;
       }
       const { data: user } = await axios.post(
-        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/register',
+        'http://localhost:3000/api/auth/register',
         {
           username,
           password: passwordAttempt
@@ -105,16 +106,16 @@ const Login = ({ navigation }) => {
       if (user) {
         // once a new user is created, send to login route
         const { data: userObj } = await axios.post(
-          'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/login',
+          'http://localhost:3000/api/auth/login',
           {
             username,
             password: passwordAttempt
           }
         );
         if (userObj) {
-          // if successful navigate to home
           setTimeout(() => {
             setUser(userObj);
+            setIsLoggedIn(true);
             console.log(userObj.userStat);
             setUserStat(userObj.userStat);
             navigation.navigate('index');

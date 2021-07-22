@@ -11,11 +11,10 @@ const SingleHabit = ({ item }) => {
 
   const markHabitComplete = async () => {
     try {
-      const currentLevel = user.level;
       const {
         data: { points, level }
       } = await axios.patch(
-        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/habits/${item.id}/complete`
+        `http://localhost:3000/api/habits/${item.id}/complete`
       );
       const mappedHabits = user.habits.map((habit) => {
         if (habit.id === item.id) {
@@ -23,9 +22,7 @@ const SingleHabit = ({ item }) => {
         }
         return habit;
       });
-      if (currentLevel !== level) {
-        setLevel(level);
-      }
+      setLevel(level);
       setUser({ ...user, habits: mappedHabits, points, level });
     } catch (err) {
       console.warn('client-side complete habit error: ', err);
@@ -37,7 +34,7 @@ const SingleHabit = ({ item }) => {
       const {
         data: { points, level }
       } = await axios.patch(
-        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/habits/${item.id}/incomplete`
+        `http://localhost:3000/api/habits/${item.id}/incomplete`
       );
       const mappedHabits = user.habits.map((habit) => {
         if (habit.id === item.id) {
@@ -53,9 +50,7 @@ const SingleHabit = ({ item }) => {
 
   const removeHabit = async () => {
     try {
-      await axios.delete(
-        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/habits/${item.id}`
-      );
+      await axios.delete(`http://localhost:3000/api/habits/${item.id}`);
       const filteredHabits = user.habits.filter((habit) => {
         return habit.id !== item.id;
       });

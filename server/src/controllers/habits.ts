@@ -3,16 +3,11 @@ import { RequestHandler } from 'express';
 import { AddHabitReqBody } from '../interfaces/habits';
 import { User } from '../database/models/user';
 
-const ptsToLvlUp = 250;
+const ptsToLvlUp = 100;
 
 export const addHabit: RequestHandler = async (req, res) => {
-  const {
-    user_id,
-    description,
-    frequency,
-    days_of_week,
-    calendar_date
-  } = req.body as AddHabitReqBody;
+  const { user_id, description, frequency, days_of_week, calendar_date } =
+    req.body as AddHabitReqBody;
 
   try {
     const newHabit = await Habit.create({
@@ -35,7 +30,7 @@ export const removeHabit: RequestHandler<{ id: string }> = async (req, res) => {
     await Habit.destroy({ where: { id } });
     res.send(true);
   } catch (err) {
-    console.log('error removing habit: ', err)
+    console.log('error removing habit: ', err);
   }
 };
 
@@ -67,12 +62,15 @@ export const markHabitAsComplete: RequestHandler<{ id: string }> = async (
           currentPoints + minutes < ptsToLvlUp
             ? currentPoints + minutes
             : (currentPoints + minutes) % ptsToLvlUp,
-        level: currentPoints + minutes < ptsToLvlUp ? currentLevel : currentLevel + 1,
+        level:
+          currentPoints + minutes < ptsToLvlUp ? currentLevel : currentLevel + 1
       },
       { where: { id: habit.user_id }, returning: true }
     );
     const updatedUser = await User.findOne({ where: { id: habit.user_id } });
-    res.status(200).send({ habit, points: updatedUser?.points, level: updatedUser?.level });
+    res
+      .status(200)
+      .send({ habit, points: updatedUser?.points, level: updatedUser?.level });
   } catch (err) {
     console.log('error updating habit to compelete: ', err);
     res.sendStatus(500);
@@ -103,12 +101,14 @@ export const markHabitAsIncomplete: RequestHandler<{ id: string }> = async (
           currentPoints - minutes < 0
             ? ptsToLvlUp - (minutes - currentPoints)
             : currentPoints - minutes,
-        level: currentPoints - minutes < 0 ? currentLevel - 1 : currentLevel,
+        level: currentPoints - minutes < 0 ? currentLevel - 1 : currentLevel
       },
       { where: { id: habit.user_id } }
     );
     const updatedUser = await User.findOne({ where: { id: habit.user_id } });
-    res.status(200).send({ habit, points: updatedUser?.points, level: updatedUser?.level });
+    res
+      .status(200)
+      .send({ habit, points: updatedUser?.points, level: updatedUser?.level });
   } catch (err) {
     console.log('error marking habit as incomplete, error: ', err);
     res.sendStatus(500);

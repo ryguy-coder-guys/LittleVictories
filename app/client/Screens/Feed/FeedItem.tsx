@@ -16,6 +16,7 @@ import Comment from './Comment';
 import axios from 'axios';
 import { v4 as getKey } from 'uuid';
 import { textStyles } from '../../Stylesheets/Stylesheet';
+import { badges } from '../../badges';
 
 const FeedItem = ({
   username,
@@ -23,18 +24,118 @@ const FeedItem = ({
   completed_at,
   id,
   likes,
-  comments
+  comments,
+  isAchievement
 }) => {
   const { user } = useUserContext();
-  const { feed, setFeed } = useFeedContext();
+  const {
+    feed,
+    setFeed,
+    commentingId,
+    setCommentingId,
+    commentingText: currentCommentText,
+    setCommentingText
+  } = useFeedContext();
   const { socket } = useSocketContext();
 
-  const [showCommentInput, setShowCommentInput] = React.useState(false);
-  const [commentText, setCommentText] = React.useState('');
+  const [showCommentInput, setShowCommentInput] = React.useState(
+    username === user.id ? false : commentingId === id
+  );
+  const [commentText, setCommentText] = React.useState(
+    username === user.id ? '' : commentingId === id ? currentCommentText : ''
+  );
+
+  const addAchievementComment = async () => {
+    const { data: newAchievementComment } = await axios.post(
+      'http://localhost:3000/api/achievements/comment',
+      {
+        userId: user.id,
+        achievementId: id,
+        content: commentText
+      }
+    );
+    if (newAchievementComment) {
+      const mappedFeed = feed.map((feedItem) => {
+        if (feedItem.id === id) {
+          return {
+            ...feedItem,
+            comments: [...feedItem.comments, newAchievementComment]
+          };
+        }
+        return feedItem;
+      });
+      setFeed(mappedFeed);
+      setCommentingId(0);
+      setCommentingText('');
+      socket.emit('addAchievementComment', newAchievementComment);
+    }
+  };
+
+  const removeAchievementComment = async (commentId: number) => {
+    const { data: removeSuccessful } = await axios.delete(
+      `http://localhost:3000/api/achievements/comment/${commentId}`
+    );
+    if (removeSuccessful) {
+      const mappedFeed = feed.map((feedItem) => {
+        if (feedItem.id === id) {
+          const filteredComments = feedItem.comments.filter((comment) => {
+            return comment.id !== commentId;
+          });
+          return { ...feedItem, comments: filteredComments };
+        }
+        return feedItem;
+      });
+      setFeed(mappedFeed);
+      socket.emit('removeAchievementComment', id);
+    }
+  };
+
+  const addAchievementLike = async () => {
+    console.log('in add achievement like');
+    const { data: newLike } = await axios.post(
+      'http://localhost:3000/api/achievements/like',
+      {
+        userId: user.id,
+        achievementId: id
+      }
+    );
+    if (newLike) {
+      const mappedFeed = feed.map((feedItem) => {
+        if (feedItem.id === id) {
+          return { ...feedItem, likes: [...feedItem.likes, newLike] };
+        }
+        return feedItem;
+      });
+      setFeed(mappedFeed);
+      socket.emit('addAchievementLike', newLike);
+    }
+  };
+
+  const removeAchievementLike = async () => {
+    console.log('in remove  achievement like');
+    const { data: removeSuccessful } = await axios.delete(
+      `http://localhost:3000/api/achievements/like/${user.id}/${id}`
+    );
+    if (removeSuccessful) {
+      const mappedFeed = feed.map((feedItem) => {
+        if (feedItem.id === id && feedItem.description === description) {
+          const filteredLikes = feedItem.likes.filter((like) => {
+            console.log(like);
+
+            return !(like.user_id === user.id);
+          });
+          return { ...feedItem, likes: filteredLikes };
+        }
+        return feedItem;
+      });
+      setFeed(mappedFeed);
+      socket.emit('removeAchievementLike', id);
+    }
+  };
 
   const addLike = async (taskId: number): Promise<void> => {
     const { data: newLike } = await axios.post(
-      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/likes/',
+      'http://localhost:3000/api/likes/',
       {
         userId: user.id,
         taskId
@@ -54,7 +155,7 @@ const FeedItem = ({
 
   const removeLike = async (taskId: number): Promise<void> => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/likes/${user.id}/${taskId}`
+      `http://localhost:3000/api/likes/${user.id}/${taskId}`
     );
     if (removeSuccessful) {
       const mappedFeed = feed.map((feedItem) => {
@@ -73,7 +174,7 @@ const FeedItem = ({
 
   const addComment = async (): Promise<void> => {
     const { data: newComment } = await axios.post(
-      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/comments',
+      'http://localhost:3000/api/comments',
       {
         user_id: user.id,
         task_id: id,
@@ -88,13 +189,15 @@ const FeedItem = ({
         return feedItem;
       });
       setFeed(mappedFeed);
+      setCommentingId(0);
+      setCommentingText('');
       socket.emit('addComment', newComment);
     }
   };
 
   const removeComment = async (commentId: number): Promise<void> => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/comments/${commentId}`
+      `http://localhost:3000/api/comments/${commentId}`
     );
     if (removeSuccessful) {
       const mappedFeed = feed.map((feedItem) => {
@@ -145,6 +248,131 @@ const FeedItem = ({
       return output;
     }
   };
+
+  if (isAchievement) {
+    return (
+      <View style={styles.feedItemContainer}>
+        <View style={styles.badges}>
+          <Text
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+          >
+            {username}
+          </Text>
+          <Image source={badges[description].source} style={styles.image} />
+          <Text
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+          >
+            {badges[description].text}
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+          {username === user.username ? (
+            <Image
+              source={require('../../../assets/images/heart.png')}
+              style={{
+                resizeMode: 'contain',
+                width: 25,
+                height: 25
+              }}
+            />
+          ) : (
+            <TouchableOpacity
+              onPress={() =>
+                canLike() ? addAchievementLike() : removeAchievementLike()
+              }
+            >
+              <Image
+                source={
+                  canLike()
+                    ? require('../../../assets/images/heart-outline.png')
+                    : require('../../../assets/images/heart.png')
+                }
+                style={{
+                  resizeMode: 'contain',
+                  width: 25,
+                  height: 25
+                }}
+              />
+            </TouchableOpacity>
+          )}
+          <Text
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+          >
+            {' '}
+            {likes?.length}
+          </Text>
+        </View>
+        {comments?.length ? (
+          <FlatList
+            data={comments}
+            renderItem={({ item }) => (
+              <Comment
+                {...item}
+                removeComment={() => removeAchievementComment(item.id)}
+              />
+            )}
+            keyExtractor={() => getKey()}
+          />
+        ) : null}
+        <View style={styles.btnContainer}>
+          {username !== user.username && (
+            <Button
+              title='Add Comment'
+              onPress={() => {
+                if (showCommentInput) {
+                  setCommentingId(0);
+                  setCommentingText('');
+                  setShowCommentInput(false);
+                } else {
+                  setCommentingId(id);
+                  setCommentingText('');
+                  setShowCommentInput(true);
+                }
+              }}
+            />
+          )}
+        </View>
+        {showCommentInput && (
+          <View>
+            <TextInput
+              style={
+                user.readable_font
+                  ? [styles.textInput, { fontSize: 20 }]
+                  : styles.textInput
+              }
+              onChangeText={(text) => {
+                setCommentText(text);
+                setCommentingText(text);
+              }}
+              value={commentText}
+              autoFocus={commentingId === id}
+            />
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            >
+              <Button
+                title='Cancel'
+                onPress={() => {
+                  setCommentText('');
+                  setCommentingId(0);
+                  setCommentingText('');
+                  setShowCommentInput(false);
+                }}
+              />
+              <Button
+                title='Submit'
+                onPress={() => {
+                  if (commentText.length) {
+                    addAchievementComment();
+                  }
+                }}
+              />
+            </View>
+          </View>
+        )}
+      </View>
+    );
+  }
 
   return (
     <View style={styles.feedItemContainer}>
@@ -209,7 +437,17 @@ const FeedItem = ({
         {username !== user.username && (
           <Button
             title='Add Comment'
-            onPress={() => setShowCommentInput(!showCommentInput)}
+            onPress={() => {
+              if (showCommentInput) {
+                setCommentingId(0);
+                setCommentingText('');
+                setShowCommentInput(false);
+              } else {
+                setCommentingId(id);
+                setCommentingText('');
+                setShowCommentInput(true);
+              }
+            }}
           />
         )}
       </View>
@@ -221,8 +459,12 @@ const FeedItem = ({
                 ? [styles.textInput, { fontSize: 20 }]
                 : styles.textInput
             }
-            onChangeText={setCommentText}
+            onChangeText={(text) => {
+              setCommentText(text);
+              setCommentingText(text);
+            }}
             value={commentText}
+            autoFocus={commentingId === id}
           />
           <View
             style={{ flexDirection: 'row', justifyContent: 'space-between' }}
@@ -231,6 +473,8 @@ const FeedItem = ({
               title='Cancel'
               onPress={() => {
                 setCommentText('');
+                setCommentingId(0);
+                setCommentingText('');
                 setShowCommentInput(false);
               }}
             />
@@ -268,6 +512,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#1D426D',
     borderRadius: 8
+  },
+  badges: {
+    height: 125,
+    width: 125,
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  image: {
+    resizeMode: 'contain',
+    width: '100%',
+    height: '100%'
   }
 });
 

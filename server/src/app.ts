@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { ErrorRequestHandler } from 'express';
 import taskRouter from './routers/tasks';
 import listRouter from './routers/lists';
 import authRouter from './routers/auth';
@@ -9,6 +9,7 @@ import likeRouter from './routers/likes';
 import commentRouter from './routers/comments';
 import fontRouter from './routers/readableFont';
 import friendRouter from './routers/friends';
+import achievementRouter from './routers/achievements';
 
 const app = express();
 
@@ -27,5 +28,11 @@ app.use('/api/likes', likeRouter);
 app.use('/api/comments', commentRouter);
 app.use('/api/font', fontRouter);
 app.use('/api/friends', friendRouter);
+app.use('/api/achievements', achievementRouter);
+
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.send(err);
+});
 
 export default app;

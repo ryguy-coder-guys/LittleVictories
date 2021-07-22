@@ -4,11 +4,7 @@ import { io } from 'socket.io-client';
 const SocketContext = createContext(null);
 
 export const SocketContextProvider = ({ children }) => {
-  const socket = io('http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com');
-
-  // socket.on('connect', () => console.log('socket connected'));
-  // socket.on('disconnect', () => console.log('socket disconnected'));
-
+  const socket = io('http://localhost:3000');
   return (
     <SocketContext.Provider value={{ socket }}>
       {children}
