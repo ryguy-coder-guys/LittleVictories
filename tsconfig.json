@@ -4,6 +4,8 @@
     "module": "CommonJS",
     "sourceMap": true,
     "strict": false,
+    "noImplicitAny": false,
+    "strictFunctionTypes": false,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

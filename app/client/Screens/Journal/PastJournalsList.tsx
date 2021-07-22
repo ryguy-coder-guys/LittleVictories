@@ -1,5 +1,12 @@
 import React, { ReactElement } from 'react';
-import { View, StyleSheet, Text, FlatList } from 'react-native';
+import {
+  Image,
+  View,
+  StyleSheet,
+  Text,
+  FlatList,
+  TouchableOpacity
+} from 'react-native';
 import { useJournalContext } from '../../Contexts/journalContext';
 import { Button } from 'react-native-elements';
 import moment from 'moment';
@@ -28,7 +35,7 @@ const List = (): ReactElement => {
     showMessage(message);
   };
 
-  const clearJournal = (date: String) => {
+  const clearJournal = (date: string) => {
     displayMessage({
       titleStyle: {
         fontSize: 20,
@@ -83,6 +90,32 @@ const List = (): ReactElement => {
     });
   };
 
+  const format = (dateStr: string) => {
+    const dateArr = dateStr.split('-');
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'June',
+      'July',
+      'Aug',
+      'Sept',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    if (dateArr[0][0] === '0') {
+      dateArr[0] = dateArr[0][1];
+    }
+    if (dateArr[1][0] === '0') {
+      dateArr[1] = dateArr[1][1];
+    }
+    console.log('dateArr is:', dateArr);
+    return `${months[parseInt(dateArr[0]) - 1]} ${dateArr[1]}, ${dateArr[2]}`;
+  };
+
   return (
     <View>
       {journals ? (
@@ -94,11 +127,32 @@ const List = (): ReactElement => {
           renderItem={({ item: journal }) => {
             return (
               <View style={styles.textAreaContainer}>
-                <Text
-                  style={user.readable_font ? styles.dateLarger : styles.date}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignContent: 'center',
+                    marginBottom: 20
+                  }}
                 >
-                  {journal.date}
-                </Text>
+                  <Text
+                    style={
+                      user.readable_font ? textStyles.txt_big : textStyles.txt
+                    }
+                  >
+                    {format(journal.date)}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      clearJournal(journal.date);
+                    }}
+                  >
+                    <Image
+                      style={{ resizeMode: 'contain', width: 25, height: 25 }}
+                      source={require('../../../assets/images/minus-circle-outline.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
                 <Text
                   style={
                     user.readable_font ? textStyles.txt_big : textStyles.txt
@@ -106,12 +160,6 @@ const List = (): ReactElement => {
                 >
                   {journal.content}
                 </Text>
-                <Button
-                  title='Clear Entry'
-                  onPress={() => {
-                    clearJournal(journal.date);
-                  }}
-                />
               </View>
             );
           }}
@@ -126,18 +174,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#1D426D',
     borderRadius: 10
-  },
-  date: {
-    color: '#1D426D',
-    fontSize: 18,
-    alignSelf: 'flex-end',
-    marginBottom: 20
-  },
-  dateLarger: {
-    color: '#1D426D',
-    fontSize: 18,
-    alignSelf: 'flex-end',
-    marginBottom: 20
   },
   header: {
     color: '#1D426D',
@@ -157,7 +193,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#8ebac6',
     borderRadius: 10,
     padding: 20,
-    marginTop: 20
+    marginTop: 20,
+    marginRight: 40,
+    marginLeft: 40
   }
 });
 

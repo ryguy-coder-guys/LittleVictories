@@ -13,12 +13,12 @@ import { useUserContext } from '../../Contexts/userContext';
 import { useSocketContext } from '../../Contexts/socketContext';
 import axios from 'axios';
 import { containerStyles } from '../../Stylesheets/Stylesheet';
+import bgImage from '../../../assets/images/blue-gradient.png';
+import logo from '../../../assets/logo.png';
 
 const Login = ({ navigation }) => {
   const { setUser, setUserStat, setIsLoggedIn } = useUserContext();
   const { socket } = useSocketContext();
-  const bgImage = require('../../../assets/images/blue-gradient.png');
-  const logo = require('../../../assets/logo.png');
   const [username, setUsername] = useState('');
   const [passwordAttempt, setPasswordAttempt] = useState('');
   const [passwordAttempt2, setPasswordAttempt2] = useState('');
@@ -116,7 +116,6 @@ const Login = ({ navigation }) => {
           setTimeout(() => {
             setUser(userObj);
             setIsLoggedIn(true);
-            console.log(userObj.userStat);
             setUserStat(userObj.userStat);
             navigation.navigate('index');
           }, 5000);

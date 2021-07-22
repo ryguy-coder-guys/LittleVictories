@@ -232,7 +232,7 @@ export const getFeedItems: RequestHandler<TaskReqParams> = async (req, res) => {
           where: { id: feedItem.getDataValue('user_id') }
         });
         const foundUsername = foundUser?.getDataValue('username');
-        let likes = await Like.findAll({
+        const likes = await Like.findAll({
           where: { task_id: feedItem.getDataValue('id') }
         });
         const comments = await Comment.findAll({

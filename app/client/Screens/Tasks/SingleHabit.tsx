@@ -6,8 +6,7 @@ import { format, getDaysInMonth } from 'date-fns';
 
 const SingleHabit = ({ item }) => {
   const { user, setUser, setNumHabits, setLevel } = useUserContext();
-  const [finished, setFinished] = useState(item.is_complete);
-  const [removed, setRemoved] = useState(false);
+  const [finished, setFinished] = useState<boolean>(item.is_complete);
 
   const markHabitComplete = async () => {
     try {
@@ -62,7 +61,7 @@ const SingleHabit = ({ item }) => {
   };
 
   const splitDays = (daysStr: string) => {
-    let daysSpacedStr: string = '';
+    let daysSpacedStr = '';
     if (daysStr.includes('M')) {
       daysSpacedStr += 'Mon, ';
     }
@@ -152,7 +151,6 @@ const SingleHabit = ({ item }) => {
         <TouchableOpacity
           onPress={() => {
             removeHabit();
-            setRemoved(true);
           }}
         >
           <Image

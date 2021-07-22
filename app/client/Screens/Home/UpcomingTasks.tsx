@@ -65,6 +65,11 @@ const UpcomingTasks = () => {
             </View>
           );
         })}
+      {!user.tasks.length ? (
+        <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
+          No upcoming tasks.
+        </Text>
+      ) : null}
     </View>
   );
 };

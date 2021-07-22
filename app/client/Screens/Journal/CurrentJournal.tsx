@@ -11,7 +11,7 @@ import { showMessage, hideMessage } from 'react-native-flash-message';
 const Journal = (): ReactElement => {
   const { user } = useUserContext();
   const { journal, setJournal } = useJournalContext();
-  const [date] = useState(moment().format('MMMM Do Y'));
+  const [date] = useState(moment().format('MMMM D, Y'));
 
   const displayMessage = (props = {}) => {
     const message: any = {
