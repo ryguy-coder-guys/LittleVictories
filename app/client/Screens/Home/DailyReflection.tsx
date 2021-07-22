@@ -261,7 +261,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
               multiline
               numberOfLines={4}
               value={notes}
-              maxLength={100}
+              maxLength={250}
               onChangeText={setNotes}
               editable={true}
               placeholder='Enter notes here.'
