@@ -14,10 +14,10 @@ import Achievements from './Achievements';
 import WeeklyStats from './WeeklyStats';
 import DailyReflection from './DailyReflection';
 import UpcomingTasks from './UpcomingTasks';
+import bgImage from '../../../assets/images/blue-gradient.png';
 
 const Home = (): ReactElement => {
   const { user, userStat } = useUserContext();
-  const bgImage = require('../../../assets/images/blue-gradient.png');
   const [hasStats, setHasStats] = useState<boolean | number>(
     userStat || user.userStats.length
   );
