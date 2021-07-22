@@ -43,7 +43,7 @@ create table Tasks (
   minutes_to_complete int not null,
   is_important bool not null,
   is_complete bool,
-  completed_at date,
+  completed_at datetime,
   is_public bool not null default false,
   list_id int,
   createdAt datetime not null,
@@ -107,6 +107,47 @@ create table Friends (
   foreign key (friend_id) references Users(id)
 );
 
+create table Achievements (
+  id int primary key auto_increment,
+  user_id varchar(36) not null,
+  achievement_type enum(
+    'levelOne',
+    'levelFive',
+    'levelTen',
+    'fiveHabits',
+    'fiveTasks',
+    'threeFollowees',
+    'fiveFollowees'
+  ) not null,
+  createdAt datetime not null default now(),
+  updatedAt datetime not null default now(),
+  foreign key (user_id) references Users(id)
+);
+
+create table AchievementsLikes (
+  id int primary key auto_increment,
+  user_id varchar(36) not null,
+  achievement_id int not null,
+  createdAt datetime not null,
+  updatedAt datetime not null,
+  foreign key (user_id) references Users(id),
+  foreign key (achievement_id) references Achievements(id)
+);
+
+create table AchievementsComments (
+  id int primary key auto_increment,
+  user_id varchar(36) not null,
+  achievement_id int not null,
+  content varchar(50) not null,
+  createdAt datetime not null,
+  updatedAt datetime not null,
+  foreign key (user_id) references Users(id),
+  foreign key (achievement_id) references Achievements(id)
+); 
+
+alter table Achievements auto_increment=1000;
+alter table AchievementsLikes auto_increment=1000;
+alter table AchievementsComments auto_increment=1000;
 
 /* run from project root
 /* mysql -u root < server/src/database/schema.sql

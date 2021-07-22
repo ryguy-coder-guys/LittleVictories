@@ -61,7 +61,6 @@ const SingleTask = ({ item }) => {
 
   const markTaskComplete = async (): Promise<void> => {
     try {
-      const currentLevel = user.level;
       const {
         data: { task, points, level, numCompletedTasks }
       } = await axios.patch(
@@ -73,17 +72,15 @@ const SingleTask = ({ item }) => {
         }
         return task;
       });
-      new Promise((resolve) => {
-        if (currentLevel !== level) {
-          setLevel(level);
-          setTimeout(() => resolve(true), 5000);
-        } else {
-          resolve(true);
-        }
-      }).then(() => {
-        setNumCompletedTasks(numCompletedTasks);
-      });
       setUser({ ...user, tasks: mappedTasks, points, level });
+      setLevel(level);
+      if (level === 1 || level === 5 || level === 10) {
+        setTimeout(() => {
+          setNumCompletedTasks(numCompletedTasks);
+        }, 3000);
+      } else {
+        setNumCompletedTasks(numCompletedTasks);
+      }
     } catch (error) {
       console.warn(error);
     }

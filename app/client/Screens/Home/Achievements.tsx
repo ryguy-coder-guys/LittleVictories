@@ -2,9 +2,12 @@ import React, { ReactElement } from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import { textStyles } from '../../Stylesheets/Stylesheet';
+import { v4 as getKey } from 'uuid';
+import { badges } from '../../badges';
 
 const Achievements = (): ReactElement => {
-  const { user, numHabits, numCompletedTasks, numFollowees } = useUserContext();
+  const { user } = useUserContext();
+
   return (
     <View style={styles.view}>
       <Text
@@ -16,97 +19,21 @@ const Achievements = (): ReactElement => {
         Achievements
       </Text>
       <View style={styles.badge_container}>
-        {user.level >= 1 ? (
-          <View style={styles.badges}>
-            <Image
-              source={require('../../../assets/images/ribbon_red1.png')}
-              style={styles.image}
-            />
-            <Text
-              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
-            >
-              Level 1
-            </Text>
-          </View>
-        ) : null}
-        {user.level >= 5 ? (
-          <View style={styles.badges}>
-            <Image
-              source={require('../../../assets/images/ribbon_green.png')}
-              style={styles.image}
-            />
-            <Text
-              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
-            >
-              Level 5
-            </Text>
-          </View>
-        ) : null}
-        {user.level >= 10 ? (
-          <View style={styles.badges}>
-            <Image
-              source={require('../../../assets/images/ribbon_yellow.png')}
-              style={styles.image}
-            />
-            <Text
-              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
-            >
-              Level 10
-            </Text>
-          </View>
-        ) : null}
-        {numHabits >= 5 ? (
-          <View style={styles.badges}>
-            <Image
-              source={require('../../../assets/images/trophy_pink.png')}
-              style={styles.image}
-            />
-            <Text
-              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
-            >
-              5 Habits
-            </Text>
-          </View>
-        ) : null}
-        {numCompletedTasks >= 5 ? (
-          <View style={styles.badges}>
-            <Image
-              source={require('../../../assets/images/trophy_blue.png')}
-              style={styles.image}
-            />
-            <Text
-              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
-            >
-              5 Tasks
-            </Text>
-          </View>
-        ) : null}
-        {numFollowees >= 3 ? (
-          <View style={styles.badges}>
-            <Image
-              source={require('../../../assets/images/star_red.png')}
-              style={styles.image}
-            />
-            <Text
-              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
-            >
-              3 Friends
-            </Text>
-          </View>
-        ) : null}
-        {numFollowees >= 5 ? (
-          <View style={styles.badges}>
-            <Image
-              source={require('../../../assets/images/star_green.png')}
-              style={styles.image}
-            />
-            <Text
-              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
-            >
-              5 Friends
-            </Text>
-          </View>
-        ) : null}
+        {user.achievements.map((achievement) => {
+          return (
+            <View style={styles.badges} key={getKey()}>
+              <Image
+                source={badges[achievement.achievement_type].source}
+                style={styles.image}
+              />
+              <Text
+                style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+              >
+                {badges[achievement.achievement_type].text}
+              </Text>
+            </View>
+          );
+        })}
       </View>
     </View>
   );

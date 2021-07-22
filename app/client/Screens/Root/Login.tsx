@@ -15,7 +15,7 @@ import axios from 'axios';
 import { containerStyles } from '../../Stylesheets/Stylesheet';
 
 const Login = ({ navigation }) => {
-  const { setUser, setUserStat } = useUserContext();
+  const { setUser, setUserStat, setIsLoggedIn } = useUserContext();
   const { socket } = useSocketContext();
   const bgImage = require('../../../assets/images/blue-gradient.png');
   const logo = require('../../../assets/logo.png');
@@ -54,6 +54,7 @@ const Login = ({ navigation }) => {
         // if successful navigate to home
         setTimeout(() => {
           setUser(userObj);
+          setIsLoggedIn(true);
           setUserStat(userObj.userStat);
           navigation.navigate('index');
         }, 5000);
@@ -112,9 +113,9 @@ const Login = ({ navigation }) => {
           }
         );
         if (userObj) {
-          // if successful navigate to home
           setTimeout(() => {
             setUser(userObj);
+            setIsLoggedIn(true);
             setUserStat(userObj.userStat);
             navigation.navigate('index');
           }, 5000);

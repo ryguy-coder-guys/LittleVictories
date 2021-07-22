@@ -7,6 +7,9 @@ import { Like } from './database/models/like';
 import { Comment } from './database/models/comment';
 import { User } from './database/models/user';
 import { Friend } from './database/models/friend';
+import { Achievement } from './database/models/achievement';
+import { AchievementComment } from './database/models/achievementComment';
+import { AchievementLike } from './database/models/achievementLike';
 
 import { FormattedTask } from './interfaces/tasks';
 import { FriendshipObject } from './interfaces/friends';
@@ -92,22 +95,90 @@ const updateFeed = async (
   }
 };
 
+const fetchAchievement = async (id: number) => {
+  try {
+    const achievement = await Achievement.findOne({ where: { id } });
+    if (!achievement) throw new Error('cannot find achievement');
+    const achievementLikes = await AchievementLike.findAll({
+      where: { achievement_id: id }
+    });
+    const achievementComments = await AchievementComment.findAll({
+      where: { achievement_id: id }
+    });
+    const user = await User.findOne({
+      where: { id: achievement.getDataValue('user_id') }
+    });
+    // if (!user) throw new Error('cannot find user');
+    const username = user.getDataValue('username');
+    const mappedAchievementComments = await Promise.all(
+      achievementComments.map(async (achievementComment) => {
+        const currentUser = await User.findOne({
+          where: { id: achievementComment.getDataValue('user_id') }
+        });
+        if (!currentUser) throw new Error('cannot fine current user');
+        return {
+          id: achievementComment.getDataValue('id'),
+          content: achievementComment.getDataValue('content'),
+          user_id: achievementComment.getDataValue('user_id'),
+          username: currentUser.getDataValue('username')
+        };
+      })
+    );
+    return {
+      id,
+      username,
+      description: achievement.getDataValue('achievement_type'),
+      completed_at: achievement.getDataValue('createdAt'),
+      likes: achievementLikes,
+      comments: mappedAchievementComments,
+      isAchievement: true
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const addAchievementToFeed = async (
+  achievementId: number,
+  socketId: string,
+  event: string
+) => {
+  const achievement = await fetchAchievement(achievementId);
+  // if (!achievement) throw new Error('cannot find achievement');
+  const userId = await getUserId(socketId);
+  // if (!userId) throw new Error('cannot find user id');
+  if (userId) {
+    const friends = await fetchFriends(userId);
+    const sockets = io.sockets.sockets;
+    for (const currentSocket of sockets) {
+      const currentUserId = await getUserId(currentSocket[0]);
+      if (currentUserId && friends.includes(currentUserId)) {
+        io.to(currentSocket[0]).emit(event, achievement);
+      }
+    }
+  }
+};
+
 io.on('connection', (socket) => {
   socket.on('addToFeed', (task) => {
     updateFeed(task.id, socket.id, 'addToFeed');
   });
 
   socket.on('removeFromFeed', async (taskId) => {
-    const userId = await getUserId(socket.id);
-    if (userId) {
-      const friends = await fetchFriends(userId);
-      const sockets = io.sockets.sockets;
-      for (const currentSocket of sockets) {
-        const currentUserId = await getUserId(currentSocket[0]);
-        if (currentUserId && friends.includes(currentUserId)) {
-          io.to(currentSocket[0]).emit('removeFromFeed', taskId);
+    try {
+      const userId = await getUserId(socket.id);
+      if (userId) {
+        const friends = await fetchFriends(userId);
+        const sockets = io.sockets.sockets;
+        for (const currentSocket of sockets) {
+          const currentUserId = await getUserId(currentSocket[0]);
+          if (currentUserId && friends.includes(currentUserId)) {
+            io.to(currentSocket[0]).emit('removeFromFeed', taskId);
+          }
         }
       }
+    } catch (error) {
+      console.log(error);
     }
   });
 
@@ -164,6 +235,58 @@ io.on('connection', (socket) => {
       });
     });
   });
-});
 
+  socket.on('achievementAdded', async (achievementObject) => {
+    const userId = await getUserId(socket.id);
+    if (userId) {
+      const user = await User.findOne({ where: { id: userId } });
+      if (user) {
+        const username = user.getDataValue('username');
+        if (username) {
+          const friends = await fetchFriends(userId);
+          const sockets = io.sockets.sockets;
+          for (const currentSocket of sockets) {
+            const currentUserId = await getUserId(currentSocket[0]);
+            if (currentUserId && friends.includes(currentUserId)) {
+              io.to(currentSocket[0]).emit('achievementAdded', {
+                ...achievementObject,
+                username
+              });
+            }
+          }
+          io.to(socket.id).emit('achievementAdded', {
+            ...achievementObject,
+            username
+          });
+        }
+      }
+    }
+  });
+
+  socket.on('addAchievementComment', async (commentObj) => {
+    addAchievementToFeed(
+      commentObj.task_id,
+      socket.id,
+      'addAchievementComment'
+    );
+  });
+
+  socket.on('removeAchievementComment', async (achievementId) => {
+    addAchievementToFeed(achievementId, socket.id, 'removeAchievementComment');
+  });
+
+  socket.on('addAchievementLike', async (likeObj) => {
+    console.log(likeObj);
+    addAchievementToFeed(
+      likeObj.achievement_id,
+      socket.id,
+      'addAchievementLike'
+    );
+  });
+
+  socket.on('removeAchievementLike', async (achievementId) => {
+    console.log(achievementId);
+    addAchievementToFeed(achievementId, socket.id, 'removeAchievementLike');
+  });
+});
 export default httpServer;
