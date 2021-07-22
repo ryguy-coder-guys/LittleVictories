@@ -14,7 +14,18 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { Button, Divider } from 'react-native-elements';
 import { showMessage } from 'react-native-flash-message';
-import { UserStat } from '../../Interfaces/user';
+
+import angryFace from '../../../assets/images/emoticon-angry-outline.png';
+import excitedFace from '../../../assets/images/emoticon-excited-outline.png';
+import happyFace from '../../../assets/images/emoticon-happy-outline.png';
+import neutralFace from '../../../assets/images/emoticon-neutral-outline.png';
+import sadFace from '../../../assets/images/emoticon-sad-outline.png';
+
+import angryInactive from '../../../assets/images/emoticon-angry-inactive.png';
+import excitedInactive from '../../../assets/images/emoticon-excited-inactive.png';
+import happyInactive from '../../../assets/images/emoticon-happy-inactive.png';
+import neutralInactive from '../../../assets/images/emoticon-neutral-inactive.png';
+import sadInactive from '../../../assets/images/emoticon-sad-inactive.png';
 
 const DailyReflection = ({ setHasStats }): ReactElement => {
   const { user, userStat, setUserStat } = useUserContext();
@@ -202,39 +213,21 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
             </Text>
             <TouchableOpacity>
               {userStat?.mood === 'great' ? (
-                <Image
-                  source={require('../../../assets/images/emoticon-excited-outline.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={excitedFace} style={styles.image} />
               ) : null}
               {userStat?.mood === 'good' ? (
-                <Image
-                  source={require('../../../assets/images/emoticon-happy-outline.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={happyFace} style={styles.image} />
               ) : null}
               {userStat?.mood === 'ok' ? (
-                <Image
-                  source={require('../../../assets/images/emoticon-neutral-outline.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={neutralFace} style={styles.image} />
               ) : null}
               {userStat?.mood === 'bad' ? (
-                <Image
-                  source={require('../../../assets/images/emoticon-sad-outline.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={sadFace} style={styles.image} />
               ) : null}
               {userStat?.mood === 'terrible' ? (
-                <Image
-                  source={require('../../../assets/images/emoticon-angry-outline.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={angryFace} style={styles.image} />
               ) : null}
             </TouchableOpacity>
-            {/* // {userStat?.mood
-            //   ? getIcon('active', userStat?.mood)
-            //   : getIcon('active', mood)} */}
           </View>
         </View>
       ) : (
@@ -319,67 +312,37 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
           <View style={{ flexDirection: 'row', marginTop: 10 }}>
             <TouchableOpacity onPress={() => handleFace('terrible')}>
               {activeIcon === 'terrible' ? (
-                <Image
-                  source={require('../../../assets/images/emoticon-angry-outline.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={angryFace} style={styles.image} />
               ) : (
-                <Image
-                  source={require('../../../assets/images/emoticon-angry-inactive.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={angryInactive} style={styles.image} />
               )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleFace('bad')}>
               {activeIcon === 'bad' ? (
-                <Image
-                  source={require('../../../assets/images/emoticon-sad-outline.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={sadFace} style={styles.image} />
               ) : (
-                <Image
-                  source={require('../../../assets/images/emoticon-sad-inactive.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={sadInactive} style={styles.image} />
               )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleFace('ok')}>
               {activeIcon === 'ok' ? (
-                <Image
-                  source={require('../../../assets/images/emoticon-neutral-outline.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={neutralFace} style={styles.image} />
               ) : (
-                <Image
-                  source={require('../../../assets/images/emoticon-neutral-inactive.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={neutralInactive} style={styles.image} />
               )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleFace('good')}>
               {activeIcon === 'good' ? (
-                <Image
-                  source={require('../../../assets/images/emoticon-happy-outline.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={happyFace} style={styles.image} />
               ) : (
-                <Image
-                  source={require('../../../assets/images/emoticon-happy-inactive.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={happyInactive} style={styles.image} />
               )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleFace('great')}>
               {activeIcon === 'great' ? (
-                <Image
-                  source={require('../../../assets/images/emoticon-excited-outline.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={excitedFace} style={styles.image} />
               ) : (
-                <Image
-                  source={require('../../../assets/images/emoticon-excited-inactive.png')}
-                  style={{ resizeMode: 'contain', width: 35, height: 35 }}
-                />
+                <Image source={excitedInactive} style={styles.image} />
               )}
             </TouchableOpacity>
           </View>
@@ -413,6 +376,11 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 20,
     backgroundColor: '#5c83b1'
+  },
+  image: {
+    resizeMode: 'contain',
+    width: 35,
+    height: 35
   },
   inactiveIcon: {
     color: '#9b9a9a'
