@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
-import { textStyles } from '../../Stylesheets/Stylesheet';
+import { containerStyles, textStyles } from '../../Stylesheets/Stylesheet';
 import { v4 as getKey } from 'uuid';
 import { badges } from '../../badges';
 
@@ -9,7 +9,7 @@ const Achievements = (): ReactElement => {
   const { user } = useUserContext();
 
   return (
-    <View style={styles.view}>
+    <View style={containerStyles.section}>
       <Text
         style={[
           user.readable_font ? textStyles.h2_big : textStyles.h2,
@@ -56,14 +56,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     width: '100%',
     height: '100%'
-  },
-  view: {
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    marginLeft: 40,
-    marginRight: 40,
-    marginBottom: 20,
-    padding: 20
   }
 });
 

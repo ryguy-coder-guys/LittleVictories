@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { v4 as getKey } from 'uuid';
 
 import { StyleSheet, FlatList, View } from 'react-native';
@@ -6,11 +6,11 @@ import { useUserContext } from '../../Contexts/userContext';
 import SingleTask from './SingleTask';
 import TaskForm from './TaskForm';
 
-const TaskList = ({ item }) => {
+const TaskList = ({ item }): ReactElement => {
   return <SingleTask item={item} />;
 };
 
-const TaskSummary = () => {
+const TaskSummary = (): ReactElement => {
   const { user } = useUserContext();
 
   return (

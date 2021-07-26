@@ -145,7 +145,7 @@ const Login = ({ navigation }) => {
 
   // default view or if login btn is clicked
   return (
-    <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
+    <ImageBackground style={containerStyles.bgImg} source={bgImage}>
       {loginSelected ? (
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}

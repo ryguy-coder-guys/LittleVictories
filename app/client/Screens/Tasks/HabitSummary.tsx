@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable indent */
+import React, { ReactElement, useState } from 'react';
 import { StyleSheet, FlatList, Text, View, Switch } from 'react-native';
 import { v4 as getKey } from 'uuid';
 import { getDay, format } from 'date-fns';
@@ -6,15 +7,15 @@ import HabitForm from './HabitForm';
 import SingleHabit from './SingleHabit';
 import { useUserContext } from '../../Contexts/userContext';
 
-const HabitsTodayList = ({ item }) => {
+const HabitsTodayList = ({ item }): ReactElement => {
   return <SingleHabit item={item} />;
 };
 
-const HabitsLaterList = ({ item }) => {
+const HabitsLaterList = ({ item }): ReactElement => {
   return <SingleHabit item={item} />;
 };
 
-const ListHeader = ({ showAll, toggleShowAll }) => {
+const ListHeader = ({ showAll, toggleShowAll }): ReactElement => {
   const { user } = useUserContext();
   return (
     <View>
@@ -126,7 +127,7 @@ const habitsDueToday = () => {
   return filteredHabits || [];
 };
 
-const HabitSummary = () => {
+const HabitSummary = (): ReactElement => {
   const { user } = useUserContext();
   const [showAll, toggleShowAll] = useState(false);
 

@@ -18,7 +18,7 @@ const Journals = () => {
   };
 
   return (
-    <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
+    <ImageBackground style={containerStyles.bgImg} source={bgImage}>
       <ProgressBar />
       <SafeAreaView>
         <ButtonGroup

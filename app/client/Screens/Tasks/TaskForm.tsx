@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable indent */
+import React, { ReactElement, useState } from 'react';
 import {
   Image,
   StyleSheet,
@@ -16,14 +17,15 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { isBefore } from 'date-fns';
 import { showMessage } from 'react-native-flash-message';
 import { Button } from 'react-native-elements';
+import minusIcon from '../../../assets/images/minus-circle-outline.png';
 
-const TaskForm = () => {
+const TaskForm = (): ReactElement => {
   const [showForm, setShowForm] = useState(false);
   const [description, setDescription] = useState('');
   const [timeToComplete, setTimeToComplete] = useState(5);
   const [isImportant, setIsImportant] = useState(false);
   const { user, setUser } = useUserContext();
-  //for date selector
+  // for date selector
   const [date, setDate] = useState(new Date());
 
   const toggleSwitch = () => setIsImportant((previousState) => !previousState);
@@ -85,9 +87,9 @@ const TaskForm = () => {
     }
   };
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
+  const onChange = (event, selectedDate: string) => {
+    const currentDate: string | Date = selectedDate || date;
+    setDate(currentDate as Date);
   };
 
   return (
@@ -128,10 +130,7 @@ const TaskForm = () => {
                   setIsImportant(false);
                 }}
               >
-                <Image
-                  source={require('../../../assets/images/minus-circle-outline.png')}
-                  style={styles.image}
-                />
+                <Image source={minusIcon} style={styles.image} />
               </TouchableOpacity>
             </View>
             <TextInput

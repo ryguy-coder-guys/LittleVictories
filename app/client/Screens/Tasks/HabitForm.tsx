@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import {
   Image,
   StyleSheet,
@@ -16,8 +16,9 @@ import { Button, ButtonGroup } from 'react-native-elements';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { Habit } from '../../Interfaces/user';
 import { showMessage } from 'react-native-flash-message';
+import minusIcon from '../../../assets/images/minus-circle-outline.png';
 
-const TaskForm = () => {
+const TaskForm = (): ReactElement => {
   const [showForm, setShowForm] = useState(false);
   const [description, setDescription] = useState('');
   const { user, setUser, setNumHabits } = useUserContext();
@@ -27,14 +28,14 @@ const TaskForm = () => {
 
   const daysSelected = (selectedDayIndices: number[]): string => {
     const days: string[] = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'];
-    let dayStr: string = '';
-    for (let i: number = 0; i < selectedDayIndices.length; i++) {
+    let dayStr = '';
+    for (let i = 0; i < selectedDayIndices.length; i++) {
       dayStr = dayStr + days[selectedDayIndices[i]];
     }
     return dayStr;
   };
 
-  const postHabit = async () => {
+  const postHabit = async (): Promise<void> => {
     const frequencies: string[] = ['daily', 'weekly', 'monthly'];
     const { data: habit }: AxiosResponse<Habit> = await axios.post(
       'http://localhost:3000/api/habits/',
@@ -59,7 +60,7 @@ const TaskForm = () => {
     setNumHabits(user.habits.length + 1);
   };
 
-  const handleSubmit = async (): Promise<any> => {
+  const handleSubmit = (): void => {
     if (description === '') {
       showMessage({
         message: 'Form Error',
@@ -71,7 +72,7 @@ const TaskForm = () => {
         backgroundColor: '#fc9c94'
       });
     } else if (selectedFrequencyIndex === 0) {
-      postHabit();
+      void postHabit();
     } else if (selectedFrequencyIndex === 1) {
       if (!selectedDayIndices.length) {
         showMessage({
@@ -85,16 +86,16 @@ const TaskForm = () => {
           backgroundColor: '#fc9c94'
         });
       } else {
-        postHabit();
+        void postHabit();
       }
     } else if (selectedFrequencyIndex === 2) {
-      postHabit();
+      void postHabit();
     }
   };
 
   // event needs to stay, breaks date picker without it
-  const onChange = (event, selectedDate): void => {
-    const currentDate = selectedDate || date;
+  const onChange = (event, selectedDate: Date): void => {
+    const currentDate: string | Date = selectedDate || date;
     setDate(currentDate);
   };
 
@@ -142,10 +143,7 @@ const TaskForm = () => {
                 Add Habit
               </Text>
               <TouchableOpacity onPress={() => setShowForm(false)}>
-                <Image
-                  source={require('../../../assets/images/minus-circle-outline.png')}
-                  style={styles.image}
-                />
+                <Image source={minusIcon} style={styles.image} />
               </TouchableOpacity>
             </View>
             <TextInput

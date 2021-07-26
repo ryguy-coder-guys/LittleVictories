@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { ImageBackground, StyleSheet, Text } from 'react-native';
 import { useQuoteContext } from '../../Contexts/quoteContext';
+import bgImage from '../../../assets/images/blue-gradient.png';
 
-const Loading = () => {
-  const bgImage = require('../../../assets/images/blue-gradient.png');
-  const { quote, author } = useQuoteContext();
+const Loading = (): ReactElement => {
+  interface QuoteInterface {
+    quote: string;
+    author: string;
+  }
+  const { quote, author }: QuoteInterface = useQuoteContext();
 
   return (
     <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <Text style={styles.quote}>"{quote.trim()}"</Text>
+      <Text style={styles.quote}>&quot;{quote.trim()}&quot;</Text>
       <Text style={styles.author}>{author.trim()}</Text>
     </ImageBackground>
   );

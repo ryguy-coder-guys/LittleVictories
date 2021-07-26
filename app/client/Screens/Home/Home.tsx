@@ -1,11 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import {
-  ImageBackground,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View
-} from 'react-native';
+import { ImageBackground, SafeAreaView, ScrollView, View } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import Loading from '../Root/Loading';
 import ProgressBar from '../Root/ProgressBar';
@@ -18,35 +12,29 @@ import bgImage from '../../../assets/images/blue-gradient.png';
 
 const Home = (): ReactElement => {
   const { user, userStat } = useUserContext();
-  const [hasStats, setHasStats] = useState<boolean | number>(
-    userStat || user.userStats.length
+  const [hasStats, setHasStats] = useState<boolean>(
+    !!userStat || !!user.userStats.length
   );
 
   if (!user) {
     return <Loading />;
   }
   return (
-    <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
+    <ImageBackground style={containerStyles.bgImg} source={bgImage}>
       <ProgressBar />
-      <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
+      <SafeAreaView>
         <ScrollView>
-          <View style={styles.view}>
+          <View style={containerStyles.fullScreenView}>
             <UpcomingTasks />
             <DailyReflection setHasStats={setHasStats} />
             {hasStats ? <WeeklyStats /> : null}
             <Achievements />
+            <View style={{ height: 70 }}></View>
           </View>
         </ScrollView>
       </SafeAreaView>
     </ImageBackground>
   );
 };
-
-const styles = StyleSheet.create({
-  view: {
-    width: '100%',
-    paddingTop: 20
-  }
-});
 
 export default Home;

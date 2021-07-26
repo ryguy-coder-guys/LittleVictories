@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { useUserContext } from '../../Contexts/userContext';
 import { v4 as getKey } from 'uuid';
+import starIcon from '../../../assets/images/star-circle-outline.png';
 
-const UpcomingTasks = () => {
+const UpcomingTasks = (): ReactElement => {
   const { user } = useUserContext();
 
-  const formatDueDate = (dueDate) => {
+  const formatDueDate = (dueDate: Date) => {
     if (dueDate) {
-      const dateArr = dueDate.split('-');
+      const dateArr: string[] = dueDate.toString().split('-');
       const months = [
         'Jan',
         'Feb',
@@ -54,7 +55,7 @@ const UpcomingTasks = () => {
               </Text>
               {task.is_important ? (
                 <Image
-                  source={require('../../../assets/images/star-circle-outline.png')}
+                  source={starIcon}
                   style={{
                     resizeMode: 'contain',
                     width: 25,
@@ -83,8 +84,6 @@ const styles = StyleSheet.create({
   view: {
     backgroundColor: '#8ebac6',
     borderRadius: 10,
-    marginLeft: 40,
-    marginRight: 40,
     marginBottom: 20,
     padding: 20
   }

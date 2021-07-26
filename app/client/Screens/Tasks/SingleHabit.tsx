@@ -1,18 +1,37 @@
 import axios from 'axios';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { format, getDaysInMonth } from 'date-fns';
+import uncheckedBox from '../../../assets/images/checkbox-blank-outline.png';
+import checkedBox from '../../../assets/images/checkbox-marked.png';
+import minusIcon from '../../../assets/images/minus-circle-outline.png';
 
-const SingleHabit = ({ item }) => {
+interface Habit {
+  id: number;
+  description: string;
+  frequency: string;
+  days_of_week: string;
+  calendar_date: number;
+  is_complete: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const SingleHabit = ({ item }): ReactElement => {
   const { user, setUser, setNumHabits, setLevel } = useUserContext();
   const [finished, setFinished] = useState<boolean>(item.is_complete);
+
+  interface DataInterface {
+    points: number;
+    level: number;
+  }
 
   const markHabitComplete = async () => {
     try {
       const {
         data: { points, level }
-      } = await axios.patch(
+      } = await axios.patch<DataInterface>(
         `http://localhost:3000/api/habits/${item.id}/complete`
       );
       const mappedHabits = user.habits.map((habit) => {
@@ -86,7 +105,7 @@ const SingleHabit = ({ item }) => {
     return daysSpacedStr.slice(0, -2);
   };
 
-  const checkDate = (date) => {
+  const checkDate = (date: number) => {
     if (date >= 1 && date <= 28) {
       return date;
     } else {
@@ -106,25 +125,19 @@ const SingleHabit = ({ item }) => {
           <TouchableOpacity
             onPress={() => {
               setFinished(!finished);
-              finished ? markHabitIncomplete() : markHabitComplete();
+              finished ? void markHabitIncomplete() : void markHabitComplete();
             }}
           >
-            <Image
-              source={require('../../../assets/images/checkbox-blank-outline.png')}
-              style={styles.checkbox}
-            />
+            <Image source={uncheckedBox} style={styles.checkbox} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
             onPress={() => {
               setFinished(!finished);
-              finished ? markHabitIncomplete() : markHabitComplete();
+              finished ? void markHabitIncomplete() : void markHabitComplete();
             }}
           >
-            <Image
-              source={require('../../../assets/images/checkbox-marked.png')}
-              style={styles.checkbox}
-            />
+            <Image source={checkedBox} style={styles.checkbox} />
           </TouchableOpacity>
         )}
         <View style={{ flexDirection: 'column', marginLeft: 10 }}>
@@ -150,17 +163,10 @@ const SingleHabit = ({ item }) => {
       <View style={{ width: '100%', alignItems: 'flex-end' }}>
         <TouchableOpacity
           onPress={() => {
-            removeHabit();
+            void removeHabit();
           }}
         >
-          <Image
-            source={require('../../../assets/images/minus-circle-outline.png')}
-            style={{
-              resizeMode: 'contain',
-              width: 25,
-              height: 25
-            }}
-          />
+          <Image source={minusIcon} style={styles.image} />
         </TouchableOpacity>
       </View>
     </View>
@@ -187,6 +193,11 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     alignItems: 'flex-start',
     flexWrap: 'wrap'
+  },
+  image: {
+    resizeMode: 'contain',
+    width: 25,
+    height: 25
   },
   text: {
     fontSize: 18,
