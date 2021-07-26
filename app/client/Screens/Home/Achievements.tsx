@@ -10,12 +10,7 @@ const Achievements = (): ReactElement => {
 
   return (
     <View style={containerStyles.section}>
-      <Text
-        style={[
-          user.readable_font ? textStyles.h2_big : textStyles.h2,
-          { marginBottom: 10 }
-        ]}
-      >
+      <Text style={user.readable_font ? textStyles.h2_big : textStyles.h2}>
         Achievements
       </Text>
       <View style={styles.badge_container}>
@@ -35,6 +30,21 @@ const Achievements = (): ReactElement => {
           );
         })}
       </View>
+      {user.achievements.length === 0 ? (
+        <View>
+          <Text
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+          >
+            No achievements yet!
+          </Text>
+          <Text
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+          >
+            Add or complete habits and tasks, follow friends, or level up to
+            start earning badges.
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 };
