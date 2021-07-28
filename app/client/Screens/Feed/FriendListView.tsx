@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react';
 import { FlatList } from 'react-native';
+import 'react-native-get-random-values';
 import { v4 as getKey } from 'uuid';
+import 'react-native-get-random-values';
 import SingleFriend from './SingleFriend';
 
 const FriendListView = ({ query, user, users, setUsers }): ReactElement => {

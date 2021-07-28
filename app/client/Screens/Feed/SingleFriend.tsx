@@ -1,7 +1,8 @@
 import React, { useState, ReactElement } from 'react';
-import { View, Button, Text, StyleSheet } from 'react-native';
+import { View, Button, Text } from 'react-native';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { showMessage } from 'react-native-flash-message';
+import { containerStyles } from '../../Stylesheets/Stylesheet';
 
 import { useSocketContext } from '../../Contexts/socketContext';
 import { useFeedContext } from '../../Contexts/feedContext';
@@ -70,7 +71,7 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
   };
 
   return (
-    <View style={styles.textAreaContainer}>
+    <View style={containerStyles.section}>
       <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
         {item.username}
       </Text>
@@ -114,14 +115,5 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  textAreaContainer: {
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    padding: 20,
-    marginTop: 20
-  }
-});
 
 export default SingleFriend;

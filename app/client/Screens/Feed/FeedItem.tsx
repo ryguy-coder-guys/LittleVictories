@@ -14,9 +14,18 @@ import { useSocketContext } from '../../Contexts/socketContext';
 import { useFeedContext } from '../../Contexts/feedContext';
 import Comment from './Comment';
 import axios from 'axios';
+import 'react-native-get-random-values';
 import { v4 as getKey } from 'uuid';
-import { textStyles } from '../../Stylesheets/Stylesheet';
+import {
+  badgeStyles,
+  containerStyles,
+  imgStyles,
+  inputStyles,
+  textStyles
+} from '../../Stylesheets/Stylesheet';
 import { badges } from '../../badges';
+import heartOutline from '../../../assets/images/heart-outline.png';
+import fullHeart from '../../../assets/images/heart.png';
 
 const FeedItem = ({
   username,
@@ -225,10 +234,10 @@ const FeedItem = ({
     }
   };
 
-  const formatDate = (date) => {
+  const formatDate = (date: string) => {
     if (date) {
-      const dateArr = date.split('-');
-      const months = [
+      const dateArr: string[] = date.split('-');
+      const months: string[] = [
         'Jan',
         'Feb',
         'Mar',
@@ -248,33 +257,21 @@ const FeedItem = ({
       return output;
     }
   };
-
   if (isAchievement) {
     return (
-      <View style={styles.feedItemContainer}>
+      <View style={containerStyles.section}>
+        <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
+          {username} has earned a new achievement badge!
+        </Text>
+        <Text style={user.readable_font ? textStyles.h3_big : textStyles.h3}>
+          {badges[description].text}
+        </Text>
         <View style={styles.badges}>
-          <Text
-            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
-          >
-            {username}
-          </Text>
           <Image source={badges[description].source} style={styles.image} />
-          <Text
-            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
-          >
-            {badges[description].text}
-          </Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           {username === user.username ? (
-            <Image
-              source={require('../../../assets/images/heart.png')}
-              style={{
-                resizeMode: 'contain',
-                width: 25,
-                height: 25
-              }}
-            />
+            <Image source={fullHeart} style={imgStyles.xsIcon} />
           ) : (
             <TouchableOpacity
               onPress={() =>
@@ -282,11 +279,7 @@ const FeedItem = ({
               }
             >
               <Image
-                source={
-                  canLike()
-                    ? require('../../../assets/images/heart-outline.png')
-                    : require('../../../assets/images/heart.png')
-                }
+                source={canLike() ? heartOutline : fullHeart}
                 style={{
                   resizeMode: 'contain',
                   width: 25,
@@ -314,7 +307,7 @@ const FeedItem = ({
             keyExtractor={() => getKey()}
           />
         ) : null}
-        <View style={styles.btnContainer}>
+        <View style={badgeStyles.container}>
           {username !== user.username && (
             <Button
               title='Add Comment'
@@ -336,9 +329,7 @@ const FeedItem = ({
           <View>
             <TextInput
               style={
-                user.readable_font
-                  ? [styles.textInput, { fontSize: 20 }]
-                  : styles.textInput
+                user.readable_font ? inputStyles.input_big : inputStyles.input
               }
               onChangeText={(text) => {
                 setCommentText(text);
@@ -375,7 +366,7 @@ const FeedItem = ({
   }
 
   return (
-    <View style={styles.feedItemContainer}>
+    <View style={containerStyles.section}>
       <Text
         style={
           user.readable_font
@@ -393,24 +384,13 @@ const FeedItem = ({
       </Text>
       <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
         {username === user.username ? (
-          <Image
-            source={require('../../../assets/images/heart.png')}
-            style={{
-              resizeMode: 'contain',
-              width: 25,
-              height: 25
-            }}
-          />
+          <Image source={fullHeart} style={imgStyles.xsIcon} />
         ) : (
           <TouchableOpacity
             onPress={() => (canLike() ? addLike(id) : removeLike(id))}
           >
             <Image
-              source={
-                canLike()
-                  ? require('../../../assets/images/heart-outline.png')
-                  : require('../../../assets/images/heart.png')
-              }
+              source={canLike() ? heartOutline : fullHeart}
               style={{
                 resizeMode: 'contain',
                 width: 25,
@@ -455,9 +435,7 @@ const FeedItem = ({
         <View>
           <TextInput
             style={
-              user.readable_font
-                ? [styles.textInput, { fontSize: 20 }]
-                : styles.textInput
+              user.readable_font ? inputStyles.input_big : inputStyles.input
             }
             onChangeText={(text) => {
               setCommentText(text);
@@ -494,31 +472,12 @@ const FeedItem = ({
 };
 
 const styles = StyleSheet.create({
-  feedItemContainer: {
-    backgroundColor: '#8ebac6',
-    padding: 20,
-    margin: 15,
-    width: 335,
-    borderRadius: 10
-  },
-  btnContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center'
-  },
-  textInput: {
-    width: '100%',
-    padding: 10,
-    backgroundColor: '#9ec5cf',
-    fontSize: 18,
-    color: '#1D426D',
-    borderRadius: 8
-  },
   badges: {
-    height: 125,
-    width: 125,
-    padding: 20,
+    height: 100,
+    width: 100,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    alignSelf: 'center'
   },
   image: {
     resizeMode: 'contain',

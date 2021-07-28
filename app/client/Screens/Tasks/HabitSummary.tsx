@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 import React, { ReactElement, useState } from 'react';
 import { StyleSheet, FlatList, Text, View, Switch } from 'react-native';
+import 'react-native-get-random-values';
 import { v4 as getKey } from 'uuid';
 import { getDay, format } from 'date-fns';
 import HabitForm from './HabitForm';

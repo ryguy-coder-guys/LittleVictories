@@ -10,6 +10,7 @@ import {
 import { useJournalContext } from '../../Contexts/journalContext';
 import { Button } from 'react-native-elements';
 import moment from 'moment';
+import 'react-native-get-random-values';
 import { v4 as getKey } from 'uuid';
 import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';

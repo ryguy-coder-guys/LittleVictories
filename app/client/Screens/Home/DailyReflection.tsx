@@ -9,6 +9,7 @@ import { Button, Divider } from 'react-native-elements';
 import { showMessage } from 'react-native-flash-message';
 import { UserStat } from '../../Interfaces/user';
 import {
+  btnStyles,
   containerStyles,
   imgStyles,
   inputStyles
@@ -315,7 +316,7 @@ const DailyReflection = ({
           >
             <Button
               title='Submit'
-              buttonStyle={containerStyles.btn}
+              buttonStyle={btnStyles.btn}
               titleStyle={
                 user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
               }

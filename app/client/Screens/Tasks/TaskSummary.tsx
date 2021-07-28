@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import 'react-native-get-random-values';
 import { v4 as getKey } from 'uuid';
 
 import { StyleSheet, FlatList, View } from 'react-native';

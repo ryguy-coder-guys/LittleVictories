@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { useUserContext } from '../../Contexts/userContext';
+import 'react-native-get-random-values';
 import { v4 as getKey } from 'uuid';
 import starIcon from '../../../assets/images/star-circle-outline.png';
 
