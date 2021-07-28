@@ -314,6 +314,7 @@ export const getFeedItems: RequestHandler<TaskReqParams> = async (req, res) => {
       })
       .slice(0, 10);
     res.send(combined);
+    // res.send(mappedFeed);
   } catch (error) {
     res.status(500).send(error);
   }

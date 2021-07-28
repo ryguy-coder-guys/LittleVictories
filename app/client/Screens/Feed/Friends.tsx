@@ -20,7 +20,7 @@ const Friends = (): ReactElement => {
           })
         );
       })
-      .catch((err) => console.warn(err, 'l'));
+      .catch((err) => console.warn(err));
   };
 
   useEffect(() => {
@@ -28,16 +28,6 @@ const Friends = (): ReactElement => {
       getAllUsers();
     }
   }, [isLoggedIn]);
-
-  // const handleSearch = (text) => {
-  //   const filteredData = filter(fullData, (user) => {
-  //     const itemData = user.username.toUpperCase();
-  //     const textData = text.toUpperCase();
-  //     return itemData.indexOf(textData) > -1;
-  //   });
-  //   setUsers(filteredData);
-  //   setQuery(text);
-  // };
 
   return (
     <View>
