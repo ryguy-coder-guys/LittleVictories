@@ -35,7 +35,14 @@ const SingleTask = ({ item }) => {
         `http://localhost:3000/api/tasks/${item.id}/private`
       );
       if (updateSuccessful) {
-        setTaskPublic(false);
+        const mappedTasks = user.tasks.map((task) => {
+          if (task.id === item.id) {
+            return { ...task, is_public: false };
+          }
+          return task;
+        });
+        setUser({ ...user, tasks: mappedTasks });
+        // setTaskPublic(false);
         setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
         socket.emit('removeFromFeed', item.id);
       }
@@ -50,7 +57,14 @@ const SingleTask = ({ item }) => {
         `http://localhost:3000/api/tasks/${item.id}/public`
       );
       if (updateSuccessful) {
-        setTaskPublic(true);
+        const mappedTasks = user.tasks.map((task) => {
+          if (task.id === item.id) {
+            return { ...task, is_public: true };
+          }
+          return task;
+        });
+        setUser({ ...user, tasks: mappedTasks });
+        // setTaskPublic(true);
         setFeed([updateSuccessful, ...feed]);
         socket.emit('addToFeed', item);
       }

@@ -16,6 +16,17 @@ import { Like } from '../database/models/like';
 import { Comment } from '../database/models/comment';
 import sequelize from 'sequelize';
 
+const customIsPast = (date: Date) => {
+  const currentDate = new Date();
+  if (date.getFullYear() < currentDate.getFullYear()) return true;
+  if (date.getFullYear() > currentDate.getFullYear()) return false;
+  if (date.getMonth() < currentDate.getMonth()) return true;
+  if (date.getMonth() > currentDate.getMonth()) return false;
+  if (date.getDate() + 1 < currentDate.getDate()) return true;
+  // if (date.getDate() + 1 >= currentDate.getDate()) return false;
+  return false;
+};
+
 const getHash = async (password: string): Promise<string> =>
   await bcrypt.hash(password, 12);
 
@@ -90,7 +101,7 @@ export const loginUser: RequestHandler = async (req, res): Promise<void> => {
         .filter(
           (task) =>
             task.getDataValue('is_complete') === 0 ||
-            !isPast(new Date(task.getDataValue('due_date')))
+            !customIsPast(new Date(task.getDataValue('due_date')))
         )
         .map((task) => {
           return {
