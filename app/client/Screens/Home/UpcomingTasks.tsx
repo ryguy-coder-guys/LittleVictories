@@ -67,7 +67,7 @@ const UpcomingTasks = (): ReactElement => {
             </View>
           );
         })}
-      {!user.tasks.length ? (
+      {user.tasks.filter((task) => !task.is_complete).length === 0 ? (
         <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
           No upcoming tasks.
         </Text>

@@ -112,6 +112,24 @@ export const inputStyles = StyleSheet.create({
   }
 });
 
+export const journalStyles = StyleSheet.create({
+  alert_btn1: {
+    borderRadius: 8,
+    marginTop: 20,
+    width: 100,
+    marginRight: 5
+  },
+  alert_btn2: {
+    borderRadius: 8,
+    marginTop: 20,
+    width: 130,
+    marginLeft: 5
+  },
+  btn: {
+    marginTop: 20
+  }
+});
+
 export const progBarStyles = StyleSheet.create({
   main: {
     flexDirection: 'row',
@@ -212,5 +230,22 @@ export const textStyles = StyleSheet.create({
     fontSize: 20,
     color: '#1D426D',
     marginBottom: 10
+  }
+});
+
+export const alertStyles = StyleSheet.create({
+  bottomContainer: {
+    width: '100%',
+    paddingRight: 40
+  },
+  title: {
+    fontSize: 18,
+    color: '#FAFAFA',
+    textAlign: 'center'
+  },
+  title_big: {
+    fontSize: 20,
+    color: '#FAFAFA',
+    textAlign: 'center'
   }
 });

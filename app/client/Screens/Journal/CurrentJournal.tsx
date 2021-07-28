@@ -1,12 +1,51 @@
 import React, { ReactElement, useState } from 'react';
-import { View, TextInput, StyleSheet, Text } from 'react-native';
+import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
 import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
 import { useJournalContext } from '../../Contexts/journalContext';
 import moment from 'moment';
-import { textStyles } from '../../Stylesheets/Stylesheet';
+import {
+  alertStyles,
+  btnStyles,
+  journalStyles,
+  textStyles
+} from '../../Stylesheets/Stylesheet';
 import { Button } from 'react-native-elements';
 import { showMessage, hideMessage } from 'react-native-flash-message';
+
+interface Message {
+  type: string;
+  autoHide: boolean;
+  backgroundColor: string;
+  icon: string;
+  position: string;
+  message: string;
+}
+
+// 12 Pro Max // 428 x 926
+// 12 Pro 390 x 844
+// 12 414 x 895
+// 11 390 x 844
+// XR 414 x 896
+// XS 375 x 812
+// XS Max 414 x 896
+// X 375 x 812
+// 8 Plus 414 x 736
+// 8 375 x 667
+// 7 Plus 414 x 736
+
+const windowHeight = Dimensions.get('window').height;
+// to calculate the correct height for journal entry text area
+const calcHeight = () => {
+  if (windowHeight > 850) {
+    return '69%';
+  } else if (windowHeight > 800) {
+    return '63%';
+  } else if (windowHeight > 600) {
+    return '58%';
+  }
+  return '54%';
+};
 
 const Journal = (): ReactElement => {
   const { user } = useUserContext();
@@ -14,7 +53,7 @@ const Journal = (): ReactElement => {
   const [date] = useState(moment().format('MMMM D, Y'));
 
   const displayMessage = (props = {}) => {
-    const message: any = {
+    const message: Message = {
       type: 'default',
       autoHide: false,
       backgroundColor: '#1D426D',
@@ -36,7 +75,9 @@ const Journal = (): ReactElement => {
     });
     showMessage({
       message: 'Journal entry successfully saved.',
-      titleStyle: { fontSize: 20, color: '#FAFAFA', alignSelf: 'center' },
+      titleStyle: user.readable_font
+        ? alertStyles.title_big
+        : alertStyles.title,
       icon: { icon: 'success', position: 'left' },
       type: 'default',
       backgroundColor: '#1D426D'
@@ -45,22 +86,15 @@ const Journal = (): ReactElement => {
 
   const clearJournal = (): void => {
     displayMessage({
-      titleStyle: {
-        fontSize: 20,
-        color: '#FAFAFA',
-        paddingTop: 30,
-        textAlign: 'center'
-      },
-      style: {
-        width: '100%',
-        borderRadius: 0,
-        paddingRight: 40
-      },
+      titleStyle: user.readable_font
+        ? [alertStyles.title_big, { paddingTop: 30 }]
+        : [alertStyles.title, { paddingTop: 30 }],
+      style: alertStyles.bottomContainer,
       renderCustomContent: () => (
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <Button
             title='Cancel'
-            style={[styles.button, { width: 100, marginTop: 10 }]}
+            style={journalStyles.alert_btn1}
             buttonStyle={{ backgroundColor: '#FAFAFA' }}
             titleStyle={{ color: '#1D426D' }}
             onPress={() => {
@@ -69,7 +103,7 @@ const Journal = (): ReactElement => {
           />
           <Button
             title='Clear Entry'
-            style={[styles.button, { width: 130, marginTop: 10 }]}
+            style={journalStyles.alert_btn2}
             buttonStyle={{ backgroundColor: '#FAFAFA' }}
             titleStyle={{ color: '#1D426D' }}
             onPress={async () => {
@@ -102,29 +136,30 @@ const Journal = (): ReactElement => {
       <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          alignItems: 'center'
         }}
       >
-        <Text style={user.readable_font ? textStyles.h1_big : textStyles.h1}>
-          User's Journal{' '}
-        </Text>
-        <Button
-          title='Clear Entry'
-          buttonStyle={styles.button}
-          titleStyle={
-            user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
+        <Text
+          style={
+            user.readable_font
+              ? [textStyles.h1_big, { marginBottom: 0 }]
+              : [textStyles.h1, { marginBottom: 0 }]
           }
-          onPress={() => {
-            clearJournal();
-          }}
-        />
+        >
+          User&apos;s Journal
+        </Text>
       </View>
       <View style={styles.textAreaContainer}>
         <Text style={user.readable_font ? styles.dateLarger : styles.date}>
           {date}
         </Text>
         <TextInput
-          style={user.readable_font ? styles.textAreaLarger : styles.textArea}
+          style={
+            user.readable_font
+              ? [styles.textAreaLarger, { height: calcHeight() }]
+              : [styles.textArea, { height: calcHeight() }]
+          }
           placeholder='Type something'
           numberOfLines={10}
           multiline={true}
@@ -133,25 +168,37 @@ const Journal = (): ReactElement => {
           editable={true}
         />
       </View>
-      <Button
-        title='Save'
-        buttonStyle={[styles.button, styles.submit]}
-        titleStyle={
-          user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
-        }
-        onPress={() => {
-          saveJournal();
-        }}
-      />
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Button
+          title='Clear Entry'
+          buttonStyle={[btnStyles.btn, journalStyles.btn]}
+          titleStyle={
+            user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
+          }
+          onPress={() => {
+            clearJournal();
+          }}
+        />
+        <Button
+          title='Save'
+          buttonStyle={[
+            btnStyles.btn,
+            journalStyles.btn,
+            { backgroundColor: '#1D426D' }
+          ]}
+          titleStyle={
+            user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
+          }
+          onPress={() => {
+            void saveJournal();
+          }}
+        />
+      </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
-  button: {
-    padding: 10,
-    backgroundColor: '#1D426D',
-    borderRadius: 10
-  },
   date: {
     color: '#1D426D',
     fontSize: 18,
@@ -171,19 +218,13 @@ const styles = StyleSheet.create({
   main: {
     padding: 40
   },
-  submit: {
-    alignSelf: 'flex-end',
-    marginTop: 10
-  },
   textArea: {
-    height: '69%',
     justifyContent: 'flex-start',
     marginTop: 5,
     color: '#1D426D',
     fontSize: 18
   },
   textAreaLarger: {
-    height: '69%',
     justifyContent: 'flex-start',
     marginTop: 5,
     color: '#1D426D',
