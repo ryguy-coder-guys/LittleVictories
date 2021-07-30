@@ -4,10 +4,16 @@ import ProgressBar from '../Root/ProgressBar';
 import FeedView from './FeedView';
 import { ButtonGroup } from 'react-native-elements';
 import Friends from './Friends';
-import { btnStyles, containerStyles } from '../../Stylesheets/Stylesheet';
+import {
+  btnStyles,
+  containerStyles,
+  textStyles
+} from '../../Stylesheets/Stylesheet';
 import bgImage from '../../../assets/images/blue-gradient.png';
+import { useUserContext } from '../../Contexts/userContext';
 
 const Feed = (): ReactElement => {
+  const { user } = useUserContext();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const updateIndex = (selectedIndex: number): void => {
@@ -26,7 +32,11 @@ const Feed = (): ReactElement => {
             containerStyle={btnStyles.BG}
             selectedButtonStyle={btnStyles.BG_active}
             buttonStyle={btnStyles.BG_inactive}
-            textStyle={{ fontSize: 16, color: '#ada6a6' }}
+            textStyle={
+              user.readable_font
+                ? textStyles.disabledBtnTxt_big
+                : textStyles.disabledBtnTxt
+            }
             innerBorderStyle={{ color: '#1D426D' }}
           />
           {selectedIndex === 0 ? <FeedView /> : <Friends />}

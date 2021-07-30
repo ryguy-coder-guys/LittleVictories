@@ -151,7 +151,13 @@ const Journal = (): ReactElement => {
         </Text>
       </View>
       <View style={styles.textAreaContainer}>
-        <Text style={user.readable_font ? styles.dateLarger : styles.date}>
+        <Text
+          style={
+            user.readable_font
+              ? [textStyles.txt_big, { alignSelf: 'flex-end' }]
+              : [textStyles.txt, { alignSelf: 'flex-end' }]
+          }
+        >
           {date}
         </Text>
         <TextInput
@@ -199,16 +205,6 @@ const Journal = (): ReactElement => {
 };
 
 const styles = StyleSheet.create({
-  date: {
-    color: '#1D426D',
-    fontSize: 18,
-    alignSelf: 'flex-end'
-  },
-  dateLarger: {
-    color: '#1D426D',
-    fontSize: 20,
-    alignSelf: 'flex-end'
-  },
   header: {
     color: '#1D426D',
     fontSize: 26,
@@ -219,13 +215,11 @@ const styles = StyleSheet.create({
     padding: 40
   },
   textArea: {
-    justifyContent: 'flex-start',
     marginTop: 5,
     color: '#1D426D',
     fontSize: 18
   },
   textAreaLarger: {
-    justifyContent: 'flex-start',
     marginTop: 5,
     color: '#1D426D',
     fontSize: 20

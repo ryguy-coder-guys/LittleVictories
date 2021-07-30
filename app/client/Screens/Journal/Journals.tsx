@@ -1,19 +1,22 @@
 import ProgressBar from '../Root/ProgressBar';
 import CurrentJournal from './CurrentJournal';
 import PastJournals from './PastJournals';
-import React, { useState } from 'react';
-import { ImageBackground, SafeAreaView, StyleSheet, View } from 'react-native';
+import React, { ReactElement, useState } from 'react';
+import { ImageBackground, SafeAreaView, View } from 'react-native';
 import { ButtonGroup } from 'react-native-elements';
 import { useUserContext } from '../../Contexts/userContext';
-import { containerStyles } from '../../Stylesheets/Stylesheet';
+import {
+  btnStyles,
+  containerStyles,
+  textStyles
+} from '../../Stylesheets/Stylesheet';
+import bgImage from '../../../assets/images/blue-gradient.png';
 
-const Journals = () => {
-  const bgImage = require('../../../assets/images/blue-gradient.png');
+const Journals = (): ReactElement => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const buttons = ['Current', 'Previous'];
   const { user } = useUserContext();
 
-  const updateIndex = (selectedIndex) => {
+  const updateIndex = (selectedIndex: number) => {
     setSelectedIndex(selectedIndex);
   };
 
@@ -24,24 +27,14 @@ const Journals = () => {
         <ButtonGroup
           onPress={updateIndex}
           selectedIndex={selectedIndex}
-          buttons={buttons}
-          containerStyle={{
-            height: 40,
-            borderRadius: 10,
-            borderColor: '#5c83b1',
-            marginTop: 20,
-            marginRight: 40,
-            marginLeft: 40
-          }}
-          selectedButtonStyle={{
-            backgroundColor: '#5c83b1',
-            borderColor: '#5c83b1'
-          }}
-          buttonStyle={{ backgroundColor: '#1D426D', borderColor: '#5c83b1' }}
+          buttons={['Current', 'Previous']}
+          containerStyle={btnStyles.BG}
+          selectedButtonStyle={btnStyles.BG_active}
+          buttonStyle={btnStyles.BG_inactive}
           textStyle={
             user.readable_font
-              ? { fontSize: 18, color: '#ada6a6' }
-              : { fontSize: 16, color: '#ada6a6' }
+              ? textStyles.disabledBtnTxt_big
+              : textStyles.disabledBtnTxt
           }
           innerBorderStyle={{ color: '#1D426D' }}
         />
