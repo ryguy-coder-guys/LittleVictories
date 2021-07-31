@@ -205,7 +205,11 @@ const SingleTask = ({ item }): ReactElement => {
         </View>
         <View style={{ marginLeft: 10 }}>
           <Text
-            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+            style={
+              user.readable_font
+                ? [textStyles.txt_big, { width: '82%' }]
+                : [textStyles.txt, { width: '82%' }]
+            }
           >
             {item.description} - {addTimeStamp(item.due_date)}
           </Text>
