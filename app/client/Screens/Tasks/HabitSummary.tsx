@@ -55,7 +55,7 @@ const ListHeader = ({ showAll, toggleShowAll }): ReactElement => {
           <Text
             style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
-            Due Today{'  '}
+            Today{'  '}
           </Text>
           <Switch
             trackColor={{ false: '#767577', true: '#81b0ff' }}
@@ -67,7 +67,7 @@ const ListHeader = ({ showAll, toggleShowAll }): ReactElement => {
             style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
             {'  '}
-            View All
+            All
           </Text>
         </View>
       </View>
