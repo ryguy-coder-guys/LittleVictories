@@ -1,22 +1,20 @@
-import React, { useState } from 'react';
-import {
-  Text,
-  View,
-  TextInput,
-  StyleSheet,
-  ImageBackground,
-  Image
-} from 'react-native';
+import React, { ReactElement, useState } from 'react';
+import { Text, View, TextInput, ImageBackground, Image } from 'react-native';
 import { Button } from 'react-native-elements';
 import { showMessage } from 'react-native-flash-message';
 import { useUserContext } from '../../Contexts/userContext';
 import { useSocketContext } from '../../Contexts/socketContext';
 import axios from 'axios';
-import { containerStyles } from '../../Stylesheets/Stylesheet';
+import {
+  btnStyles,
+  containerStyles,
+  inputStyles,
+  textStyles
+} from '../../Stylesheets/Stylesheet';
 import bgImage from '../../../assets/images/blue-gradient.png';
 import logo from '../../../assets/logo.png';
 
-const Login = ({ navigation }) => {
+const Login = ({ navigation }): ReactElement => {
   const { setUser, setUserStat, setIsLoggedIn } = useUserContext();
   const { socket } = useSocketContext();
   const [username, setUsername] = useState('');
@@ -44,7 +42,7 @@ const Login = ({ navigation }) => {
     if (loginSelected) {
       // attempt a login for the user
       const { data: userObj } = await axios.post(
-        'http://localhost:3000/api/auth/login',
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/login',
         {
           username,
           password: passwordAttempt
@@ -95,7 +93,7 @@ const Login = ({ navigation }) => {
         return;
       }
       const { data: user } = await axios.post(
-        'http://localhost:3000/api/auth/register',
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/register',
         {
           username,
           password: passwordAttempt
@@ -106,7 +104,7 @@ const Login = ({ navigation }) => {
       if (user) {
         // once a new user is created, send to login route
         const { data: userObj } = await axios.post(
-          'http://localhost:3000/api/auth/login',
+          'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/login',
           {
             username,
             password: passwordAttempt
@@ -158,7 +156,7 @@ const Login = ({ navigation }) => {
             <View style={{ flexDirection: 'row' }}>
               <Button
                 title='Login'
-                buttonStyle={styles.button}
+                buttonStyle={btnStyles.btn_login}
                 titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
                 onPress={() => {
                   handleClick('login');
@@ -166,23 +164,26 @@ const Login = ({ navigation }) => {
               />
               <Button
                 title='Register'
-                buttonStyle={[styles.button, { backgroundColor: '#1D426D' }]}
+                buttonStyle={[
+                  btnStyles.btn_login,
+                  { backgroundColor: '#1D426D' }
+                ]}
                 titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
                 onPress={() => {
                   handleClick('register');
                 }}
               />
             </View>
-            <Text style={styles.text}>Username</Text>
+            <Text style={textStyles.txt_big}>Username</Text>
             <TextInput
-              style={styles.input}
+              style={inputStyles.input_login}
               onChangeText={setUsername}
               value={username}
               autoCapitalize='none'
             />
-            <Text style={styles.text}>Password</Text>
+            <Text style={textStyles.txt_big}>Password</Text>
             <TextInput
-              style={styles.input}
+              style={inputStyles.input_login}
               onChangeText={setPasswordAttempt}
               value={passwordAttempt}
               secureTextEntry={true}
@@ -190,10 +191,13 @@ const Login = ({ navigation }) => {
             />
             <Button
               title='Submit'
-              buttonStyle={[styles.button, { backgroundColor: '#1D426D' }]}
+              buttonStyle={[
+                btnStyles.btn_login,
+                { backgroundColor: '#1D426D' }
+              ]}
               titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
               onPress={() => {
-                handleLogin();
+                void handleLogin();
               }}
             />
           </>
@@ -211,7 +215,10 @@ const Login = ({ navigation }) => {
             <View style={{ flexDirection: 'row' }}>
               <Button
                 title='Login'
-                buttonStyle={[styles.button, { backgroundColor: '#1D426D' }]}
+                buttonStyle={[
+                  btnStyles.btn_login,
+                  { backgroundColor: '#1D426D' }
+                ]}
                 titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
                 onPress={() => {
                   handleClick('login');
@@ -219,31 +226,34 @@ const Login = ({ navigation }) => {
               />
               <Button
                 title='Register'
-                buttonStyle={[styles.button, { backgroundColor: '#5c83b1' }]}
+                buttonStyle={[
+                  btnStyles.btn_login,
+                  { backgroundColor: '#5c83b1' }
+                ]}
                 titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
                 onPress={() => {
                   handleClick('register');
                 }}
               />
             </View>
-            <Text style={styles.text}>Username</Text>
+            <Text style={textStyles.txt_big}>Username</Text>
             <TextInput
-              style={styles.input}
+              style={inputStyles.input_login}
               onChangeText={setUsername}
               value={username}
               autoCapitalize='none'
             />
-            <Text style={styles.text}>Password</Text>
+            <Text style={textStyles.txt_big}>Password</Text>
             <TextInput
-              style={styles.input}
+              style={inputStyles.input_login}
               onChangeText={setPasswordAttempt}
               value={passwordAttempt}
               secureTextEntry={true}
               autoCapitalize='none'
             />
-            <Text style={styles.text}>Confirm Password</Text>
+            <Text style={textStyles.txt_big}>Confirm Password</Text>
             <TextInput
-              style={styles.input}
+              style={inputStyles.input_login}
               onChangeText={setPasswordAttempt2}
               value={passwordAttempt2}
               secureTextEntry={true}
@@ -251,10 +261,13 @@ const Login = ({ navigation }) => {
             />
             <Button
               title='Submit'
-              buttonStyle={[styles.button, { backgroundColor: '#1D426D' }]}
+              buttonStyle={[
+                btnStyles.btn_login,
+                { backgroundColor: '#1D426D' }
+              ]}
               titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
               onPress={() => {
-                handleLogin();
+                void handleLogin();
               }}
             />
           </>
@@ -263,31 +276,5 @@ const Login = ({ navigation }) => {
     </ImageBackground>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    marginLeft: 5,
-    marginRight: 5,
-    marginBottom: 20,
-    backgroundColor: '#5c83b1',
-    borderRadius: 8,
-    height: 40,
-    width: 100
-  },
-  input: {
-    height: 40,
-    width: '50%',
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: '#FAFAFA',
-    opacity: 0.3,
-    marginBottom: 20
-  },
-  text: {
-    color: '#FAFAFA',
-    marginBottom: 5,
-    fontSize: 18
-  }
-});
 
 export default Login;

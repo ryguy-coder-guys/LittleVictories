@@ -24,27 +24,29 @@ const Journals = (): ReactElement => {
     <ImageBackground style={containerStyles.bgImg} source={bgImage}>
       <ProgressBar />
       <SafeAreaView>
-        <ButtonGroup
-          onPress={updateIndex}
-          selectedIndex={selectedIndex}
-          buttons={['Current', 'Previous']}
-          containerStyle={btnStyles.BG}
-          selectedButtonStyle={btnStyles.BG_active}
-          buttonStyle={btnStyles.BG_inactive}
-          textStyle={
-            user.readable_font
-              ? textStyles.disabledBtnTxt_big
-              : textStyles.disabledBtnTxt
-          }
-          innerBorderStyle={{ color: '#1D426D' }}
-        />
-        {selectedIndex === 0 ? (
-          <CurrentJournal />
-        ) : (
-          <View>
-            <PastJournals />
-          </View>
-        )}
+        <View style={containerStyles.fullScreenView}>
+          <ButtonGroup
+            onPress={updateIndex}
+            selectedIndex={selectedIndex}
+            buttons={['Current', 'Previous']}
+            containerStyle={btnStyles.BG}
+            selectedButtonStyle={btnStyles.BG_active}
+            buttonStyle={btnStyles.BG_inactive}
+            textStyle={
+              user.readable_font
+                ? textStyles.disabledBtnTxt_big
+                : textStyles.disabledBtnTxt
+            }
+            innerBorderStyle={{ color: '#1D426D' }}
+          />
+          {selectedIndex === 0 ? (
+            <CurrentJournal />
+          ) : (
+            <View>
+              <PastJournals />
+            </View>
+          )}
+        </View>
       </SafeAreaView>
     </ImageBackground>
   );

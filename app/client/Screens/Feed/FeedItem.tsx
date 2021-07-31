@@ -3,7 +3,6 @@ import {
   Button,
   FlatList,
   Image,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -56,7 +55,7 @@ const FeedItem = ({
 
   const addAchievementComment = async () => {
     const { data: newAchievementComment } = await axios.post(
-      'http://localhost:3000/api/achievements/comment',
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/achievements/comment',
       {
         userId: user.id,
         achievementId: id,
@@ -82,7 +81,7 @@ const FeedItem = ({
 
   const removeAchievementComment = async (commentId: number) => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://localhost:3000/api/achievements/comment/${commentId}`
+      `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/achievements/comment/${commentId}`
     );
     if (removeSuccessful) {
       const mappedFeed = feed.map((feedItem) => {
@@ -102,7 +101,7 @@ const FeedItem = ({
   const addAchievementLike = async () => {
     console.log('in add achievement like');
     const { data: newLike } = await axios.post(
-      'http://localhost:3000/api/achievements/like',
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/achievements/like',
       {
         userId: user.id,
         achievementId: id
@@ -123,7 +122,7 @@ const FeedItem = ({
   const removeAchievementLike = async () => {
     console.log('in remove  achievement like');
     const { data: removeSuccessful } = await axios.delete(
-      `http://localhost:3000/api/achievements/like/${user.id}/${id}`
+      `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/achievements/like/${user.id}/${id}`
     );
     if (removeSuccessful) {
       const mappedFeed = feed.map((feedItem) => {
@@ -144,7 +143,7 @@ const FeedItem = ({
 
   const addLike = async (taskId: number): Promise<void> => {
     const { data: newLike } = await axios.post(
-      'http://localhost:3000/api/likes/',
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/likes/',
       {
         userId: user.id,
         taskId
@@ -164,7 +163,7 @@ const FeedItem = ({
 
   const removeLike = async (taskId: number): Promise<void> => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://localhost:3000/api/likes/${user.id}/${taskId}`
+      `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/likes/${user.id}/${taskId}`
     );
     if (removeSuccessful) {
       const mappedFeed = feed.map((feedItem) => {
@@ -183,7 +182,7 @@ const FeedItem = ({
 
   const addComment = async (): Promise<void> => {
     const { data: newComment } = await axios.post(
-      'http://localhost:3000/api/comments',
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/comments',
       {
         user_id: user.id,
         task_id: id,
@@ -206,7 +205,7 @@ const FeedItem = ({
 
   const removeComment = async (commentId: number): Promise<void> => {
     const { data: removeSuccessful } = await axios.delete(
-      `http://localhost:3000/api/comments/${commentId}`
+      `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/comments/${commentId}`
     );
     if (removeSuccessful) {
       const mappedFeed = feed.map((feedItem) => {
@@ -266,8 +265,11 @@ const FeedItem = ({
         <Text style={user.readable_font ? textStyles.h3_big : textStyles.h3}>
           {badges[description].text}
         </Text>
-        <View style={styles.badges}>
-          <Image source={badges[description].source} style={styles.image} />
+        <View style={badgeStyles.feed_badge}>
+          <Image
+            source={badges[description].source}
+            style={badgeStyles.feed_image}
+          />
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
           {username === user.username ? (
@@ -413,7 +415,7 @@ const FeedItem = ({
           keyExtractor={() => getKey()}
         />
       ) : null}
-      <View style={styles.btnContainer}>
+      <View>
         {username !== user.username && (
           <Button
             title='Add Comment'
@@ -470,20 +472,5 @@ const FeedItem = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  badges: {
-    height: 100,
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center'
-  },
-  image: {
-    resizeMode: 'contain',
-    width: '100%',
-    height: '100%'
-  }
-});
 
 export default FeedItem;

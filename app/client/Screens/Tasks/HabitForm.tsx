@@ -1,19 +1,18 @@
 import React, { ReactElement, useState } from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import axios, { AxiosResponse } from 'axios';
 import { FAB } from 'react-native-paper';
 import { useUserContext } from '../../Contexts/userContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import { Button, ButtonGroup } from 'react-native-elements';
-import { textStyles } from '../../Stylesheets/Stylesheet';
+import {
+  btnStyles,
+  containerStyles,
+  imgStyles,
+  inputStyles,
+  textStyles
+} from '../../Stylesheets/Stylesheet';
 import { Habit } from '../../Interfaces/user';
 import { showMessage } from 'react-native-flash-message';
 import minusIcon from '../../../assets/images/minus-circle-outline.png';
@@ -38,7 +37,7 @@ const TaskForm = (): ReactElement => {
   const postHabit = async (): Promise<void> => {
     const frequencies: string[] = ['daily', 'weekly', 'monthly'];
     const { data: habit }: AxiosResponse<Habit> = await axios.post(
-      'http://localhost:3000/api/habits/',
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/habits/',
       {
         user_id: user.id,
         description: description,
@@ -102,32 +101,32 @@ const TaskForm = (): ReactElement => {
   const dayArr: string[] = ['M', 'Tu', 'W', 'Th', 'F', 'Sa', 'Su'];
 
   return (
-    <View style={styles.container}>
+    <View>
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginLeft: 20
+          alignItems: 'center'
         }}
       >
-        <Text style={user.readable_font ? textStyles.h1_big : textStyles.h1}>
+        <Text
+          style={
+            user.readable_font
+              ? textStyles.screenHeading_big
+              : textStyles.screenHeading
+          }
+        >
           Habits
         </Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <View
-            style={{ flexDirection: 'column', alignItems: 'center' }}
-          ></View>
-          <Text> </Text>
-          <FAB
-            style={styles.fab}
-            small
-            icon='plus'
-            onPress={() => setShowForm(true)}
-          />
-        </View>
+        <FAB
+          style={btnStyles.fab}
+          small
+          icon='plus'
+          onPress={() => setShowForm(true)}
+        />
       </View>
       {showForm ? (
-        <View style={styles.addHabitComponent}>
+        <View style={containerStyles.section}>
           <View>
             <View
               style={{
@@ -136,18 +135,18 @@ const TaskForm = (): ReactElement => {
               }}
             >
               <Text
-                style={
-                  user.readable_font ? styles.subheaderLarger : styles.subheader
-                }
+                style={user.readable_font ? textStyles.h2_big : textStyles.h2}
               >
                 Add Habit
               </Text>
               <TouchableOpacity onPress={() => setShowForm(false)}>
-                <Image source={minusIcon} style={styles.image} />
+                <Image source={minusIcon} style={imgStyles.xsIcon} />
               </TouchableOpacity>
             </View>
             <TextInput
-              style={user.readable_font ? styles.inputLarger : styles.input}
+              style={
+                user.readable_font ? inputStyles.input_big : inputStyles.input
+              }
               onChangeText={setDescription}
               value={description}
               placeholder='Enter Habit Description'
@@ -155,7 +154,11 @@ const TaskForm = (): ReactElement => {
             />
           </View>
           <Text
-            style={user.readable_font ? styles.promptLarger : styles.prompt}
+            style={
+              user.readable_font
+                ? [textStyles.txt_big, { marginTop: 10 }]
+                : [textStyles.txt, { marginTop: 10 }]
+            }
           >
             Habit Frequency
           </Text>
@@ -188,7 +191,11 @@ const TaskForm = (): ReactElement => {
           {selectedFrequencyIndex === 1 ? (
             <View>
               <Text
-                style={user.readable_font ? styles.promptLarger : styles.prompt}
+                style={
+                  user.readable_font
+                    ? [textStyles.txt_big, { marginTop: 10 }]
+                    : [textStyles.txt, { marginTop: 10 }]
+                }
               >
                 Habit Day(s)
               </Text>
@@ -196,28 +203,16 @@ const TaskForm = (): ReactElement => {
                 onPress={setSelectedDayIndices}
                 selectedIndexes={selectedDayIndices}
                 buttons={dayArr}
-                containerStyle={{
-                  height: 40,
-                  borderRadius: 4,
-                  borderColor: '#5c83b1'
-                }}
-                selectedButtonStyle={{
-                  backgroundColor: '#5c83b1',
-                  borderColor: '#5c83b1'
-                }}
-                buttonStyle={{
-                  backgroundColor: '#1D426D',
-                  borderColor: '#5c83b1'
-                }}
+                containerStyle={btnStyles.BG}
+                selectedButtonStyle={btnStyles.BG_active}
+                buttonStyle={btnStyles.BG_inactive}
                 textStyle={
-                  user.readable_font
-                    ? { fontSize: 18, color: '#FAFAFA' }
-                    : { fontSize: 16, color: '#FAFAFA' }
+                  user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
                 }
                 disabledTextStyle={
                   user.readable_font
-                    ? { fontSize: 18, color: '#a3a0a0' }
-                    : { fontSize: 16, color: '#a3a0a0' }
+                    ? textStyles.disabledBtnTxt_big
+                    : textStyles.disabledBtnTxt
                 }
                 innerBorderStyle={{ color: '#1D426D' }}
                 selectMultiple={true}
@@ -227,7 +222,11 @@ const TaskForm = (): ReactElement => {
           {selectedFrequencyIndex === 2 ? (
             <View>
               <Text
-                style={user.readable_font ? styles.promptLarger : styles.prompt}
+                style={
+                  user.readable_font
+                    ? [textStyles.txt_big, { marginTop: 10, marginBottom: 15 }]
+                    : [textStyles.txt, { marginTop: 10, marginBottom: 15 }]
+                }
               >
                 Monthly Repeat Date
               </Text>
@@ -240,17 +239,9 @@ const TaskForm = (): ReactElement => {
             </View>
           ) : null}
           <Button
-            buttonStyle={{
-              width: 80,
-              alignSelf: 'flex-end',
-              marginTop: 15,
-              borderRadius: 8,
-              backgroundColor: '#5c83b1'
-            }}
+            buttonStyle={btnStyles.btn_submit}
             titleStyle={
-              user.readable_font
-                ? { fontSize: 20, color: '#FAFAFA' }
-                : { fontSize: 18, color: '#FAFAFA' }
+              user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
             }
             title='Submit'
             onPress={() => handleSubmit()}
@@ -260,79 +251,5 @@ const TaskForm = (): ReactElement => {
     </View>
   );
 };
-const styles = StyleSheet.create({
-  addHabitComponent: {
-    backgroundColor: '#8ebac6',
-    padding: 20,
-    borderRadius: 10,
-    marginTop: 20,
-    marginRight: 20,
-    marginLeft: 20
-  },
-  container: {
-    flex: 1,
-    padding: 20
-  },
-  fab: {
-    backgroundColor: '#1D426D',
-    height: 40,
-    marginRight: 20
-  },
-  image: {
-    resizeMode: 'contain',
-    width: 25,
-    height: 25
-  },
-  input: {
-    borderRadius: 10,
-    backgroundColor: '#9ec5cf',
-    color: '#1D426D',
-    height: 40,
-    padding: 10,
-    width: '100%',
-    marginTop: 15,
-    fontSize: 16
-  },
-  inputLarger: {
-    borderRadius: 10,
-    backgroundColor: '#9ec5cf',
-    color: '#1D426D',
-    height: 40,
-    padding: 10,
-    width: '100%',
-    marginTop: 15,
-    fontSize: 18
-  },
-  prompt: {
-    alignSelf: 'flex-start',
-    color: '#1D426D',
-    marginTop: 25,
-    marginBottom: 10,
-    fontSize: 18
-  },
-  promptLarger: {
-    alignSelf: 'flex-start',
-    color: '#1D426D',
-    marginTop: 25,
-    marginBottom: 10,
-    fontSize: 20
-  },
-  subheader: {
-    color: '#1D426D',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginTop: 5
-  },
-  subheaderLarger: {
-    color: '#1D426D',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginTop: 5
-  },
-  textArea: {
-    height: 200,
-    width: 100,
-    justifyContent: 'flex-start'
-  }
-});
+
 export default TaskForm;

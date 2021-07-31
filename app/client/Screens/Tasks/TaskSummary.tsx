@@ -1,8 +1,7 @@
 import React, { ReactElement } from 'react';
 import 'react-native-get-random-values';
 import { v4 as getKey } from 'uuid';
-
-import { StyleSheet, FlatList, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import SingleTask from './SingleTask';
 import TaskForm from './TaskForm';
@@ -15,7 +14,7 @@ const TaskSummary = (): ReactElement => {
   const { user } = useUserContext();
 
   return (
-    <View style={styles.listContainer}>
+    <View style={{ height: '89.8%' }}>
       <FlatList
         keyExtractor={() => getKey()}
         data={user ? user.tasks : []}
@@ -25,11 +24,5 @@ const TaskSummary = (): ReactElement => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  listContainer: {
-    height: '86%'
-  }
-});
 
 export default TaskSummary;

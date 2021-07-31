@@ -1,22 +1,16 @@
 import axios from 'axios';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { useUserContext } from '../../Contexts/userContext';
 import React, { ReactElement, useState } from 'react';
 import { format, getDaysInMonth } from 'date-fns';
 import uncheckedBox from '../../../assets/images/checkbox-blank-outline.png';
 import checkedBox from '../../../assets/images/checkbox-marked.png';
 import minusIcon from '../../../assets/images/minus-circle-outline.png';
-
-interface Habit {
-  id: number;
-  description: string;
-  frequency: string;
-  days_of_week: string;
-  calendar_date: number;
-  is_complete: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import {
+  containerStyles,
+  imgStyles,
+  textStyles
+} from '../../Stylesheets/Stylesheet';
 
 const SingleHabit = ({ item }): ReactElement => {
   const { user, setUser, setNumHabits, setLevel } = useUserContext();
@@ -32,7 +26,7 @@ const SingleHabit = ({ item }): ReactElement => {
       const {
         data: { points, level }
       } = await axios.patch<DataInterface>(
-        `http://localhost:3000/api/habits/${item.id}/complete`
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/habits/${item.id}/complete`
       );
       const mappedHabits = user.habits.map((habit) => {
         if (habit.id === item.id) {
@@ -52,7 +46,7 @@ const SingleHabit = ({ item }): ReactElement => {
       const {
         data: { points, level }
       } = await axios.patch(
-        `http://localhost:3000/api/habits/${item.id}/incomplete`
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/habits/${item.id}/incomplete`
       );
       const mappedHabits = user.habits.map((habit) => {
         if (habit.id === item.id) {
@@ -68,7 +62,9 @@ const SingleHabit = ({ item }): ReactElement => {
 
   const removeHabit = async () => {
     try {
-      await axios.delete(`http://localhost:3000/api/habits/${item.id}`);
+      await axios.delete(
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/habits/${item.id}`
+      );
       const filteredHabits = user.habits.filter((habit) => {
         return habit.id !== item.id;
       });
@@ -119,7 +115,7 @@ const SingleHabit = ({ item }): ReactElement => {
   };
 
   return (
-    <View style={styles.habit_view}>
+    <View style={containerStyles.section}>
       <View style={{ flexDirection: 'row' }}>
         {!finished ? (
           <TouchableOpacity
@@ -128,7 +124,7 @@ const SingleHabit = ({ item }): ReactElement => {
               finished ? void markHabitIncomplete() : void markHabitComplete();
             }}
           >
-            <Image source={uncheckedBox} style={styles.checkbox} />
+            <Image source={uncheckedBox} style={imgStyles.xsIcon} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
@@ -137,23 +133,39 @@ const SingleHabit = ({ item }): ReactElement => {
               finished ? void markHabitIncomplete() : void markHabitComplete();
             }}
           >
-            <Image source={checkedBox} style={styles.checkbox} />
+            <Image source={checkedBox} style={imgStyles.xsIcon} />
           </TouchableOpacity>
         )}
         <View style={{ flexDirection: 'column', marginLeft: 10 }}>
-          <Text style={user.readable_font ? styles.textLarger : styles.text}>
+          <Text
+            style={
+              user.readable_font
+                ? [textStyles.txt_big, { maxWidth: 250 }]
+                : [textStyles.txt, { maxWidth: 250 }]
+            }
+          >
             {item.description}
           </Text>
-          <Text style={user.readable_font ? styles.textLarger : styles.text}>
+          <Text
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+          >
             Frequency: {item.frequency}
           </Text>
           {item.frequency === 'weekly' ? (
-            <Text style={user.readable_font ? styles.textLarger : styles.text}>
+            <Text
+              style={
+                user.readable_font
+                  ? [textStyles.txt_big, { maxWidth: 250 }]
+                  : [textStyles.txt, { maxWidth: 250 }]
+              }
+            >
               On {splitDays(item.days_of_week)}
             </Text>
           ) : null}
           {item.frequency === 'monthly' ? (
-            <Text style={user.readable_font ? styles.textLarger : styles.text}>
+            <Text
+              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+            >
               Due Date: {format(new Date(), 'MMMM')}{' '}
               {checkDate(item.calendar_date)}
             </Text>
@@ -166,49 +178,11 @@ const SingleHabit = ({ item }): ReactElement => {
             void removeHabit();
           }}
         >
-          <Image source={minusIcon} style={styles.image} />
+          <Image source={minusIcon} style={imgStyles.xsIcon} />
         </TouchableOpacity>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  checkbox: {
-    resizeMode: 'contain',
-    width: 25,
-    height: 25,
-    marginLeft: 20
-  },
-  habit_view: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginLeft: 40,
-    marginRight: 40,
-    marginTop: 10,
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    paddingRight: 20,
-    paddingBottom: 20,
-    paddingTop: 20,
-    alignItems: 'flex-start',
-    flexWrap: 'wrap'
-  },
-  image: {
-    resizeMode: 'contain',
-    width: 25,
-    height: 25
-  },
-  text: {
-    fontSize: 18,
-    color: '#1D426D',
-    maxWidth: 250
-  },
-  textLarger: {
-    fontSize: 20,
-    color: '#1D426D',
-    maxWidth: 250
-  }
-});
 
 export default SingleHabit;

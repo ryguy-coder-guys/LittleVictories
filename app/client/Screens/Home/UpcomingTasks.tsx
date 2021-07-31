@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { textStyles } from '../../Stylesheets/Stylesheet';
+import { Image, Text, View } from 'react-native';
+import { containerStyles, textStyles } from '../../Stylesheets/Stylesheet';
 import { useUserContext } from '../../Contexts/userContext';
 import 'react-native-get-random-values';
 import { v4 as getKey } from 'uuid';
@@ -34,7 +34,7 @@ const UpcomingTasks = (): ReactElement => {
   };
 
   return (
-    <View style={styles.view}>
+    <View style={containerStyles.section}>
       <Text
         style={[
           user.readable_font ? textStyles.h2_big : textStyles.h2,
@@ -48,7 +48,7 @@ const UpcomingTasks = (): ReactElement => {
         .slice(0, 5)
         .map((task) => {
           return (
-            <View style={styles.task} key={getKey()}>
+            <View style={containerStyles.task} key={getKey()}>
               <Text
                 style={user.readable_font ? textStyles.txt_big : textStyles.txt}
               >
@@ -75,19 +75,5 @@ const UpcomingTasks = (): ReactElement => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  task: {
-    paddingTop: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  view: {
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    marginBottom: 20,
-    padding: 20
-  }
-});
 
 export default UpcomingTasks;

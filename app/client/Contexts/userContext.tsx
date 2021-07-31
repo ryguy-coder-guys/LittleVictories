@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
 import { User, UserStat } from '../Interfaces/user';
 import { useSocketContext } from '../Contexts/socketContext';
 import { showMessage } from 'react-native-flash-message';
 import axios from 'axios';
 import { badges } from '../badges';
+import { alertStyles, badgeStyles } from '../Stylesheets/Stylesheet';
+import { Style } from 'util';
 
 interface UserContextState {
   user: User;
@@ -90,23 +92,34 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
     }
   }, [isLoggedIn]);
 
+  interface Icon {
+    icon: string;
+    position: string;
+  }
+  interface Message {
+    type: string;
+    autoHide: boolean;
+    backgroundColor: string;
+    icon: Icon;
+    position: string;
+    message: string;
+    titleStyle: Style;
+    style: Style;
+  }
+
   const displayMessage = (props = {}) => {
-    const message: any = {
+    const message: Message = {
       type: 'default',
       autoHide: false,
       backgroundColor: '#1D426D',
       icon: { icon: 'danger', position: 'right' },
       position: 'bottom',
       message: 'Congratulations!',
-      titleStyle: {
-        fontSize: 20,
-        color: '#FAFAFA',
-        paddingTop: 30,
-        textAlign: 'center'
-      },
+      titleStyle: user.readable_font
+        ? [alertStyles.title_big, { paddingTop: 30 }]
+        : [alertStyles.title, { paddingTop: 30 }],
       style: {
         width: '100%',
-        borderRadius: 0,
         paddingLeft: 40
       },
       ...props
@@ -120,7 +133,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
     msg: string
   ): Promise<void> => {
     const { data: newAchievement } = await axios.post(
-      'http://localhost:3000/api/achievements',
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/achievements',
       {
         user_id: user.id,
         achievement_type
@@ -139,7 +152,7 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
         <TouchableOpacity>
           <Image
             source={badges[achievement_type].source}
-            style={styles.image}
+            style={badgeStyles.achievement_badge}
           />
         </TouchableOpacity>
       )
@@ -154,28 +167,28 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
 
   useEffect(() => {
     if (level === 1 && !hasAchievement('levelOne'))
-      addAchievement('levelOne', 'Level 1 Reached');
+      void addAchievement('levelOne', 'Level 1 Reached');
     else if (level === 5 && !hasAchievement('levelFive'))
-      addAchievement('levelFive', 'Level 5 Reached');
+      void addAchievement('levelFive', 'Level 5 Reached');
     else if (level === 10 && !hasAchievement('levelTen'))
-      addAchievement('levelTen', 'Level 10 Reached');
+      void addAchievement('levelTen', 'Level 10 Reached');
   }, [level]);
 
   useEffect(() => {
     if (numCompletedTasks === 5 && !hasAchievement('fiveTasks'))
-      addAchievement('fiveTasks', '5 Completed Tasks');
+      void addAchievement('fiveTasks', '5 Completed Tasks');
   }, [numCompletedTasks]);
 
   useEffect(() => {
     if (numHabits === 5 && !hasAchievement('fiveHabits'))
-      addAchievement('fiveHabits', '5 Habits Added');
+      void addAchievement('fiveHabits', '5 Habits Added');
   }, [numHabits]);
 
   useEffect(() => {
     if (numFollowees === 3 && !hasAchievement('threeFollowees'))
-      addAchievement('threeFollowees', 'Added 3 Friends');
+      void addAchievement('threeFollowees', 'Added 3 Friends');
     else if (numFollowees === 5 && !hasAchievement('fiveFollowees'))
-      addAchievement('fiveFollowees', 'Added 5 Friends');
+      void addAchievement('fiveFollowees', 'Added 5 Friends');
   });
 
   return (
@@ -200,16 +213,5 @@ export const UserContextProvider: React.FunctionComponent = ({ children }) => {
     </UserContext.Provider>
   );
 };
-
-const styles = StyleSheet.create({
-  image: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-    alignSelf: 'center',
-    marginTop: 20,
-    marginBottom: 10
-  }
-});
 
 export const useUserContext = () => useContext(UserContext);

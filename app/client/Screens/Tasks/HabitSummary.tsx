@@ -1,12 +1,13 @@
 /* eslint-disable indent */
 import React, { ReactElement, useState } from 'react';
-import { StyleSheet, FlatList, Text, View, Switch } from 'react-native';
+import { FlatList, Text, View, Switch } from 'react-native';
 import 'react-native-get-random-values';
 import { v4 as getKey } from 'uuid';
 import { getDay, format } from 'date-fns';
 import HabitForm from './HabitForm';
 import SingleHabit from './SingleHabit';
 import { useUserContext } from '../../Contexts/userContext';
+import { textStyles } from '../../Stylesheets/Stylesheet';
 
 const HabitsTodayList = ({ item }): ReactElement => {
   return <SingleHabit item={item} />;
@@ -21,11 +22,20 @@ const ListHeader = ({ showAll, toggleShowAll }): ReactElement => {
   return (
     <View>
       <HabitForm />
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginBottom: 15,
+          alignItems: 'center'
+        }}
+      >
         {!showAll ? (
           <Text
             style={
-              user.readable_font ? styles.subheaderLarger : styles.subheader
+              user.readable_font
+                ? [textStyles.h3_big, { marginBottom: 10 }]
+                : [textStyles.h3, { marginBottom: 10 }]
             }
           >
             Due Today
@@ -33,59 +43,30 @@ const ListHeader = ({ showAll, toggleShowAll }): ReactElement => {
         ) : (
           <Text
             style={
-              user.readable_font ? styles.subheaderLarger : styles.subheader
+              user.readable_font
+                ? [textStyles.h3_big, { marginBottom: 10 }]
+                : [textStyles.h3, { marginBottom: 10 }]
             }
           >
             All Habits
           </Text>
         )}
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row' }}>
           <Text
-            style={
-              user.readable_font
-                ? {
-                    fontSize: 16,
-                    color: '#1D426D',
-                    marginBottom: 5,
-                    marginTop: 20
-                  }
-                : {
-                    fontSize: 16,
-                    color: '#1D426D',
-                    marginBottom: 5,
-                    marginTop: 20
-                  }
-            }
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
-            Due Today{' '}
+            Due Today{'  '}
           </Text>
           <Switch
             trackColor={{ false: '#767577', true: '#81b0ff' }}
             thumbColor={'#FAFAFA'}
             onValueChange={() => toggleShowAll((prevState) => !prevState)}
             value={showAll}
-            style={{ marginTop: 20 }}
           />
           <Text
-            style={
-              user.readable_font
-                ? {
-                    fontSize: 18,
-                    color: '#1D426D',
-                    marginBottom: 5,
-                    marginTop: 20,
-                    marginRight: 40
-                  }
-                : {
-                    fontSize: 16,
-                    color: '#1D426D',
-                    marginBottom: 5,
-                    marginTop: 20,
-                    marginRight: 40
-                  }
-            }
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
-            {' '}
+            {'  '}
             View All
           </Text>
         </View>
@@ -133,7 +114,7 @@ const HabitSummary = (): ReactElement => {
   const [showAll, toggleShowAll] = useState(false);
 
   return (
-    <View style={styles.listContainerAll}>
+    <View style={{ maxHeight: '90%' }}>
       {!showAll ? (
         <FlatList
           keyExtractor={() => getKey()}
@@ -144,42 +125,17 @@ const HabitSummary = (): ReactElement => {
           }
         />
       ) : (
-        <View style={styles.listContainerToday}>
-          <FlatList
-            keyExtractor={() => getKey()}
-            data={user ? user.habits : []}
-            renderItem={HabitsLaterList}
-            ListHeaderComponent={
-              <ListHeader showAll={showAll} toggleShowAll={toggleShowAll} />
-            }
-          />
-        </View>
+        <FlatList
+          keyExtractor={() => getKey()}
+          data={user ? user.habits : []}
+          renderItem={HabitsLaterList}
+          ListHeaderComponent={
+            <ListHeader showAll={showAll} toggleShowAll={toggleShowAll} />
+          }
+        />
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  listContainerToday: {
-    height: '100%'
-  },
-  listContainerAll: {
-    height: '85.85%'
-  },
-  subheader: {
-    color: '#1D426D',
-    fontSize: 20,
-    marginLeft: 40,
-    fontWeight: 'bold',
-    marginTop: 20
-  },
-  subheaderLarger: {
-    color: '#1D426D',
-    fontSize: 22,
-    marginLeft: 40,
-    fontWeight: 'bold',
-    marginTop: 20
-  }
-});
 
 export default HabitSummary;

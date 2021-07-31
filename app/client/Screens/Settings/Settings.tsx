@@ -1,5 +1,12 @@
+/* eslint-disable indent */
 import React, { ReactElement } from 'react';
-import { StyleSheet, Text, View, ImageBackground, Switch } from 'react-native';
+import {
+  Text,
+  View,
+  ImageBackground,
+  SafeAreaView,
+  Switch
+} from 'react-native';
 import { Button } from 'react-native-elements';
 import { useUserContext } from '../../Contexts/userContext';
 import { useQuoteContext } from '../../Contexts/quoteContext';
@@ -11,9 +18,17 @@ import moment from 'moment';
 import axios from 'axios';
 import { showMessage, hideMessage } from 'react-native-flash-message';
 import { FeedDefaultValues } from '../../Contexts/feedContext';
+import {
+  alertStyles,
+  btnStyles,
+  containerStyles,
+  journalStyles,
+  textStyles
+} from '../../Stylesheets/Stylesheet';
+import bgImage from '../../../assets/images/blue-gradient.png';
+import ProgressBar from '../Root/ProgressBar';
 
 const Settings = ({ navigation }): ReactElement => {
-  const bgImage = require('../../../assets/images/blue-gradient.png');
   const {
     user,
     setUser,
@@ -29,8 +44,17 @@ const Settings = ({ navigation }): ReactElement => {
   const { socket } = useSocketContext();
   const { setFeed } = useFeedContext();
 
+  interface Message {
+    type: string;
+    autoHide: boolean;
+    backgroundColor: string;
+    icon: string;
+    position: string;
+    message: string;
+  }
+
   const displayMessage = (props = {}) => {
-    const message: any = {
+    const message: Message = {
       type: 'default',
       autoHide: false,
       backgroundColor: '#1D426D',
@@ -64,14 +88,16 @@ const Settings = ({ navigation }): ReactElement => {
     if (user.readable_font) {
       try {
         await axios.patch(
-          `http://localhost:3000/api/font/${user.id}/toggleOff`
+          `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/font/${user.id}/toggleOff`
         );
       } catch (err) {
         console.warn('toggle readableFont off client side error');
       }
     } else {
       try {
-        await axios.patch(`http://localhost:3000/api/font/${user.id}/toggleOn`);
+        await axios.patch(
+          `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/font/${user.id}/toggleOn`
+        );
       } catch (err) {
         console.warn('toggle readableFont on client side error');
       }
@@ -80,22 +106,15 @@ const Settings = ({ navigation }): ReactElement => {
 
   const deleteUser = (): void => {
     displayMessage({
-      titleStyle: {
-        fontSize: 20,
-        color: '#FAFAFA',
-        paddingTop: 30,
-        textAlign: 'center'
-      },
-      style: {
-        width: '100%',
-        borderRadius: 0,
-        paddingRight: 40
-      },
+      titleStyle: user.readable_font
+        ? [alertStyles.title_big, { paddingTop: 30 }]
+        : [alertStyles.title, { paddingTop: 30 }],
+      style: alertStyles.bottomContainer,
       renderCustomContent: () => (
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <Button
             title='Cancel'
-            style={[styles.button, { width: 100, marginTop: 25 }]}
+            style={journalStyles.alert_btn1}
             buttonStyle={{ backgroundColor: '#FAFAFA' }}
             titleStyle={{ color: '#1D426D' }}
             onPress={() => {
@@ -104,21 +123,18 @@ const Settings = ({ navigation }): ReactElement => {
           />
           <Button
             title='Delete Account'
-            style={[
-              styles.button,
-              { marginLeft: 15, width: 170, marginTop: 25 }
-            ]}
+            style={[journalStyles.alert_btn2, { width: 140 }]}
             buttonStyle={{ backgroundColor: '#FAFAFA' }}
             titleStyle={{ color: '#1D426D' }}
             onPress={async () => {
-              await axios.delete(`http://localhost:3000/api/auth/${user.id}`);
+              await axios.delete(
+                `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/auth/${user.id}`
+              );
               showMessage({
                 message: 'User successfully deleted from Little Victories.',
-                titleStyle: {
-                  fontSize: 20,
-                  color: '#FAFAFA',
-                  alignSelf: 'center'
-                },
+                titleStyle: user.readable_font
+                  ? alertStyles.title_big
+                  : alertStyles.title,
                 icon: { icon: 'success', position: 'left' },
                 type: 'default',
                 backgroundColor: '#1D426D'
@@ -132,97 +148,59 @@ const Settings = ({ navigation }): ReactElement => {
   };
 
   return (
-    <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <View style={styles.container}>
-        <Text style={user.readable_font ? styles.headerLarger : styles.header}>
+    <ImageBackground style={containerStyles.bgImg} source={bgImage}>
+      <ProgressBar />
+      <SafeAreaView
+        style={[containerStyles.fullScreenView, { justifyContent: 'center' }]}
+      >
+        <Text
+          style={
+            user.readable_font
+              ? [textStyles.screenHeading_big, { marginBottom: 20 }]
+              : [textStyles.screenHeading, { marginBottom: 20 }]
+          }
+        >
           Settings
         </Text>
-        <Text style={user.readable_font ? styles.valueLarger : styles.value}>
-          Readable Font: {user.readable_font ? 'On' : 'Off'}
-        </Text>
-        <Switch
-          trackColor={{ false: '#767577', true: '#81b0ff' }}
-          thumbColor={'#FAFAFA'}
-          onValueChange={async () => {
-            await setUser({ ...user, readable_font: !user.readable_font });
-            changeUserAccessibilityOption();
-          }}
-          value={user.readable_font}
-        />
-        <Button
-          title='Delete Account'
-          buttonStyle={styles.button}
-          titleStyle={
-            user.readable_font ? styles.buttonTextLarger : styles.buttonText
-          }
-          onPress={() => {
-            deleteUser();
-          }}
-        />
-        <Button
-          title='Log Out'
-          buttonStyle={styles.button}
-          titleStyle={
-            user.readable_font ? styles.buttonTextLarger : styles.buttonText
-          }
-          onPress={() => {
-            logout();
-          }}
-        />
-      </View>
+        <View style={[containerStyles.section, containerStyles.center]}>
+          <Text
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+          >
+            Readable Font: {user.readable_font ? 'On' : 'Off'}
+          </Text>
+          <Switch
+            trackColor={{ false: '#767577', true: '#81b0ff' }}
+            thumbColor={'#FAFAFA'}
+            onValueChange={async () => {
+              await setUser({ ...user, readable_font: !user.readable_font });
+              changeUserAccessibilityOption();
+            }}
+            value={user.readable_font}
+          />
+          <Button
+            title='Delete Account'
+            buttonStyle={[btnStyles.btn, { width: 130 }]}
+            titleStyle={
+              user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
+            }
+            onPress={() => {
+              deleteUser();
+            }}
+          />
+          <Button
+            title='Log Out'
+            buttonStyle={[btnStyles.btn, { width: 130 }]}
+            titleStyle={
+              user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
+            }
+            onPress={() => {
+              logout();
+            }}
+          />
+        </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 };
-
-const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1
-  },
-  button: {
-    marginTop: 20,
-    borderRadius: 10,
-    backgroundColor: '#1D426D',
-    width: 125
-  },
-  buttonText: {
-    fontSize: 18
-  },
-  buttonTextLarger: {
-    fontSize: 20
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  header: {
-    color: '#1D426D',
-    fontSize: 26,
-    marginBottom: 40,
-    fontWeight: 'bold'
-  },
-  headerLarger: {
-    color: '#1D426D',
-    fontSize: 28,
-    marginBottom: 40,
-    fontWeight: 'bold'
-  },
-  input: {
-    height: 40,
-    width: '50%',
-    margin: 12,
-    borderWidth: 1
-  },
-  value: {
-    color: '#1D426D',
-    fontSize: 18,
-    marginBottom: 10
-  },
-  valueLarger: {
-    color: '#1D426D',
-    fontSize: 20,
-    marginBottom: 10
-  }
-});
 
 export default Settings;

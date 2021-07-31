@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Dimensions, Text, TextInput, View } from 'react-native';
 import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
 import { useJournalContext } from '../../Contexts/journalContext';
@@ -7,6 +7,7 @@ import moment from 'moment';
 import {
   alertStyles,
   btnStyles,
+  containerStyles,
   journalStyles,
   textStyles
 } from '../../Stylesheets/Stylesheet';
@@ -38,13 +39,13 @@ const windowHeight = Dimensions.get('window').height;
 // to calculate the correct height for journal entry text area
 const calcHeight = () => {
   if (windowHeight > 850) {
-    return '69%';
+    return '75%';
   } else if (windowHeight > 800) {
-    return '63%';
+    return '70%';
   } else if (windowHeight > 600) {
-    return '58%';
+    return '67%';
   }
-  return '54%';
+  return '60%';
 };
 
 const Journal = (): ReactElement => {
@@ -68,11 +69,14 @@ const Journal = (): ReactElement => {
   };
 
   const saveJournal = async (): Promise<void> => {
-    await axios.post('http://localhost:3000/api/journalEntries/create', {
-      user_id: user.id,
-      content: journal.content,
-      date: moment().format('MM-D-Y')
-    });
+    await axios.post(
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/journalEntries/create',
+      {
+        user_id: user.id,
+        content: journal.content,
+        date: moment().format('MM-D-Y')
+      }
+    );
     showMessage({
       message: 'Journal entry successfully saved.',
       titleStyle: user.readable_font
@@ -108,7 +112,7 @@ const Journal = (): ReactElement => {
             titleStyle={{ color: '#1D426D' }}
             onPress={async () => {
               await axios.delete(
-                `http://localhost:3000/api/journalEntries/${
+                `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/journalEntries/${
                   user.id
                 }/${moment().format('MM-D-Y')}`
               );
@@ -132,52 +136,47 @@ const Journal = (): ReactElement => {
   };
 
   return (
-    <View style={styles.main}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}
+    <View>
+      <Text
+        style={
+          user.readable_font
+            ? textStyles.screenHeading_big
+            : textStyles.screenHeading
+        }
       >
-        <Text
-          style={
-            user.readable_font
-              ? [textStyles.h1_big, { marginBottom: 0 }]
-              : [textStyles.h1, { marginBottom: 0 }]
-          }
-        >
-          User&apos;s Journal
-        </Text>
-      </View>
-      <View style={styles.textAreaContainer}>
-        <Text
-          style={
-            user.readable_font
-              ? [textStyles.txt_big, { alignSelf: 'flex-end' }]
-              : [textStyles.txt, { alignSelf: 'flex-end' }]
-          }
-        >
-          {date}
-        </Text>
-        <TextInput
-          style={
-            user.readable_font
-              ? [styles.textAreaLarger, { height: calcHeight() }]
-              : [styles.textArea, { height: calcHeight() }]
-          }
-          placeholder='Type something'
-          numberOfLines={10}
-          multiline={true}
-          onChangeText={(text) => setJournal({ ...journal, content: text })}
-          value={journal?.content || ''}
-          editable={true}
-        />
+        Journal
+      </Text>
+      <View
+        style={[
+          containerStyles.section,
+          { height: calcHeight(), paddingBottom: 60 }
+        ]}
+      >
+        <View>
+          <Text
+            style={
+              user.readable_font
+                ? [textStyles.txt_big, { alignSelf: 'flex-end' }]
+                : [textStyles.txt, { alignSelf: 'flex-end' }]
+            }
+          >
+            {date}
+          </Text>
+          <TextInput
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+            placeholder='What are your thoughts?'
+            multiline={true}
+            numberOfLines={30}
+            onChangeText={(text) => setJournal({ ...journal, content: text })}
+            value={journal?.content || ''}
+            editable={true}
+          />
+        </View>
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Button
           title='Clear Entry'
-          buttonStyle={[btnStyles.btn, journalStyles.btn]}
+          buttonStyle={[btnStyles.btn, { marginTop: 0 }]}
           titleStyle={
             user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
           }
@@ -189,8 +188,7 @@ const Journal = (): ReactElement => {
           title='Save'
           buttonStyle={[
             btnStyles.btn,
-            journalStyles.btn,
-            { backgroundColor: '#1D426D' }
+            { backgroundColor: '#1D426D', marginTop: 0 }
           ]}
           titleStyle={
             user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
@@ -203,33 +201,5 @@ const Journal = (): ReactElement => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    color: '#1D426D',
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginLeft: 20
-  },
-  main: {
-    padding: 40
-  },
-  textArea: {
-    marginTop: 5,
-    color: '#1D426D',
-    fontSize: 18
-  },
-  textAreaLarger: {
-    marginTop: 5,
-    color: '#1D426D',
-    fontSize: 20
-  },
-  textAreaContainer: {
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    padding: 20,
-    marginTop: 20
-  }
-});
 
 export default Journal;

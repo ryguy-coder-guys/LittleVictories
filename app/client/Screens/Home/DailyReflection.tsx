@@ -48,7 +48,7 @@ const DailyReflection = ({
         data: UserStat;
       }
       const response: ServerResponse = await axios.post(
-        'http://localhost:3000/api/stats',
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/stats',
         {
           user_id: user.id,
           sleep_hours: parseInt(sleepHours),

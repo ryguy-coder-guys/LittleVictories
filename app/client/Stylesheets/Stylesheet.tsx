@@ -1,6 +1,31 @@
 import { StyleSheet } from 'react-native';
 
+export const alertStyles = StyleSheet.create({
+  bottomContainer: {
+    width: '100%',
+    paddingRight: 40
+  },
+  title: {
+    fontSize: 18,
+    color: '#FAFAFA',
+    textAlign: 'center'
+  },
+  title_big: {
+    fontSize: 20,
+    color: '#FAFAFA',
+    textAlign: 'center'
+  }
+});
+
 export const badgeStyles = StyleSheet.create({
+  achievement_badge: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    marginTop: 20,
+    marginBottom: 10
+  },
   badges: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -14,6 +39,18 @@ export const badgeStyles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     paddingTop: 15
+  },
+  feed_badge: {
+    height: 100,
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  feed_image: {
+    resizeMode: 'contain',
+    width: '100%',
+    height: '100%'
   },
   image: {
     resizeMode: 'contain',
@@ -29,6 +66,22 @@ export const btnStyles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: '#5c83b1'
   },
+  btn_login: {
+    marginLeft: 5,
+    marginRight: 5,
+    marginBottom: 20,
+    backgroundColor: '#5c83b1',
+    borderRadius: 8,
+    height: 40,
+    width: 100
+  },
+  btn_submit: {
+    width: 80,
+    alignSelf: 'flex-end',
+    marginTop: 15,
+    borderRadius: 8,
+    backgroundColor: '#5c83b1'
+  },
   BG: {
     borderRadius: 8,
     borderColor: '#5c83b1',
@@ -42,6 +95,10 @@ export const btnStyles = StyleSheet.create({
   BG_inactive: {
     backgroundColor: '#1D426D',
     borderColor: '#5c83b1'
+  },
+  fab: {
+    backgroundColor: '#1D426D',
+    height: 40
   }
 });
 
@@ -63,6 +120,11 @@ export const containerStyles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 20,
     padding: 20
+  },
+  task: {
+    paddingTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   }
 });
 
@@ -109,6 +171,16 @@ export const inputStyles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     fontSize: 20
+  },
+  input_login: {
+    height: 40,
+    width: '50%',
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: '#FAFAFA',
+    opacity: 0.3,
+    marginBottom: 20,
+    fontSize: 18
   }
 });
 
@@ -221,6 +293,14 @@ export const textStyles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 15
   },
+  loading_txt: {
+    fontSize: 20,
+    color: '#1D426D',
+    marginLeft: 55,
+    marginRight: 55,
+    marginTop: 5,
+    textAlign: 'center'
+  },
   txt: {
     fontSize: 18,
     color: '#1D426D',
@@ -230,22 +310,5 @@ export const textStyles = StyleSheet.create({
     fontSize: 20,
     color: '#1D426D',
     marginBottom: 10
-  }
-});
-
-export const alertStyles = StyleSheet.create({
-  bottomContainer: {
-    width: '100%',
-    paddingRight: 40
-  },
-  title: {
-    fontSize: 18,
-    color: '#FAFAFA',
-    textAlign: 'center'
-  },
-  title_big: {
-    fontSize: 20,
-    color: '#FAFAFA',
-    textAlign: 'center'
   }
 });

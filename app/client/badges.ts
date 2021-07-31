@@ -28,11 +28,11 @@ export const badges = {
     source: blueTrophy
   },
   threeFollowees: {
-    text: '3 Followers',
+    text: '3 Friends',
     source: redStar
   },
   fiveFollowees: {
-    text: '5 Followers',
+    text: '5 Friends',
     source: greenStar
   }
 };
