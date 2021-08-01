@@ -99,7 +99,6 @@ const FeedItem = ({
   };
 
   const addAchievementLike = async () => {
-    console.log('in add achievement like');
     const { data: newLike } = await axios.post(
       'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/achievements/like',
       {
@@ -120,7 +119,6 @@ const FeedItem = ({
   };
 
   const removeAchievementLike = async () => {
-    console.log('in remove  achievement like');
     const { data: removeSuccessful } = await axios.delete(
       `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/achievements/like/${user.id}/${id}`
     );
@@ -128,8 +126,6 @@ const FeedItem = ({
       const mappedFeed = feed.map((feedItem) => {
         if (feedItem.id === id && feedItem.description === description) {
           const filteredLikes = feedItem.likes.filter((like) => {
-            console.log(like);
-
             return !(like.user_id === user.id);
           });
           return { ...feedItem, likes: filteredLikes };

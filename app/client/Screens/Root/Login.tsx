@@ -157,7 +157,7 @@ const Login = ({ navigation }): ReactElement => {
               <Button
                 title='Login'
                 buttonStyle={btnStyles.btn_login}
-                titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
+                titleStyle={{ color: '#FAFAFA', fontSize: 20 }}
                 onPress={() => {
                   handleClick('login');
                 }}
@@ -168,7 +168,7 @@ const Login = ({ navigation }): ReactElement => {
                   btnStyles.btn_login,
                   { backgroundColor: '#1D426D' }
                 ]}
-                titleStyle={{ color: '#FAFAFA', fontSize: 18 }}
+                titleStyle={{ color: '#FAFAFA', fontSize: 20 }}
                 onPress={() => {
                   handleClick('register');
                 }}

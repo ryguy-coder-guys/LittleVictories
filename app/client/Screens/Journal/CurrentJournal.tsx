@@ -39,7 +39,7 @@ const windowHeight = Dimensions.get('window').height;
 // to calculate the correct height for journal entry text area
 const calcHeight = () => {
   if (windowHeight > 850) {
-    return '75%';
+    return '74%';
   } else if (windowHeight > 800) {
     return '70%';
   } else if (windowHeight > 600) {

@@ -118,7 +118,7 @@ const DailyReflection = ({
         backgroundColor: '#fc9c94'
       });
     } else {
-      submit();
+      void submit();
     }
   };
 
@@ -256,7 +256,9 @@ const DailyReflection = ({
           <View style={{ width: '100%' }}>
             <TextInput
               style={
-                user.readable_font ? inputStyles.input_big : inputStyles.input
+                user.readable_font
+                  ? [inputStyles.input_big, { paddingTop: 7 }]
+                  : [inputStyles.input, { paddingTop: 7 }]
               }
               multiline
               value={notes}

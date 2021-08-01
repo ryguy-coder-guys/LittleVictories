@@ -110,7 +110,6 @@ const List = (): ReactElement => {
     if (dateArr[1][0] === '0') {
       dateArr[1] = dateArr[1][1];
     }
-    console.log('dateArr is:', dateArr);
     return `${months[parseInt(dateArr[0]) - 1]} ${dateArr[1]}, ${dateArr[2]}`;
   };
 

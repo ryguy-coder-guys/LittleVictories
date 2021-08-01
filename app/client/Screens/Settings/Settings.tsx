@@ -150,53 +150,61 @@ const Settings = ({ navigation }): ReactElement => {
   return (
     <ImageBackground style={containerStyles.bgImg} source={bgImage}>
       <ProgressBar />
-      <SafeAreaView
-        style={[containerStyles.fullScreenView, { justifyContent: 'center' }]}
-      >
-        <Text
-          style={
-            user.readable_font
-              ? [textStyles.screenHeading_big, { marginBottom: 20 }]
-              : [textStyles.screenHeading, { marginBottom: 20 }]
-          }
+      <SafeAreaView>
+        <View
+          style={[containerStyles.fullScreenView, { justifyContent: 'center' }]}
         >
-          Settings
-        </Text>
-        <View style={[containerStyles.section, containerStyles.center]}>
           <Text
-            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+            style={
+              user.readable_font
+                ? [
+                    textStyles.screenHeading_big,
+                    { marginBottom: 20, marginTop: 170, alignSelf: 'center' }
+                  ]
+                : [
+                    textStyles.screenHeading,
+                    { marginBottom: 20, marginTop: 170, alignSelf: 'center' }
+                  ]
+            }
           >
-            Readable Font: {user.readable_font ? 'On' : 'Off'}
+            Settings
           </Text>
-          <Switch
-            trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={'#FAFAFA'}
-            onValueChange={async () => {
-              await setUser({ ...user, readable_font: !user.readable_font });
-              changeUserAccessibilityOption();
-            }}
-            value={user.readable_font}
-          />
-          <Button
-            title='Delete Account'
-            buttonStyle={[btnStyles.btn, { width: 130 }]}
-            titleStyle={
-              user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
-            }
-            onPress={() => {
-              deleteUser();
-            }}
-          />
-          <Button
-            title='Log Out'
-            buttonStyle={[btnStyles.btn, { width: 130 }]}
-            titleStyle={
-              user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
-            }
-            onPress={() => {
-              logout();
-            }}
-          />
+          <View style={[containerStyles.section, containerStyles.center]}>
+            <Text
+              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+            >
+              Readable Font: {user.readable_font ? 'On' : 'Off'}
+            </Text>
+            <Switch
+              trackColor={{ false: '#767577', true: '#81b0ff' }}
+              thumbColor={'#FAFAFA'}
+              onValueChange={async () => {
+                await setUser({ ...user, readable_font: !user.readable_font });
+                changeUserAccessibilityOption();
+              }}
+              value={user.readable_font}
+            />
+            <Button
+              title='Delete Account'
+              buttonStyle={[btnStyles.btn, { width: 130 }]}
+              titleStyle={
+                user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
+              }
+              onPress={() => {
+                deleteUser();
+              }}
+            />
+            <Button
+              title='Log Out'
+              buttonStyle={[btnStyles.btn, { width: 130 }]}
+              titleStyle={
+                user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
+              }
+              onPress={() => {
+                logout();
+              }}
+            />
+          </View>
         </View>
       </SafeAreaView>
     </ImageBackground>
