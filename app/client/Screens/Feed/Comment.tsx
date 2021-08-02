@@ -15,7 +15,7 @@ const Comment = ({ id, content, user_id, username, removeComment }) => {
   };
 
   return (
-    <View style={{ flexDirection: 'row', width: '72%' }}>
+    <View style={{ flexDirection: 'row', width: '67%' }}>
       {canRemove() && (
         <TouchableOpacity onPress={() => void removeComment(id)}>
           <Image

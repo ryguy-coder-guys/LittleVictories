@@ -1,18 +1,16 @@
+/* eslint-disable indent */
 import React, { useState, ReactElement } from 'react';
 import { View, Button, Text } from 'react-native';
-import { textStyles } from '../../Stylesheets/Stylesheet';
 import { showMessage } from 'react-native-flash-message';
-import { containerStyles } from '../../Stylesheets/Stylesheet';
+import { containerStyles, textStyles } from '../../Stylesheets/Stylesheet';
 
-import { useSocketContext } from '../../Contexts/socketContext';
 import { useFeedContext } from '../../Contexts/feedContext';
 import { useUserContext } from '../../Contexts/userContext';
 
 import axios from 'axios';
 
 const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
-  const [isFriend, setIsFriend] = useState(item.isFriend);
-  const { socket } = useSocketContext();
+  const [isFriend, setIsFriend] = useState<boolean>(item.isFriend);
   const { feed, setFeed, refreshFeed } = useFeedContext();
   const { setNumFollowees } = useUserContext();
 
@@ -74,20 +72,30 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
   };
 
   return (
-    <View style={containerStyles.section}>
-      <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
+    <View
+      style={[
+        containerStyles.section,
+        { flexDirection: 'row', justifyContent: 'space-between' }
+      ]}
+    >
+      <Text
+        style={
+          user.readable_font
+            ? [textStyles.txt_big, { paddingTop: 5 }]
+            : [textStyles.txt, { paddingTop: 5 }]
+        }
+      >
         {item.username}
       </Text>
       {!isFriend ? (
         <Button
           onPress={() => {
-            addFriend(item.id),
+            void addFriend(item.id),
               showMessage({
                 message: `Now following ${item.username}.`,
                 titleStyle: {
                   fontSize: 20,
-                  color: '#FAFAFA',
-                  alignSelf: 'center'
+                  color: '#FAFAFA'
                 },
                 icon: { icon: 'success', position: 'left' },
                 type: 'default',
@@ -99,13 +107,12 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
       ) : (
         <Button
           onPress={() => {
-            removeFriend(item.id),
+            void removeFriend(item.id),
               showMessage({
                 message: `You are no longer following ${item.username}.`,
                 titleStyle: {
                   fontSize: 20,
-                  color: '#FAFAFA',
-                  alignSelf: 'center'
+                  color: '#FAFAFA'
                 },
                 icon: { icon: 'success', position: 'left' },
                 type: 'default',
