@@ -1,12 +1,52 @@
 import React, { ReactElement, useState } from 'react';
-import { View, TextInput, StyleSheet, Text } from 'react-native';
+import { Dimensions, Text, TextInput, View } from 'react-native';
 import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
 import { useJournalContext } from '../../Contexts/journalContext';
 import moment from 'moment';
-import { textStyles } from '../../Stylesheets/Stylesheet';
+import {
+  alertStyles,
+  btnStyles,
+  containerStyles,
+  journalStyles,
+  textStyles
+} from '../../Stylesheets/Stylesheet';
 import { Button } from 'react-native-elements';
 import { showMessage, hideMessage } from 'react-native-flash-message';
+
+interface Message {
+  type: string;
+  autoHide: boolean;
+  backgroundColor: string;
+  icon: string;
+  position: string;
+  message: string;
+}
+
+// 12 Pro Max // 428 x 926
+// 12 Pro 390 x 844
+// 12 414 x 895
+// 11 390 x 844
+// XR 414 x 896
+// XS 375 x 812
+// XS Max 414 x 896
+// X 375 x 812
+// 8 Plus 414 x 736
+// 8 375 x 667
+// 7 Plus 414 x 736
+
+const windowHeight = Dimensions.get('window').height;
+// to calculate the correct height for journal entry text area
+const calcHeight = () => {
+  if (windowHeight > 850) {
+    return '74%';
+  } else if (windowHeight > 800) {
+    return '70%';
+  } else if (windowHeight > 600) {
+    return '67%';
+  }
+  return '60%';
+};
 
 const Journal = (): ReactElement => {
   const { user } = useUserContext();
@@ -14,7 +54,7 @@ const Journal = (): ReactElement => {
   const [date] = useState(moment().format('MMMM D, Y'));
 
   const displayMessage = (props = {}) => {
-    const message: any = {
+    const message: Message = {
       type: 'default',
       autoHide: false,
       backgroundColor: '#1D426D',
@@ -29,14 +69,19 @@ const Journal = (): ReactElement => {
   };
 
   const saveJournal = async (): Promise<void> => {
-    await axios.post('http://localhost:3000/api/journalEntries/create', {
-      user_id: user.id,
-      content: journal.content,
-      date: moment().format('MM-D-Y')
-    });
+    await axios.post(
+      'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/journalEntries/create',
+      {
+        user_id: user.id,
+        content: journal.content,
+        date: moment().format('MM-D-Y')
+      }
+    );
     showMessage({
       message: 'Journal entry successfully saved.',
-      titleStyle: { fontSize: 20, color: '#FAFAFA', alignSelf: 'center' },
+      titleStyle: user.readable_font
+        ? alertStyles.title_big
+        : alertStyles.title,
       icon: { icon: 'success', position: 'left' },
       type: 'default',
       backgroundColor: '#1D426D'
@@ -45,22 +90,15 @@ const Journal = (): ReactElement => {
 
   const clearJournal = (): void => {
     displayMessage({
-      titleStyle: {
-        fontSize: 20,
-        color: '#FAFAFA',
-        paddingTop: 30,
-        textAlign: 'center'
-      },
-      style: {
-        width: '100%',
-        borderRadius: 0,
-        paddingRight: 40
-      },
+      titleStyle: user.readable_font
+        ? [alertStyles.title_big, { paddingTop: 30 }]
+        : [alertStyles.title, { paddingTop: 30 }],
+      style: alertStyles.bottomContainer,
       renderCustomContent: () => (
         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <Button
             title='Cancel'
-            style={[styles.button, { width: 100, marginTop: 10 }]}
+            style={journalStyles.alert_btn1}
             buttonStyle={{ backgroundColor: '#FAFAFA' }}
             titleStyle={{ color: '#1D426D' }}
             onPress={() => {
@@ -69,12 +107,12 @@ const Journal = (): ReactElement => {
           />
           <Button
             title='Clear Entry'
-            style={[styles.button, { width: 130, marginTop: 10 }]}
+            style={journalStyles.alert_btn2}
             buttonStyle={{ backgroundColor: '#FAFAFA' }}
             titleStyle={{ color: '#1D426D' }}
             onPress={async () => {
               await axios.delete(
-                `http://localhost:3000/api/journalEntries/${
+                `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/journalEntries/${
                   user.id
                 }/${moment().format('MM-D-Y')}`
               );
@@ -98,19 +136,47 @@ const Journal = (): ReactElement => {
   };
 
   return (
-    <View style={styles.main}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between'
-        }}
+    <View>
+      <Text
+        style={
+          user.readable_font
+            ? textStyles.screenHeading_big
+            : textStyles.screenHeading
+        }
       >
-        <Text style={user.readable_font ? textStyles.h1_big : textStyles.h1}>
-          User's Journal{' '}
-        </Text>
+        Journal
+      </Text>
+      <View
+        style={[
+          containerStyles.section,
+          { height: calcHeight(), paddingBottom: 60 }
+        ]}
+      >
+        <View>
+          <Text
+            style={
+              user.readable_font
+                ? [textStyles.txt_big, { alignSelf: 'flex-end' }]
+                : [textStyles.txt, { alignSelf: 'flex-end' }]
+            }
+          >
+            {date}
+          </Text>
+          <TextInput
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+            placeholder='What are your thoughts?'
+            multiline={true}
+            numberOfLines={30}
+            onChangeText={(text) => setJournal({ ...journal, content: text })}
+            value={journal?.content || ''}
+            editable={true}
+          />
+        </View>
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Button
           title='Clear Entry'
-          buttonStyle={styles.button}
+          buttonStyle={[btnStyles.btn, { marginTop: 0 }]}
           titleStyle={
             user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
           }
@@ -118,83 +184,22 @@ const Journal = (): ReactElement => {
             clearJournal();
           }}
         />
-      </View>
-      <View style={styles.textAreaContainer}>
-        <Text style={user.readable_font ? styles.dateLarger : styles.date}>
-          {date}
-        </Text>
-        <TextInput
-          style={user.readable_font ? styles.textAreaLarger : styles.textArea}
-          placeholder='Type something'
-          numberOfLines={10}
-          multiline={true}
-          onChangeText={(text) => setJournal({ ...journal, content: text })}
-          value={journal?.content || ''}
-          editable={true}
+        <Button
+          title='Save'
+          buttonStyle={[
+            btnStyles.btn,
+            { backgroundColor: '#1D426D', marginTop: 0 }
+          ]}
+          titleStyle={
+            user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
+          }
+          onPress={() => {
+            void saveJournal();
+          }}
         />
       </View>
-      <Button
-        title='Save'
-        buttonStyle={[styles.button, styles.submit]}
-        titleStyle={
-          user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
-        }
-        onPress={() => {
-          saveJournal();
-        }}
-      />
     </View>
   );
 };
-const styles = StyleSheet.create({
-  button: {
-    padding: 10,
-    backgroundColor: '#1D426D',
-    borderRadius: 10
-  },
-  date: {
-    color: '#1D426D',
-    fontSize: 18,
-    alignSelf: 'flex-end'
-  },
-  dateLarger: {
-    color: '#1D426D',
-    fontSize: 20,
-    alignSelf: 'flex-end'
-  },
-  header: {
-    color: '#1D426D',
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginLeft: 20
-  },
-  main: {
-    padding: 40
-  },
-  submit: {
-    alignSelf: 'flex-end',
-    marginTop: 10
-  },
-  textArea: {
-    height: '69%',
-    justifyContent: 'flex-start',
-    marginTop: 5,
-    color: '#1D426D',
-    fontSize: 18
-  },
-  textAreaLarger: {
-    height: '69%',
-    justifyContent: 'flex-start',
-    marginTop: 5,
-    color: '#1D426D',
-    fontSize: 20
-  },
-  textAreaContainer: {
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    padding: 20,
-    marginTop: 20
-  }
-});
 
 export default Journal;

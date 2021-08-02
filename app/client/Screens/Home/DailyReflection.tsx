@@ -1,19 +1,19 @@
 /* eslint-disable indent */
 import React, { useState, ReactElement } from 'react';
-import {
-  Image,
-  TouchableOpacity,
-  View,
-  Text,
-  StyleSheet,
-  TextInput
-} from 'react-native';
+import { Image, TouchableOpacity, View, Text, TextInput } from 'react-native';
 import { textStyles } from '../../Stylesheets/Stylesheet';
 import { useUserContext } from '../../Contexts/userContext';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { Button, Divider } from 'react-native-elements';
 import { showMessage } from 'react-native-flash-message';
+import { UserStat } from '../../Interfaces/user';
+import {
+  btnStyles,
+  containerStyles,
+  imgStyles,
+  inputStyles
+} from '../../Stylesheets/Stylesheet';
 
 import angryFace from '../../../assets/images/emoticon-angry-outline.png';
 import excitedFace from '../../../assets/images/emoticon-excited-outline.png';
@@ -27,7 +27,12 @@ import happyInactive from '../../../assets/images/emoticon-happy-inactive.png';
 import neutralInactive from '../../../assets/images/emoticon-neutral-inactive.png';
 import sadInactive from '../../../assets/images/emoticon-sad-inactive.png';
 
-const DailyReflection = ({ setHasStats }): ReactElement => {
+interface DailyReflectionProps {
+  setHasStats: (hasStats: boolean) => void;
+}
+const DailyReflection = ({
+  setHasStats
+}: DailyReflectionProps): ReactElement => {
   const { user, userStat, setUserStat } = useUserContext();
   const [sleepHours, setSleepHours] = useState('');
   const [didEatWell, setDidEatWell] = useState('');
@@ -43,7 +48,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
         data: UserStat;
       }
       const response: ServerResponse = await axios.post(
-        'http://localhost:3000/api/stats',
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/stats',
         {
           user_id: user.id,
           sleep_hours: parseInt(sleepHours),
@@ -113,7 +118,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
         backgroundColor: '#fc9c94'
       });
     } else {
-      submit();
+      void submit();
     }
   };
 
@@ -123,22 +128,14 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
   };
 
   return (
-    <View style={styles.view}>
-      <Text
-        style={[
-          user.readable_font ? textStyles.h2_big : textStyles.h2,
-          { marginBottom: 10 }
-        ]}
-      >
+    <View style={containerStyles.section}>
+      <Text style={user.readable_font ? textStyles.h2_big : textStyles.h2}>
         Daily Reflection
       </Text>
       {hasSubmitted || userStat ? (
         <View>
           <Text
-            style={[
-              user.readable_font ? textStyles.txt_big : textStyles.txt,
-              { marginTop: 10 }
-            ]}
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
             Fill out your Daily Reflection data tomorrow for the most accurate
             Weekly Stats.
@@ -147,32 +144,18 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
             orientation='horizontal'
             width={0.5}
             color={'#FAFAFA'}
-            style={{
-              width: '100%',
-              marginTop: 15
-            }}
+            style={imgStyles.divider}
           />
-          <Text
-            style={[
-              user.readable_font ? textStyles.h3_big : textStyles.h3,
-              { marginTop: 15 }
-            ]}
-          >
+          <Text style={user.readable_font ? textStyles.h3_big : textStyles.h3}>
             Today&apos;s Data:
           </Text>
           <Text
-            style={[
-              user.readable_font ? textStyles.txt_big : textStyles.txt,
-              { marginTop: 10 }
-            ]}
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
             Hours of sleep: {userStat?.sleep_hours || sleepHours}
           </Text>
           <Text
-            style={[
-              user.readable_font ? textStyles.txt_big : textStyles.txt,
-              { marginTop: 10 }
-            ]}
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
             Did you eat well?{' '}
             {didEatWell.length
@@ -182,10 +165,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
               : 'no'}
           </Text>
           <Text
-            style={[
-              user.readable_font ? textStyles.txt_big : textStyles.txt,
-              { marginTop: 10 }
-            ]}
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
             Exercised?{' '}
             {didExercise.length
@@ -195,37 +175,31 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
               : 'no'}
           </Text>
           <Text
-            style={[
-              user.readable_font ? textStyles.txt_big : textStyles.txt,
-              { marginTop: 10 }
-            ]}
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
             Notes: {userStat?.notes || notes}
           </Text>
           <View style={{ flexDirection: 'row' }}>
             <Text
-              style={[
-                user.readable_font ? textStyles.txt_big : textStyles.txt,
-                { marginTop: 10 }
-              ]}
+              style={user.readable_font ? textStyles.txt_big : textStyles.txt}
             >
               Mood:{' '}
             </Text>
             <TouchableOpacity>
               {userStat?.mood === 'great' ? (
-                <Image source={excitedFace} style={styles.image} />
+                <Image source={excitedFace} style={imgStyles.smallIcon} />
               ) : null}
               {userStat?.mood === 'good' ? (
-                <Image source={happyFace} style={styles.image} />
+                <Image source={happyFace} style={imgStyles.smallIcon} />
               ) : null}
               {userStat?.mood === 'ok' ? (
-                <Image source={neutralFace} style={styles.image} />
+                <Image source={neutralFace} style={imgStyles.smallIcon} />
               ) : null}
               {userStat?.mood === 'bad' ? (
-                <Image source={sadFace} style={styles.image} />
+                <Image source={sadFace} style={imgStyles.smallIcon} />
               ) : null}
               {userStat?.mood === 'terrible' ? (
-                <Image source={angryFace} style={styles.image} />
+                <Image source={angryFace} style={imgStyles.smallIcon} />
               ) : null}
             </TouchableOpacity>
           </View>
@@ -233,55 +207,49 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
       ) : (
         <View style={{ alignItems: 'flex-start' }}>
           <Text
-            style={[
-              user.readable_font ? textStyles.txt_big : textStyles.txt,
-              { marginTop: 10 }
-            ]}
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
             How many hours did you sleep last night?
           </Text>
           <TextInput
-            style={user.readable_font ? styles.inputLarger : styles.input}
+            style={
+              user.readable_font ? inputStyles.input_big : inputStyles.input
+            }
             onChangeText={setSleepHours}
             value={sleepHours}
             placeholder='Enter 0 - 24'
             autoCapitalize='none'
           />
           <Text
-            style={[
-              user.readable_font ? textStyles.txt_big : textStyles.txt,
-              { marginTop: 10 }
-            ]}
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
             Did you eat well?
           </Text>
           <TextInput
-            style={user.readable_font ? styles.inputLarger : styles.input}
+            style={
+              user.readable_font ? inputStyles.input_big : inputStyles.input
+            }
             onChangeText={setDidEatWell}
             value={didEatWell}
             placeholder='yes or no'
             autoCapitalize='none'
           />
           <Text
-            style={[
-              user.readable_font ? textStyles.txt_big : textStyles.txt,
-              { marginTop: 10 }
-            ]}
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
             Did you get any exercise?
           </Text>
           <TextInput
-            style={user.readable_font ? styles.inputLarger : styles.input}
+            style={
+              user.readable_font ? inputStyles.input_big : inputStyles.input
+            }
             onChangeText={setDidExercise}
             value={didExercise}
             placeholder='yes or no'
             autoCapitalize='none'
           />
           <Text
-            style={[
-              user.readable_font ? textStyles.txt_big : textStyles.txt,
-              { marginTop: 10 }
-            ]}
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
             Daily Notes
           </Text>
@@ -289,60 +257,56 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
             <TextInput
               style={
                 user.readable_font
-                  ? styles.multi_inputLarger
-                  : styles.multi_input
+                  ? [inputStyles.input_big, { paddingTop: 7 }]
+                  : [inputStyles.input, { paddingTop: 7 }]
               }
               multiline
-              numberOfLines={4}
               value={notes}
-              maxLength={250}
+              maxLength={200}
               onChangeText={setNotes}
               editable={true}
               placeholder='Enter notes here.'
             />
           </View>
           <Text
-            style={[
-              user.readable_font ? textStyles.txt_big : textStyles.txt,
-              { marginTop: 10 }
-            ]}
+            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
           >
             What&apos;s your mood?
           </Text>
           <View style={{ flexDirection: 'row', marginTop: 10 }}>
             <TouchableOpacity onPress={() => handleFace('terrible')}>
               {activeIcon === 'terrible' ? (
-                <Image source={angryFace} style={styles.image} />
+                <Image source={angryFace} style={imgStyles.smallIcon} />
               ) : (
-                <Image source={angryInactive} style={styles.image} />
+                <Image source={angryInactive} style={imgStyles.smallIcon} />
               )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleFace('bad')}>
               {activeIcon === 'bad' ? (
-                <Image source={sadFace} style={styles.image} />
+                <Image source={sadFace} style={imgStyles.smallIcon} />
               ) : (
-                <Image source={sadInactive} style={styles.image} />
+                <Image source={sadInactive} style={imgStyles.smallIcon} />
               )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleFace('ok')}>
               {activeIcon === 'ok' ? (
-                <Image source={neutralFace} style={styles.image} />
+                <Image source={neutralFace} style={imgStyles.smallIcon} />
               ) : (
-                <Image source={neutralInactive} style={styles.image} />
+                <Image source={neutralInactive} style={imgStyles.smallIcon} />
               )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleFace('good')}>
               {activeIcon === 'good' ? (
-                <Image source={happyFace} style={styles.image} />
+                <Image source={happyFace} style={imgStyles.smallIcon} />
               ) : (
-                <Image source={happyInactive} style={styles.image} />
+                <Image source={happyInactive} style={imgStyles.smallIcon} />
               )}
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleFace('great')}>
               {activeIcon === 'great' ? (
-                <Image source={excitedFace} style={styles.image} />
+                <Image source={excitedFace} style={imgStyles.smallIcon} />
               ) : (
-                <Image source={excitedInactive} style={styles.image} />
+                <Image source={excitedInactive} style={imgStyles.smallIcon} />
               )}
             </TouchableOpacity>
           </View>
@@ -354,7 +318,7 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
           >
             <Button
               title='Submit'
-              buttonStyle={styles.button}
+              buttonStyle={btnStyles.btn}
               titleStyle={
                 user.readable_font ? textStyles.btnTxt_big : textStyles.btnTxt
               }
@@ -368,73 +332,5 @@ const DailyReflection = ({ setHasStats }): ReactElement => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  activeIcon: {
-    color: '#FAFAFA'
-  },
-  button: {
-    marginTop: 20,
-    backgroundColor: '#5c83b1'
-  },
-  image: {
-    resizeMode: 'contain',
-    width: 35,
-    height: 35
-  },
-  inactiveIcon: {
-    color: '#9b9a9a'
-  },
-  input: {
-    borderRadius: 10,
-    backgroundColor: '#9ec5cf',
-    color: '#1D426D',
-    padding: 10,
-    width: '100%',
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 18
-  },
-  inputLarger: {
-    borderRadius: 10,
-    backgroundColor: '#9ec5cf',
-    color: '#1D426D',
-    padding: 10,
-    width: '100%',
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 20
-  },
-  multi_input: {
-    borderRadius: 10,
-    backgroundColor: '#9ec5cf',
-    color: '#1D426D',
-    padding: 10,
-    paddingTop: 10,
-    maxWidth: '100%',
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 18
-  },
-  multi_inputLarger: {
-    borderRadius: 10,
-    backgroundColor: '#9ec5cf',
-    color: '#1D426D',
-    padding: 10,
-    paddingTop: 10,
-    maxWidth: '100%',
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 20
-  },
-  view: {
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    marginLeft: 40,
-    marginRight: 40,
-    marginBottom: 20,
-    padding: 20
-  }
-});
 
 export default DailyReflection;

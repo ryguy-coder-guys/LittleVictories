@@ -1,38 +1,35 @@
-import React, { useState } from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Switch
-} from 'react-native';
+import React, { ReactElement, useState } from 'react';
+import { Image, Text, TouchableOpacity, View, Switch } from 'react-native';
 
 import { useUserContext } from '../../Contexts/userContext';
 import { useSocketContext } from '../../Contexts/socketContext';
 import { useFeedContext } from '../../Contexts/feedContext';
 
 import axios from 'axios';
+import { differenceInWeeks, getDay, isThisWeek } from 'date-fns';
+
 import {
-  differenceInDays,
-  differenceInWeeks,
-  getDay,
-  isThisWeek
-} from 'date-fns';
+  containerStyles,
+  imgStyles,
+  textStyles
+} from '../../Stylesheets/Stylesheet';
 
-import { textStyles } from '../../Stylesheets/Stylesheet';
+import starIcon from '../../../assets/images/star-circle-outline.png';
+import minusIcon from '../../../assets/images/minus-circle-outline.png';
+import uncheckedBox from '../../../assets/images/checkbox-blank-outline.png';
+import checkedBox from '../../../assets/images/checkbox-marked.png';
 
-const SingleTask = ({ item }) => {
+const SingleTask = ({ item }): ReactElement => {
   const { user, setUser, setLevel, setNumCompletedTasks } = useUserContext();
   const { socket } = useSocketContext();
   const { feed, setFeed } = useFeedContext();
-  const [finished, setFinished] = useState(item.is_complete);
-  const [taskPublic, setTaskPublic] = useState(item.is_public);
+  const [finished, setFinished] = useState<boolean>(item.is_complete);
+  const [taskPublic] = useState<boolean>(item.is_public);
 
   const unshareTask = async (): Promise<void> => {
     try {
       const { data: updateSuccessful } = await axios.patch(
-        `http://localhost:3000/api/tasks/${item.id}/private`
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/tasks/${item.id}/private`
       );
       if (updateSuccessful) {
         const mappedTasks = user.tasks.map((task) => {
@@ -42,7 +39,6 @@ const SingleTask = ({ item }) => {
           return task;
         });
         setUser({ ...user, tasks: mappedTasks });
-        // setTaskPublic(false);
         setFeed(feed.filter((feedItem) => feedItem.id !== item.id));
         socket.emit('removeFromFeed', item.id);
       }
@@ -54,7 +50,7 @@ const SingleTask = ({ item }) => {
   const shareTask = async (): Promise<void> => {
     try {
       const { data: updateSuccessful } = await axios.patch(
-        `http://localhost:3000/api/tasks/${item.id}/public`
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/tasks/${item.id}/public`
       );
       if (updateSuccessful) {
         const mappedTasks = user.tasks.map((task) => {
@@ -64,7 +60,6 @@ const SingleTask = ({ item }) => {
           return task;
         });
         setUser({ ...user, tasks: mappedTasks });
-        // setTaskPublic(true);
         setFeed([updateSuccessful, ...feed]);
         socket.emit('addToFeed', item);
       }
@@ -78,7 +73,7 @@ const SingleTask = ({ item }) => {
       const {
         data: { task, points, level, numCompletedTasks }
       } = await axios.patch(
-        `http://localhost:3000/api/tasks/${item.id}/complete`
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/tasks/${item.id}/complete`
       );
       const mappedTasks = user.tasks.map((task) => {
         if (task.id === item.id) {
@@ -106,7 +101,7 @@ const SingleTask = ({ item }) => {
       const {
         data: { points, level, numCompletedTasks }
       } = await axios.patch(
-        `http://localhost:3000/api/tasks/${item.id}/incomplete`
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/tasks/${item.id}/incomplete`
       );
       const mappedTasks = user.tasks.map((task) => {
         if (task.id === item.id) {
@@ -130,7 +125,7 @@ const SingleTask = ({ item }) => {
   const removeTask = async (): Promise<void> => {
     try {
       const { data: deleteSuccessful } = await axios.delete(
-        `http://localhost:3000/api/tasks/${item.id}`
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/tasks/${item.id}`
       );
       if (deleteSuccessful) {
         const filteredTasks = user.tasks.filter((task) => {
@@ -171,7 +166,7 @@ const SingleTask = ({ item }) => {
   };
 
   return (
-    <View style={styles.task_view}>
+    <View style={containerStyles.section}>
       <View
         style={{
           flexDirection: 'row',
@@ -180,53 +175,42 @@ const SingleTask = ({ item }) => {
         }}
       >
         {item.is_important ? (
-          <Image
-            source={require('../../../assets/images/star-circle-outline.png')}
-            style={{
-              resizeMode: 'contain',
-              width: 25,
-              height: 25
-            }}
-          />
+          <Image source={starIcon} style={imgStyles.xsIcon} />
         ) : null}
         <TouchableOpacity onPress={() => removeTask()}>
-          <Image
-            source={require('../../../assets/images/minus-circle-outline.png')}
-            style={styles.checkbox}
-          />
+          <Image source={minusIcon} style={imgStyles.xsIcon} />
         </TouchableOpacity>
       </View>
       <View style={{ flexDirection: 'row' }}>
-        {!finished ? (
-          <TouchableOpacity
-            onPress={() => {
-              setFinished(!finished);
-              finished ? markTaskIncomplete() : markTaskComplete();
-            }}
-          >
-            <Image
-              source={require('../../../assets/images/checkbox-blank-outline.png')}
-              style={styles.checkbox}
-            />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => {
-              setFinished(!finished);
-              finished ? markTaskIncomplete() : markTaskComplete();
-            }}
-          >
-            <Image
-              source={require('../../../assets/images/checkbox-marked.png')}
-              style={styles.checkbox}
-            />
-          </TouchableOpacity>
-        )}
-        <View style={{ width: '90%', padding: 10 }}>
+        <View>
+          {!finished ? (
+            <TouchableOpacity
+              onPress={() => {
+                setFinished(!finished);
+                finished ? void markTaskIncomplete() : void markTaskComplete();
+              }}
+            >
+              <Image source={uncheckedBox} style={imgStyles.xsIcon} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setFinished(!finished);
+                finished ? void markTaskIncomplete() : void markTaskComplete();
+              }}
+            >
+              <Image source={checkedBox} style={imgStyles.xsIcon} />
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={{ marginLeft: 10 }}>
           <Text
-            style={user.readable_font ? textStyles.txt_big : textStyles.txt}
+            style={
+              user.readable_font
+                ? [textStyles.txt_big, { width: '82%' }]
+                : [textStyles.txt, { width: '82%' }]
+            }
           >
-            {'  '}
             {item.description} - {addTimeStamp(item.due_date)}
           </Text>
         </View>
@@ -235,17 +219,24 @@ const SingleTask = ({ item }) => {
         <View
           style={{
             flexDirection: 'row',
-            alignItems: 'center',
             justifyContent: 'flex-end',
-            marginTop: 15
+            marginTop: 5
           }}
         >
-          <Text style={textStyles.txt}>Public? </Text>
+          <Text
+            style={
+              user.readable_font
+                ? [textStyles.txt_big]
+                : [textStyles.txt, { marginTop: 5 }]
+            }
+          >
+            Public?{' '}
+          </Text>
           <Switch
             trackColor={{ false: '#767577', true: '#81b0ff' }}
             thumbColor={'#FAFAFA'}
             onValueChange={() => {
-              taskPublic ? unshareTask() : shareTask();
+              taskPublic ? void unshareTask() : void shareTask();
             }}
             value={taskPublic}
           />
@@ -254,21 +245,5 @@ const SingleTask = ({ item }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  checkbox: {
-    resizeMode: 'contain',
-    width: 25,
-    height: 25
-  },
-  task_view: {
-    marginLeft: 40,
-    marginRight: 40,
-    marginTop: 10,
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    padding: 15
-  }
-});
 
 export default SingleTask;

@@ -1,45 +1,46 @@
 import React, { ReactElement, useState } from 'react';
-import { ImageBackground, SafeAreaView } from 'react-native';
+import { ImageBackground, SafeAreaView, View } from 'react-native';
 import ProgressBar from '../Root/ProgressBar';
 import FeedView from './FeedView';
 import { ButtonGroup } from 'react-native-elements';
 import Friends from './Friends';
-import { containerStyles } from '../../Stylesheets/Stylesheet';
+import {
+  btnStyles,
+  containerStyles,
+  textStyles
+} from '../../Stylesheets/Stylesheet';
+import bgImage from '../../../assets/images/blue-gradient.png';
+import { useUserContext } from '../../Contexts/userContext';
 
 const Feed = (): ReactElement => {
-  const bgImage: any = require('../../../assets/images/blue-gradient.png');
+  const { user } = useUserContext();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const buttons: string[] = ['Feed', 'Friends'];
 
   const updateIndex = (selectedIndex: number): void => {
     setSelectedIndex(selectedIndex);
   };
 
   return (
-    <ImageBackground style={containerStyles.backgroundImage} source={bgImage}>
+    <ImageBackground style={containerStyles.bgImg} source={bgImage}>
       <ProgressBar />
       <SafeAreaView>
-        <ButtonGroup
-          onPress={updateIndex}
-          selectedIndex={selectedIndex}
-          buttons={buttons}
-          containerStyle={{
-            height: 40,
-            borderRadius: 10,
-            borderColor: '#5c83b1',
-            marginTop: 20,
-            marginLeft: 40,
-            marginRight: 40
-          }}
-          selectedButtonStyle={{
-            backgroundColor: '#5c83b1',
-            borderColor: '#5c83b1'
-          }}
-          buttonStyle={{ backgroundColor: '#1D426D', borderColor: '#5c83b1' }}
-          textStyle={{ fontSize: 16, color: '#ada6a6' }}
-          innerBorderStyle={{ color: '#1D426D' }}
-        />
-        {selectedIndex === 0 ? <FeedView /> : <Friends />}
+        <View style={containerStyles.fullScreenView}>
+          <ButtonGroup
+            onPress={updateIndex}
+            selectedIndex={selectedIndex}
+            buttons={['Feed', 'Friends']}
+            containerStyle={btnStyles.BG}
+            selectedButtonStyle={btnStyles.BG_active}
+            buttonStyle={btnStyles.BG_inactive}
+            textStyle={
+              user.readable_font
+                ? textStyles.disabledBtnTxt_big
+                : textStyles.disabledBtnTxt
+            }
+            innerBorderStyle={{ color: '#1D426D' }}
+          />
+          {selectedIndex === 0 ? <FeedView /> : <Friends />}
+        </View>
       </SafeAreaView>
     </ImageBackground>
   );

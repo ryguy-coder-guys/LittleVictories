@@ -1,17 +1,16 @@
+/* eslint-disable indent */
 import React, { useState, ReactElement } from 'react';
-import { View, Button, Text, StyleSheet } from 'react-native';
-import { textStyles } from '../../Stylesheets/Stylesheet';
+import { View, Button, Text } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
+import { containerStyles, textStyles } from '../../Stylesheets/Stylesheet';
 
-import { useSocketContext } from '../../Contexts/socketContext';
 import { useFeedContext } from '../../Contexts/feedContext';
 import { useUserContext } from '../../Contexts/userContext';
 
 import axios from 'axios';
 
 const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
-  const [isFriend, setIsFriend] = useState(item.isFriend);
-  const { socket } = useSocketContext();
+  const [isFriend, setIsFriend] = useState<boolean>(item.isFriend);
   const { feed, setFeed, refreshFeed } = useFeedContext();
   const { setNumFollowees } = useUserContext();
 
@@ -19,10 +18,13 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
     try {
       const {
         data: { addSuccessful, numFollowees }
-      } = await axios.post('http://localhost:3000/api/friends/', {
-        userId: user.id,
-        friendId: id
-      });
+      } = await axios.post(
+        'http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/friends/',
+        {
+          userId: user.id,
+          friendId: id
+        }
+      );
       if (addSuccessful) {
         refreshFeed();
         const mappedUsers = users.map((currentUser) => {
@@ -46,7 +48,7 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
       const {
         data: { deleteSuccessful, numFollowees }
       } = await axios.delete(
-        `http://localhost:3000/api/friends/${user.id}/${id}`
+        `http://ec2-3-131-151-82.us-east-2.compute.amazonaws.com/api/friends/${user.id}/${id}`
       );
       if (deleteSuccessful) {
         const mappedUsers = users.map((currentUser) => {
@@ -70,20 +72,30 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
   };
 
   return (
-    <View style={styles.textAreaContainer}>
-      <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
+    <View
+      style={[
+        containerStyles.section,
+        { flexDirection: 'row', justifyContent: 'space-between' }
+      ]}
+    >
+      <Text
+        style={
+          user.readable_font
+            ? [textStyles.txt_big, { paddingTop: 5 }]
+            : [textStyles.txt, { paddingTop: 5 }]
+        }
+      >
         {item.username}
       </Text>
       {!isFriend ? (
         <Button
           onPress={() => {
-            addFriend(item.id),
+            void addFriend(item.id),
               showMessage({
                 message: `Now following ${item.username}.`,
                 titleStyle: {
                   fontSize: 20,
-                  color: '#FAFAFA',
-                  alignSelf: 'center'
+                  color: '#FAFAFA'
                 },
                 icon: { icon: 'success', position: 'left' },
                 type: 'default',
@@ -95,13 +107,12 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
       ) : (
         <Button
           onPress={() => {
-            removeFriend(item.id),
+            void removeFriend(item.id),
               showMessage({
                 message: `You are no longer following ${item.username}.`,
                 titleStyle: {
                   fontSize: 20,
-                  color: '#FAFAFA',
-                  alignSelf: 'center'
+                  color: '#FAFAFA'
                 },
                 icon: { icon: 'success', position: 'left' },
                 type: 'default',
@@ -114,14 +125,5 @@ const SingleFriend = ({ item, user, users, setUsers }): ReactElement => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  textAreaContainer: {
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    padding: 20,
-    marginTop: 20
-  }
-});
 
 export default SingleFriend;

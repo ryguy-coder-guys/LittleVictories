@@ -1,30 +1,38 @@
+import redRibbon from '../assets/images/ribbon_red1.png';
+import greenRibbon from '../assets/images/ribbon_green.png';
+import yellowRibbon from '../assets/images/ribbon_yellow.png';
+import pinkTrophy from '../assets/images/trophy_pink.png';
+import blueTrophy from '../assets/images/trophy_blue.png';
+import redStar from '../assets/images/star_red.png';
+import greenStar from '../assets/images/star_green.png';
+
 export const badges = {
   levelOne: {
     text: 'Level 1',
-    source: require('../assets/images/ribbon_red1.png')
+    source: redRibbon
   },
   levelFive: {
     text: 'Level 5',
-    source: require('../assets/images/ribbon_green.png')
+    source: greenRibbon
   },
   levelTen: {
     text: 'Level 10',
-    source: require('../assets/images/ribbon_yellow.png')
+    source: yellowRibbon
   },
   fiveHabits: {
     text: '5 Habits',
-    source: require('../assets/images/trophy_pink.png')
+    source: pinkTrophy
   },
   fiveTasks: {
     text: '5 Tasks',
-    source: require('../assets/images/trophy_blue.png')
+    source: blueTrophy
   },
   threeFollowees: {
-    text: '3 Followers',
-    source: require('../assets/images/star_red.png')
+    text: '3 Friends',
+    source: redStar
   },
   fiveFollowees: {
-    text: '5 Followers',
-    source: require('../assets/images/star_green.png')
+    text: '5 Friends',
+    source: greenStar
   }
 };

@@ -14,7 +14,6 @@ import { Friend } from '../database/models/friend';
 export { UserInstance } from '../database/models/user';
 import { Like } from '../database/models/like';
 import { Comment } from '../database/models/comment';
-import sequelize from 'sequelize';
 
 const customIsPast = (date: Date) => {
   const currentDate = new Date();

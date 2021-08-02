@@ -1,15 +1,17 @@
-import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { textStyles } from '../../Stylesheets/Stylesheet';
+import React, { ReactElement } from 'react';
+import { Image, Text, View } from 'react-native';
+import { containerStyles, textStyles } from '../../Stylesheets/Stylesheet';
 import { useUserContext } from '../../Contexts/userContext';
+import 'react-native-get-random-values';
 import { v4 as getKey } from 'uuid';
+import starIcon from '../../../assets/images/star-circle-outline.png';
 
-const UpcomingTasks = () => {
+const UpcomingTasks = (): ReactElement => {
   const { user } = useUserContext();
 
-  const formatDueDate = (dueDate) => {
+  const formatDueDate = (dueDate: Date) => {
     if (dueDate) {
-      const dateArr = dueDate.split('-');
+      const dateArr: string[] = dueDate.toString().split('-');
       const months = [
         'Jan',
         'Feb',
@@ -32,7 +34,7 @@ const UpcomingTasks = () => {
   };
 
   return (
-    <View style={styles.view}>
+    <View style={containerStyles.section}>
       <Text
         style={[
           user.readable_font ? textStyles.h2_big : textStyles.h2,
@@ -46,7 +48,7 @@ const UpcomingTasks = () => {
         .slice(0, 5)
         .map((task) => {
           return (
-            <View style={styles.task} key={getKey()}>
+            <View style={containerStyles.task} key={getKey()}>
               <Text
                 style={user.readable_font ? textStyles.txt_big : textStyles.txt}
               >
@@ -54,7 +56,7 @@ const UpcomingTasks = () => {
               </Text>
               {task.is_important ? (
                 <Image
-                  source={require('../../../assets/images/star-circle-outline.png')}
+                  source={starIcon}
                   style={{
                     resizeMode: 'contain',
                     width: 25,
@@ -65,7 +67,7 @@ const UpcomingTasks = () => {
             </View>
           );
         })}
-      {!user.tasks.length ? (
+      {user.tasks.filter((task) => !task.is_complete).length === 0 ? (
         <Text style={user.readable_font ? textStyles.txt_big : textStyles.txt}>
           No upcoming tasks.
         </Text>
@@ -73,21 +75,5 @@ const UpcomingTasks = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  task: {
-    paddingTop: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  view: {
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    marginLeft: 40,
-    marginRight: 40,
-    marginBottom: 20,
-    padding: 20
-  }
-});
 
 export default UpcomingTasks;

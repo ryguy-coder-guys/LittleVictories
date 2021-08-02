@@ -1,44 +1,34 @@
-import React from 'react';
-import { FlatList, View, Text, StyleSheet } from 'react-native';
+import React, { ReactElement } from 'react';
+import { FlatList, View, Text } from 'react-native';
+import 'react-native-get-random-values';
 import { v4 as getKey } from 'uuid';
 import { useFeedContext } from '../../Contexts/feedContext';
+import { useUserContext } from '../../Contexts/userContext';
+import { textStyles } from '../../Stylesheets/Stylesheet';
 import FeedItem from './FeedItem';
 
-const FeedView = () => {
+const FeedView = (): ReactElement => {
   const { feed } = useFeedContext();
+  const { user } = useUserContext();
   return (
-    <View
-      style={{
-        justifyContent: 'flex-start',
-        marginLeft: 20,
-        marginRight: 20,
-        width: '100%'
-      }}
-    >
-      <Text style={styles.heading}>Feed</Text>
-      <View style={styles.listContainer}>
-        <FlatList
-          data={feed}
-          renderItem={({ item }) => <FeedItem {...item} />}
-          keyExtractor={() => getKey()}
-        />
-      </View>
+    <View>
+      <Text
+        style={
+          user.readable_font
+            ? textStyles.screenHeading_big
+            : textStyles.screenHeading
+        }
+      >
+        Feed
+      </Text>
+      <FlatList
+        data={feed}
+        renderItem={({ item }) => <FeedItem {...item} />}
+        keyExtractor={() => getKey()}
+        style={{ height: '81%' }}
+      />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  heading: {
-    color: '#1D426D',
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    marginTop: 25,
-    marginLeft: 20
-  },
-  listContainer: {
-    height: '81.85%'
-  }
-});
 
 export default FeedView;

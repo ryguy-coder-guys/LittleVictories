@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { textStyles } from '../../Stylesheets/Stylesheet';
+import { Text, View } from 'react-native';
+import { containerStyles, textStyles } from '../../Stylesheets/Stylesheet';
 import {
   BarChart,
   Grid,
@@ -12,6 +12,13 @@ import { useUserContext } from '../../Contexts/userContext';
 import { format, getDay, isLeapYear } from 'date-fns';
 import { G, Image } from 'react-native-svg';
 import { UserStat } from '../../Interfaces/user';
+import {
+  AxesSvgType,
+  MoodCount,
+  MoodData,
+  Slice,
+  VerticalContentInsetType
+} from '../../Interfaces/chart';
 
 import angryFace from '../../../assets/images/emoticon-angry-outline.png';
 import excitedFace from '../../../assets/images/emoticon-excited-outline.png';
@@ -52,25 +59,6 @@ const getDatesInLastWeek = (): string[] => {
   }
   return datesInLastWeek;
 };
-
-interface Svg {
-  fill: string;
-}
-
-interface MoodData {
-  key: number;
-  amount: number;
-  mood: string;
-  svg: Svg;
-}
-
-interface MoodCount {
-  terrible?: number;
-  bad?: number;
-  ok?: number;
-  good?: number;
-  great?: number;
-}
 
 const MoodChart = (): ReactElement => {
   const { user, userStat } = useUserContext();
@@ -125,11 +113,6 @@ const MoodChart = (): ReactElement => {
       ok: neutralFace,
       bad: sadFace
     };
-
-    interface Slice {
-      labelCentroid: number[];
-      data: MoodData[];
-    }
 
     return slices.map((slice: Slice, index: number) => {
       const { labelCentroid, data } = slice;
@@ -262,16 +245,6 @@ const SleepHoursChart = (): ReactElement => {
     return falseCount;
   };
 
-  type AxesSvgType = {
-    fontSize: number;
-    fill: string;
-  };
-
-  type VerticalContentInsetType = {
-    top: number;
-    bottom: number;
-  };
-
   const axesSvg: AxesSvgType = { fontSize: 16, fill: '#1D426D' };
   const verticalContentInset: VerticalContentInsetType = {
     top: 10,
@@ -281,7 +254,7 @@ const SleepHoursChart = (): ReactElement => {
 
   return (
     <View>
-      <Text style={[textStyles.txt, { fontWeight: 'bold' }]}>
+      <Text style={user.readable_font ? textStyles.h3_big : textStyles.h3}>
         Hours of Sleep
       </Text>
       <View style={{ height: 200, flexDirection: 'row', marginTop: 15 }}>
@@ -336,29 +309,13 @@ const SleepHoursChart = (): ReactElement => {
 const WeeklyStats = (): ReactElement => {
   const { user } = useUserContext();
   return (
-    <View style={styles.view}>
-      <Text
-        style={[
-          user.readable_font ? textStyles.h2_big : textStyles.h2,
-          { marginBottom: 10 }
-        ]}
-      >
+    <View style={containerStyles.section}>
+      <Text style={user.readable_font ? textStyles.h2_big : textStyles.h2}>
         Weekly Stats
       </Text>
       <SleepHoursChart />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  view: {
-    backgroundColor: '#8ebac6',
-    borderRadius: 10,
-    marginLeft: 40,
-    marginRight: 40,
-    marginBottom: 20,
-    padding: 20
-  }
-});
 
 export default WeeklyStats;

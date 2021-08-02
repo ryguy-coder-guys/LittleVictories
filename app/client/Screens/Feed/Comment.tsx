@@ -1,7 +1,8 @@
 import React from 'react';
 import { useUserContext } from '../../Contexts/userContext';
-import { Button, Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { textStyles } from '../../Stylesheets/Stylesheet';
+import minusIcon from '../../../assets/images/minus-circle-outline.png';
 
 const Comment = ({ id, content, user_id, username, removeComment }) => {
   const { user } = useUserContext();
@@ -14,11 +15,11 @@ const Comment = ({ id, content, user_id, username, removeComment }) => {
   };
 
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row', width: '67%' }}>
       {canRemove() && (
-        <TouchableOpacity onPress={() => removeComment(id)}>
+        <TouchableOpacity onPress={() => void removeComment(id)}>
           <Image
-            source={require('../../../assets/images/minus-circle-outline.png')}
+            source={minusIcon}
             style={{
               resizeMode: 'contain',
               width: 25,
@@ -27,13 +28,7 @@ const Comment = ({ id, content, user_id, username, removeComment }) => {
           />
         </TouchableOpacity>
       )}
-      <Text
-        style={
-          user.readable_font
-            ? [textStyles.txt_big, { fontWeight: 'bold' }]
-            : [textStyles.txt, { fontWeight: 'bold' }]
-        }
-      >
+      <Text style={user.readable_font ? textStyles.h3_big : textStyles.h3}>
         {' '}
         {username} -{' '}
       </Text>
