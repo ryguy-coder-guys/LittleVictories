@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { ReactElement } from 'react';
 import { Image, View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { useJournalContext } from '../../Contexts/journalContext';
@@ -9,10 +10,12 @@ import axios from 'axios';
 import { useUserContext } from '../../Contexts/userContext';
 import {
   containerStyles,
+  imgStyles,
   journalStyles,
   textStyles
 } from '../../Stylesheets/Stylesheet';
 import { showMessage, hideMessage } from 'react-native-flash-message';
+import minusIcon from '../../../assets/images/minus-circle-outline.png';
 
 const List = (): ReactElement => {
   const { journals, setJournals } = useJournalContext();
@@ -145,10 +148,7 @@ const List = (): ReactElement => {
                       clearJournal(journal.date);
                     }}
                   >
-                    <Image
-                      style={{ resizeMode: 'contain', width: 25, height: 25 }}
-                      source={require('../../../assets/images/minus-circle-outline.png')}
-                    />
+                    <Image style={imgStyles.xsIcon} source={minusIcon} />
                   </TouchableOpacity>
                 </View>
                 <Text

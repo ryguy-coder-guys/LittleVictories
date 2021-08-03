@@ -18,7 +18,9 @@ const Journal = (): ReactElement => {
       >
         Previous Journals
       </Text>
-      <List />
+      <View style={{ height: '85.5%' }}>
+        <List />
+      </View>
     </View>
   );
 };
